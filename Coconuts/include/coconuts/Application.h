@@ -14,28 +14,26 @@
  * limitations under the License.
  */
 
-#ifndef COCONUTS_CORE_H
-#define COCONUTS_CORE_H
+#ifndef APPLICATION_H
+#define APPLICATION_H
 
-#include "Application.h" 
-
-#define COCONUTS_VERSION 0.1F
-
-/* core.cpp */
-extern void coconuts_version(void);
-
-
-/* Entry Point for Sandbox applications */
-#ifdef __COCONUTS_SANDBOX_APP__
-int main (void)
+namespace Coconuts
 {
-    auto app = Coconuts::CreateApplication();
-    app->Run();
-    delete app;
     
-    return 0;
+    class Application
+    {
+    private:
+        
+    public:
+        Application();
+        virtual ~Application();
+        
+        void Run(void);
+    };
+    
+    extern Application* CreateApplication();
+    
 }
-#endif
 
+#endif /* APPLICATION_H */
 
-#endif

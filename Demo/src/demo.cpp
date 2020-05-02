@@ -1,12 +1,28 @@
+/**
+ * A Sandbox Application example to show Coconuts running.
+ */
+
+//!!!
+/* Must define __COCONUTS_SANDBOX_APP__ prior to any Coconuts include */
+#ifndef __COCONUTS_SANDBOX_APP__
+#define __COCONUTS_SANDBOX_APP__
+#endif
+
+#include <coconuts/core.h>
+
+
 #include <iostream>
-#include "coconuts/core.h"
 #include "demo.h"
 
-int main(void)
-{
-    std::cout << "This is a Game - version: " << DEMO_VERSION << std::endl;
 
-    coconuts_version();
-    
-    return 0;
+namespace Coconuts
+{
+    /**
+     * Create a new Sandbox Application.
+     * Check Coconuts running state output in the terminal. 
+     */
+    Application* CreateApplication()
+    {
+        return new Application();
+    }
 }

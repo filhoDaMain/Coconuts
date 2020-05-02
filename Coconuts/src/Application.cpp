@@ -14,28 +14,25 @@
  * limitations under the License.
  */
 
-#ifndef COCONUTS_CORE_H
-#define COCONUTS_CORE_H
+#include "coconuts/core.h"
 
-#include "Application.h" 
+#include <iostream>
 
-#define COCONUTS_VERSION 0.1F
-
-/* core.cpp */
-extern void coconuts_version(void);
-
-
-/* Entry Point for Sandbox applications */
-#ifdef __COCONUTS_SANDBOX_APP__
-int main (void)
+namespace Coconuts
 {
-    auto app = Coconuts::CreateApplication();
-    app->Run();
-    delete app;
+    Application::Application()
+    {
+        std::cout << "Coconuts sandbox application created." << std::endl;
+    }
     
-    return 0;
+    Application::~Application()
+    {
+        std::cout << "Coconuts sandbox application destroyed." << std::endl;
+    }
+    
+    void Application::Run()
+    {
+        std::cout << "Coconuts sandbox application running..." << std::endl;
+        while(true);
+    }
 }
-#endif
-
-
-#endif

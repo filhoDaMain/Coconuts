@@ -16,23 +16,24 @@
 
 #include "coconuts/core.h"
 
-#include <iostream>
+#include "spdlog/spdlog.h"
+#include "spdlog/sinks/basic_file_sink.h"
 
 namespace Coconuts
 {
     Application::Application()
     {
-        std::cout << "Coconuts sandbox application created." << std::endl;
+        spdlog::info("Coconuts sandbox application created.");
     }
     
     Application::~Application()
     {
-        std::cout << "Coconuts sandbox application destroyed." << std::endl;
+        spdlog::info("Coconuts sandbox application destroyed.");
     }
     
     void Application::Run()
     {
-        std::cout << "Coconuts sandbox application running..." << std::endl;
+        spdlog::info("Coconuts sandbox application running...");
         while(true);
     }
 }

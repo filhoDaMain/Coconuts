@@ -3,7 +3,7 @@ A didactic project to introduce myself to Game Engines architecture
 
 
 # Include all submodules
-Coconuts depends on some submodules that should also be cloned into the ./Coconuts/vendor directory.
+Coconuts depends on some submodules that should also be cloned into the ./Coconuts/vendor/ directory.
 To perform this step at once while cloning this repo you can do
 
 ```

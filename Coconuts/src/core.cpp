@@ -1,5 +1,5 @@
 #include <iostream>
-#include "coconuts/core.h"
+#include <coconuts/core.h>
 
 void coconuts_version()
 {

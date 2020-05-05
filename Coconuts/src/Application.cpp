@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-#include "coconuts/core.h"
+#include <coconuts/core.h>
 
-#include "spdlog/spdlog.h"
-#include "spdlog/sinks/basic_file_sink.h"
+#include <spdlog/spdlog.h>
+#include <spdlog/sinks/basic_file_sink.h>
 
 namespace Coconuts
 {

@@ -9,6 +9,7 @@
 #endif
 
 #include <coconuts/core.h>
+#include <coconuts/Logger.h>
 
 
 #include <iostream>

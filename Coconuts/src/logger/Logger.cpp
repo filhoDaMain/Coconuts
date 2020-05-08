@@ -14,30 +14,21 @@
  * limitations under the License.
  */
 
-#ifndef COCONUTS_CORE_H
-#define COCONUTS_CORE_H
-
-#include <coconuts/Application.h>
 #include <coconuts/Logger.h>
 
-#define COCONUTS_VERSION 0.1F
-
-/* core.cpp */
-extern void coconuts_version(void);
-
-
-/* Entry Point for Sandbox applications */
-#ifdef __COCONUTS_SANDBOX_APP__
-int main (void)
+namespace Coconuts
 {
-    Coconuts::Logger::Init();
-    auto app = Coconuts::CreateApplication();
-    app->Run();
-    delete app;
+    std::shared_ptr<spdlog::logger> Logger::s_CoreLogger;
+    std::shared_ptr<spdlog::logger> Logger::s_ClientLogger;
     
-    return 0;
+    void Logger::Init()
+    {        
+        spdlog::set_pattern("%d-%m-%Y  [%-8n]  %^%-8l   %v%$");
+        
+        s_CoreLogger = spdlog::stdout_color_mt  ("COCONUTS");
+        s_CoreLogger->set_level(spdlog::level::trace);
+        
+        s_ClientLogger = spdlog::stdout_color_mt("Sandbox");
+        s_ClientLogger->set_level(spdlog::level::trace);
+    }
 }
-#endif
-
-
-#endif

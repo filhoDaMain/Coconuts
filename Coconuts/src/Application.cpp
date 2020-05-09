@@ -16,6 +16,7 @@
 
 #include <coconuts/core.h>
 #include <coconuts/Logger.h>
+#include <coconuts/EventSystem.h>
 
 namespace Coconuts
 {
@@ -32,6 +33,21 @@ namespace Coconuts
     void Application::Run()
     {
         LOG_INFO("Sandbox App is now running...");
+        
+        LOG_TRACE("Emulating an AppWindowResize Event");
+        Events::AppWindowResize mEvent(10,20);
+        
+        if (mEvent.IsInCategory(EventCategory::EVCATG_SANDBOX_APP))
+        {
+            LOG_TRACE("It's a Sandbox App Event");
+        }
+        
+        if (mEvent.IsInCategory(EventCategory::EVCATG_WINDOW_CHANGE))
+        {
+            LOG_TRACE("It's a Window change Event");
+        }
+        
+        LOG_TRACE("Window size: w: {}  h: {}", mEvent.GetWidth(), mEvent.GetHeight());
         
         while(true);
     }

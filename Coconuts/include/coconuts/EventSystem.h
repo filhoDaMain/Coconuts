@@ -13,33 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#ifndef EVENTSYSTEM_H
+#define EVENTSYSTEM_H
 
-#ifndef COCONUTS_CORE_H
-#define COCONUTS_CORE_H
+#include <coconuts/event_system/Event.h>
+#include <coconuts/event_system/AppWindowEvent.h>
 
-#include <coconuts/application/Application.h>
-#include <coconuts/EventSystem.h>
+#endif /* EVENTSYSTEM_H */
 
-#include <coconuts/Logger.h>
-
-#define COCONUTS_VERSION 0.1F
-
-/* core.cpp */
-extern void coconuts_version(void);
-
-
-/* Entry Point for Sandbox applications */
-#ifdef __COCONUTS_SANDBOX_APP__
-int main (void)
-{
-    Coconuts::Logger::Init();
-    auto app = Coconuts::CreateApplication();
-    app->Run();
-    delete app;
-    
-    return 0;
-}
-#endif
-
-
-#endif

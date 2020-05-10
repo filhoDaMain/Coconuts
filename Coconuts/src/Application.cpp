@@ -31,6 +31,7 @@ namespace Coconuts
         if (!glfwInit())
         {
             LOG_WARN("GLFW was not properly initialized");
+            exit(1);
         }
         LOG_TRACE("GLFW initialized");
         
@@ -46,6 +47,7 @@ namespace Coconuts
         {
             LOG_WARN("Window was not created");
             glfwTerminate();
+            exit(1);
         }
         LOG_TRACE("Window created");
         glfwSwapInterval(1);

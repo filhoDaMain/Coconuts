@@ -30,7 +30,7 @@ namespace Coconuts
         /* Initialize the library */
         if (!glfwInit())
         {
-            LOG_WARN("GLFW was not properly initialized");
+            LOG_CRITICAL("GLFW was not properly initialized. Closing app...");
             exit(1);
         }
         LOG_TRACE("GLFW initialized");
@@ -45,7 +45,7 @@ namespace Coconuts
         window = glfwCreateWindow(640, 480, "Coconuts", NULL, NULL);
         if (!window)
         {
-            LOG_WARN("Window was not created");
+            LOG_CRITICAL("Window was not created. Closing app...");
             glfwTerminate();
             exit(1);
         }

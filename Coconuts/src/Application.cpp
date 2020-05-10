@@ -17,38 +17,66 @@
 #include <coconuts/core.h>
 #include <coconuts/Logger.h>
 #include <coconuts/EventSystem.h>
+#include <GLFW/glfw3.h>
+
+GLFWwindow* window;
 
 namespace Coconuts
 {
     Application::Application()
     {
         LOG_INFO("Sandbox App created!");
+        
+        /* Initialize the library */
+        if (!glfwInit())
+        {
+            LOG_WARN("GLFW was not properly initialized");
+        }
+        LOG_TRACE("GLFW initialized");
+        
+        const char* glsl_version = "#version 150";
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+        
+        /* Create a windowed mode window and its OpenGL context */
+        window = glfwCreateWindow(640, 480, "Coconuts", NULL, NULL);
+        if (!window)
+        {
+            LOG_WARN("Window was not created");
+            glfwTerminate();
+        }
+        LOG_TRACE("Window created");
+        glfwSwapInterval(1);
+        
+        /* Make the window's context current */
+        glfwMakeContextCurrent(window);
     }
     
     Application::~Application()
     {
-        
+
     }
     
     void Application::Run()
     {
         LOG_INFO("Sandbox App is now running...");
         
-        LOG_TRACE("Emulating an AppWindowResize Event");
-        Events::AppWindowResize mEvent(10,20);
-        
-        if (mEvent.IsInCategory(EventCategory::EVCATG_SANDBOX_APP))
+        /* Loop until the user closes the window */
+        LOG_DEBUG("Entering Rendering loop...");
+        while (!glfwWindowShouldClose(window))
         {
-            LOG_TRACE("It's a Sandbox App Event");
+            /* Render here */
+            glClear(GL_COLOR_BUFFER_BIT);
+
+            /* Swap front and back buffers */
+            glfwSwapBuffers(window);
+
+            /* Poll for and process events */
+            glfwPollEvents();
         }
-        
-        if (mEvent.IsInCategory(EventCategory::EVCATG_WINDOW_CHANGE))
-        {
-            LOG_TRACE("It's a Window change Event");
-        }
-        
-        LOG_TRACE("Window size: w: {}  h: {}", mEvent.GetWidth(), mEvent.GetHeight());
-        
-        while(true);
+        LOG_WARN("Rendering loop exited because window was closed");
+        glfwTerminate();
     }
 }

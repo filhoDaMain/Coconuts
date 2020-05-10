@@ -10,4 +10,10 @@ if(APPLE)
     target_link_libraries(demo  "-framework Cocoa"
                                 "-framework OpenGL"
                                 "-framework IOKit")
+# GNU:
+elseif(UNIX AND NOT APPLE)
+    find_package(OpenGL REQUIRED)
+    target_link_libraries(demo OpenGL::GL)
+    target_link_libraries(demo "-ldl" "-pthread")
 endif()
+

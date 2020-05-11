@@ -1,6 +1,6 @@
 # CORE LIBRARY
 
-add_library(ccncore core.cpp Application.cpp logger/Logger.cpp)
+add_library(ccncore core.cpp application/Application.cpp logger/Logger.cpp)
 
 target_include_directories(ccncore PRIVATE "${PROJECT_SOURCE_DIR}/include"
                                         "${PROJECT_SOURCE_DIR}/vendor/spdlog/include"

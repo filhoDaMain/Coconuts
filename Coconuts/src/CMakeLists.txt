@@ -5,7 +5,11 @@ add_library(ccncore core.cpp application/Application.cpp logger/Logger.cpp)
 # Platform Specific files
 # Mac OS
 if (APPLE)
+    message(STATUS "MacOS Platform detected")
     add_subdirectory(platform/MacOS)
+elseif(UNIX AND NOT APPLE)
+    message(STATUS "GNU Platform detected")
+    add_subdirectory(platform/GNU)
 endif()
 
 target_include_directories(ccncore PRIVATE "${PROJECT_SOURCE_DIR}/include"

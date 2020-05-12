@@ -23,7 +23,7 @@ namespace Coconuts
     
     void Logger::Init()
     {        
-        spdlog::set_pattern("%d-%m-%Y  [%-8n]  %^%-8l   %v%$");
+        spdlog::set_pattern("%d-%m-%Y %H:%M:%S.%e [%-8n] %^%-8l  %v%$");
         
         s_CoreLogger = spdlog::stdout_color_mt  ("COCONUTS");
         s_CoreLogger->set_level(spdlog::level::trace);

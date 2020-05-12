@@ -2,6 +2,12 @@
 
 add_library(ccncore core.cpp application/Application.cpp logger/Logger.cpp)
 
+# Platform Specific files
+# Mac OS
+if (APPLE)
+    add_subdirectory(platform/MacOS)
+endif()
+
 target_include_directories(ccncore PRIVATE "${PROJECT_SOURCE_DIR}/include"
                                         "${PROJECT_SOURCE_DIR}/vendor/spdlog/include"
                                         "${PROJECT_SOURCE_DIR}/vendor/glfw/include")

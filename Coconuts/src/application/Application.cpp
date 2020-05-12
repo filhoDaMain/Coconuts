@@ -14,46 +14,33 @@
  * limitations under the License.
  */
 
+#include <coconuts/application/Application.h>
 #include <coconuts/core.h>
 #include <coconuts/Logger.h>
 #include <coconuts/EventSystem.h>
-#include <GLFW/glfw3.h>
 
-GLFWwindow* window;
 
 namespace Coconuts
 {
     Application::Application()
     {
         LOG_INFO("Sandbox App created!");
+        m_Window = std::unique_ptr<Window>(Window::Create());
         
-        /* Initialize the library */
-        if (!glfwInit())
+#if defined(__APPLE__)
+        if (m_Window != nullptr)
         {
-            LOG_CRITICAL("GLFW was not properly initialized. Closing app...");
-            exit(1);
+            LOG_INFO("Coconuts WindowSystem initialized for the MacOS Platform");
         }
-        LOG_TRACE("GLFW initialized");
-        
-        const char* glsl_version = "#version 150";
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-        
-        /* Create a windowed mode window and its OpenGL context */
-        window = glfwCreateWindow(640, 480, "Coconuts", NULL, NULL);
-        if (!window)
+        //ELSE - it should already have crashed!
+#elif __gnu_linux__
+        if (m_Window != nullptr)
         {
-            LOG_CRITICAL("Window was not created. Closing app...");
-            glfwTerminate();
-            exit(1);
+            LOG_INFO("Coconuts WindowSystem initialized for the GNU Platform");
         }
-        LOG_TRACE("Window created");
-        glfwSwapInterval(1);
+        //ELSE - it should already have crashed!
+#endif
         
-        /* Make the window's context current */
-        glfwMakeContextCurrent(window);
     }
     
     Application::~Application()
@@ -65,20 +52,9 @@ namespace Coconuts
     {
         LOG_INFO("Sandbox App is now running...");
         
-        /* Loop until the user closes the window */
-        LOG_DEBUG("Entering Rendering loop...");
-        while (!glfwWindowShouldClose(window))
+        while(true)
         {
-            /* Render here */
-            glClear(GL_COLOR_BUFFER_BIT);
-
-            /* Swap front and back buffers */
-            glfwSwapBuffers(window);
-
-            /* Poll for and process events */
-            glfwPollEvents();
+            m_Window->OnUpdate();
         }
-        LOG_WARN("Rendering loop exited because window was closed");
-        glfwTerminate();
     }
 }

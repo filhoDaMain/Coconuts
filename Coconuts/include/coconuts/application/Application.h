@@ -17,18 +17,22 @@
 #ifndef APPLICATION_H
 #define APPLICATION_H
 
+#include <memory>
+#include <coconuts/window_system/Window.h>
+
 namespace Coconuts
 {
     
     class Application
-    {
-    private:
-        
+    {   
     public:
         Application();
         virtual ~Application();
         
         void Run(void);
+        
+    private:
+        std::unique_ptr<Window> m_Window;
     };
     
     extern Application* CreateApplication();

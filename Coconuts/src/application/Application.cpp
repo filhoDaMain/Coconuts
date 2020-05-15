@@ -20,26 +20,29 @@
 #include <coconuts/EventSystem.h>
 
 
+
 namespace Coconuts
 {
     Application::Application()
     {
         LOG_INFO("Sandbox App created!");
-        m_Window = std::unique_ptr<Window>(Window::Create());
+        p_Window = std::unique_ptr<Window>(Window::Create());
         
 #if defined(__APPLE__)
-        if (m_Window != nullptr)
+        if (p_Window != nullptr)
         {
             LOG_INFO("Coconuts WindowSystem initialized for the MacOS Platform");
         }
         //ELSE - it should already have crashed!
 #elif __gnu_linux__
-        if (m_Window != nullptr)
+        if (p_Window != nullptr)
         {
             LOG_INFO("Coconuts WindowSystem initialized for the GNU Platform");
         }
         //ELSE - it should already have crashed!
 #endif
+      
+        
         
     }
     
@@ -54,7 +57,12 @@ namespace Coconuts
         
         while(true)
         {
-            m_Window->OnUpdate();
+            p_Window->OnUpdate();
         }
+    }
+    
+    void Application::OnEvent(Event& event)
+    {
+        
     }
 }

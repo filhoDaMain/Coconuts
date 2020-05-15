@@ -19,6 +19,7 @@
 
 #include <memory>
 #include <coconuts/window_system/Window.h>
+#include <coconuts/EventSystem.h>
 
 namespace Coconuts
 {
@@ -30,9 +31,11 @@ namespace Coconuts
         virtual ~Application();
         
         void Run(void);
+        void OnEvent(Event& event);
         
     private:
-        std::unique_ptr<Window> m_Window;
+        /* Generic Window tied to a platform dependent Window sublclass */
+        std::unique_ptr<Window> p_Window;
     };
     
     extern Application* CreateApplication();

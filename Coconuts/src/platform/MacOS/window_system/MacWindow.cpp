@@ -60,17 +60,17 @@ namespace Coconuts
         }
          
         /* Create a windowed mode window and its OpenGL context */
-        m_Window = glfwCreateWindow((int) m_WindowData.width, (int) m_WindowData.height,
+        p_glfwWindow = glfwCreateWindow((int) m_WindowData.width, (int) m_WindowData.height,
                                     m_WindowData.title.c_str(), nullptr, nullptr);
         
-        if (m_Window == NULL)
+        if (p_glfwWindow == NULL)
         {
             LOG_CRITICAL("Failed to create a GLFW Window. Exiting...");
             exit(1);
         }
         
         /* Make the window's context current */
-        glfwMakeContextCurrent(m_Window);
+        glfwMakeContextCurrent(p_glfwWindow);
         
         LOG_TRACE("A GLFW Window was created and set to current context");
     }
@@ -78,13 +78,13 @@ namespace Coconuts
     /* Private - Shall only be called from ~MacWindow() deconstructor */
     void MacWindow::ShutDown()
     {
-        glfwDestroyWindow(m_Window);
+        glfwDestroyWindow(p_glfwWindow);
     }
     
     void MacWindow::OnUpdate()
     {
         /* Swap front and back buffers */
-        glfwSwapBuffers(m_Window);
+        glfwSwapBuffers(p_glfwWindow);
 
         /* Poll for and process events */
         glfwPollEvents();

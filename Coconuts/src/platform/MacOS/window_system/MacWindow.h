@@ -43,7 +43,7 @@ namespace Coconuts
         };   
         MacWindowData m_WindowData;
         
-        GLFWwindow* m_Window;
+        GLFWwindow* p_glfwWindow;
     };
 }
 

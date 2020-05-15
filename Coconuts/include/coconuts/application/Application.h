@@ -28,12 +28,15 @@ namespace Coconuts
     {   
     public:
         Application();
-        virtual ~Application();
+        ~Application();
         
         void Run(void);
         void OnEvent(Event& event);
+        void OnWindowClose(void);
         
     private:
+        bool m_isRunning = false;
+        
         /* Generic Window tied to a platform dependent Window sublclass */
         std::unique_ptr<Window> p_Window;
     };

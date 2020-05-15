@@ -49,14 +49,15 @@ namespace Coconuts
     
     Application::~Application()
     {
-
+        LOG_INFO("Sandbox App is closing");
     }
     
     void Application::Run()
     {
+        m_isRunning = true;
         LOG_INFO("Sandbox App is now running...");
         
-        while(true)
+        while(m_isRunning)
         {
             p_Window->OnUpdate();
         }
@@ -64,6 +65,21 @@ namespace Coconuts
     
     void Application::OnEvent(Event& event)
     {
+        /* Log Event */
         LOG_TRACE(event.ToString());
+        
+        //TODO: Set an event dispatcher for every event type
+        
+        /* debugging way for now */
+        if (event.GetEventType() == EventType::EVTYPE_WINDOW_CLOSE)
+        {
+            OnWindowClose();
+        }
+    }
+    
+    void Application::OnWindowClose()
+    {
+        LOG_WARN("Performing a graceful shutdown sequence...");
+        m_isRunning = false;
     }
 }

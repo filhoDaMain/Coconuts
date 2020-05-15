@@ -35,6 +35,7 @@ namespace Coconuts
     MacWindow::~MacWindow()
     {
         ShutDown();
+        LOG_TRACE("MacWindow objects freed");
     }
     
     /* Private - Shall only be called from MacWindow() constructor */
@@ -75,14 +76,31 @@ namespace Coconuts
         glfwMakeContextCurrent(p_glfwWindow);
         LOG_TRACE("A GLFW Window was created and set to current context");
         
+        
         /* Set GLFW Callbacks */
+        
+        /* Window Close */
+        glfwSetWindowCloseCallback(p_glfwWindow, [](GLFWwindow* window)
+        {
+            /**
+             * Get the user pointer associated to the GLFW Window on which
+             * this event has occured
+             */
+            MacWindowData &thisWinData = *((MacWindowData*)glfwGetWindowUserPointer(window));
+            
+            /* Create the associated Coconuts Event for this kind of event */
+            Events::WindowClose winCloseEvent;
+            
+            /* Dispatch this event to the callback function associated with this window */
+            thisWinData.eventCallback(winCloseEvent);
+        });
         
         /* Window (Re)size */
         glfwSetWindowSizeCallback(p_glfwWindow, [](GLFWwindow* window, int width, int height)
         {
             /**
              * Get the user pointer associated to the GLFW Window on which
-             * thie vent has occured
+             * this event has occured
              */
             MacWindowData &thisWinData = *((MacWindowData*)glfwGetWindowUserPointer(window));
             
@@ -91,10 +109,10 @@ namespace Coconuts
             thisWinData.height = height;
             
             /* Create the associated Coconuts Event for this kind of event */
-            Events::WindowResize thisEvent(width, height);
+            Events::WindowResize winResizeEvent(width, height);
             
             /* Dispatch this event to the callback function associated with this window */
-            thisWinData.eventCallback(thisEvent);
+            thisWinData.eventCallback(winResizeEvent);
         });
               
     }

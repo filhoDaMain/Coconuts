@@ -16,31 +16,12 @@
 #ifndef EVENT_H
 #define EVENT_H
 
-#include <coconuts/types.h>
+#include <coconuts/event_system/EventTypes.h>
 #include <string>
 #include <sstream>
 
-/* Log Output Event names */
-#define EVENT_NAME_WINDOW_RESIZE    "Event <WindowResize>"
-#define EVENT_NAME_WINDOW_CLOSE     "Event <WindowClose>"
-
 namespace Coconuts
-{
-    
-    enum class EventType
-    {
-        None = 0,           
-        WindowResize,
-        WindowClose
-    };
-    
-    enum EventCategory
-    {
-        None = 0,
-        WindowChange    = BIT_MASK(1),  /* Related to a window change */
-        SandboxApp      = BIT_MASK(2),  /* Related to the sanbox app */
-    };
-    
+{   
     class Event
     {
     public:
@@ -53,7 +34,6 @@ namespace Coconuts
             return ( GetEventCategoryFlags() & cat );
         }
     };
-    
 }
 
 

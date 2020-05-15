@@ -16,6 +16,7 @@
 #ifndef APPWINDOWEVENT_H
 #define APPWINDOWEVENT_H
 
+#include <coconuts/event_system/EventTypes.h>
 #include <coconuts/event_system/Event.h>
 
 namespace Coconuts
@@ -36,6 +37,7 @@ namespace Coconuts
             }
                 
             EventType GetEventType(void) const override { return EventType::WindowResize; }
+            static EventType GetStaticEventType(void) { return EventType::WindowResize; }
             
             unsigned int GetEventCategoryFlags(void) const override
             {
@@ -63,6 +65,7 @@ namespace Coconuts
             }
                 
             EventType GetEventType(void) const override { return EventType::WindowClose; }
+            static EventType GetStaticEventType(void) { return EventType::WindowClose; }
             
             unsigned int GetEventCategoryFlags(void) const override
             {

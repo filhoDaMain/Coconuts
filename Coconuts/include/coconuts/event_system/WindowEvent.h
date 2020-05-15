@@ -22,16 +22,16 @@ namespace Coconuts
 {
     namespace Events
     {
-        class AppWindowResize : public Event
+        class WindowResize : public Event
         {
         public:
-            AppWindowResize(unsigned int w, unsigned int h)
+            WindowResize(unsigned int w, unsigned int h)
                 :   m_Width(w), m_Height(h) {}
                 
             unsigned int GetWidth() const { return m_Width; }
             unsigned int GetHeight() const { return m_Height; }
             
-            EventType GetEventType() const override { return EventType::EVTYPE_APP_WINDOW_RESIZE; }
+            EventType GetEventType() const override { return EventType::EVTYPE_WINDOW_RESIZE; }
             
             unsigned int GetEventCategoryFlags() const override
             {

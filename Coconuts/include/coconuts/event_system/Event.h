@@ -22,6 +22,7 @@
 
 /* Log Output Event names */
 #define EVENT_NAME_WINDOW_RESIZE    "Event <WindowResize>"
+#define EVENT_NAME_WINDOW_CLOSE     "Event <WindowClose>"
 
 namespace Coconuts
 {
@@ -29,7 +30,8 @@ namespace Coconuts
     enum class EventType
     {
         EVTYPE_NONE = 0,           
-        EVTYPE_WINDOW_RESIZE    
+        EVTYPE_WINDOW_RESIZE,
+        EVTYPE_WINDOW_CLOSE
     };
     
     enum EventCategory
@@ -50,8 +52,6 @@ namespace Coconuts
         {
             return ( GetEventCategoryFlags() & cat );
         }
-        
-    private:
     };
         
 }

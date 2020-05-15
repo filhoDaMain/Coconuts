@@ -48,6 +48,27 @@ namespace Coconuts
         private:
             unsigned int m_Width, m_Height;
         };
+        
+        
+        class WindowClose : public Event
+        {
+        public:
+            WindowClose() = default;
+            
+            std::string ToString() const override
+            {
+                std::stringstream ss;
+                ss << EVENT_NAME_WINDOW_CLOSE;
+                return ss.str();
+            }
+                
+            EventType GetEventType(void) const override { return EventType::EVTYPE_WINDOW_CLOSE; }
+            
+            unsigned int GetEventCategoryFlags(void) const override
+            {
+                return (EVCATG_SANDBOX_APP);
+            }
+        };
     }
 }
 

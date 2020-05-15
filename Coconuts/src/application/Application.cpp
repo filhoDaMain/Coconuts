@@ -18,7 +18,7 @@
 #include <coconuts/core.h>
 #include <coconuts/Logger.h>
 #include <coconuts/EventSystem.h>
-
+#include <functional>
 
 
 namespace Coconuts
@@ -41,8 +41,9 @@ namespace Coconuts
         }
         //ELSE - it should already have crashed!
 #endif
-      
         
+        /* Whenever an event occurs inside p_Window OnEvent gets called */
+        p_Window->SetEventCallback( std::bind(&Application::OnEvent, this, std::placeholders::_1) );
         
     }
     
@@ -63,6 +64,6 @@ namespace Coconuts
     
     void Application::OnEvent(Event& event)
     {
-        
+        LOG_TRACE("Event captured");
     }
 }

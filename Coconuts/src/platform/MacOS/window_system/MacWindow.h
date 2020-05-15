@@ -28,7 +28,12 @@ namespace Coconuts
         ~MacWindow();
             
         void OnUpdate() override;
-            
+        
+        void SetEventCallback(const EventCallbackFunction& callbackFn) override
+        {
+            /* Make our MacWindow callback for events point to callbackFn */
+            m_WindowData.eventCallback = callbackFn;
+        }
         unsigned int GetWidth() const override { return m_WindowData.width; }
         unsigned int GetHeight() const override { return m_WindowData.height; }
             
@@ -40,6 +45,9 @@ namespace Coconuts
         {
             std::string title;
             unsigned int width, height;
+            
+            /* Called to dispatch any MacWindow Event */
+            EventCallbackFunction eventCallback;
         };   
         MacWindowData m_WindowData;
         

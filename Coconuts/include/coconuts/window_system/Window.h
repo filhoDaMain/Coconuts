@@ -17,6 +17,8 @@
 #define WINDOW_H
 
 #include <string>
+#include <functional>
+#include <coconuts/EventSystem.h>
 
 namespace Coconuts
 {
@@ -37,11 +39,15 @@ namespace Coconuts
     class Window
     {
     public:
+        using EventCallbackFunction = std::function<void(Event& event)>;
+        
         virtual ~Window() = default;
         
         /* Called once per frame */
         virtual void OnUpdate() = 0;
         
+        /* MUST be implemented by a platform dependent sub Window class */
+        virtual void SetEventCallback(const EventCallbackFunction& callbackFn) = 0;
         virtual unsigned int GetWidth() const = 0;
         virtual unsigned int GetHeight() const = 0;
         

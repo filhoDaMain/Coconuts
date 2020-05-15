@@ -15,6 +15,7 @@
  */
 
 #include "MacWindow.h"
+#include <coconuts/EventSystem.h>
 #include <coconuts/Logger.h>
 
 namespace Coconuts
@@ -70,9 +71,32 @@ namespace Coconuts
         }
         
         /* Make the window's context current */
+        glfwSetWindowUserPointer(p_glfwWindow, &m_WindowData);
         glfwMakeContextCurrent(p_glfwWindow);
-        
         LOG_TRACE("A GLFW Window was created and set to current context");
+        
+        /* Set GLFW Callbacks */
+        
+        /* Window (Re)size */
+        glfwSetWindowSizeCallback(p_glfwWindow, [](GLFWwindow* window, int width, int height)
+        {
+            /**
+             * Get the user pointer associated to the GLFW Window on which
+             * thie vent has occured
+             */
+            MacWindowData &thisWinData = *((MacWindowData*)glfwGetWindowUserPointer(window));
+            
+            /* Update the window data */
+            thisWinData.width = width; 
+            thisWinData.height = height;
+            
+            /* Create the associated Coconuts Event for this kind of event */
+            Events::WindowResize thisEvent(width, height);
+            
+            /* Dispatch this event to the callback function associated with this window */
+            thisWinData.eventCallback(thisEvent);
+        });
+              
     }
     
     /* Private - Shall only be called from ~MacWindow() deconstructor */

@@ -17,6 +17,11 @@
 #define EVENT_H
 
 #include <coconuts/types.h>
+#include <string>
+#include <sstream>
+
+/* Log Output Event names */
+#define EVENT_NAME_WINDOW_RESIZE    "Event <WindowResize>"
 
 namespace Coconuts
 {
@@ -37,8 +42,9 @@ namespace Coconuts
     class Event
     {
     public:
-        virtual EventType GetEventType() const = 0;
-        virtual unsigned int GetEventCategoryFlags() const = 0;
+        virtual std::string ToString(void) const = 0;
+        virtual EventType GetEventType(void) const = 0;
+        virtual unsigned int GetEventCategoryFlags(void) const = 0;
         
         bool IsInCategory(EventCategory cat)
         {
@@ -47,6 +53,7 @@ namespace Coconuts
         
     private:
     };
+        
 }
 
 

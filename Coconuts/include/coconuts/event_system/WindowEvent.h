@@ -27,16 +27,23 @@ namespace Coconuts
         public:
             WindowResize(unsigned int w, unsigned int h)
                 :   m_Width(w), m_Height(h) {}
+            
+            std::string ToString() const override
+            {
+                std::stringstream ss;
+                ss << EVENT_NAME_WINDOW_RESIZE << " (" << m_Width << ", " << m_Height << ")";
+                return ss.str();
+            }
                 
-            unsigned int GetWidth() const { return m_Width; }
-            unsigned int GetHeight() const { return m_Height; }
+            EventType GetEventType(void) const override { return EventType::EVTYPE_WINDOW_RESIZE; }
             
-            EventType GetEventType() const override { return EventType::EVTYPE_WINDOW_RESIZE; }
-            
-            unsigned int GetEventCategoryFlags() const override
+            unsigned int GetEventCategoryFlags(void) const override
             {
                 return (EVCATG_WINDOW_CHANGE | EVCATG_SANDBOX_APP);
             }
+                   
+            unsigned int GetWidth() const { return m_Width; }
+            unsigned int GetHeight() const { return m_Height; }
             
         private:
             unsigned int m_Width, m_Height;

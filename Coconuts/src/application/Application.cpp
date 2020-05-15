@@ -64,6 +64,6 @@ namespace Coconuts
     
     void Application::OnEvent(Event& event)
     {
-        LOG_TRACE("Event captured");
+        LOG_TRACE(event.ToString());
     }
 }

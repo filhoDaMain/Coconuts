@@ -29,22 +29,21 @@ namespace Coconuts
             
         void OnUpdate() override;
             
-        unsigned int GetWidth() const override { return m_Props.width; }
-        unsigned int GetHeight() const override { return m_Props.height; }
+        unsigned int GetWidth() const override { return m_WindowData.width; }
+        unsigned int GetHeight() const override { return m_WindowData.height; }
             
     private:
-        GLFWwindow* m_Window;
-        
         void Init(const WindowProperties& props);
         void ShutDown();
         
-        struct MacWindowProperties
+        struct MacWindowData
         {
             std::string title;
             unsigned int width, height;
-        };
-            
-        MacWindowProperties m_Props;
+        };   
+        MacWindowData m_WindowData;
+        
+        GLFWwindow* m_Window;
     };
 }
 

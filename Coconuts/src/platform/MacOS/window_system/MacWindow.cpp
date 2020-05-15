@@ -40,9 +40,9 @@ namespace Coconuts
     void MacWindow::Init(const WindowProperties& props)
     {
         int rc;
-        m_Props.title = props.m_Title;
-        m_Props.width = props.m_Width;
-        m_Props.height = props.m_Height;
+        m_WindowData.title = props.m_Title;
+        m_WindowData.width = props.m_Width;
+        m_WindowData.height = props.m_Height;
         
         if (!s_GLFWinitialized)
         {
@@ -60,8 +60,8 @@ namespace Coconuts
         }
          
         /* Create a windowed mode window and its OpenGL context */
-        m_Window = glfwCreateWindow((int) m_Props.width, (int) m_Props.height,
-                                    m_Props.title.c_str(), nullptr, nullptr);
+        m_Window = glfwCreateWindow((int) m_WindowData.width, (int) m_WindowData.height,
+                                    m_WindowData.title.c_str(), nullptr, nullptr);
         
         if (m_Window == NULL)
         {

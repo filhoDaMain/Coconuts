@@ -29,16 +29,16 @@ namespace Coconuts
     
     enum class EventType
     {
-        EVTYPE_NONE = 0,           
-        EVTYPE_WINDOW_RESIZE,
-        EVTYPE_WINDOW_CLOSE
+        None = 0,           
+        WindowResize,
+        WindowClose
     };
     
     enum EventCategory
     {
-        EVCATG_NONE = 0,
-        EVCATG_WINDOW_CHANGE    = BIT_MASK(1),  /* Related to a window change */
-        EVCATG_SANDBOX_APP      = BIT_MASK(2),  /* Related to the sanbox app */
+        None = 0,
+        WindowChange    = BIT_MASK(1),  /* Related to a window change */
+        SandboxApp      = BIT_MASK(2),  /* Related to the sanbox app */
     };
     
     class Event
@@ -53,7 +53,7 @@ namespace Coconuts
             return ( GetEventCategoryFlags() & cat );
         }
     };
-        
+    
 }
 
 

@@ -69,12 +69,6 @@ namespace Coconuts
         LOG_TRACE(event.ToString());
         
         //TODO: Set an event dispatcher for every event type
-        
-        /* debugging way for now */
-        if (event.GetEventType() == EventType::EVTYPE_WINDOW_CLOSE)
-        {
-            OnWindowClose();
-        }
     }
     
     void Application::OnWindowClose()

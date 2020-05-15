@@ -35,11 +35,11 @@ namespace Coconuts
                 return ss.str();
             }
                 
-            EventType GetEventType(void) const override { return EventType::EVTYPE_WINDOW_RESIZE; }
+            EventType GetEventType(void) const override { return EventType::WindowResize; }
             
             unsigned int GetEventCategoryFlags(void) const override
             {
-                return (EVCATG_WINDOW_CHANGE | EVCATG_SANDBOX_APP);
+                return (WindowChange | SandboxApp);
             }
                    
             unsigned int GetWidth() const { return m_Width; }
@@ -62,11 +62,11 @@ namespace Coconuts
                 return ss.str();
             }
                 
-            EventType GetEventType(void) const override { return EventType::EVTYPE_WINDOW_CLOSE; }
+            EventType GetEventType(void) const override { return EventType::WindowClose; }
             
             unsigned int GetEventCategoryFlags(void) const override
             {
-                return (EVCATG_SANDBOX_APP);
+                return (SandboxApp);
             }
         };
     }

@@ -42,7 +42,17 @@ namespace Coconuts
         //ELSE - it should already have crashed!
 #endif
         
-        /* Whenever an event occurs inside p_Window OnEvent gets called */
+        /* Initialize the Window Manager library callbacks */
+        if ( p_Window->InitWindowManagerCallbacks("GLFW") )
+        {
+            LOG_DEBUG("Window Manager library callbacks successfully initialized");
+        }
+        else
+        {
+            LOG_ERROR("Failed to initialize Window Manager library callbacks!");
+        }
+        
+        /* Set the callback function for all Window Manager library events */
         p_Window->SetEventCallback( std::bind(&Application::OnEvent, this, std::placeholders::_1) );
         
     }

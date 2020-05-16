@@ -17,6 +17,7 @@
 #include "MacWindow.h"
 #include <coconuts/EventSystem.h>
 #include <coconuts/Logger.h>
+#include <cstring>
 
 namespace Coconuts
 {   
@@ -74,47 +75,53 @@ namespace Coconuts
         /* Make the window's context current */
         glfwSetWindowUserPointer(p_glfwWindow, &m_WindowData);
         glfwMakeContextCurrent(p_glfwWindow);
-        LOG_TRACE("A GLFW Window was created and set to current context");
-        
-        
-        /* Set GLFW Callbacks */
-        
-        /* Window Close */
-        glfwSetWindowCloseCallback(p_glfwWindow, [](GLFWwindow* window)
+        LOG_TRACE("A GLFW Window was created and set to current context");     
+    }
+    
+    bool MacWindow::InitWindowManagerCallbacks(const char* library)
+    {
+        if (strcmp(library, "GLFW") == 0)
         {
-            /**
-             * Get the user pointer associated to the GLFW Window on which
-             * this event has occured
-             */
-            MacWindowData &thisWinData = *((MacWindowData*)glfwGetWindowUserPointer(window));
+            LOG_TRACE("Initializing GLFW callbacks...");
             
-            /* Create the associated Coconuts Event for this kind of event */
-            Events::WindowClose winCloseEvent;
+            /* Window Close */
+            glfwSetWindowCloseCallback(p_glfwWindow, [](GLFWwindow* window)
+            {
+                /**
+                 * Get the user pointer associated to the GLFW Window on which
+                 * this event has occured
+                 */
+                MacWindowData &thisWinData = *((MacWindowData*)glfwGetWindowUserPointer(window));
             
-            /* Dispatch this event to the callback function associated with this window */
-            thisWinData.eventCallback(winCloseEvent);
-        });
+                /* Create the associated Coconuts Event for this kind of event */
+                Events::WindowClose winCloseEvent;
+            
+                /* Dispatch this event to the callback function associated with this window */
+                thisWinData.eventCallback(winCloseEvent);
+            });
+            LOG_TRACE("* <WindowCloseCallback> initialized");
+            
+            /* Window (Re)size */
+            glfwSetWindowSizeCallback(p_glfwWindow, [](GLFWwindow* window, int width, int height)
+            {
+                MacWindowData &thisWinData = *((MacWindowData*)glfwGetWindowUserPointer(window));
+            
+                /* Update the window data */
+                thisWinData.width = width; 
+                thisWinData.height = height;
+            
+                /* Create the associated Coconuts Event for this kind of event */
+                Events::WindowResize winResizeEvent(width, height);
+            
+                /* Dispatch this event to the callback function associated with this window */
+                thisWinData.eventCallback(winResizeEvent);
+            });
+            LOG_TRACE("* <WindowSizeCallback> initialized");
+            
+            return true;
+        }
         
-        /* Window (Re)size */
-        glfwSetWindowSizeCallback(p_glfwWindow, [](GLFWwindow* window, int width, int height)
-        {
-            /**
-             * Get the user pointer associated to the GLFW Window on which
-             * this event has occured
-             */
-            MacWindowData &thisWinData = *((MacWindowData*)glfwGetWindowUserPointer(window));
-            
-            /* Update the window data */
-            thisWinData.width = width; 
-            thisWinData.height = height;
-            
-            /* Create the associated Coconuts Event for this kind of event */
-            Events::WindowResize winResizeEvent(width, height);
-            
-            /* Dispatch this event to the callback function associated with this window */
-            thisWinData.eventCallback(winResizeEvent);
-        });
-              
+        return false;   /* unknown library */
     }
     
     /* Private - Shall only be called from ~MacWindow() deconstructor */

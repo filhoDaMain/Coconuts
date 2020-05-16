@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef APPWINDOWEVENT_H
-#define APPWINDOWEVENT_H
+#ifndef WINDOWEVENT_H
+#define WINDOWEVENT_H
 
 #include <coconuts/event_system/EventTypes.h>
 #include <coconuts/event_system/Event.h>
@@ -37,7 +37,6 @@ namespace Coconuts
             }
                 
             EventType GetEventType(void) const override { return EventType::WindowResize; }
-            static EventType GetStaticEventType(void) { return EventType::WindowResize; }
             
             unsigned int GetEventCategoryFlags(void) const override
             {
@@ -65,7 +64,6 @@ namespace Coconuts
             }
                 
             EventType GetEventType(void) const override { return EventType::WindowClose; }
-            static EventType GetStaticEventType(void) { return EventType::WindowClose; }
             
             unsigned int GetEventCategoryFlags(void) const override
             {
@@ -75,5 +73,5 @@ namespace Coconuts
     }
 }
 
-#endif /* APPWINDOWEVENT_H */
+#endif /* WINDOWEVENT_H */
 

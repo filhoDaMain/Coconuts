@@ -17,6 +17,7 @@
 #define EVENTSYSTEM_H
 
 #include <coconuts/event_system/EventTypes.h>
+#include <coconuts/event_system/EventDispatcher.h>
 #include <coconuts/event_system/Event.h>
 #include <coconuts/event_system/WindowEvent.h>
 

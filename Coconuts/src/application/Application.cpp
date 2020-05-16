@@ -16,8 +16,8 @@
 
 #include <coconuts/application/Application.h>
 #include <coconuts/core.h>
-#include <coconuts/Logger.h>
 #include <coconuts/EventSystem.h>
+#include <coconuts/Logger.h>
 #include <functional>
 
 
@@ -25,19 +25,19 @@ namespace Coconuts
 {
     Application::Application()
     {
-        LOG_INFO("Sandbox App created!");
+        LOG_DEBUG("Sandbox App created!");
         p_Window = std::unique_ptr<Window>(Window::Create());
         
 #if defined(__APPLE__)
         if (p_Window != nullptr)
         {
-            LOG_INFO("Coconuts WindowSystem initialized for the MacOS Platform");
+            LOG_DEBUG("Coconuts WindowSystem initialized for the MacOS Platform");
         }
         //ELSE - it should already have crashed!
 #elif __gnu_linux__
         if (p_Window != nullptr)
         {
-            LOG_INFO("Coconuts WindowSystem initialized for the GNU Platform");
+            LOG_DEBUG("Coconuts WindowSystem initialized for the GNU Platform");
         }
         //ELSE - it should already have crashed!
 #endif
@@ -49,7 +49,7 @@ namespace Coconuts
     
     Application::~Application()
     {
-        LOG_INFO("Sandbox App is closing");
+
     }
     
     void Application::Run()
@@ -65,10 +65,18 @@ namespace Coconuts
     
     void Application::OnEvent(Event& event)
     {
+        bool handled = false;
+        
         /* Log Event */
         LOG_TRACE(event.ToString());
         
-        //TODO: Set an event dispatcher for every event type
+        /* Dispatch Event */
+        handled = EventDispatcher::StaticDispatch<Application>(event, this);
+        
+        if (!handled)
+        {
+            LOG_WARN("Event could not be dispatched by the EventDispatcher");
+        }
     }
     
     void Application::OnWindowClose()

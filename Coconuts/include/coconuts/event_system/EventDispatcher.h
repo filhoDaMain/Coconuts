@@ -13,35 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#ifndef EVENTDISPATCHER_H
+#define EVENTDISPATCHER_H
 
-#ifndef COCONUTS_CORE_H
-#define COCONUTS_CORE_H
+#include <coconuts/event_system/Event.h>
+#include <coconuts/event_system/EventTypes.h>
 
-#include <coconuts/application/Application.h>
-#include <coconuts/EventSystem.h>
-
-#include <coconuts/Logger.h>
-
-#define COCONUTS_VERSION 0.1F
-
-/* core.cpp */
-extern void coconuts_version(void);
-
-
-/* Entry Point for Sandbox applications */
-#ifdef __COCONUTS_SANDBOX_APP__
-int main (void)
+namespace Coconuts
 {
-    Coconuts::Logger::Init();
-    auto app = Coconuts::CreateApplication();
-    app->Run();
-    delete app;
-    
-    LOG_TRACE("All instances of Sandbox Application died");
-    LOG_WARN("Goodbye!");
-    return 0;
+    class EventDispatcher
+    {
+    public:
+        template <typename T>
+        static bool StaticDispatch(Event& event, T* object);
+    };
 }
-#endif
 
+#endif /* EVENTDISPATCHER_H */
 
-#endif

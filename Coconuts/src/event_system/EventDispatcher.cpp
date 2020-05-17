@@ -23,31 +23,34 @@ namespace Coconuts
     template <>
     bool EventDispatcher::StaticDispatch<Application>(Event& event, Application* object)
     {
-        switch(event.GetEventType())
+        /* Window Event */
+        if (event.IsInCategory(EventCategory::WindowChange))
         {
-            case EventType::None:
+            switch(event.GetEventType())
             {
-                return false;
-                break;
-            }
+                case EventType::None:
+                {
+                    return false;
+                    break;
+                }
                 
-            case EventType::WindowResize:
-            {
-                return false;
-                break;
-            }
+                case EventType::WindowResize:
+                {
+                    return false;
+                    break;
+                }
                 
-            case EventType::WindowClose:
-            {
-                object->OnWindowClose();
-                return true;
-                break;
-            }
+                case EventType::WindowClose:
+                {
+                    object->OnWindowClose();
+                    return true;
+                    break;
+                }
                 
-            default:
-                return false;
+                default:
+                    return false;
+            }
         }
-        
         return false;
     }
 }

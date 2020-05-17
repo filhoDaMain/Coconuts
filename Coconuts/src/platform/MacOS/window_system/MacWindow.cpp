@@ -94,7 +94,7 @@ namespace Coconuts
                 MacWindowData &thisWinData = *((MacWindowData*)glfwGetWindowUserPointer(window));
             
                 /* Create the associated Coconuts Event for this kind of event */
-                Events::WindowClose winCloseEvent;
+                WindowEvent::WindowClose winCloseEvent;
             
                 /* Dispatch this event to the callback function associated with this window */
                 thisWinData.eventCallback(winCloseEvent);
@@ -111,10 +111,40 @@ namespace Coconuts
                 thisWinData.height = height;
             
                 /* Create the associated Coconuts Event for this kind of event */
-                Events::WindowResize winResizeEvent(width, height);
+                WindowEvent::WindowResize winResizeEvent(width, height);
             
                 /* Dispatch this event to the callback function associated with this window */
                 thisWinData.eventCallback(winResizeEvent);
+            });
+            LOG_TRACE("* <WindowSizeCallback> initialized");
+            
+            /* Input Key */
+            glfwSetKeyCallback(p_glfwWindow, [](GLFWwindow* window, int key, int scancode, int action, int mods)
+            {
+                MacWindowData &thisWinData = *((MacWindowData*)glfwGetWindowUserPointer(window));
+            
+                switch (action)
+                {
+                    case GLFW_PRESS:
+                    {
+                        break;
+                    }
+                    
+                    case GLFW_RELEASE:
+                    {
+                        break;
+                    }
+                        
+                    case GLFW_REPEAT:
+                    {
+                        break;
+                    }
+                }
+            
+                /* Create the associated Coconuts Event for this kind of event */
+            
+                /* Dispatch this event to the callback function associated with this window */
+                //thisWinData.eventCallback(winResizeEvent);
             });
             LOG_TRACE("* <WindowSizeCallback> initialized");
             

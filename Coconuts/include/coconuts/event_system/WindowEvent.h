@@ -21,7 +21,7 @@
 
 namespace Coconuts
 {
-    namespace Events
+    namespace WindowEvent
     {
         class WindowResize : public Event
         {

@@ -30,6 +30,7 @@ namespace Coconuts
         if (IS_INPUT_EVENT(event_categories))
         {
             //TODO
+            return true;
         }
         
         /* Window Event */

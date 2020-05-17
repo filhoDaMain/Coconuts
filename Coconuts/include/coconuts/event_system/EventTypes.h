@@ -19,11 +19,16 @@
 #include <coconuts/types.h>
 
 /* Log Output Event names */
-#define EVENT_NAME_WINDOW_RESIZE    "Event <WindowResize>"
-#define EVENT_NAME_WINDOW_CLOSE     "Event <WindowClose>"
+#define EVENT_NAME_WINDOW_RESIZE        "Event <WindowResize>"
+#define EVENT_NAME_WINDOW_CLOSE         "Event <WindowClose>"
 
-#define EVENT_NAME_KEY_PRESS        "Event <KeyPress>"
-#define EVENT_NAME_KEY_RELEASE      "Event <KeyRelease>"
+#define EVENT_NAME_KEY_PRESS            "Event <KeyPress>"
+#define EVENT_NAME_KEY_RELEASE          "Event <KeyRelease>"
+
+#define EVENT_NAME_MOUSE_BUTTON_PRESS   "Event <MouseButtonPress>"
+#define EVENT_NAME_MOUSE_BUTTON_RELEASE "Event <MouseButtonRelease>"
+#define EVENT_NAME_MOUSE_CURSOR_MOVE    "Event <MouseCursorMove>"
+#define EVENT_NAME_MOUSE_SCROLL         "Event <MouseScroll>"
 
 /* Macro to write the Getters() for EventType and EventCategories */
 #define SET_EVENT_TYPE(TYPE)        EventType GetEventType(void) const override { return TYPE; }
@@ -31,6 +36,7 @@
 
 namespace Coconuts
 {
+    /* Event Classes */
     enum class EventType
     {
         None = 0,           
@@ -38,12 +44,15 @@ namespace Coconuts
         WindowClose,
         KeyPress,
         KeyRelease,
-        MousePress,
-        MouseRelease,
+        MouseButtonPress,
+        MouseButtonRelease,
+        MouseCursorMove,
+        MouseScroll,
         TouchPress,
         TouchRelease
     };
     
+    /* Event Classes parent namespaces, aka HeaderFile names */
     enum EventCategory
     {
         None = 0,

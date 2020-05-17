@@ -78,7 +78,7 @@ namespace Coconuts
         bool handled = false;
         
         /* Log Event */
-        LOG_TRACE(event.ToString());
+        //LOG_TRACE(event.ToString());
         
         /* Dispatch Event */
         handled = EventDispatcher::StaticDispatch<Application>(event, this);

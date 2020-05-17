@@ -23,6 +23,11 @@ namespace Coconuts
 {   
     static bool s_GLFWinitialized = false;
     
+    static void GLFWErrorCallback(int error, const char* description)
+    {
+        LOG_ERROR("GLFW Error {:X}: {}", error, description);
+    }
+    
     Window* Window::Create(const WindowProperties& props)
     {
         return new MacWindow(props);
@@ -53,6 +58,7 @@ namespace Coconuts
             if (rc == GLFW_TRUE)
             {
                 s_GLFWinitialized = true;
+                glfwSetErrorCallback(GLFWErrorCallback);
                 LOG_DEBUG("GLFW initialized");
             }
             else
@@ -118,7 +124,7 @@ namespace Coconuts
             });
             LOG_TRACE("* <WindowSizeCallback>   initialized");
             
-            /* Input Key */
+            /* Keyboard Inputs */
             glfwSetKeyCallback(p_glfwWindow, [](GLFWwindow* window, int key, int scancode, int action, int mods)
             {
                 MacWindowData &thisWinData = *((MacWindowData*)glfwGetWindowUserPointer(window));
@@ -147,7 +153,49 @@ namespace Coconuts
                     }
                 }
             });
-            LOG_TRACE("* <KeyCallback>          initialized     [Keyboard Input]");
+            LOG_TRACE("* <KeyCallback>          initialized     [Input: Keyboard]");
+            
+            /* Mouse Inputs */
+            glfwSetMouseButtonCallback(p_glfwWindow, [](GLFWwindow* window, int button, int action, int mods)
+            {
+                MacWindowData &thisWinData = *((MacWindowData*)glfwGetWindowUserPointer(window));
+            
+                switch (action)
+                {
+                    case GLFW_PRESS:
+                    {
+                        InputMouseEvent::MouseButtonPress buttonPress(button);
+                        thisWinData.eventCallback(buttonPress);
+                        break;
+                    }
+                    
+                    case GLFW_RELEASE:
+                    {
+                        InputMouseEvent::MouseButtonRelease buttonRelease(button);
+                        thisWinData.eventCallback(buttonRelease);
+                        break;
+                    }
+                }
+            });
+            LOG_TRACE("* <MouseButtonCallback>  initialized     [Input:    Mouse]");
+            
+            glfwSetCursorPosCallback(p_glfwWindow, [](GLFWwindow* window, double xpos, double ypos)
+            {
+                MacWindowData &thisWinData = *((MacWindowData*)glfwGetWindowUserPointer(window));
+                
+                InputMouseEvent::MouseCursorMove cursorMove(xpos, ypos);
+                thisWinData.eventCallback(cursorMove);
+            });
+            LOG_TRACE("* <CursorPosCallback>    initialized     [Input:    Mouse]");
+            
+            glfwSetScrollCallback(p_glfwWindow, [](GLFWwindow* window, double xoffset, double yoffset)
+            {
+                MacWindowData &thisWinData = *((MacWindowData*)glfwGetWindowUserPointer(window));
+                
+                InputMouseEvent::MouseScroll scroll(xoffset, yoffset);
+                thisWinData.eventCallback(scroll);
+            });
+            LOG_TRACE("* <ScrollCallback>       initialized     [Input:    Mouse]");
             
             return true;
         }

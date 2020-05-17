@@ -49,10 +49,11 @@ namespace Coconuts
         None = 0,
         Category_WindowEvent        = BIT_MASK(1),
         Category_InputKeyEvent      = BIT_MASK(2),  /* Keyboard + Gamepad */
-        Category_InputMouseEvent    = BIT_MASK(3),
+        Category_InputMouseEvent    = BIT_MASK(3),  /* Mouse pointer + Mouse keys */
+        Category_InputTouchEvent    = BIT_MASK(4)   /* RESERVED - Future usage */
     };
     
-#define IS_INPUT_EVENT(CATS)    ((CATS & Category_InputKeyEvent) || (CATS & Category_InputMouseEvent)) ? true:false
+#define IS_INPUT_EVENT(CATS)    ((CATS & Category_InputKeyEvent) || (CATS & Category_InputMouseEvent) || (CATS & Category_InputTouchEvent)) ? true:false
 #define IS_WINDOW_EVENT(CATS)   (CATS & Category_WindowEvent) ? true:false
 }
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include <coconuts/application/Application.h>
+#include <coconuts/Application.h>
 #include <coconuts/core.h>
 #include <coconuts/EventSystem.h>
 #include <coconuts/Logger.h>

@@ -17,7 +17,7 @@
 #ifndef COCONUTS_CORE_H
 #define COCONUTS_CORE_H
 
-#include <coconuts/application/Application.h>
+#include <coconuts/Application.h>
 #include <coconuts/EventSystem.h>
 
 #include <coconuts/Logger.h>

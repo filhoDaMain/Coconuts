@@ -40,7 +40,7 @@ namespace Coconuts
             
             unsigned int GetEventCategoryFlags(void) const override
             {
-                return (WindowChange | SandboxApp);
+                return (Category_WindowEvent | Category_SandboxApp);
             }
                    
             unsigned int GetWidth() const { return m_Width; }
@@ -67,7 +67,7 @@ namespace Coconuts
             
             unsigned int GetEventCategoryFlags(void) const override
             {
-                return (SandboxApp);
+                return (Category_WindowEvent | Category_SandboxApp);
             }
         };
     }

@@ -16,6 +16,7 @@
 
 #include <coconuts/EventSystem.h>
 #include <coconuts/application/Application.h>
+#include <coconuts/Logger.h>
 
 namespace Coconuts
 {
@@ -24,7 +25,7 @@ namespace Coconuts
     bool EventDispatcher::StaticDispatch<Application>(Event& event, Application* object)
     {
         /* Window Event */
-        if (event.IsInCategory(EventCategory::WindowChange))
+        if (event.IsInCategory(EventCategory::Category_WindowEvent))
         {
             switch(event.GetEventType())
             {
@@ -51,6 +52,7 @@ namespace Coconuts
                     return false;
             }
         }
+        
         return false;
     }
 }

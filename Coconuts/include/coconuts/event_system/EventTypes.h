@@ -34,8 +34,8 @@ namespace Coconuts
     enum EventCategory
     {
         None = 0,
-        WindowChange    = BIT_MASK(1),  /* Related to a window change */
-        SandboxApp      = BIT_MASK(2),  /* Related to the sanbox app */
+        Category_WindowEvent    = BIT_MASK(1),
+        Category_SandboxApp     = BIT_MASK(2)
     };
 }
 

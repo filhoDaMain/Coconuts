@@ -32,15 +32,24 @@ namespace Coconuts
     {
         None = 0,           
         WindowResize,
-        WindowClose
+        WindowClose,
+        KeyPress,
+        KeyRelease,
+        MousePress,
+        MouseRelease,
+        TouchPress,
+        TouchRelease
     };
     
     enum EventCategory
     {
         None = 0,
-        Category_WindowEvent    = BIT_MASK(1),
-        Category_SandboxApp     = BIT_MASK(2)
+        Category_WindowEvent        = BIT_MASK(1),
+        Category_InputKeyEvent      = BIT_MASK(2),  /* Keyboard + Gamepad */
+        Category_InputMouseEvent    = BIT_MASK(3)
     };
+    
+
 }
 
 #endif /* EVENTTYPES_H */

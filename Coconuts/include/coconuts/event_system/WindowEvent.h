@@ -26,6 +26,9 @@ namespace Coconuts
         class WindowResize : public Event
         {
         public:
+            SET_EVENT_CATEGORIES(Category_WindowEvent|Category_SandboxApp);
+            SET_EVENT_TYPE(EventType::WindowResize);
+            
             WindowResize(unsigned int w, unsigned int h)
                 :   m_Width(w), m_Height(h) {}
             
@@ -36,12 +39,14 @@ namespace Coconuts
                 return ss.str();
             }
                 
+#if 0
             EventType GetEventType(void) const override { return EventType::WindowResize; }
             
             unsigned int GetEventCategoryFlags(void) const override
             {
                 return (Category_WindowEvent | Category_SandboxApp);
             }
+#endif
                    
             unsigned int GetWidth() const { return m_Width; }
             unsigned int GetHeight() const { return m_Height; }
@@ -54,6 +59,9 @@ namespace Coconuts
         class WindowClose : public Event
         {
         public:
+            SET_EVENT_CATEGORIES(Category_WindowEvent|Category_SandboxApp);
+            SET_EVENT_TYPE(EventType::WindowClose);
+            
             WindowClose() = default;
             
             std::string ToString() const override
@@ -62,13 +70,15 @@ namespace Coconuts
                 ss << EVENT_NAME_WINDOW_CLOSE;
                 return ss.str();
             }
-                
+             
+#if 0
             EventType GetEventType(void) const override { return EventType::WindowClose; }
             
             unsigned int GetEventCategoryFlags(void) const override
             {
                 return (Category_WindowEvent | Category_SandboxApp);
             }
+#endif
         };
     }
 }

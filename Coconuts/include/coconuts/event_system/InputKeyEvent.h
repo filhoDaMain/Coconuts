@@ -29,23 +29,45 @@ namespace Coconuts
             SET_EVENT_CATEGORIES(Category_InputKeyEvent);
             SET_EVENT_TYPE(EventType::KeyPress);
             
-            KeyPress(int keycode, unsigned char repeatCount)
+            KeyPress(int keycode, unsigned int repeatCount)
                 : m_KeyCode(keycode), m_RepeatCount(repeatCount)
             {}
                 
             inline int GetKeyCode(void) const { return m_KeyCode; }
-            inline unsigned char GetRepeatCount(void) const { return m_RepeatCount; }
+            inline unsigned int GetRepeatCount(void) const { return m_RepeatCount; }
             
             std::string ToString() const override
             {
                 std::stringstream ss;
-                ss << EVENT_NAME_KEY_PRESS << " keycode = " << m_KeyCode << "; repeat_count = " << m_RepeatCount;
+                ss << EVENT_NAME_KEY_PRESS << " [keycode = " << m_KeyCode << "; repeat = " << m_RepeatCount << "]";
                 return ss.str();
             }
             
         private:
             int             m_KeyCode;
-            unsigned char   m_RepeatCount;
+            unsigned int    m_RepeatCount;
+        };
+        
+        
+        class KeyRelease : public Event
+        {
+        public:
+            SET_EVENT_CATEGORIES(Category_InputKeyEvent);
+            SET_EVENT_TYPE(EventType::KeyRelease);
+            
+            KeyRelease(int keycode) : m_KeyCode(keycode) {}
+            
+            inline int GetKeyCode(void) const { return m_KeyCode; }
+            
+            std::string ToString() const override
+            {
+                std::stringstream ss;
+                ss << EVENT_NAME_KEY_RELEASE << " [keycode = " << m_KeyCode <<"]";
+                return ss.str();
+            }
+            
+        private:
+            int             m_KeyCode;
         };
     }
 }

@@ -99,7 +99,7 @@ namespace Coconuts
                 /* Dispatch this event to the callback function associated with this window */
                 thisWinData.eventCallback(winCloseEvent);
             });
-            LOG_TRACE("* <WindowCloseCallback> initialized");
+             LOG_TRACE("* <WindowCloseCallback>  initialized");
             
             /* Window (Re)size */
             glfwSetWindowSizeCallback(p_glfwWindow, [](GLFWwindow* window, int width, int height)
@@ -116,7 +116,7 @@ namespace Coconuts
                 /* Dispatch this event to the callback function associated with this window */
                 thisWinData.eventCallback(winResizeEvent);
             });
-            LOG_TRACE("* <WindowSizeCallback> initialized");
+            LOG_TRACE("* <WindowSizeCallback>   initialized");
             
             /* Input Key */
             glfwSetKeyCallback(p_glfwWindow, [](GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -127,26 +127,27 @@ namespace Coconuts
                 {
                     case GLFW_PRESS:
                     {
+                        InputKeyEvent::KeyPress keyPress(key, 0);
+                        thisWinData.eventCallback(keyPress);
                         break;
                     }
                     
                     case GLFW_RELEASE:
                     {
+                        InputKeyEvent::KeyRelease keyRelease(key);
+                        thisWinData.eventCallback(keyRelease);
                         break;
                     }
                         
                     case GLFW_REPEAT:
                     {
+                        InputKeyEvent::KeyPress keyPress(key, 1);
+                        thisWinData.eventCallback(keyPress);
                         break;
                     }
                 }
-            
-                /* Create the associated Coconuts Event for this kind of event */
-            
-                /* Dispatch this event to the callback function associated with this window */
-                //thisWinData.eventCallback(winResizeEvent);
             });
-            LOG_TRACE("* <WindowSizeCallback> initialized");
+            LOG_TRACE("* <KeyCallback>          initialized     [Keyboard Input]");
             
             return true;
         }

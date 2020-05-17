@@ -20,6 +20,7 @@
 #include <coconuts/event_system/EventDispatcher.h>
 #include <coconuts/event_system/Event.h>
 #include <coconuts/event_system/WindowEvent.h>
+#include <coconuts/event_system/InputKeyEvent.h>
 
 #endif /* EVENTSYSTEM_H */
 

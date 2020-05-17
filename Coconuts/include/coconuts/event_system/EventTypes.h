@@ -23,6 +23,7 @@
 #define EVENT_NAME_WINDOW_CLOSE     "Event <WindowClose>"
 
 #define EVENT_NAME_KEY_PRESS        "Event <KeyPress>"
+#define EVENT_NAME_KEY_RELEASE      "Event <KeyRelease>"
 
 /* Macro to write the Getters() for EventType and EventCategories */
 #define SET_EVENT_TYPE(TYPE)        EventType GetEventType(void) const override { return TYPE; }
@@ -48,7 +49,7 @@ namespace Coconuts
         None = 0,
         Category_WindowEvent        = BIT_MASK(1),
         Category_InputKeyEvent      = BIT_MASK(2),  /* Keyboard + Gamepad */
-        Category_InputMouseEvent    = BIT_MASK(3)
+        Category_InputMouseEvent    = BIT_MASK(3),
     };
     
 #define IS_INPUT_EVENT(CATS)    ((CATS & Category_InputKeyEvent) || (CATS & Category_InputMouseEvent)) ? true:false

@@ -49,7 +49,8 @@ namespace Coconuts
         Category_InputMouseEvent    = BIT_MASK(3)
     };
     
-
+#define IS_INPUT_EVENT(CATS)    ((CATS & Category_InputKeyEvent) || (CATS & Category_InputMouseEvent)) ? true:false
+#define IS_WINDOW_EVENT(CATS)   (CATS & Category_WindowEvent) ? true:false
 }
 
 #endif /* EVENTTYPES_H */

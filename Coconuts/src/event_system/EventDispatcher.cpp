@@ -24,8 +24,16 @@ namespace Coconuts
     template <>
     bool EventDispatcher::StaticDispatch<Application>(Event& event, Application* object)
     {
+        unsigned int event_categories = event.GetEventCategoryFlags();
+        
+        /* Input Event */
+        if (IS_INPUT_EVENT(event_categories))
+        {
+            //TODO
+        }
+        
         /* Window Event */
-        if (event.IsInCategory(EventCategory::Category_WindowEvent))
+        if (IS_WINDOW_EVENT(event_categories))
         {
             switch(event.GetEventType())
             {

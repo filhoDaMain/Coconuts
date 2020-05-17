@@ -22,6 +22,8 @@
 #define EVENT_NAME_WINDOW_RESIZE    "Event <WindowResize>"
 #define EVENT_NAME_WINDOW_CLOSE     "Event <WindowClose>"
 
+#define EVENT_NAME_KEY_PRESS        "Event <KeyPress>"
+
 /* Macro to write the Getters() for EventType and EventCategories */
 #define SET_EVENT_TYPE(TYPE)        EventType GetEventType(void) const override { return TYPE; }
 #define SET_EVENT_CATEGORIES(CATS)  unsigned int GetEventCategoryFlags(void) const override { return CATS;}

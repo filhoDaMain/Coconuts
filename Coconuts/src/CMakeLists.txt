@@ -1,6 +1,11 @@
 # CORE LIBRARY
 
-add_library(ccncore core.cpp application/Application.cpp logger/Logger.cpp event_system/EventDispatcher.cpp)
+add_library(ccncore core.cpp
+                    application/Application.cpp
+                    logger/Logger.cpp
+                    event_system/EventDispatcher.cpp
+                    layer_system/Layer.cpp
+                    layer_system/LayerStack.cpp)
 
 # Platform Specific files
 # Mac OS

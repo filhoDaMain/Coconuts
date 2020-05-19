@@ -69,6 +69,11 @@ namespace Coconuts
         
         while(m_isRunning)
         {
+            for (Layer* layer : m_LayerStack)
+            {
+                layer->OnUpdate();
+            }
+            
             p_Window->OnUpdate();
         }
     }
@@ -87,11 +92,41 @@ namespace Coconuts
         {
             LOG_WARN("Event could not be dispatched by the EventDispatcher");
         }
+        
+        /* it is casted to a Layer */
+        for (auto it = m_LayerStack.end(); it != m_LayerStack.begin(); )
+        {
+            /**
+             *  We start from the TOP View (last drawn Layer)
+             *  and we go up to first drawn Layer
+             */
+            (*--it)->OnEvent(event);    /* We try to dispatch de Layer to the upmost Layer */
+            
+            /**
+             * We break on the Layer on which the event belongs to (was handled)
+             */
+            if (event.handled)
+            {
+                break;
+            }
+        }
     }
     
-    void Application::OnWindowClose()
+    bool Application::OnWindowClose()
     {
         LOG_WARN("Performing a graceful shutdown sequence...");
         m_isRunning = false;
+        
+        return true;    /* Event was handled */
+    }
+    
+    void Application::PushLayer(Layer* layer)
+    {
+        m_LayerStack.PushLayer(layer);
+    }
+    
+    void Application::PushOverlay(Layer* overlay)
+    {
+        m_LayerStack.PushOverlay(overlay);
     }
 }

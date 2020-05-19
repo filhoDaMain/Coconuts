@@ -13,31 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef EVENT_H
-#define EVENT_H
+#ifndef LAYER_H
+#define LAYER_H
 
-#include <coconuts/event_system/EventTypes.h>
+#include <coconuts/EventSystem.h>
 #include <string>
-#include <sstream>
 
 namespace Coconuts
-{   
-    class Event
+{
+    class Layer
     {
     public:
-        bool handled = false;
+        Layer(const std::string& name = "New Layer");
+        virtual ~Layer();
         
-        virtual std::string ToString(void) const = 0;
-        virtual EventType GetEventType(void) const = 0;
-        virtual unsigned int GetEventCategoryFlags(void) const = 0;
+        virtual void OnAttach();
+        virtual void OnDetach();
+        virtual void OnUpdate();
+        virtual void OnEvent(Event& event);
         
-        bool IsInCategory(EventCategory cat)
-        {
-            return ( GetEventCategoryFlags() & cat );
-        }
+        inline const std::string& GetName() const { return m_Name; }
+        
+    private:
+        std::string m_Name;
     };
 }
 
-
-#endif /* EVENT_H */
+#endif /* LAYER_H */
 

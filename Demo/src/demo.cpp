@@ -6,24 +6,95 @@
 /* Must define __COCONUTS_SANDBOX_APP__ prior to any Coconuts include */
 #ifndef __COCONUTS_SANDBOX_APP__
 #define __COCONUTS_SANDBOX_APP__
-#endif
+#endif  // __COCONUTS_SANDBOX_APP__
+//!!!
 
 #include <coconuts/core.h>
+#include <coconuts/Application.h>
+#include <coconuts/Layer.h>
+#include <coconuts/EventSystem.h>
 #include <coconuts/Logger.h>
 
-
-#include <iostream>
+#include <string>
 #include "demo.h"
 
 
-namespace Coconuts
+/**
+ * Define a new custom Layer, inherited from Coconuts::Layer base class.
+ * 
+ * Event triggers and draw calls are issued per Layer.
+ * Overlay get always on top of the last inserted Layer.
+ * 
+ * The rendering order of Layers/Overlays is as below:
+ * 
+ *      Further away
+ *  +-----------+
+ *  |   Layer   |   0
+ *  +---+-----------+
+ *      |   Layer   |   1
+ *      +---+-----------+
+ *          |   Layer   |   2
+ *          +---+-----------+ <----------- Next Layer will be pushed here
+ *              |  Overlay  |
+ *              +---+-----------+
+ *                  |  Overlay  |
+ *                  +-----------+ <------- Next Overlay will be pushed here
+ *      TOP VIEW
+ */
+class ExampleLayer : public ::Coconuts::Layer
 {
-    /**
-     * Create a new Sandbox Application.
-     * Check Coconuts running state output in the terminal. 
-     */
-    Application* CreateApplication()
+    public:
+        ExampleLayer(const std::string& layerName)  : Layer(layerName)
+        {
+            // necessary inits and allocations
+        }
+        
+        /**
+         * Called once per frame
+         */
+        void OnUpdate() override
+        {
+            
+        }
+        
+        /**
+         * Triggered whenever an Event occurs
+         */
+        void OnEvent(Coconuts::Event& event) override
+        {
+            /* Log the event */
+            LOG_TRACE(event.ToString());
+        }
+};
+
+
+/**
+ * Define a new Application, inherited from Coconuts::Application base clase
+ */
+class DemoApp : public ::Coconuts::Application
+{
+public:
+    DemoApp()
     {
-        return new Application();
+        /* Create a New Layer */
+        ExampleLayer* newLayer = new ExampleLayer("Layer0");
+        
+        /* Push Layer into the Layer Stack of 'this' Application */
+        this->PushLayer(newLayer);
     }
+    
+    ~DemoApp()
+    {
+        
+    }
+};
+
+
+/**
+ * Feed Coconuts with a new user defined Application that
+ * inherits from Coconuts::Application base class
+ */
+Coconuts::Application* Coconuts::CreateApplication()
+{
+    return new DemoApp();
 }

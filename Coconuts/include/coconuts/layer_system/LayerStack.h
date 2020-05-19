@@ -13,44 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#ifndef LAYERSTACK_H
+#define LAYERSTACK_H
 
-#ifndef APPLICATION_H
-#define APPLICATION_H
-
-#include <memory>
-#include <coconuts/window_system/Window.h>
-#include <coconuts/EventSystem.h>
 #include <coconuts/Layer.h>
-#include <coconuts/layer_system/LayerStack.h>
+#include <vector>
 
 namespace Coconuts
 {
-    
-    class Application
-    {   
+    class LayerStack
+    {
     public:
-        Application();
-        ~Application();
-        
-        void Run(void);
-        void OnEvent(Event& event);
-        bool OnWindowClose(void);
+        LayerStack();
+        ~LayerStack();
         
         void PushLayer(Layer* layer);
         void PushOverlay(Layer* overlay);
         
+        void PopLayer(Layer* layer);
+        void PopOverlay(Layer* overlay);
+        
+        std::vector<Layer*>::iterator begin() { return v_Layers.begin(); }
+        std::vector<Layer*>::iterator end() { return v_Layers.end(); }
+        
     private:
-        bool m_isRunning = false;
-        
-        /* Generic Window tied to a platform dependent Window sublclass */
-        std::unique_ptr<Window> p_Window;
-        
-        LayerStack m_LayerStack;
+        std::vector<Layer*> v_Layers;   /* Contuguous heap storage of raw vectors */
+        std::vector<Layer*>::iterator i_LayerInsert;
     };
-    
-    extern Application* CreateApplication();
-    
 }
 
-#endif /* APPLICATION_H */
+#endif /* LAYERSTACK_H */
 

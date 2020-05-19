@@ -83,7 +83,7 @@ namespace Coconuts
             std::string ToString() const override
             {
                 std::stringstream ss;
-                ss << EVENT_NAME_MOUSE_CURSOR_MOVE << " [(" << m_MouseX <<";" << m_MouseY << ")]";
+                ss << EVENT_NAME_MOUSE_CURSOR_MOVE << " [(" << m_MouseX <<"; " << m_MouseY << ")]";
                 return ss.str();
             }
             

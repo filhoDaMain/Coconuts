@@ -18,6 +18,7 @@
 #include <coconuts/EventSystem.h>
 #include <coconuts/Logger.h>
 #include <cstring>
+#include <glad/glad.h>
 
 namespace Coconuts
 {   
@@ -81,7 +82,18 @@ namespace Coconuts
         /* Make the window's context current */
         glfwSetWindowUserPointer(p_glfwWindow, &m_WindowData);
         glfwMakeContextCurrent(p_glfwWindow);
-        LOG_TRACE("A GLFW Window was created and set to current context");     
+        LOG_TRACE("A GLFW Window was created and set to current context"); 
+        
+        rc = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+        if (rc > 0)
+        {
+            LOG_DEBUG("GLAD initialized");
+        }
+        else
+        {
+            LOG_CRITICAL("Failed to initialize GLAD. Exiting...");
+            exit(1);
+        }
     }
     
     bool MacWindow::InitWindowManagerCallbacks(const char* library)

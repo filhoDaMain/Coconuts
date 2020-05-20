@@ -4,7 +4,8 @@ target_include_directories(demo PRIVATE "${PROJECT_SOURCE_DIR}/include" "${PROJE
 set_target_properties(demo PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/bin")
 
 target_link_libraries(demo  "${PROJECT_SOURCE_DIR}/../Coconuts/lib/libccncore.a"
-                            "${PROJECT_SOURCE_DIR}/../Coconuts/lib/libglfw3.a")
+                            "${PROJECT_SOURCE_DIR}/../Coconuts/lib/libglfw3.a"
+                            "${PROJECT_SOURCE_DIR}/../Coconuts/lib/libglad.a")
 
 if(APPLE)
     target_link_libraries(demo  "-framework Cocoa"

@@ -23,21 +23,22 @@
  * Define a new custom Layer, inherited from Coconuts::Layer base class.
  * 
  * Event triggers and draw calls are issued per Layer.
- * Overlay get always on top of the last inserted Layer.
+ * Overlays get always on top of the last inserted Layer.
  * 
- * The rendering order of Layers/Overlays is as below:
+ * The rendering order of Layers/Overlays is as follows:
  * 
  *      Further away
  *  +-----------+
  *  |   Layer   |   0
- *  +---+-----------+
- *      |   Layer   |   1
- *      +---+-----------+
- *          |   Layer   |   2
- *          +---+-----------+ <----------- Next Layer will be pushed here
- *              |  Overlay  |
- *              +---+-----------+
- *                  |  Overlay  |
+ *  |   +-----------+
+ *  +---|   Layer   |   1
+ *      |   +-----------+
+ *      +---|   Layer   |   2
+ *          |   +-----------+ <----------- Next Layer will be pushed here
+ *          +---|  Overlay  |   3
+ *              |   +-----------+
+ *              +---|  Overlay  |
+ *                  |           |   4
  *                  +-----------+ <------- Next Overlay will be pushed here
  *      TOP VIEW
  */
@@ -46,7 +47,7 @@ class ExampleLayer : public ::Coconuts::Layer
     public:
         ExampleLayer(const std::string& layerName)  : Layer(layerName)
         {
-            // necessary inits and allocations
+            // inits and allocations
         }
         
         /**
@@ -54,7 +55,7 @@ class ExampleLayer : public ::Coconuts::Layer
          */
         void OnUpdate() override
         {
-            
+            //TODO
         }
         
         /**

@@ -19,6 +19,7 @@
 #include <coconuts/EventSystem.h>
 #include <coconuts/Logger.h>
 #include <functional>
+#include <glad/glad.h>
 
 
 namespace Coconuts
@@ -81,6 +82,9 @@ namespace Coconuts
         
         while(m_isRunning)
         {
+            glClearColor(0.02f, 0.31f, 0.7f, 1);
+            glClear(GL_COLOR_BUFFER_BIT);
+            
             for (Layer* layer : m_LayerStack)
             {
                 layer->OnUpdate();
@@ -102,7 +106,7 @@ namespace Coconuts
         
         if (!handled)
         {
-            LOG_WARN("Event could not be dispatched by the EventDispatcher");
+            //LOG_WARN("Event could not be dispatched by the EventDispatcher");
         }
         
         /* it is casted to a Layer */

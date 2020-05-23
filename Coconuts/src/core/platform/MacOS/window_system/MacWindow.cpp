@@ -107,6 +107,8 @@ namespace Coconuts
         {
             LOG_TRACE("Initializing GLFW callbacks...");
             
+            glfwSetInputMode(p_glfwWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+            
             /* Window Close */
             glfwSetWindowCloseCallback(p_glfwWindow, [](GLFWwindow* window)
             {

@@ -19,6 +19,7 @@
 #include <coconuts/EventSystem.h>
 #include <coconuts/Logger.h>
 #include <GLFW/glfw3.h>
+#include <coconuts/types.h>
 
 
 using namespace Coconuts::Editor;
@@ -52,9 +53,9 @@ void GUILayer::OnAttach()
      *  imgui/examples/imgui_impl_glfw.cpp
      */
     ImGuiIO& io = ImGui::GetIO();
+    ImGui::GetIO().MouseDrawCursor = false;
     io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
     io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;
-    //io.BackendPlatformName = "imgui_impl_glfw";
     
     // Keyboard mapping. ImGui will use those indices to peek into the io.KeysDown[] array.
     io.KeyMap[ImGuiKey_Tab] = GLFW_KEY_TAB;
@@ -103,11 +104,11 @@ void GUILayer::OnUpdate()
     
     ImGuiIO& io = ImGui::GetIO();
     Application& app = Application::GetInstance();
-    io.DisplaySize = ImVec2(app.GetWindow().GetWidth(), app.GetWindow().GetHeight());
+    io.DisplaySize = ImVec2((float)app.GetWindow().GetWidth(), (float)app.GetWindow().GetHeight());
     
-    double time = glfwGetTime();
-    io.DeltaTime = m_Time > 0.0f ? (time - m_Time) : (1.0f / 60.0f);
-    m_Time = time;
+    //double time = glfwGetTime();
+    //io.DeltaTime = m_Time > 0.0f ? (time - m_Time) : (1.0f / 60.0f);
+    //m_Time = time;
     
     ImGui_ImplOpenGL3_NewFrame();
     ImGui::NewFrame();
@@ -121,5 +122,77 @@ void GUILayer::OnUpdate()
 
 void GUILayer::OnEvent(Event& event)
 {
+    EventDispatcher dispatcher(event);
     
+    dispatcher.Dispatch<InputMouseEvent::MouseButtonPress>
+            (BIND_EVENT_FUNCTION(Editor::GUILayer::OnMouseButtonPress));
+    
+    dispatcher.Dispatch<InputMouseEvent::MouseButtonRelease>
+            (BIND_EVENT_FUNCTION(Editor::GUILayer::OnMouseButtonRelease));
+    
+    dispatcher.Dispatch<InputMouseEvent::MouseCursorMove>
+            (BIND_EVENT_FUNCTION(Editor::GUILayer::OnMouseCursorMove));
+    
+    dispatcher.Dispatch<InputMouseEvent::MouseScroll>
+            (BIND_EVENT_FUNCTION(Editor::GUILayer::OnMouseScroll));
+    
+    dispatcher.Dispatch<InputKeyEvent::KeyPress>
+            (BIND_EVENT_FUNCTION(Editor::GUILayer::OnKeyPress));
+    
+    dispatcher.Dispatch<InputKeyEvent::KeyRelease>
+            (BIND_EVENT_FUNCTION(Editor::GUILayer::OnKeyRelease));
+    
+    dispatcher.Dispatch<WindowEvent::WindowResize>
+            (BIND_EVENT_FUNCTION(Editor::GUILayer::OnWindowResize));
+}
+
+/**
+ * Private methods
+ */
+
+/* Mouse Events */
+bool GUILayer::OnMouseButtonPress(InputMouseEvent::MouseButtonPress& event)
+{
+    ImGuiIO& io = ImGui::GetIO();
+    io.MouseDown[event.GetButtonCode()] = true;
+    return false;
+}
+
+bool GUILayer::OnMouseButtonRelease(InputMouseEvent::MouseButtonRelease& event)
+{
+    ImGuiIO& io = ImGui::GetIO();
+    io.MouseDown[event.GetButtonCode()] = false;
+    return false;
+}
+
+bool GUILayer::OnMouseCursorMove(InputMouseEvent::MouseCursorMove& event)
+{
+    ImGuiIO& io = ImGui::GetIO();
+    io.MousePos = ImVec2((float)event.GetX(), (float)event.GetY());
+    return false;
+}
+
+bool GUILayer::OnMouseScroll(InputMouseEvent::MouseScroll& event)
+{
+    ImGuiIO& io = ImGui::GetIO();
+    io.MouseWheelH += event.GetOffsetX();
+    io.MouseWheel += event.GetOffsetY();
+    return false;   
+}
+
+/* Key Events */
+bool GUILayer::OnKeyPress(InputKeyEvent::KeyPress& event)
+{
+    return false;
+}
+
+bool GUILayer::OnKeyRelease(InputKeyEvent::KeyRelease& event)
+{
+    return false;
+}
+
+/* Window Events */
+bool GUILayer::OnWindowResize(WindowEvent::WindowResize& event)
+{
+    return false;
 }

@@ -16,7 +16,11 @@
 #ifndef TYPES_H
 #define TYPES_H
 
+#include <functional>
+
 #define BIT_MASK(x) (1 << (x))
+
+#define BIND_EVENT_FUNCTION(fn)     std::bind(&fn, this, std::placeholders::_1)
 
 #endif /* TYPES_H */
 

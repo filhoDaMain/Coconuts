@@ -66,7 +66,7 @@ class ExampleLayer : public ::Coconuts::Layer
         void OnEvent(Coconuts::Event& event) override
         {
             /* Log the event */
-            LOG_TRACE(event.ToString());
+            //LOG_TRACE(event.ToString());
         }
 };
 

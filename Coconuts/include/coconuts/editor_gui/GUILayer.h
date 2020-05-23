@@ -36,6 +36,21 @@ namespace Coconuts
             
         private:
             double m_Time = 0.0f;
+            
+        public:
+            /* Mouse Events */
+            bool OnMouseButtonPress(InputMouseEvent::MouseButtonPress& event);
+            bool OnMouseButtonRelease(InputMouseEvent::MouseButtonRelease& event);
+            bool OnMouseCursorMove(InputMouseEvent::MouseCursorMove& event);
+            bool OnMouseScroll(InputMouseEvent::MouseScroll& event);
+            
+            /* Key Events */
+            bool OnKeyPress(InputKeyEvent::KeyPress& event);
+            bool OnKeyRelease(InputKeyEvent::KeyRelease& event);
+            
+            /* Window Events */
+            bool OnWindowResize(WindowEvent::WindowResize& event);
+            //bool OnWindowClose(WindowEvent::WindowClose& event);
         };
     }
 }

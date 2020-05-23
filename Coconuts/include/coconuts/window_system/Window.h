@@ -29,7 +29,7 @@ namespace Coconuts
         unsigned int  m_Height;
         
         WindowProperties(const std::string& title  = "Coconuts" /* Default name */,
-                         unsigned int width = 1280, unsigned int height = 720)
+                         unsigned int width = 1280, unsigned int height = 696)
                 : m_Title(title), m_Width(width), m_Height(height)
         {
             //do nothing

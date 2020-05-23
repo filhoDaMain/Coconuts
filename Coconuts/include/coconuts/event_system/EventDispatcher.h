@@ -26,6 +26,24 @@ namespace Coconuts
     public:
         template <typename T>
         static bool StaticDispatch(Event& event, T* object);
+        
+        EventDispatcher(Event& event)   : m_Event(event)
+        {
+        }
+        
+        template <typename C, typename F>
+        bool Dispatch(const F& func)
+        {
+            if (m_Event.GetEventType() == C::GetStaticType())
+            {
+                m_Event.handled = func(static_cast<C&>(m_Event));
+                return true;
+            }
+            return false;
+        }
+        
+    private:
+        Event& m_Event;
     };
 }
 

@@ -25,12 +25,17 @@
 
 namespace Coconuts
 {
-    
+    /**
+     * Singleton
+     */
     class Application
     {   
     public:
         Application();
         ~Application();
+        
+        inline static Application& GetInstance() { return *s_Instance; }
+        inline Window& GetWindow() const { return *p_Window; }
         
         void Run(void);
         void OnEvent(Event& event);
@@ -40,6 +45,9 @@ namespace Coconuts
         void PushOverlay(Layer* overlay);
         
     private:
+        /* Single instance */
+        static Application* s_Instance;
+        
         bool m_isRunning = false;
         
         /* Generic Window tied to a platform dependent Window sublclass */

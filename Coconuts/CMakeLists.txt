@@ -27,4 +27,6 @@ add_definitions(-DGLFW_INCLUDE_NONE)
 
 
 # Coconuts source
-add_subdirectory(src)
+add_subdirectory(src/core)
+add_subdirectory(src/editor)
+

@@ -23,8 +23,20 @@
 
 namespace Coconuts
 {
+    /* Singleton Pattern */
+    Application* Application::s_Instance = nullptr;
+    
     Application::Application()
     {
+        /* Assert that the Singleton Pattern is respected */
+        if (s_Instance != nullptr)
+        {
+            LOG_CRITICAL("Crash! Application already exists.");
+            exit(1);
+        }
+        
+        s_Instance = this;
+        
         LOG_DEBUG("Sandbox App created!");
         p_Window = std::unique_ptr<Window>(Window::Create());
         
@@ -123,10 +135,12 @@ namespace Coconuts
     void Application::PushLayer(Layer* layer)
     {
         m_LayerStack.PushLayer(layer);
+        layer->OnAttach();
     }
     
     void Application::PushOverlay(Layer* overlay)
     {
         m_LayerStack.PushOverlay(overlay);
+        overlay->OnAttach();
     }
 }

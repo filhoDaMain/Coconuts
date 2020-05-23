@@ -15,6 +15,8 @@
 #include <coconuts/EventSystem.h>
 #include <coconuts/Logger.h>
 
+#include <coconuts/editor.h>
+
 #include <string>
 #include "demo.h"
 
@@ -77,11 +79,21 @@ class DemoApp : public ::Coconuts::Application
 public:
     DemoApp()
     {
-        /* Create a New Layer */
+        /**
+         * Create a new Layer and push it to the Layer Stack
+         * of 'this' Application
+         */
         ExampleLayer* newLayer = new ExampleLayer("Layer0");
-        
-        /* Push Layer into the Layer Stack of 'this' Application */
         this->PushLayer(newLayer);
+        
+        //GUI
+        /**
+         * Create a new GUI Overlay and push it to the Overlay Stack
+         * of 'this' Application
+         */
+        ::Coconuts::Editor::GUILayer* guiOverlay = new ::Coconuts::Editor::GUILayer();
+        this->PushOverlay(guiOverlay);
+        
     }
     
     ~DemoApp()

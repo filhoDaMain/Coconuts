@@ -15,6 +15,7 @@
 #include <coconuts/EventSystem.h>
 #include <coconuts/Logger.h>
 #include <coconuts/Polling.h>
+#include <coconuts/Keyboard.h>
 
 #include <coconuts/editor.h>
 
@@ -58,9 +59,18 @@ class ExampleLayer : public ::Coconuts::Layer
          */
         void OnUpdate() override
         {
-            /* Example - Polling mouse cursor X Position */
-            double mouseX = Coconuts::InputPolling::GetMouseX();
-            LOG_TRACE("{}", mouseX);
+            /* Example: Polling some pressed keys */
+            
+            using namespace Coconuts;
+            if (InputPolling::IsKeyPressed(Keyboard::KEY_A))
+            {
+                LOG_TRACE("Keyboard: A was pressed");
+            }
+            
+            if (InputPolling::IsKeyPressed(Keyboard::KEY_X))
+            {
+                LOG_TRACE("Keyboard: X was pressed");
+            }
         }
         
         /**

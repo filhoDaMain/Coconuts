@@ -37,6 +37,8 @@ namespace Coconuts
         bool InitWindowManagerCallbacks(const char* library) override;
         unsigned int GetWidth() const override { return m_WindowData.width; }
         unsigned int GetHeight() const override { return m_WindowData.height; }
+        
+        inline void* GetNativeWindow() const override { return p_glfwWindow; }
             
     private:
         void Init(const WindowProperties& props);

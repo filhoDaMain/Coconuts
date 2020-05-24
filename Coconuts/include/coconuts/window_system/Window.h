@@ -54,6 +54,7 @@ namespace Coconuts
         
         static Window* Create(const WindowProperties& props = WindowProperties());
         
+        virtual void* GetNativeWindow() const = 0;
         
     private:
     };

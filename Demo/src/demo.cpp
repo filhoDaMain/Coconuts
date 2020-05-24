@@ -14,6 +14,7 @@
 #include <coconuts/Layer.h>
 #include <coconuts/EventSystem.h>
 #include <coconuts/Logger.h>
+#include <coconuts/Polling.h>
 
 #include <coconuts/editor.h>
 
@@ -57,7 +58,9 @@ class ExampleLayer : public ::Coconuts::Layer
          */
         void OnUpdate() override
         {
-            //TODO
+            /* Example - Polling mouse cursor X Position */
+            double mouseX = Coconuts::InputPolling::GetMouseX();
+            LOG_TRACE("{}", mouseX);
         }
         
         /**

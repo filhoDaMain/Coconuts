@@ -7,3 +7,6 @@
 [submodule "Coconuts/vendor/imgui/imgui"]
 	path = Coconuts/vendor/imgui/imgui
 	url = https://github.com/ocornut/imgui
+[submodule "Coconuts/vendor/glm"]
+	path = Coconuts/vendor/glm
+	url = https://github.com/g-truc/glm

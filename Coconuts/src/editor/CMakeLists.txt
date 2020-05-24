@@ -5,7 +5,9 @@ add_library(ccneditor editor.cpp)
 target_include_directories(ccneditor PRIVATE "${PROJECT_SOURCE_DIR}/include"
                                         "${PROJECT_SOURCE_DIR}/vendor/spdlog/include"
                                         "${PROJECT_SOURCE_DIR}/vendor/glfw/include"
-                                        "${PROJECT_SOURCE_DIR}/vendor/glad/include")
+                                        "${PROJECT_SOURCE_DIR}/vendor/glad/include"
+                                        "${PROJECT_SOURCE_DIR}/vendor/glm")
+
 # imgui
 add_subdirectory(${PROJECT_SOURCE_DIR}/vendor/imgui vendor/imgui/imgui)
 

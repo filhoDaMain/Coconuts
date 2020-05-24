@@ -20,10 +20,8 @@ endif()
 target_include_directories(ccncore PRIVATE "${PROJECT_SOURCE_DIR}/include"
                                         "${PROJECT_SOURCE_DIR}/vendor/spdlog/include"
                                         "${PROJECT_SOURCE_DIR}/vendor/glfw/include"
-                                        "${PROJECT_SOURCE_DIR}/vendor/glad/include")
-
-# imgui
-#add_subdirectory(${PROJECT_SOURCE_DIR}/vendor/imgui vendor/imgui/imgui)
+                                        "${PROJECT_SOURCE_DIR}/vendor/glad/include"
+                                        "${PROJECT_SOURCE_DIR}/vendor/glm")
 
 set_target_properties(ccncore PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/lib")
 

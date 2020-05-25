@@ -93,20 +93,17 @@ public:
     DemoApp()
     {
         /**
-         * Create a new Layer and push it to the Layer Stack
-         * of 'this' Application
+         * Create a new Layer and push it to the LayerStack.
          */
         ExampleLayer* newLayer = new ExampleLayer("Layer0");
         this->PushLayer(newLayer);
         
-        //GUI
         /**
-         * Create a new GUI Overlay and push it to the Overlay Stack
-         * of 'this' Application
+         * Editor GUI.
          */
-        ::Coconuts::Editor::GUILayer* guiOverlay = new ::Coconuts::Editor::GUILayer();
-        this->PushOverlay(guiOverlay);
-        
+        using namespace Coconuts;
+        Editor::GUILayer* gui = new Editor::GUILayer();
+        this->PushOverlay(gui);
     }
     
     ~DemoApp()

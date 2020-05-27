@@ -16,7 +16,48 @@
 #ifndef POLLING_H
 #define POLLING_H
 
-#include <coconuts/input_polling/InputPolling.h>
+//#include <coconuts/input_polling/InputPolling.h>
+
+namespace Coconuts
+{
+    class Polling
+    {
+    public:
+        /* Key */
+        inline static bool IsKeyPressed(int keyCode)
+        {
+            return s_Instance->IsKeyPressedImpl(keyCode);
+        }
+        
+        /* Mouse */
+        inline static bool IsMouseButtonPressed(int keyCode)
+        {
+            return s_Instance->IsMouseButtonPressedImpl(keyCode);
+        }
+        
+        inline static double GetMouseX()
+        {
+            return s_Instance->GetMouseXImpl();
+        }
+        
+        inline static double GetMouseY()
+        {
+            return s_Instance->GetMouseYImpl();
+        }
+        
+    protected:
+        /* Platform dependent implementations */
+        virtual bool IsKeyPressedImpl(int keyCode) = 0;
+        
+        virtual bool IsMouseButtonPressedImpl(int keyCode) = 0;
+        virtual double GetMouseXImpl() = 0;
+        virtual double GetMouseYImpl() = 0;
+        
+    private:
+        static Polling* s_Instance;
+    };
+    
+}
 
 #endif /* POLLING_H */
 

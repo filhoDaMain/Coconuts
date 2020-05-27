@@ -16,11 +16,12 @@
 #ifndef MACINPUTPOLLING_H
 #define MACINPUTPOLLING_H
 
-#include <coconuts/input_polling/InputPolling.h>
+//#include <coconuts/input_polling/InputPolling.h>
+#include <coconuts/Polling.h>
 
 namespace Coconuts
 {
-    class MacInputPolling : public InputPolling
+    class MacPolling : public Polling
     {
     protected:
         /* Key */

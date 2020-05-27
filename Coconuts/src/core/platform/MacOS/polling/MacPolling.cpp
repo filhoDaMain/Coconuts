@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-#include "MacInputPolling.h"
+#include "MacPolling.h"
 #include <coconuts/Application.h>
 #include <GLFW/glfw3.h>
 
 namespace Coconuts
 {
     /* Singleton instance */
-    InputPolling* InputPolling::s_Instance = new MacInputPolling();
+    Polling* Polling::s_Instance = new MacPolling();
     
     /* Key */
-    bool MacInputPolling::IsKeyPressedImpl(int keyCode)
+    bool MacPolling::IsKeyPressedImpl(int keyCode)
     {
         auto glfwWindow = static_cast<GLFWwindow*>
                 (Application::GetInstance().GetWindow().GetNativeWindow());
@@ -35,7 +35,7 @@ namespace Coconuts
     }
     
     /* Mouse */
-    bool MacInputPolling::IsMouseButtonPressedImpl(int keyCode)
+    bool MacPolling::IsMouseButtonPressedImpl(int keyCode)
     {
         auto glfwWindow = static_cast<GLFWwindow*>
                 (Application::GetInstance().GetWindow().GetNativeWindow());
@@ -45,7 +45,7 @@ namespace Coconuts
         return (state == GLFW_PRESS);
     }
     
-    double MacInputPolling::GetMouseXImpl()
+    double MacPolling::GetMouseXImpl()
     {
         auto glfwWindow = static_cast<GLFWwindow*>
                 (Application::GetInstance().GetWindow().GetNativeWindow());
@@ -55,7 +55,7 @@ namespace Coconuts
         return xPos;
     }
     
-    double MacInputPolling::GetMouseYImpl()
+    double MacPolling::GetMouseYImpl()
     {
         auto glfwWindow = static_cast<GLFWwindow*>
                 (Application::GetInstance().GetWindow().GetNativeWindow());

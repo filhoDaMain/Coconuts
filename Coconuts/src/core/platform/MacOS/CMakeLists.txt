@@ -2,4 +2,4 @@
 
 # Window System
 add_subdirectory(window_system)
-add_subdirectory(input_polling)
+add_subdirectory(polling)

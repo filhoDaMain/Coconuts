@@ -62,12 +62,12 @@ class ExampleLayer : public ::Coconuts::Layer
             /* Example: Polling some pressed keys */
             
             using namespace Coconuts;
-            if (InputPolling::IsKeyPressed(Keyboard::KEY_A))
+            if (Polling::IsKeyPressed(Keyboard::KEY_A))
             {
                 LOG_TRACE("Keyboard: A was pressed");
             }
             
-            if (InputPolling::IsKeyPressed(Keyboard::KEY_X))
+            if (Polling::IsKeyPressed(Keyboard::KEY_X))
             {
                 LOG_TRACE("Keyboard: X was pressed");
             }

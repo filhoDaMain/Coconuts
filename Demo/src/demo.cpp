@@ -16,7 +16,7 @@
 #include <coconuts/Logger.h>
 #include <coconuts/Polling.h>
 #include <coconuts/Keyboard.h>
-
+#include <coconuts/Mouse.h>
 #include <coconuts/editor.h>
 
 #include <string>
@@ -70,6 +70,11 @@ class ExampleLayer : public ::Coconuts::Layer
             if (Polling::IsKeyPressed(Keyboard::KEY_X))
             {
                 LOG_TRACE("Keyboard: X was pressed");
+            }
+            
+            if (Polling::IsMouseButtonPressed(Mouse::MOUSE_BUTTON_LEFT))
+            {
+                LOG_TRACE("Mouse: Left button was pressed");
             }
         }
         

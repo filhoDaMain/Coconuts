@@ -18,7 +18,7 @@
 #include <coconuts/EventSystem.h>
 #include <coconuts/Logger.h>
 #include <cstring>
-#include <glad/glad.h>
+#include "OpenGLGraphicsContext.h"
 
 namespace Coconuts
 {   
@@ -68,11 +68,9 @@ namespace Coconuts
                 exit(rc);
             }
         }
-        
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+                
+        /* Some necessary Hints for platform MacOS before window creation */
+        OpenGLGraphicsContext::PreInitHints(TargetPlatform::Platform_MacOS);
         
         /* Create a windowed mode window and its OpenGL context */
         p_glfwWindow = glfwCreateWindow((int) m_WindowData.width, (int) m_WindowData.height,
@@ -84,21 +82,12 @@ namespace Coconuts
             exit(1);
         }
         
+        /* Create Graphics Context */
+        graphicsContext = new OpenGLGraphicsContext(p_glfwWindow);
+        graphicsContext->Init();
+        
         /* Make the window's context current */
         glfwSetWindowUserPointer(p_glfwWindow, &m_WindowData);
-        glfwMakeContextCurrent(p_glfwWindow);
-        LOG_TRACE("A GLFW Window was created and set to current context"); 
-        
-        rc = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-        if (rc > 0)
-        {
-            LOG_DEBUG("GLAD initialized");
-        }
-        else
-        {
-            LOG_CRITICAL("Failed to initialize GLAD. Exiting...");
-            exit(1);
-        }
     }
     
     bool MacWindow::InitWindowManagerCallbacks(const char* library)
@@ -230,9 +219,8 @@ namespace Coconuts
     
     void MacWindow::OnUpdate()
     {
-        /* Swap front and back buffers */
-        glfwSwapBuffers(p_glfwWindow);
-
+        graphicsContext->SwapBuffers();
+        
         /* Poll for and process events */
         glfwPollEvents();
     }

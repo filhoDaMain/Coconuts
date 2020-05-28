@@ -11,7 +11,9 @@ add_library(ccncore core.cpp
 # Mac OS
 if (APPLE)
     message(STATUS "MacOS Platform detected")
+    message(STATUS "Using OpenGL Graphics API")
     add_subdirectory(platform/MacOS)
+    add_subdirectory(platform/OpenGL)
 elseif(UNIX AND NOT APPLE)
     message(STATUS "GNU Platform detected")
     add_subdirectory(platform/GNU)

@@ -18,6 +18,7 @@
 
 #include <coconuts/window_system/Window.h>
 #include <GLFW/glfw3.h>
+#include <coconuts/graphics/GraphicsContext.h>
 
 namespace Coconuts
 {
@@ -55,6 +56,8 @@ namespace Coconuts
         MacWindowData m_WindowData;
         
         GLFWwindow* p_glfwWindow;
+        
+        GraphicsContext* graphicsContext;
     };
 }
 

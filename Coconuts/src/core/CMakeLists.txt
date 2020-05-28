@@ -26,20 +26,6 @@ target_include_directories(ccncore PRIVATE "${PROJECT_SOURCE_DIR}/include"
 set_target_properties(ccncore PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/lib")
 
 
-#GLFW
-if(NOT TARGET glfw)
-    # Stand-alone build
-    find_package(glfw REQUIRED)
-endif()
-target_link_libraries(ccncore glfw)
-
-#GLAD
-if(NOT TARGET glad)
-    # Stand-alone build
-    find_package(glad REQUIRED)
-endif()
-target_link_libraries(ccncore glad)
-
 ADD_CUSTOM_COMMAND(TARGET ccncore POST_BUILD
                    COMMAND ${CMAKE_COMMAND} -E copy_directory
                        "${PROJECT_SOURCE_DIR}/vendor/spdlog/include"

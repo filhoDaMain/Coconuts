@@ -66,6 +66,12 @@ namespace Coconuts
             LOG_CRITICAL("Failed to initialize GLAD. Exiting...");
             exit(1);
         }
+        
+        LOG_TRACE("Coconuts Graphics info:");
+        LOG_TRACE("* Using OpenGL ver:  {}", glGetString(GL_VERSION));
+        LOG_TRACE("* From vendor:       {}", glGetString(GL_VENDOR));
+        LOG_TRACE("* Renderer:          {}", glGetString(GL_RENDERER));
+        LOG_TRACE("* Shading Language:  {}", glGetString(GL_SHADING_LANGUAGE_VERSION));
     }
     
     void OpenGLGraphicsContext::SwapBuffers()

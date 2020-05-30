@@ -23,6 +23,8 @@
 #include <coconuts/Layer.h>
 #include <coconuts/layer_system/LayerStack.h>
 
+#include <coconuts/graphics/Shader.h>
+
 namespace Coconuts
 {
     /**
@@ -54,6 +56,13 @@ namespace Coconuts
         std::unique_ptr<Window> p_Window;
         
         LayerStack m_LayerStack;
+        
+        /* Graphics Context objects IDs */
+        unsigned int m_VA;  /* VertexArray ID */
+        unsigned int m_VB;  /* VertexBuffer ID */
+        unsigned int m_IB;  /* IndexBuffer ID */
+        
+        std::unique_ptr<Shader> m_Shader;
     };
     
     extern Application* CreateApplication();

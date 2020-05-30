@@ -20,6 +20,7 @@
 #include <coconuts/Logger.h>
 #include <functional>
 #include <glad/glad.h>
+#include <string>
 
 
 namespace Coconuts
@@ -68,6 +69,79 @@ namespace Coconuts
         /* Set the callback function for all Window Manager library events */
         p_Window->SetEventCallback( std::bind(&Application::OnEvent, this, std::placeholders::_1) );
         
+        /**
+         * Generate Graphics Context objects
+         */
+        /* Vertex Array (VA) */
+        glGenVertexArrays(1, &m_VA);
+        glBindVertexArray(m_VA);                /* bind VA */
+        
+        /* Vertex Buffer (VB) */
+        glGenBuffers(1, &m_VB);
+        glBindBuffer(GL_ARRAY_BUFFER /* Vertex Buffer */, m_VB);    /* bind VB */
+        
+        /* Position Vertices (normalized in the [-1, 1] space) */
+        float vertices[3 * 3] = {       /* 3 vertices of 3D positions */
+        /*    x      y     z    */
+            -0.5f, -0.5f, 0.0f, // Index 0
+             0.5f, -0.5f, 0.0f, // Index 1
+             0.0f,  0.5f, 0.0f  // Index 2
+        /*  |---- STRIDE ----|*/
+        };
+        
+        glBufferData(GL_ARRAY_BUFFER    /* Vertex Buffer */,
+                     sizeof(vertices)   /* Size (Bytes) of data */,
+                     vertices           /* Data to be written in the Vertex Buffer */,
+                     GL_STATIC_DRAW     /* Setup once */
+                    );
+        
+        /* Enable a vertex attribute */
+        glEnableVertexAttribArray(0 /* Enable index 0 */);
+        
+        /* Vertex Attribute 0 - Buffer Layout (how data is structured) */
+        glVertexAttribPointer(0                 /* index nr */,
+                              3                 /* number of elements per vertex */,
+                              GL_FLOAT          /* type of vertex elements */,
+                              GL_FALSE          /* non-normalized */,
+                              3*sizeof(float)   /* stride length */,
+                              nullptr           /* attrib offset */);
+        
+        /* Index Buffer (IB) */
+        glGenBuffers(1, &m_IB);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IB);
+        
+        unsigned int indices[3] = {0, 1, 2};   /* Refers to the indices of vertices */
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+        
+        
+        /* Wrinting Shaders */
+        std::string vertexSrc = R"(
+            
+                #version 330 core
+                
+                layout(location = 0) in vec3 a_Postion;
+                
+                void main()
+                {
+                    gl_Position = vec4(a_Postion, 1.0);
+                }
+                
+            )";
+        
+        std::string fragmentSrc = R"(
+            
+                #version 330 core
+                
+                layout(location = 0) out vec4 color;
+                
+                void main()
+                {
+                    color = vec4(0.8, 0.7, 0.1, 1.0);
+                }
+                
+            )";
+        
+        m_Shader.reset(new Shader(vertexSrc, fragmentSrc));
     }
     
     Application::~Application()
@@ -84,6 +158,10 @@ namespace Coconuts
         {
             glClearColor(0.02f, 0.31f, 0.7f, 1);
             glClear(GL_COLOR_BUFFER_BIT);
+            
+            m_Shader->Bind();
+            glBindVertexArray(m_VA);
+            glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
             
             for (Layer* layer : m_LayerStack)
             {

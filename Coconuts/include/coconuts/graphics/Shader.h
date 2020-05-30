@@ -16,7 +16,28 @@
 #ifndef SHADER_H
 #define SHADER_H
 
+#include <string>
+#include <stdint.h>
 
+namespace Coconuts
+{
+    
+    class Shader
+    {
+    public:
+        Shader(const std::string& vertexShaderSrc,
+               const std::string& fragmentShaderSrc);
+        
+        ~Shader();
+        
+        void Bind();
+        void Unbind();
+        
+    private:
+        uint32_t m_RendererID;
+    };
+    
+}
 
 #endif /* SHADER_H */
 

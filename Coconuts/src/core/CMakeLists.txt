@@ -5,7 +5,8 @@ add_library(ccncore core.cpp
                     logger/Logger.cpp
                     event_system/EventDispatcher.cpp
                     layer_system/Layer.cpp
-                    layer_system/LayerStack.cpp)
+                    layer_system/LayerStack.cpp
+                    graphics/Shader.cpp)
 
 # Platform Specific files
 # Mac OS

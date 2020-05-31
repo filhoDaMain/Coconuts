@@ -16,8 +16,11 @@
 
 #include <coconuts/graphics/VertexBuffer.h>
 #include <coconuts/Renderer.h>
-#include "OpenGLVertexBuffer.h"
 #include <coconuts/Logger.h>
+
+// Platform - OpenGL
+#include "OpenGLVertexBuffer.h"
+
 
 namespace Coconuts
 {

@@ -21,6 +21,7 @@
 #include <functional>
 #include <glad/glad.h>
 #include <string>
+#include <stdint.h>
 
 
 namespace Coconuts
@@ -85,8 +86,8 @@ namespace Coconuts
         /*  |---- STRIDE ----|*/
         };
      
-        // NEW
-        m_vertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices))); // Bound
+        /* Vertex Buffer (VB) */
+        m_VertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices))); // Bound
         
         /* Enable a vertex attribute */
         glEnableVertexAttribArray(0 /* Enable index 0 */);
@@ -99,14 +100,11 @@ namespace Coconuts
                               3*sizeof(float)   /* stride length */,
                               nullptr           /* attrib offset */);
         
-#if 1
-        /* Index Buffer (IB) */
-        glGenBuffers(1, &m_IB);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IB);
+        /* Indices */
+        uint32_t indices[3] = {0, 1, 2};
         
-        unsigned int indices[3] = {0, 1, 2};   /* Refers to the indices of vertices */
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-#endif
+        /* Index Buffer (IB) */
+        m_IndexBuffer.reset(IndexBuffer::Create(indices, 3 /* sizeof(indices)/sizeof(uint32_t) */));
         
         /* Wrinting Shaders */
         std::string vertexSrc = R"(
@@ -160,7 +158,7 @@ namespace Coconuts
             
             m_Shader->Bind();
             glBindVertexArray(m_VA);
-            glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
+            glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
             
             for (Layer* layer : m_LayerStack)
             {

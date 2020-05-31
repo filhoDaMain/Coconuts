@@ -15,3 +15,36 @@
  */
 
 #include <coconuts/graphics/IndexBuffer.h>
+#include <coconuts/Renderer.h>
+#include <coconuts/Logger.h>
+
+// Platform - OpenGL
+#include "OpenGLIndexBuffer.h"
+
+
+namespace Coconuts
+{
+  
+    // static
+    IndexBuffer* IndexBuffer::Create(uint32_t* indices, uint32_t count)
+    {
+        switch(Renderer::GetRendererAPI())
+        {
+            case RendererAPI::OpenGL:
+            {
+                return new OpenGLIndexBuffer(indices, count);
+                
+                break;
+            }
+            
+            default:
+            {
+                LOG_CRITICAL("IndexBuffer - Unknown RendererAPI {}", Renderer::GetRendererAPI());
+                exit(1);
+            }
+        }
+        
+        return nullptr;
+    }
+    
+}

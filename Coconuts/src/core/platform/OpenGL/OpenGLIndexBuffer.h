@@ -13,29 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef OPENGLVERTEXBUFFER_H
-#define OPENGLVERTEXBUFFER_H
+#ifndef OPENGLINDEXBUFFER_H
+#define OPENGLINDEXBUFFER_H
 
-#include <coconuts/graphics/VertexBuffer.h>
+#include <coconuts/graphics/IndexBuffer.h>
 #include <stdint.h>
 
 namespace Coconuts
 {
     
-    class OpenGLVertexBuffer : public VertexBuffer
+    class OpenGLIndexBuffer : public IndexBuffer
     {
     public:
-        OpenGLVertexBuffer(float* vertices, uint32_t size);
-        virtual ~OpenGLVertexBuffer();
+        OpenGLIndexBuffer(uint32_t* indices, uint32_t count);
+        virtual ~OpenGLIndexBuffer();
+        
+        inline uint32_t GetCount() const override { return m_Count; }
         
         void Bind() const override;
         void Unbind() const override;
         
     private:
         uint32_t m_RendererID;
+        uint32_t m_Count;
     };
     
 }
 
-#endif /* OPENGLVERTEXBUFFER_H */
+#endif /* OPENGLINDEXBUFFER_H */
 

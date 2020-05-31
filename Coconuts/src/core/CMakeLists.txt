@@ -6,7 +6,9 @@ add_library(ccncore core.cpp
                     event_system/EventDispatcher.cpp
                     layer_system/Layer.cpp
                     layer_system/LayerStack.cpp
-                    graphics/Shader.cpp)
+                    graphics/Shader.cpp
+                    graphics/VertexBuffer.cpp
+                    graphics/IndexBuffer.cpp)
 
 # Platform Specific files
 # Mac OS

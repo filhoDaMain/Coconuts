@@ -7,8 +7,10 @@ add_library(ccncore core.cpp
                     layer_system/Layer.cpp
                     layer_system/LayerStack.cpp
                     graphics/Shader.cpp
+                    graphics/Shader.cpp
                     graphics/VertexBuffer.cpp
-                    graphics/IndexBuffer.cpp)
+                    graphics/IndexBuffer.cpp
+                    graphics/Renderer.cpp)
 
 # Platform Specific files
 # Mac OS

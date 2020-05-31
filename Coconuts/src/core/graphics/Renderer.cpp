@@ -13,26 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef VERTEXBUFFER_H
-#define VERTEXBUFFER_H
 
-#include <stdint.h>
+#include <coconuts/Renderer.h>
 
 namespace Coconuts
 {
     
-    class VertexBuffer
-    {
-    public:
-        virtual ~VertexBuffer() {}
-        
-        virtual void Bind() const = 0;
-        virtual void Unbind() const = 0;
-        
-        static VertexBuffer* Create(float* vertices, uint32_t size);
-    };
+    RendererAPI Renderer::s_RendererAPI = RendererAPI::OpenGL;
     
 }
-
-#endif /* VERTEXBUFFER_H */
-

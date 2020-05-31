@@ -15,3 +15,33 @@
  */
 
 #include <coconuts/graphics/VertexBuffer.h>
+#include <coconuts/Renderer.h>
+#include "OpenGLVertexBuffer.h"
+#include <coconuts/Logger.h>
+
+namespace Coconuts
+{
+    
+    // static
+    VertexBuffer* VertexBuffer::Create(float* vertices, uint32_t size)
+    {
+        switch(Renderer::GetRendererAPI())
+        {
+            case RendererAPI::OpenGL:
+            {
+                return new OpenGLVertexBuffer(vertices, size);
+                
+                break;
+            }
+            
+            default:
+            {
+                LOG_CRITICAL("VertexBuffer - Unknown RendererAPI {}", Renderer::GetRendererAPI());
+                exit(1);
+            }
+        }
+        
+        return nullptr;
+    }
+    
+}

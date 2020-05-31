@@ -76,10 +76,6 @@ namespace Coconuts
         glGenVertexArrays(1, &m_VA);
         glBindVertexArray(m_VA);                /* bind VA */
         
-        /* Vertex Buffer (VB) */
-        glGenBuffers(1, &m_VB);
-        glBindBuffer(GL_ARRAY_BUFFER /* Vertex Buffer */, m_VB);    /* bind VB */
-        
         /* Position Vertices (normalized in the [-1, 1] space) */
         float vertices[3 * 3] = {       /* 3 vertices of 3D positions */
         /*    x      y     z    */
@@ -88,12 +84,9 @@ namespace Coconuts
              0.0f,  0.5f, 0.0f  // Index 2
         /*  |---- STRIDE ----|*/
         };
-        
-        glBufferData(GL_ARRAY_BUFFER    /* Vertex Buffer */,
-                     sizeof(vertices)   /* Size (Bytes) of data */,
-                     vertices           /* Data to be written in the Vertex Buffer */,
-                     GL_STATIC_DRAW     /* Setup once */
-                    );
+     
+        // NEW
+        m_vertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices))); // Bound
         
         /* Enable a vertex attribute */
         glEnableVertexAttribArray(0 /* Enable index 0 */);
@@ -106,13 +99,14 @@ namespace Coconuts
                               3*sizeof(float)   /* stride length */,
                               nullptr           /* attrib offset */);
         
+#if 1
         /* Index Buffer (IB) */
         glGenBuffers(1, &m_IB);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IB);
         
         unsigned int indices[3] = {0, 1, 2};   /* Refers to the indices of vertices */
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-        
+#endif
         
         /* Wrinting Shaders */
         std::string vertexSrc = R"(
@@ -141,7 +135,7 @@ namespace Coconuts
                 
                 void main()
                 {
-                    color = vec4(v_Position, 1.0);
+                    color = vec4(v_Position * 0.5 + 0.5, 1.0);
                 }
                 
             )";

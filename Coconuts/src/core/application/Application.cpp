@@ -22,12 +22,49 @@
 #include <glad/glad.h>
 #include <string>
 #include <stdint.h>
+#include <coconuts/graphics/BufferLayout.h>
 
+// ----------------------------------------
+#include <stdint.h>     /* uintptr_t */
+#define INT2VOIDP(i) (void*)(uintptr_t)(i)
+// ----------------------------------------
 
 namespace Coconuts
 {
     /* Singleton Pattern */
     Application* Application::s_Instance = nullptr;
+    
+    static GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType _type)
+    {
+        switch(_type)
+        {
+            case ShaderDataType::None:      return 0;
+            
+            case ShaderDataType::Float:     return GL_FLOAT;
+                
+            case ShaderDataType::Float2:    return GL_FLOAT;
+                
+            case ShaderDataType::Float3:    return GL_FLOAT;
+                
+            case ShaderDataType::Float4:    return GL_FLOAT;
+                
+            case ShaderDataType::Mat3:      return GL_FLOAT;
+                
+            case ShaderDataType::Mat4:      return GL_FLOAT;
+                
+            case ShaderDataType::Int:       return GL_INT;
+                
+            case ShaderDataType::Int2:      return GL_INT;
+                
+            case ShaderDataType::Int3:      return GL_INT;
+                
+            case ShaderDataType::Int4:      return GL_INT;
+                
+            case ShaderDataType::Bool:      return GL_BOOL;
+        }
+        LOG_ERROR("Unknown ShaderDataType {}", _type);
+        return 0;
+    }
     
     Application::Application()
     {
@@ -77,28 +114,46 @@ namespace Coconuts
         glGenVertexArrays(1, &m_VA);
         glBindVertexArray(m_VA);                /* bind VA */
         
-        /* Position Vertices (normalized in the [-1, 1] space) */
-        float vertices[3 * 3] = {       /* 3 vertices of 3D positions */
-        /*    x      y     z    */
-            -0.5f, -0.5f, 0.0f, // Index 0
-             0.5f, -0.5f, 0.0f, // Index 1
-             0.0f,  0.5f, 0.0f  // Index 2
-        /*  |---- STRIDE ----|*/
+        
+        /* Vertices */
+        float vertices[3 * 7] = {
+        /*  | x      y     z |       RGBA Color       |*/
+            -0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
+             0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
+             0.0f,  0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f
+        /*  |----------------- STRIDE ----------------|*/
         };
      
         /* Vertex Buffer (VB) */
         m_VertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices))); // Bound
         
-        /* Enable a vertex attribute */
-        glEnableVertexAttribArray(0 /* Enable index 0 */);
+        /* (Vertex) Buffer Layout */
+        BufferLayout layout = {
+            { ShaderDataType::Float3, "a_Position" },
+            { ShaderDataType::Float4, "a_Color" }
+        };
         
-        /* Vertex Attribute 0 - Buffer Layout (how data is structured) */
-        glVertexAttribPointer(0                 /* index nr */,
-                              3                 /* number of elements per vertex */,
-                              GL_FLOAT          /* type of vertex elements */,
-                              GL_FALSE          /* non-normalized */,
-                              3*sizeof(float)   /* stride length */,
-                              nullptr           /* attrib offset */);
+        m_VertexBuffer->SetLayout(layout);
+        
+        uint32_t index = 0;
+        for (const auto& element : m_VertexBuffer->GetLayout())
+        {
+
+            /* Enable a vertex attribute */
+            glEnableVertexAttribArray(index);
+            
+            GLvoid* offset_ptr;
+            offset_ptr = INT2VOIDP(element.offset); /* avoid compiler warnings due to casting */
+            
+            glVertexAttribPointer(index,
+                                  element.GetComponentCount(),
+                                  ShaderDataTypeToOpenGLBaseType(element.type),
+                                  element.normalized ? GL_TRUE : GL_FALSE,
+                                  m_VertexBuffer->GetLayout().GetStride(),
+                                  offset_ptr);
+            
+            index++;
+        }
         
         /* Indices */
         uint32_t indices[3] = {0, 1, 2};
@@ -112,12 +167,15 @@ namespace Coconuts
                 #version 330 core
                 
                 layout(location = 0) in vec3 a_Position;
+                layout(location = 1) in vec4 a_Color;
                 
                 out vec3 v_Position;
+                out vec4 v_Color;
                 
                 void main()
                 {
                     v_Position = a_Position;
+                    v_Color = a_Color;
                     gl_Position = vec4(a_Position, 1.0);
                 }
                 
@@ -130,10 +188,13 @@ namespace Coconuts
                 layout(location = 0) out vec4 color;
                 
                 in vec3 v_Position;
+                in vec4 v_Color;
                 
                 void main()
                 {
                     color = vec4(v_Position * 0.5 + 0.5, 1.0);
+                
+                    color = v_Color;
                 }
                 
             )";

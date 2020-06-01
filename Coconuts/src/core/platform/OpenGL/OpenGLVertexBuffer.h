@@ -18,6 +18,7 @@
 
 #include <coconuts/graphics/VertexBuffer.h>
 #include <stdint.h>
+#include <coconuts/graphics/BufferLayout.h>
 
 namespace Coconuts
 {
@@ -31,8 +32,12 @@ namespace Coconuts
         void Bind() const override;
         void Unbind() const override;
         
+        void SetLayout(const BufferLayout& layout) override { m_Layout = layout; }
+        const BufferLayout& GetLayout() const override { return m_Layout; }
+        
     private:
         uint32_t m_RendererID;
+        BufferLayout m_Layout;
     };
     
 }

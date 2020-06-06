@@ -17,23 +17,24 @@
 #define RENDERER_H
 
 #include <coconuts/graphics/GraphicsContext.h>
+#include <coconuts/graphics/RendererAPI.h>
+#include <coconuts/graphics/LowLevelAPI.h>
+#include <coconuts/graphics/VertexArray.h>
+#include <memory>
 
 namespace Coconuts
 {
     
-    enum class RendererAPI
-    {
-        None = 0,
-        OpenGL = 1
-    };
-    
     class Renderer
     {
     public:
-        inline static RendererAPI GetRendererAPI() {return s_RendererAPI; }
+        static void BeginScene();
+        static void EndScene();
+        static void Submit(const std::shared_ptr<VertexArray>&vertexArray);
+        
+        inline static RendererAPI::API GetRendererAPI() {return RendererAPI::GetAPI(); }
         
     private:
-        static RendererAPI s_RendererAPI;
     };
     
 }

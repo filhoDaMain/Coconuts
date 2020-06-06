@@ -14,28 +14,25 @@
  * limitations under the License.
  */
 
-#include <coconuts/Renderer.h>
-#include <coconuts/graphics/LowLevelAPI.h>
+#include "OpenGLRendererAPI.h"
+#include <glad/glad.h>
 
 namespace Coconuts
 {
-    // static
-    void Renderer::BeginScene()
+    
+    void OpenGLRendererAPI::SetClearColor(const glm::vec4& color)
     {
-        
+        glClearColor(color.r, color.g, color.b, color.a);
     }
     
-    // static
-    void Renderer::EndScene()
+    void OpenGLRendererAPI::Clear()
     {
-        
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
     
-    // static
-    void Renderer::Submit(const std::shared_ptr<VertexArray>&vertexArray)
+    void OpenGLRendererAPI::DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray)
     {
-        vertexArray->Bind();
-        Graphics::LowLevelAPI::DrawIndexed(vertexArray);
+        glDrawElements(GL_TRIANGLES, vertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
     }
     
 }

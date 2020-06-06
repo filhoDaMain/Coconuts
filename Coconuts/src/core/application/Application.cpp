@@ -19,54 +19,15 @@
 #include <coconuts/EventSystem.h>
 #include <coconuts/Logger.h>
 #include <functional>
-#include <glad/glad.h>
 #include <string>
 #include <stdint.h>
 #include <coconuts/graphics/BufferLayout.h>
-
-// ----------------------------------------
-#include <stdint.h>     /* uintptr_t */
-#define INT2VOIDP(i) (void*)(uintptr_t)(i)
-// ----------------------------------------
+#include <coconuts/Renderer.h>
 
 namespace Coconuts
 {
     /* Singleton Pattern */
     Application* Application::s_Instance = nullptr;
-    
-#if 0
-    static GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType _type)
-    {
-        switch(_type)
-        {
-            case ShaderDataType::None:      return 0;
-            
-            case ShaderDataType::Float:     return GL_FLOAT;
-                
-            case ShaderDataType::Float2:    return GL_FLOAT;
-                
-            case ShaderDataType::Float3:    return GL_FLOAT;
-                
-            case ShaderDataType::Float4:    return GL_FLOAT;
-                
-            case ShaderDataType::Mat3:      return GL_FLOAT;
-                
-            case ShaderDataType::Mat4:      return GL_FLOAT;
-                
-            case ShaderDataType::Int:       return GL_INT;
-                
-            case ShaderDataType::Int2:      return GL_INT;
-                
-            case ShaderDataType::Int3:      return GL_INT;
-                
-            case ShaderDataType::Int4:      return GL_INT;
-                
-            case ShaderDataType::Bool:      return GL_BOOL;
-        }
-        LOG_ERROR("Unknown ShaderDataType {}", _type);
-        return 0;
-    }
-#endif
     
     Application::Application()
     {
@@ -217,15 +178,16 @@ namespace Coconuts
         LOG_INFO("Sandbox App is now running...");
         
         while(m_isRunning)
-        {
-            glClearColor(0.02f, 0.31f, 0.7f, 1);
-            glClear(GL_COLOR_BUFFER_BIT);
-            
-            m_Shader->Bind();
-            
-            m_VertexArray->Bind();
-            
-            glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
+        {            
+            Graphics::LowLevelAPI::SetClearColor({0.02f, 0.31f, 0.7f, 1});
+            Graphics::LowLevelAPI::Clear();
+                   
+            Renderer::BeginScene();
+            {
+                m_Shader->Bind();
+                Renderer::Submit(m_VertexArray);   
+            }
+            Renderer::EndScene();
             
             for (Layer* layer : m_LayerStack)
             {

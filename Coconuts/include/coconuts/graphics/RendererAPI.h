@@ -13,38 +13,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#ifndef RENDERERAPI_H
+#define RENDERERAPI_H
 
-#include <coconuts/graphics/VertexBuffer.h>
-#include <coconuts/Renderer.h>
-#include <coconuts/Logger.h>
-
-// Platform - OpenGL
-#include "OpenGLVertexBuffer.h"
-
+#include <glm/glm.hpp>
+#include <coconuts/graphics/VertexArray.h>
+#include <memory>
 
 namespace Coconuts
 {
     
-    // static
-    VertexBuffer* VertexBuffer::Create(float* vertices, uint32_t size)
+    class RendererAPI
     {
-        switch(Renderer::GetRendererAPI())
+    public:
+        enum class API
         {
-            case RendererAPI::API::OpenGL:
-            {
-                return new OpenGLVertexBuffer(vertices, size);
-                
-                break;
-            }
-            
-            default:
-            {
-                LOG_CRITICAL("VertexBuffer - Unknown RendererAPI {}", Renderer::GetRendererAPI());
-                exit(1);
-            }
-        }
+            None = 0,
+            OpenGL = 1
+        };
         
-        return nullptr;
-    }
+        virtual void SetClearColor(const glm::vec4& color) = 0;
+        virtual void Clear() = 0;
+        
+        virtual void DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray) = 0;
+                
+        inline static API GetAPI() { return s_API; };
+        
+    private:
+        static API s_API;
+        
+    };
     
 }
+
+#endif /* RENDERERAPI_H */
+

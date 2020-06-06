@@ -13,29 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#ifndef OPENGLRENDERERAPI_H
+#define OPENGLRENDERERAPI_H
 
-#include <coconuts/Renderer.h>
-#include <coconuts/graphics/LowLevelAPI.h>
+#include <coconuts/graphics/RendererAPI.h>
 
 namespace Coconuts
 {
-    // static
-    void Renderer::BeginScene()
-    {
-        
-    }
     
-    // static
-    void Renderer::EndScene()
+    class OpenGLRendererAPI : public RendererAPI
     {
+        void SetClearColor(const glm::vec4& color) override;
+        void Clear() override;
         
-    }
-    
-    // static
-    void Renderer::Submit(const std::shared_ptr<VertexArray>&vertexArray)
-    {
-        vertexArray->Bind();
-        Graphics::LowLevelAPI::DrawIndexed(vertexArray);
-    }
+        void DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray) override;
+    };
     
 }
+
+#endif /* OPENGLRENDERERAPI_H */
+

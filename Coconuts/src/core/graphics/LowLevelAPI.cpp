@@ -14,28 +14,12 @@
  * limitations under the License.
  */
 
-#include <coconuts/Renderer.h>
 #include <coconuts/graphics/LowLevelAPI.h>
+#include "OpenGLRendererAPI.h"
 
 namespace Coconuts
 {
-    // static
-    void Renderer::BeginScene()
-    {
-        
-    }
     
-    // static
-    void Renderer::EndScene()
-    {
-        
-    }
-    
-    // static
-    void Renderer::Submit(const std::shared_ptr<VertexArray>&vertexArray)
-    {
-        vertexArray->Bind();
-        Graphics::LowLevelAPI::DrawIndexed(vertexArray);
-    }
+    RendererAPI* Graphics::LowLevelAPI::s_RendererAPI = new OpenGLRendererAPI();
     
 }

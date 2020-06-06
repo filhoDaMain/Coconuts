@@ -30,7 +30,7 @@ namespace Coconuts
     {
         switch(Renderer::GetRendererAPI())
         {
-            case RendererAPI::OpenGL:
+            case RendererAPI::API::OpenGL:
             {
                 return new OpenGLIndexBuffer(indices, count);
                 

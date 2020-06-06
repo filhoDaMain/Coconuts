@@ -13,37 +13,43 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#ifndef LOWLEVELAPI_H
+#define LOWLEVELAPI_H
 
+#include <coconuts/graphics/RendererAPI.h>
 #include <coconuts/graphics/VertexArray.h>
-#include <coconuts/Renderer.h>
-#include <coconuts/Logger.h>
-
-// Platform - OpenGL
-#include "OpenGLVertexArray.h"
 
 namespace Coconuts
 {
     
-    //static
-    VertexArray* VertexArray::Create()
+    namespace Graphics
     {
-        switch(Renderer::GetRendererAPI())
-        {
-            case RendererAPI::API::OpenGL:
-            {
-                return new OpenGLVertexArray();
-                
-                break;
-            }
-            
-            default:
-            {
-                LOG_CRITICAL("VertexArray - Unknown RendererAPI {}", Renderer::GetRendererAPI());
-                exit(1);
-            }
-        }
         
-        return nullptr;
+        class LowLevelAPI
+        {
+        public:
+            inline static void SetClearColor(const glm::vec4& color)
+            {
+                s_RendererAPI->SetClearColor(color);
+            }
+        
+            inline static void Clear()
+            {
+                s_RendererAPI->Clear();
+            }
+        
+            inline static void DrawIndexed(const std::shared_ptr<VertexArray>&vertexArray)
+            {
+                s_RendererAPI->DrawIndexed(vertexArray);
+            }
+        
+        private:
+            static RendererAPI* s_RendererAPI;
+        };
+        
     }
-    
+        
 }
+
+#endif /* LOWLEVELAPI_H */
+

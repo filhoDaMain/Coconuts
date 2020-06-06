@@ -11,7 +11,9 @@ add_library(ccncore core.cpp
                     graphics/VertexBuffer.cpp
                     graphics/IndexBuffer.cpp
                     graphics/VertexArray.cpp
-                    graphics/Renderer.cpp)
+                    graphics/Renderer.cpp
+                    graphics/RendererAPI.cpp
+                    graphics/LowLevelAPI.cpp)
 
 # Platform Specific files
 # Mac OS

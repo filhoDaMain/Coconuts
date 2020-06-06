@@ -19,8 +19,6 @@
 #include <coconuts/Mouse.h>
 #include <coconuts/editor.h>
 
-#include <coconuts/Renderer.h>
-
 #include <string>
 #include "demo.h"
 

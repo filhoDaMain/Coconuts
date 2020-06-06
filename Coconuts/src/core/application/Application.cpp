@@ -34,6 +34,7 @@ namespace Coconuts
     /* Singleton Pattern */
     Application* Application::s_Instance = nullptr;
     
+#if 0
     static GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType _type)
     {
         switch(_type)
@@ -65,6 +66,7 @@ namespace Coconuts
         LOG_ERROR("Unknown ShaderDataType {}", _type);
         return 0;
     }
+#endif
     
     Application::Application()
     {
@@ -107,13 +109,18 @@ namespace Coconuts
         /* Set the callback function for all Window Manager library events */
         p_Window->SetEventCallback( std::bind(&Application::OnEvent, this, std::placeholders::_1) );
         
-        /**
-         * Generate Graphics Context objects
-         */
-        /* Vertex Array (VA) */
-        glGenVertexArrays(1, &m_VA);
-        glBindVertexArray(m_VA);                /* bind VA */
         
+        /**
+         * 1) Generate Graphics Context objects:
+         *      VA:  Vertex Array
+         *      vb:  vertex buffer (with a buffer layout)
+         *      ib:  index buffer
+         * 
+         * 2) Add vb and ib to VA.
+         */
+        
+        /* Vertex Array (VA) */
+        m_VertexArray.reset(VertexArray::Create());
         
         /* Vertices */
         float vertices[3 * 7] = {
@@ -124,42 +131,39 @@ namespace Coconuts
         /*  |----------------- STRIDE ----------------|*/
         };
      
-        /* Vertex Buffer (VB) */
-        m_VertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices))); // Bound
         
-        /* (Vertex) Buffer Layout */
-        BufferLayout layout = {
-            { ShaderDataType::Float3, "a_Position" },
-            { ShaderDataType::Float4, "a_Color" }
-        };
+        /* -------------------------------------------------------------------- */
+        /* Vertex Buffer (vb) */
+        /* -------------------------------------------------------------------- */
+        m_VertexBuffer.reset(
+                VertexBuffer::Create(vertices, sizeof(vertices))); // Bound
         
-        m_VertexBuffer->SetLayout(layout);
+            /* (Vertex) Buffer Layout */
+            BufferLayout layout = {
+                { ShaderDataType::Float3, "a_Position" },
+                { ShaderDataType::Float4, "a_Color" }
+            };
+            m_VertexBuffer->SetLayout(layout);
+        /* -------------------------------------------------------------------- */
         
-        uint32_t index = 0;
-        for (const auto& element : m_VertexBuffer->GetLayout())
-        {
-
-            /* Enable a vertex attribute */
-            glEnableVertexAttribArray(index);
-            
-            GLvoid* offset_ptr;
-            offset_ptr = INT2VOIDP(element.offset); /* avoid compiler warnings due to casting */
-            
-            glVertexAttribPointer(index,
-                                  element.GetComponentCount(),
-                                  ShaderDataTypeToOpenGLBaseType(element.type),
-                                  element.normalized ? GL_TRUE : GL_FALSE,
-                                  m_VertexBuffer->GetLayout().GetStride(),
-                                  offset_ptr);
-            
-            index++;
-        }
         
-        /* Indices */
+        /* -------------------------------------------------------------------- */
+        /* Index Buffer (ib) */
+        /* -------------------------------------------------------------------- */
         uint32_t indices[3] = {0, 1, 2};
         
-        /* Index Buffer (IB) */
-        m_IndexBuffer.reset(IndexBuffer::Create(indices, 3 /* sizeof(indices)/sizeof(uint32_t) */));
+        /* Add indices to an ib */
+        m_IndexBuffer.reset(
+                IndexBuffer::Create(indices, sizeof(indices)/sizeof(uint32_t)));
+        /* -------------------------------------------------------------------- */
+        
+        
+        /* -------------------------------------------------------------------- */
+        /* Add vb and ib to VA */
+        m_VertexArray->AddVertexBuffer(m_VertexBuffer);
+        m_VertexArray->SetIndexBuffer(m_IndexBuffer);
+        /* -------------------------------------------------------------------- */
+        
         
         /* Wrinting Shaders */
         std::string vertexSrc = R"(
@@ -218,7 +222,9 @@ namespace Coconuts
             glClear(GL_COLOR_BUFFER_BIT);
             
             m_Shader->Bind();
-            glBindVertexArray(m_VA);
+            
+            m_VertexArray->Bind();
+            
             glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
             
             for (Layer* layer : m_LayerStack)

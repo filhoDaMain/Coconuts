@@ -25,6 +25,7 @@
 #include <coconuts/graphics/Shader.h>
 #include <coconuts/graphics/VertexBuffer.h>
 #include <coconuts/graphics/IndexBuffer.h>
+#include <coconuts/graphics/VertexArray.h>
 
 namespace Coconuts
 {
@@ -57,14 +58,13 @@ namespace Coconuts
         std::unique_ptr<Window> p_Window;
         
         LayerStack m_LayerStack;
-        
-        /* Graphics Context objects IDs */
-        unsigned int m_VA;  /* VertexArray ID */
-        
+                
         /* Graphics Objects */
-        std::unique_ptr<Shader> m_Shader;
-        std::unique_ptr<VertexBuffer> m_VertexBuffer;
-        std::unique_ptr<IndexBuffer> m_IndexBuffer;
+        std::shared_ptr<Shader> m_Shader;
+        std::shared_ptr<VertexArray> m_VertexArray;
+        std::shared_ptr<VertexBuffer> m_VertexBuffer;
+        std::shared_ptr<IndexBuffer> m_IndexBuffer;
+        
     };
     
     extern Application* CreateApplication();

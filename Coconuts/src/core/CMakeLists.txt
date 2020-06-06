@@ -10,6 +10,7 @@ add_library(ccncore core.cpp
                     graphics/Shader.cpp
                     graphics/VertexBuffer.cpp
                     graphics/IndexBuffer.cpp
+                    graphics/VertexArray.cpp
                     graphics/Renderer.cpp)
 
 # Platform Specific files

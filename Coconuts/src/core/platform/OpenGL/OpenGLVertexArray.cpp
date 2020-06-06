@@ -112,7 +112,7 @@ namespace Coconuts
         glBindVertexArray(m_RendererID);
         indexBuffer->Bind();
         
-        m_IndexBuffers = indexBuffer;
+        m_IndexBuffer = indexBuffer;
     }
     
 }

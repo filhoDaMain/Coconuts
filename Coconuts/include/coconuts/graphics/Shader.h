@@ -18,6 +18,8 @@
 
 #include <string>
 #include <stdint.h>
+#include <glm/glm.hpp>
+
 
 namespace Coconuts
 {
@@ -32,6 +34,8 @@ namespace Coconuts
         
         void Bind();
         void Unbind();
+        
+        void UploadUniformMat4(const std::string& name, const glm::mat4& matrix);
         
     private:
         uint32_t m_RendererID;

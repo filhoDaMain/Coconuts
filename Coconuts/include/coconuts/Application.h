@@ -26,6 +26,7 @@
 #include <coconuts/graphics/VertexBuffer.h>
 #include <coconuts/graphics/IndexBuffer.h>
 #include <coconuts/graphics/VertexArray.h>
+#include <coconuts/graphics/cameras/OrthographicCamera.h>
 
 namespace Coconuts
 {
@@ -65,6 +66,7 @@ namespace Coconuts
         std::shared_ptr<VertexBuffer> m_VertexBuffer;
         std::shared_ptr<IndexBuffer> m_IndexBuffer;
         
+        OrthographicCamera m_Camera;
     };
     
     extern Application* CreateApplication();

@@ -19,10 +19,13 @@
 
 namespace Coconuts
 {
+    
+    Renderer::SceneData* Renderer::m_SceneData = new Renderer::SceneData;
+    
     // static
-    void Renderer::BeginScene()
+    void Renderer::BeginScene(OrthographicCamera& camera)
     {
-        
+        m_SceneData->viewProjMatrix = camera.GetViewProjMatrix();
     }
     
     // static
@@ -32,8 +35,12 @@ namespace Coconuts
     }
     
     // static
-    void Renderer::Submit(const std::shared_ptr<VertexArray>&vertexArray)
+    void Renderer::Submit(const std::shared_ptr<Shader>& shader,
+                          const std::shared_ptr<VertexArray>&vertexArray)
     {
+        shader->Bind();
+        shader->UploadUniformMat4("u_ViewProj", m_SceneData->viewProjMatrix);
+        
         vertexArray->Bind();
         Graphics::LowLevelAPI::DrawIndexed(vertexArray);
     }

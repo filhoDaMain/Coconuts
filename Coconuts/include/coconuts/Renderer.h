@@ -20,6 +20,8 @@
 #include <coconuts/graphics/RendererAPI.h>
 #include <coconuts/graphics/LowLevelAPI.h>
 #include <coconuts/graphics/VertexArray.h>
+#include <coconuts/graphics/cameras/OrthographicCamera.h>
+#include <coconuts/graphics/Shader.h>
 #include <memory>
 
 namespace Coconuts
@@ -28,13 +30,20 @@ namespace Coconuts
     class Renderer
     {
     public:
-        static void BeginScene();
+        static void BeginScene(OrthographicCamera& camera);
         static void EndScene();
-        static void Submit(const std::shared_ptr<VertexArray>&vertexArray);
+        static void Submit(const std::shared_ptr<Shader>& shader,
+                           const std::shared_ptr<VertexArray>&vertexArray);
         
         inline static RendererAPI::API GetRendererAPI() {return RendererAPI::GetAPI(); }
         
     private:
+        struct SceneData
+        {
+            glm::mat4 viewProjMatrix;
+        };
+        
+        static SceneData* m_SceneData;
     };
     
 }

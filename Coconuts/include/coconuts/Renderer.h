@@ -16,13 +16,17 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
-#include <coconuts/graphics/GraphicsContext.h>
 #include <coconuts/graphics/RendererAPI.h>
 #include <coconuts/graphics/LowLevelAPI.h>
-#include <coconuts/graphics/VertexArray.h>
-#include <coconuts/graphics/cameras/OrthographicCamera.h>
+#include <coconuts/graphics/GraphicsContext.h>
 #include <coconuts/graphics/Shader.h>
+#include <coconuts/graphics/VertexArray.h>
+#include <coconuts/graphics/VertexBuffer.h>
+#include <coconuts/graphics/IndexBuffer.h>
 #include <memory>
+
+/* Cameras */
+#include <coconuts/graphics/cameras/OrthographicCamera.h>
 
 namespace Coconuts
 {

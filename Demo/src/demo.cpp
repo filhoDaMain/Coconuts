@@ -9,16 +9,21 @@
 #endif  // __COCONUTS_SANDBOX_APP__
 //!!!
 
+/* Core Library stuff */
 #include <coconuts/core.h>
+#include <coconuts/Logger.h>
 #include <coconuts/Application.h>
 #include <coconuts/Layer.h>
 #include <coconuts/EventSystem.h>
-#include <coconuts/Logger.h>
 #include <coconuts/Polling.h>
 #include <coconuts/Keyboard.h>
 #include <coconuts/Mouse.h>
+#include <coconuts/Renderer.h>
+
+/* Editor Library stuff */
 #include <coconuts/editor.h>
 
+#include <memory>
 #include <string>
 #include "demo.h"
 
@@ -48,44 +53,155 @@
  */
 class ExampleLayer : public ::Coconuts::Layer
 {
-    public:
-        ExampleLayer(const std::string& layerName)  : Layer(layerName)
-        {
-            // inits and allocations
-        }
+public:
+    ExampleLayer(const std::string& layerName)
+        :   Layer(layerName), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f)
+    {
+        using namespace Coconuts;    
         
         /**
-         * Called once per frame
+         * 1) Generate Graphics Context objects:
+         *      VA:  Vertex Array
+         *      vb:  vertex buffer (with a buffer layout)
+         *      ib:  index buffer
+         * 
+         * 2) Add vb and ib to VA.
          */
-        void OnUpdate() override
-        {
-            /* Example: Polling some pressed keys */
-            
-            using namespace Coconuts;
-            if (Polling::IsKeyPressed(Keyboard::KEY_A))
-            {
-                LOG_TRACE("Keyboard: A was pressed");
-            }
-            
-            if (Polling::IsKeyPressed(Keyboard::KEY_X))
-            {
-                LOG_TRACE("Keyboard: X was pressed");
-            }
-            
-            if (Polling::IsMouseButtonPressed(Mouse::MOUSE_BUTTON_LEFT))
-            {
-                LOG_TRACE("Mouse: Left button was pressed");
-            }
-        }
         
-        /**
-         * Triggered whenever an Event occurs
-         */
-        void OnEvent(Coconuts::Event& event) override
+        /* Vertex Array (VA) */
+        m_VertexArray.reset(VertexArray::Create());
+        
+        /* Vertices */
+        float vertices[3 * 7] = {
+        /*  | x      y     z |       RGBA Color       |*/
+            -0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
+             0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
+             0.0f,  0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f
+        /*  |----------------- STRIDE ----------------|*/
+        };
+     
+        
+        /* -------------------------------------------------------------------- */
+        /* Vertex Buffer (vb) */
+        /* -------------------------------------------------------------------- */
+        m_VertexBuffer.reset(
+                VertexBuffer::Create(vertices, sizeof(vertices))); // Bound
+        
+            /* (Vertex) Buffer Layout */
+            BufferLayout layout = {
+                { ShaderDataType::Float3, "a_Position" },
+                { ShaderDataType::Float4, "a_Color" }
+            };
+            m_VertexBuffer->SetLayout(layout);
+        /* -------------------------------------------------------------------- */
+        
+        
+        /* -------------------------------------------------------------------- */
+        /* Index Buffer (ib) */
+        /* -------------------------------------------------------------------- */
+        uint32_t indices[3] = {0, 1, 2};
+        
+        /* Add indices to an ib */
+        m_IndexBuffer.reset(
+                IndexBuffer::Create(indices, sizeof(indices)/sizeof(uint32_t)));
+        /* -------------------------------------------------------------------- */
+        
+        
+        /* -------------------------------------------------------------------- */
+        /* Add vb and ib to VA */
+        m_VertexArray->AddVertexBuffer(m_VertexBuffer);
+        m_VertexArray->SetIndexBuffer(m_IndexBuffer);
+        /* -------------------------------------------------------------------- */
+        
+        
+        /* Wrinting Shaders */
+        std::string vertexSrc = R"(
+            
+                #version 330 core
+                
+                layout(location = 0) in vec3 a_Position;
+                layout(location = 1) in vec4 a_Color;
+                
+                uniform mat4 u_ViewProj;
+                
+                out vec3 v_Position;
+                out vec4 v_Color;
+                
+                void main()
+                {
+                    v_Position = a_Position;
+                    v_Color = a_Color;
+                    gl_Position = u_ViewProj * vec4(a_Position, 1.0);
+                }
+                
+            )";
+        
+        std::string fragmentSrc = R"(
+            
+                #version 330 core
+                
+                layout(location = 0) out vec4 color;
+                
+                in vec3 v_Position;
+                in vec4 v_Color;
+                
+                void main()
+                {
+                    color = vec4(v_Position * 0.5 + 0.5, 1.0);
+                
+                    color = v_Color;
+                }
+                
+            )";
+        
+        m_Shader.reset(new Shader(vertexSrc, fragmentSrc));
+    }
+        
+    /**
+     * Called once per frame
+     */
+    void OnUpdate() override
+    {
+        using namespace Coconuts;
+        Graphics::LowLevelAPI::SetClearColor({0.02f, 0.31f, 0.7f, 1});
+        Graphics::LowLevelAPI::Clear();
+        
+        m_Camera.SetPosition({0.5f, 0.5f, 0.0f});
+        m_Camera.SetRotation(45.0f);
+        
+        Renderer::BeginScene(m_Camera);
         {
-            /* Log the event */
-            //LOG_TRACE(event.ToString());
+            Renderer::Submit(m_Shader, m_VertexArray);   
         }
+        Renderer::EndScene();
+        
+#if 0
+        /* Example: Polling some pressed keys */
+        if (Polling::IsKeyPressed(Keyboard::KEY_A))
+        {
+            LOG_TRACE("Keyboard: A was pressed");
+        }
+#endif
+    }
+        
+    /**
+     * Triggered whenever an Event occurs
+     */
+    void OnEvent(Coconuts::Event& event) override
+    {
+        /* Log the event */
+        //LOG_TRACE(event.ToString());
+    }
+    
+private:
+    /* Camera */
+    Coconuts::OrthographicCamera m_Camera;
+    
+    /* Graphics Objects */
+    std::shared_ptr<Coconuts::Shader> m_Shader;
+    std::shared_ptr<Coconuts::VertexArray> m_VertexArray;
+    std::shared_ptr<Coconuts::VertexBuffer> m_VertexBuffer;
+    std::shared_ptr<Coconuts::IndexBuffer> m_IndexBuffer;
 };
 
 
@@ -103,12 +219,14 @@ public:
         ExampleLayer* newLayer = new ExampleLayer("Layer0");
         this->PushLayer(newLayer);
         
+#if 0
         /**
          * Editor GUI.
          */
         using namespace Coconuts;
         Editor::GUILayer* gui = new Editor::GUILayer();
         this->PushOverlay(gui);
+#endif
     }
     
     ~DemoApp()

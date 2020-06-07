@@ -31,7 +31,6 @@ namespace Coconuts
     Application* Application::s_Instance = nullptr;
     
     Application::Application()
-        :   m_Camera(-1.0f, 1.0f, -1.0f, 1.0f)
     {
         /* Assert that the Singleton Pattern is respected */
         if (s_Instance != nullptr)
@@ -71,104 +70,6 @@ namespace Coconuts
         
         /* Set the callback function for all Window Manager library events */
         p_Window->SetEventCallback( std::bind(&Application::OnEvent, this, std::placeholders::_1) );
-        
-        
-        /**
-         * 1) Generate Graphics Context objects:
-         *      VA:  Vertex Array
-         *      vb:  vertex buffer (with a buffer layout)
-         *      ib:  index buffer
-         * 
-         * 2) Add vb and ib to VA.
-         */
-        
-        /* Vertex Array (VA) */
-        m_VertexArray.reset(VertexArray::Create());
-        
-        /* Vertices */
-        float vertices[3 * 7] = {
-        /*  | x      y     z |       RGBA Color       |*/
-            -0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
-             0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
-             0.0f,  0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f
-        /*  |----------------- STRIDE ----------------|*/
-        };
-     
-        
-        /* -------------------------------------------------------------------- */
-        /* Vertex Buffer (vb) */
-        /* -------------------------------------------------------------------- */
-        m_VertexBuffer.reset(
-                VertexBuffer::Create(vertices, sizeof(vertices))); // Bound
-        
-            /* (Vertex) Buffer Layout */
-            BufferLayout layout = {
-                { ShaderDataType::Float3, "a_Position" },
-                { ShaderDataType::Float4, "a_Color" }
-            };
-            m_VertexBuffer->SetLayout(layout);
-        /* -------------------------------------------------------------------- */
-        
-        
-        /* -------------------------------------------------------------------- */
-        /* Index Buffer (ib) */
-        /* -------------------------------------------------------------------- */
-        uint32_t indices[3] = {0, 1, 2};
-        
-        /* Add indices to an ib */
-        m_IndexBuffer.reset(
-                IndexBuffer::Create(indices, sizeof(indices)/sizeof(uint32_t)));
-        /* -------------------------------------------------------------------- */
-        
-        
-        /* -------------------------------------------------------------------- */
-        /* Add vb and ib to VA */
-        m_VertexArray->AddVertexBuffer(m_VertexBuffer);
-        m_VertexArray->SetIndexBuffer(m_IndexBuffer);
-        /* -------------------------------------------------------------------- */
-        
-        
-        /* Wrinting Shaders */
-        std::string vertexSrc = R"(
-            
-                #version 330 core
-                
-                layout(location = 0) in vec3 a_Position;
-                layout(location = 1) in vec4 a_Color;
-                
-                uniform mat4 u_ViewProj;
-                
-                out vec3 v_Position;
-                out vec4 v_Color;
-                
-                void main()
-                {
-                    v_Position = a_Position;
-                    v_Color = a_Color;
-                    gl_Position = u_ViewProj * vec4(a_Position, 1.0);
-                }
-                
-            )";
-        
-        std::string fragmentSrc = R"(
-            
-                #version 330 core
-                
-                layout(location = 0) out vec4 color;
-                
-                in vec3 v_Position;
-                in vec4 v_Color;
-                
-                void main()
-                {
-                    color = vec4(v_Position * 0.5 + 0.5, 1.0);
-                
-                    color = v_Color;
-                }
-                
-            )";
-        
-        m_Shader.reset(new Shader(vertexSrc, fragmentSrc));
     }
     
     Application::~Application()
@@ -182,19 +83,7 @@ namespace Coconuts
         LOG_INFO("Sandbox App is now running...");
         
         while(m_isRunning)
-        {            
-            Graphics::LowLevelAPI::SetClearColor({0.02f, 0.31f, 0.7f, 1});
-            Graphics::LowLevelAPI::Clear();
-                   
-            m_Camera.SetPosition({0.5f, 0.5f, 0.0f});
-            m_Camera.SetRotation(45.0f);
-            
-            Renderer::BeginScene(m_Camera);
-            {
-                Renderer::Submit(m_Shader, m_VertexArray);   
-            }
-            Renderer::EndScene();
-            
+        {
             for (Layer* layer : m_LayerStack)
             {
                 layer->OnUpdate();

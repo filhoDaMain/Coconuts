@@ -59,14 +59,6 @@ namespace Coconuts
         std::unique_ptr<Window> p_Window;
         
         LayerStack m_LayerStack;
-                
-        /* Graphics Objects */
-        std::shared_ptr<Shader> m_Shader;
-        std::shared_ptr<VertexArray> m_VertexArray;
-        std::shared_ptr<VertexBuffer> m_VertexBuffer;
-        std::shared_ptr<IndexBuffer> m_IndexBuffer;
-        
-        OrthographicCamera m_Camera;
     };
     
     extern Application* CreateApplication();

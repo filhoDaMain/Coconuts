@@ -39,6 +39,9 @@ namespace Coconuts
         unsigned int GetWidth() const override { return m_WindowData.width; }
         unsigned int GetHeight() const override { return m_WindowData.height; }
         
+        void SetVSync(bool enable) override;
+        bool IsVsyncEnabled() const override;
+        
         inline void* GetNativeWindow() const override { return p_glfwWindow; }
             
     private:
@@ -49,6 +52,7 @@ namespace Coconuts
         {
             std::string title;
             unsigned int width, height;
+            bool VSync;
             
             /* Called to dispatch any MacWindow Event */
             EventCallbackFunction eventCallback;

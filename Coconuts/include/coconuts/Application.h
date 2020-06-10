@@ -59,6 +59,8 @@ namespace Coconuts
         std::unique_ptr<Window> p_Window;
         
         LayerStack m_LayerStack;
+        
+        float m_LastFrameTime = 0.0f;
     };
     
     extern Application* CreateApplication();

@@ -224,4 +224,26 @@ namespace Coconuts
         /* Poll for and process events */
         glfwPollEvents();
     }
+    
+    void MacWindow::SetVSync(bool enable)
+    {
+        if (enable)
+        {
+            glfwSwapInterval(1);
+            LOG_DEBUG("VSync enabled");
+        }
+        
+        else    // disable 
+        {
+            glfwSwapInterval(0);
+            LOG_DEBUG("VSync disabled");
+        }
+        
+        m_WindowData.VSync = enable;
+    }
+    
+    bool MacWindow::IsVsyncEnabled() const
+    {
+        return m_WindowData.VSync;
+    }
 }

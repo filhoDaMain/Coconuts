@@ -13,32 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef LAYER_H
-#define LAYER_H
-
-#include <coconuts/EventSystem.h>
-#include <string>
-#include <coconuts/Timestep.h>
+#ifndef TIMESTEP_H
+#define TIMESTEP_H
 
 namespace Coconuts
 {
-    class Layer
+    
+    class Timestep
     {
     public:
-        Layer(const std::string& name = "New Layer");
-        virtual ~Layer();
+        Timestep(float time = 0.0f) : m_Time(time) {}
         
-        virtual void OnAttach();
-        virtual void OnDetach();
-        virtual void OnUpdate(Timestep ts);
-        virtual void OnEvent(Event& event);
-        
-        inline const std::string& GetName() const { return m_Name; }
+        float GetSeconds() const { return m_Time; }
+        float GetMilliseconds() const { return m_Time * 1000.0f; }
         
     private:
-        std::string m_Name;
+        float m_Time;   // seconds
     };
+    
 }
 
-#endif /* LAYER_H */
+#endif /* TIMESTEP_H */
 

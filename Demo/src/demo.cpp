@@ -26,6 +26,7 @@
 #include <memory>
 #include <string>
 #include "demo.h"
+#include <glm/glm.hpp>
 
 
 /**
@@ -160,28 +161,56 @@ public:
     /**
      * Called once per frame
      */
-    void OnUpdate() override
+    void OnUpdate(Coconuts::Timestep ts) override
     {
+        LOG_TRACE("Delta time = {} ms", ts.GetMilliseconds());
+        
         using namespace Coconuts;
         Graphics::LowLevelAPI::SetClearColor({0.02f, 0.31f, 0.7f, 1});
         Graphics::LowLevelAPI::Clear();
         
-        m_Camera.SetPosition({0.5f, 0.5f, 0.0f});
-        m_Camera.SetRotation(45.0f);
         
-        Renderer::BeginScene(m_Camera);
+        /**
+         * Input polling from Keyboard to 
+         * move and rotate Camera
+         */
+        
+        /* LEFT */
+        if (Polling::IsKeyPressed(Keyboard::KEY_LEFT))
         {
-            Renderer::Submit(m_Shader, m_VertexArray);   
+            m_CameraPos.x -= m_CameraMoveSpeed * ts.GetSeconds();
+        }
+        
+        /* RIGHT */
+        if (Polling::IsKeyPressed(Keyboard::KEY_RIGHT))
+        {
+            m_CameraPos.x += m_CameraMoveSpeed * ts.GetSeconds();
+        }
+        
+        /* DOWN - Clockwise rotation */
+        if (Polling::IsKeyPressed(Keyboard::KEY_DOWN))
+        {
+            m_CameraRotation -= m_CameraRotationSpeed * ts.GetSeconds();
+        }
+        
+        /* UP - Counterclockwise rotation */
+        if (Polling::IsKeyPressed(Keyboard::KEY_UP))
+        {
+            m_CameraRotation += m_CameraRotationSpeed * ts.GetSeconds();
+        }
+        
+        /* Update Camera's object position */
+        m_Camera.SetPosition(m_CameraPos);
+        
+        /* Update Camera's object rotation */
+        m_Camera.SetRotation(m_CameraRotation);
+        
+        /* RENDER */
+        Renderer::BeginScene(m_Camera); // select a camera
+        {
+            Renderer::Submit(m_Shader, m_VertexArray);
         }
         Renderer::EndScene();
-        
-#if 0
-        /* Example: Polling some pressed keys */
-        if (Polling::IsKeyPressed(Keyboard::KEY_A))
-        {
-            LOG_TRACE("Keyboard: A was pressed");
-        }
-#endif
     }
         
     /**
@@ -196,6 +225,12 @@ public:
 private:
     /* Camera */
     Coconuts::OrthographicCamera m_Camera;
+    
+    glm::vec3 m_CameraPos = {0.0f, 0.0f, 0.0f};
+    float m_CameraMoveSpeed = 1.0f;
+    
+    float m_CameraRotation = 0.0f;
+    float m_CameraRotationSpeed = 25.0f;    // degrees/seconds
     
     /* Graphics Objects */
     std::shared_ptr<Coconuts::Shader> m_Shader;

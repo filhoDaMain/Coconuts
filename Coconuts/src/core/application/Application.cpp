@@ -23,6 +23,8 @@
 #include <stdint.h>
 #include <coconuts/graphics/BufferLayout.h>
 #include <coconuts/Renderer.h>
+#include <coconuts/Timestep.h>
+#include <GLFW/glfw3.h>
 
 
 namespace Coconuts
@@ -43,6 +45,9 @@ namespace Coconuts
         
         LOG_DEBUG("Sandbox App created!");
         p_Window = std::unique_ptr<Window>(Window::Create());
+        
+        /* VSync enable/disable */
+        p_Window->SetVSync(true);
         
 #if defined(__APPLE__)
         if (p_Window != nullptr)
@@ -84,9 +89,13 @@ namespace Coconuts
         
         while(m_isRunning)
         {
+            float time = (float) glfwGetTime(); //TODO: Make this a platform dependent func call
+            Timestep timestep = time - m_LastFrameTime;
+            m_LastFrameTime = time;
+            
             for (Layer* layer : m_LayerStack)
             {
-                layer->OnUpdate();
+                layer->OnUpdate(timestep);
             }
             
             p_Window->OnUpdate();

@@ -98,7 +98,7 @@ void GUILayer::OnDetach()
     ImGui::DestroyContext();
 }
 
-void GUILayer::OnUpdate()
+void GUILayer::OnUpdate(Timestep ts)
 {
     this->Begin();
     

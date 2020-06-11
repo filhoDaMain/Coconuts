@@ -27,6 +27,7 @@
 #include <string>
 #include "demo.h"
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 
 /**
@@ -56,7 +57,9 @@ class ExampleLayer : public ::Coconuts::Layer
 {
 public:
     ExampleLayer(const std::string& layerName)
-        :   Layer(layerName), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f)
+        :   Layer(layerName),
+            m_Camera(-1.6f, 1.6f, -0.9f, 0.9f),
+            m_ObjPos(0.0f)
     {
         using namespace Coconuts;    
         
@@ -124,6 +127,7 @@ public:
                 layout(location = 1) in vec4 a_Color;
                 
                 uniform mat4 u_ViewProj;
+                uniform mat4 u_Transform;
                 
                 out vec3 v_Position;
                 out vec4 v_Color;
@@ -132,7 +136,7 @@ public:
                 {
                     v_Position = a_Position;
                     v_Color = a_Color;
-                    gl_Position = u_ViewProj * vec4(a_Position, 1.0);
+                    gl_Position = u_ViewProj * u_Transform * vec4(a_Position, 1.0);
                 }
                 
             )";
@@ -163,7 +167,7 @@ public:
      */
     void OnUpdate(Coconuts::Timestep ts) override
     {
-        LOG_TRACE("Delta time = {} ms", ts.GetMilliseconds());
+        //LOG_TRACE("Delta time = {} ms", ts.GetMilliseconds());
         
         using namespace Coconuts;
         Graphics::LowLevelAPI::SetClearColor({0.02f, 0.31f, 0.7f, 1});
@@ -199,18 +203,52 @@ public:
             m_CameraRotation += m_CameraRotationSpeed * ts.GetSeconds();
         }
         
+        
+        /**
+         * Input polling from Keyboard to 
+         * move rendered object
+         */
+        
+        /* A - Left */
+        if (Polling::IsKeyPressed(Keyboard::KEY_A))
+        {
+            m_ObjPos.x -= m_ObjMoveSpeed * ts.GetSeconds();
+        }
+        
+        /* D - Right */
+        if (Polling::IsKeyPressed(Keyboard::KEY_D))
+        {
+            m_ObjPos.x += m_ObjMoveSpeed * ts.GetSeconds();
+        }
+        
+        /* W - Up */
+        if (Polling::IsKeyPressed(Keyboard::KEY_W))
+        {
+            m_ObjPos.y += m_ObjMoveSpeed * ts.GetSeconds();
+        }
+        
+        /* S - Down */
+        if (Polling::IsKeyPressed(Keyboard::KEY_S))
+        {
+            m_ObjPos.y -= m_ObjMoveSpeed * ts.GetSeconds();
+        }
+        
         /* Update Camera's object position */
         m_Camera.SetPosition(m_CameraPos);
         
         /* Update Camera's object rotation */
         m_Camera.SetRotation(m_CameraRotation);
         
-        /* RENDER */
+        glm::mat4 transform = glm::translate(glm::mat4(1.0f), m_ObjPos);
+        
+        /* ******************************************************************** */
+        /* RENDER: :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: */
         Renderer::BeginScene(m_Camera); // select a camera
         {
-            Renderer::Submit(m_Shader, m_VertexArray);
+            Renderer::Submit(m_Shader, m_VertexArray, transform);
         }
         Renderer::EndScene();
+        /* ******************************************************************** */
     }
         
     /**
@@ -230,7 +268,10 @@ private:
     float m_CameraMoveSpeed = 1.0f;
     
     float m_CameraRotation = 0.0f;
-    float m_CameraRotationSpeed = 25.0f;    // degrees/seconds
+    float m_CameraRotationSpeed = 35.0f;    // degrees/seconds
+    
+    glm::vec3 m_ObjPos;
+    float m_ObjMoveSpeed = 1.5f;
     
     /* Graphics Objects */
     std::shared_ptr<Coconuts::Shader> m_Shader;

@@ -16,6 +16,8 @@
 
 #include <coconuts/Renderer.h>
 #include <coconuts/graphics/LowLevelAPI.h>
+#include <coconuts/Logger.h>
+#include "OpenGLShader.h"
 
 namespace Coconuts
 {
@@ -40,8 +42,22 @@ namespace Coconuts
                           const glm::mat4& transform)
     {
         shader->Bind();
-        shader->UploadUniformMat4("u_ViewProj", m_SceneData->viewProjMatrix);
-        shader->UploadUniformMat4("u_Transform", transform);
+        
+        switch(Renderer::GetRendererAPI())
+        {
+            case RendererAPI::API::OpenGL:
+            {
+                std::dynamic_pointer_cast<OpenGLShader>(shader)->UploadUniformMat4("u_ViewProj", m_SceneData->viewProjMatrix);
+                std::dynamic_pointer_cast<OpenGLShader>(shader)->UploadUniformMat4("u_Transform", transform);
+                break;
+            }
+            
+            default:
+            {
+                LOG_CRITICAL("Renderer - Unknown RendererAPI {}", Renderer::GetRendererAPI());
+                exit(1);
+            }
+        }
         
         vertexArray->Bind();
         Graphics::LowLevelAPI::DrawIndexed(vertexArray);

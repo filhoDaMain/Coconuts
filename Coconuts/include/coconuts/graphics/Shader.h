@@ -26,20 +26,50 @@ namespace Coconuts
     
     class Shader
     {
-    public:
-        Shader(const std::string& vertexShaderSrc,
-               const std::string& fragmentShaderSrc);
+    public:        
+        static Shader* Create(const std::string& vertexShaderSrc,
+                              const std::string& fragmentShaderSrc);
         
-        ~Shader();
+        virtual ~Shader() = default;
         
-        void Bind();
-        void Unbind();
+        virtual void Bind() = 0;
+        virtual void Unbind() = 0;
         
-        void UploadUniformMat4(const std::string& name, const glm::mat4& matrix);
-        void UploadUniformFloat4(const std::string& name, const glm::vec4& values);
+        /**
+         * Upload Uniforms
+         */
+        
+        /**************/
+        /*   Matrix   */
+        /**************/
+        // 2x2
+        virtual void UploadUniformMat2(const std::string& name, const glm::mat2& matrix) = 0;
+        // 3x3
+        virtual void UploadUniformMat3(const std::string& name, const glm::mat3& matrix) = 0;
+        // 4x4
+        virtual void UploadUniformMat4(const std::string& name, const glm::mat4& matrix) = 0;
+        
+        
+        /**************/
+        /*  Integer   */
+        /**************/
+        // 1
+        virtual void UploadUniformInt1(const std::string& name, int value) = 0;
+        
+        
+        /**************/
+        /*   Float    */
+        /**************/
+        // 1
+        virtual void UploadUniformFloat1(const std::string& name, float value) = 0;
+        // 2
+        virtual void UploadUniformFloat2(const std::string& name, const glm::vec2& values) = 0;
+        // 3
+        virtual void UploadUniformFloat2(const std::string& name, const glm::vec3& values) = 0;
+        // 4
+        virtual void UploadUniformFloat4(const std::string& name, const glm::vec4& values) = 0;
         
     private:
-        uint32_t m_RendererID;
     };
     
 }

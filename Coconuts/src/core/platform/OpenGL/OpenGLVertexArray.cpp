@@ -17,6 +17,7 @@
 #include "OpenGLVertexArray.h"
 #include <glad/glad.h>
 #include <coconuts/graphics/BufferLayout.h>
+#include <coconuts/Logger.h>
 
 #include <stdint.h>     /* uintptr_t */
 #define INT2VOIDP(i) (void*)(uintptr_t)(i)

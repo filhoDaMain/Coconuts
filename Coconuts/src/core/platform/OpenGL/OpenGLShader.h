@@ -62,7 +62,7 @@ namespace Coconuts
         // 2
         void UploadUniformFloat2(const std::string& name, const glm::vec2& values) override;
         // 3
-        void UploadUniformFloat2(const std::string& name, const glm::vec3& values) override;
+        void UploadUniformFloat3(const std::string& name, const glm::vec3& values) override;
         // 4
         void UploadUniformFloat4(const std::string& name, const glm::vec4& values) override;
         

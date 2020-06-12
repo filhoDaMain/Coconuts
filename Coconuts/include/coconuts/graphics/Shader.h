@@ -65,7 +65,7 @@ namespace Coconuts
         // 2
         virtual void UploadUniformFloat2(const std::string& name, const glm::vec2& values) = 0;
         // 3
-        virtual void UploadUniformFloat2(const std::string& name, const glm::vec3& values) = 0;
+        virtual void UploadUniformFloat3(const std::string& name, const glm::vec3& values) = 0;
         // 4
         virtual void UploadUniformFloat4(const std::string& name, const glm::vec4& values) = 0;
         

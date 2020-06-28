@@ -17,6 +17,7 @@
 #define EDITOR_H
 
 #include <coconuts/editor_gui/GUILayer.h>
+#include <imgui/imgui.h>
 
 
 #endif /* EDITOR_H */

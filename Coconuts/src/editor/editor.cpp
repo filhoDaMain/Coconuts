@@ -25,7 +25,6 @@
 using namespace Coconuts::Editor;
 
 #include <coconuts/editor_gui/GUILayer.h>
-#include <imgui/imgui.h>
 #include <imgui/examples/imgui_impl_opengl3.h>
 #include <imgui/examples/imgui_impl_glfw.h>
 
@@ -100,12 +99,7 @@ void GUILayer::OnDetach()
 
 void GUILayer::OnUpdate(Timestep ts)
 {
-    this->Begin();
-    
-    static bool show = true;
-    ImGui::ShowDemoWindow(&show);
-    
-    this->End();
+    // override on sandbox app
 }
 
 void GUILayer::Begin()

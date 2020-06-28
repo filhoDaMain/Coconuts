@@ -25,6 +25,7 @@
 #include <coconuts/Renderer.h>
 #include <coconuts/layer_system/Timestep.h>
 #include <GLFW/glfw3.h>
+#include <coconuts/editor_gui/GUILayer.h>
 
 
 namespace Coconuts
@@ -95,7 +96,22 @@ namespace Coconuts
             
             for (Layer* layer : m_LayerStack)
             {
-                layer->OnUpdate(timestep);
+                /* GUI Layer */
+                if (layer->IsGUI() == true)
+                {
+                    Editor::GUILayer* gui = dynamic_cast<Editor::GUILayer*>(layer);
+                    gui->Begin();
+                    gui->OnUpdate(timestep);
+                    gui->End();
+                }
+                
+                /* Normal Layer */
+                else
+                {
+                    layer->OnUpdate(timestep);
+                }
+                
+                
             }
             
             p_Window->OnUpdate();

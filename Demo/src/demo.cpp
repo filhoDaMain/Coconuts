@@ -28,6 +28,7 @@
 #include "demo.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 
 /**
@@ -73,94 +74,82 @@ public:
          */
         
         /* Vertex Array (VA) */
-        m_VertexArray.reset(VertexArray::Create());
+        m_VertexArray_square.reset(VertexArray::Create());
         
-        /* Vertices */
-        float vertices[3 * 7] = {
-        /*  | x      y     z |       RGBA Color       |*/
-            -0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
-             0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
-             0.0f,  0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f
-        /*  |----------------- STRIDE ----------------|*/
+        float vertices_square[3 * 4] = {
+            -0.5f, -0.5f,  0.0f,
+             0.5f, -0.5f,  0.0f,
+             0.5f,  0.5f,  0.0f,
+            -0.5f,  0.5f,  0.0f
         };
      
         
         /* -------------------------------------------------------------------- */
         /* Vertex Buffer (vb) */
         /* -------------------------------------------------------------------- */
-        m_VertexBuffer.reset(
-                VertexBuffer::Create(vertices, sizeof(vertices))); // Bound
+        m_VertexBuffer_square.reset(
+                    VertexBuffer::Create(vertices_square, sizeof(vertices_square)));
         
-            /* (Vertex) Buffer Layout */
-            BufferLayout layout = {
-                { ShaderDataType::Float3, "a_Position" },
-                { ShaderDataType::Float4, "a_Color" }
-            };
-            m_VertexBuffer->SetLayout(layout);
+        m_VertexBuffer_square->SetLayout( {{ShaderDataType::Float3, "a_Position"}} );
         /* -------------------------------------------------------------------- */
         
         
         /* -------------------------------------------------------------------- */
         /* Index Buffer (ib) */
         /* -------------------------------------------------------------------- */
-        uint32_t indices[3] = {0, 1, 2};
+        uint32_t indices_square[6] = {0, 1, 2, 2, 3, 0};
         
         /* Add indices to an ib */
-        m_IndexBuffer.reset(
-                IndexBuffer::Create(indices, sizeof(indices)/sizeof(uint32_t)));
+        m_IndexBuffer_square.reset(
+                IndexBuffer::Create(indices_square, sizeof(indices_square)/sizeof(uint32_t)));
         /* -------------------------------------------------------------------- */
         
         
         /* -------------------------------------------------------------------- */
         /* Add vb and ib to VA */
-        m_VertexArray->AddVertexBuffer(m_VertexBuffer);
-        m_VertexArray->SetIndexBuffer(m_IndexBuffer);
+        m_VertexArray_square->AddVertexBuffer(m_VertexBuffer_square);
+        m_VertexArray_square->SetIndexBuffer(m_IndexBuffer_square);
         /* -------------------------------------------------------------------- */
         
         
-        /* Wrinting Shaders */
-        std::string vertexSrc = R"(
+        /* Writing Shaders */
+        std::string vertexSrc_flatcolor = R"(
             
                 #version 330 core
                 
                 layout(location = 0) in vec3 a_Position;
-                layout(location = 1) in vec4 a_Color;
                 
                 uniform mat4 u_ViewProj;
                 uniform mat4 u_Transform;
                 
                 out vec3 v_Position;
-                out vec4 v_Color;
                 
                 void main()
                 {
                     v_Position = a_Position;
-                    v_Color = a_Color;
                     gl_Position = u_ViewProj * u_Transform * vec4(a_Position, 1.0);
                 }
                 
             )";
-        
-        std::string fragmentSrc = R"(
+
+        std::string fragmentSrc_flatcolor = R"(
             
                 #version 330 core
                 
                 layout(location = 0) out vec4 color;
                 
                 in vec3 v_Position;
-                in vec4 v_Color;
+                
+                uniform vec3 u_Color;
                 
                 void main()
                 {
-                    color = vec4(v_Position * 0.5 + 0.5, 1.0);
-                
-                    color = v_Color;
+                    color = vec4(u_Color, 1.0);
                 }
                 
             )";
         
-        //m_Shader.reset(new Shader(vertexSrc, fragmentSrc));
-        m_Shader.reset(Shader::Create(vertexSrc, fragmentSrc));
+        m_Shader_square.reset(Shader::Create(vertexSrc_flatcolor, fragmentSrc_flatcolor));
     }
         
     /**
@@ -242,14 +231,19 @@ public:
         
         glm::mat4 transform = glm::translate(glm::mat4(1.0f), m_ObjPos);
         
+        /* Change Squre color */
+        m_Shader_square->UploadUniformFloat3("u_Color", m_Color_square);
+        
         /* ******************************************************************** */
         /* RENDER: :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: */
         Renderer::BeginScene(m_Camera); // select a camera
-        {
-            Renderer::Submit(m_Shader, m_VertexArray, transform);
+        {   
+            // Flatcolor Square:
+            Renderer::Submit(m_Shader_square, m_VertexArray_square, transform);
         }
         Renderer::EndScene();
         /* ******************************************************************** */
+        
     }
         
     /**
@@ -259,6 +253,12 @@ public:
     {
         /* Log the event */
         //LOG_TRACE(event.ToString());
+    }
+    
+    
+    static void SetSquareColor(glm::vec3& color)
+    {
+        m_Color_square = color;
     }
     
 private:
@@ -275,11 +275,48 @@ private:
     float m_ObjMoveSpeed = 1.5f;
     
     /* Graphics Objects */
-    std::shared_ptr<Coconuts::Shader> m_Shader;
-    std::shared_ptr<Coconuts::VertexArray> m_VertexArray;
-    std::shared_ptr<Coconuts::VertexBuffer> m_VertexBuffer;
-    std::shared_ptr<Coconuts::IndexBuffer> m_IndexBuffer;
+    
+    /* Square / quad */
+    std::shared_ptr<Coconuts::Shader> m_Shader_square;
+    std::shared_ptr<Coconuts::VertexArray> m_VertexArray_square;
+    std::shared_ptr<Coconuts::VertexBuffer> m_VertexBuffer_square;
+    std::shared_ptr<Coconuts::IndexBuffer> m_IndexBuffer_square;
+    
+    // Color
+    static glm::vec3 m_Color_square;
+    
 };
+
+glm::vec3 ExampleLayer::m_Color_square = { 1.0f, 0.0f, 1.0f };
+
+
+/* GUI - Settings */
+/* ------------------------------------------------------------ */
+class GUI_ColorSettings : public ::Coconuts::Editor::GUILayer
+{
+public:
+    GUI_ColorSettings() 
+    {
+        
+    }
+    
+    ~GUI_ColorSettings()
+    {
+        
+    }
+    
+    void OnUpdate(Coconuts::Timestep ts) override
+    {   
+        ImGui::Begin("Settings");
+        ImGui::ColorEdit3("Square Color", glm::value_ptr(m_Color));
+        ExampleLayer::SetSquareColor(m_Color);
+        ImGui::End();
+    }
+    
+private:
+    glm::vec3 m_Color;
+};
+/* ------------------------------------------------------------ */
 
 
 /**
@@ -295,15 +332,12 @@ public:
          */
         ExampleLayer* newLayer = new ExampleLayer("Layer0");
         this->PushLayer(newLayer);
-        
-#if 0
+       
         /**
-         * Editor GUI.
+         * GUI
          */
-        using namespace Coconuts;
-        Editor::GUILayer* gui = new Editor::GUILayer();
+        GUI_ColorSettings* gui = new GUI_ColorSettings();
         this->PushOverlay(gui);
-#endif
     }
     
     ~DemoApp()

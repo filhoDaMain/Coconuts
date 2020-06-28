@@ -33,6 +33,8 @@ namespace Coconuts
         virtual void OnUpdate(Timestep ts);
         virtual void OnEvent(Event& event);
         
+        inline virtual bool IsGUI() { return false; } 
+        
         inline const std::string& GetName() const { return m_Name; }
         
     private:

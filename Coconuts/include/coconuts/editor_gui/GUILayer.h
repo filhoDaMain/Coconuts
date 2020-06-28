@@ -29,6 +29,8 @@ namespace Coconuts
             GUILayer();
             ~GUILayer();
             
+            inline bool IsGUI() override { return true; } 
+            
             void OnAttach() override;
             void OnDetach() override;
             void OnUpdate(Timestep ts) override;          

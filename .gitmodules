@@ -10,3 +10,6 @@
 [submodule "Coconuts/vendor/glm"]
 	path = Coconuts/vendor/glm
 	url = https://github.com/g-truc/glm
+[submodule "Coconuts/vendor/stb/stb"]
+	path = Coconuts/vendor/stb/stb
+	url = https://github.com/nothings/stb

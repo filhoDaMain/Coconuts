@@ -71,17 +71,33 @@ public:
          *      ib:  index buffer
          * 
          * 2) Add vb and ib to VA.
+         * 
          */
         
         /* Vertex Array (VA) */
         m_VertexArray_square.reset(VertexArray::Create());
         
-        float vertices_square[3 * 4] = {
-            -0.5f, -0.5f,  0.0f,
-             0.5f, -0.5f,  0.0f,
-             0.5f,  0.5f,  0.0f,
-            -0.5f,  0.5f,  0.0f
+        float vertices_square[5 * 4] = {
+        /* |---- a_Position ----|-- a_TexCoord --| */
+            -0.5f, -0.5f,  0.0f,    0.0f, 0.0f,
+             0.5f, -0.5f,  0.0f,    1.0f, 0.0f,
+             0.5f,  0.5f,  0.0f,    1.0f, 1.0f,
+            -0.5f,  0.5f,  0.0f,    0.0f, 1.0f
         };
+        
+        /* a_Postion: vertex screen position (x,y,z) normalized in the [-1, 1] space */
+        
+        /* a_TexCoord: texture image edges (x,y) normalized in the [0, 1] space */
+        
+        /**
+         * NOTE:
+         * The idea is to map the edges of aa square formed by two intersected triangles
+         * (a_Position) to the edges of an image (a_TexCoord).
+         * 
+         * We then pick the texture's color of each pixel and paint the screen, by
+         * interpolating the texture's pixels with corresponding square pixels on 
+         * the screen.
+         */
      
         
         /* -------------------------------------------------------------------- */
@@ -90,7 +106,14 @@ public:
         m_VertexBuffer_square.reset(
                     VertexBuffer::Create(vertices_square, sizeof(vertices_square)));
         
-        m_VertexBuffer_square->SetLayout( {{ShaderDataType::Float3, "a_Position"}} );
+        /* (Vertex) Buffer Layout -> Group vertices_square indices in a meaningful way */
+        BufferLayout layout = {
+            { ShaderDataType::Float3, "a_Position" },   /* first 3 floats */
+            { ShaderDataType::Float2, "a_TexCoord" }    /* next 2 floats */
+        };
+        
+        /* Associate the layout with a buffer of vertices */
+        m_VertexBuffer_square->SetLayout(layout);
         /* -------------------------------------------------------------------- */
         
         
@@ -98,6 +121,8 @@ public:
         /* Index Buffer (ib) */
         /* -------------------------------------------------------------------- */
         uint32_t indices_square[6] = {0, 1, 2, 2, 3, 0};
+        
+        /* Pick indices (lines) of vertices_square that can be re-used to form a square */
         
         /* Add indices to an ib */
         m_IndexBuffer_square.reset(
@@ -113,43 +138,51 @@ public:
         
         
         /* Writing Shaders */
-        std::string vertexSrc_flatcolor = R"(
+        
+        /* Vertex Shader */
+        std::string vertexSrc_textureShader = R"(
             
                 #version 330 core
                 
                 layout(location = 0) in vec3 a_Position;
+                layout(location = 1) in vec2 a_TexCoord;
                 
                 uniform mat4 u_ViewProj;
                 uniform mat4 u_Transform;
-                
-                out vec3 v_Position;
+                   
+                out vec2 v_TexCoord;
                 
                 void main()
                 {
-                    v_Position = a_Position;
+                    v_TexCoord = a_TexCoord;
                     gl_Position = u_ViewProj * u_Transform * vec4(a_Position, 1.0);
                 }
                 
             )";
 
-        std::string fragmentSrc_flatcolor = R"(
+        /* Fragment / Pixel Shader */
+        std::string fragmentSrc_textureShader = R"(
             
                 #version 330 core
                 
                 layout(location = 0) out vec4 color;
                 
-                in vec3 v_Position;
+                in vec2 v_TexCoord;
                 
-                uniform vec3 u_Color;
+                uniform sampler2D u_Texture;
                 
                 void main()
                 {
-                    color = vec4(u_Color, 1.0);
+                    color = texture(u_Texture, v_TexCoord);
                 }
                 
             )";
+       
+        /* Add Shader source code to a Shader Object = Compile shader source code */
+        m_TextureShader.reset(Shader::Create(vertexSrc_textureShader, fragmentSrc_textureShader));
         
-        m_Shader_square.reset(Shader::Create(vertexSrc_flatcolor, fragmentSrc_flatcolor));
+        /* Pick an Image and add it a Texture2D object + add filters and interpolations */
+        m_Texture2D.reset(Texture2D::Create("../assets/textures/Moris.png"));
     }
         
     /**
@@ -231,19 +264,46 @@ public:
         
         glm::mat4 transform = glm::translate(glm::mat4(1.0f), m_ObjPos);
         
-        /* Change Squre color */
-        m_Shader_square->UploadUniformFloat3("u_Color", m_Color_square);
         
+        
+        
+        
+        /* :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: */
         /* ******************************************************************** */
-        /* RENDER: :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: */
+        /* RENDER CALL:    */
+        
         Renderer::BeginScene(m_Camera); // select a camera
         {   
-            // Flatcolor Square:
-            Renderer::Submit(m_Shader_square, m_VertexArray_square, transform);
+            /**
+             * Bind a Texture Object:
+             *  Make the shaders use the associated texture image of this Texture
+             *  Object in the next Render call.
+             */
+            m_Texture2D->Bind();
+            
+            
+            /**
+             * 1) Select a Shader object to be bound (to be used by GPU) which
+             *    contains the compiled source code for a Vertex and a Fragment
+             *    shaders.
+             * 
+             * 2) Select a Vertex Array object which contains the geometry data
+             *    to be bound (to be used) by the GPU.
+             * 
+             * 3) Select a Transform matrix which is hardcoded mapped into a
+             *    Vertex Shader Uniform in order to apply a position
+             *    transformation to each Vertex Array.
+             * 
+             *    NOTE: A view projection matrix is auto computed each time a
+             *          scene begins as ell (BeginScene)
+             * 
+             */
+            Renderer::Submit(m_TextureShader, m_VertexArray_square, transform);
         }
         Renderer::EndScene();
-        /* ******************************************************************** */
         
+        /* ******************************************************************** */
+        /* :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: */
     }
         
     /**
@@ -253,12 +313,6 @@ public:
     {
         /* Log the event */
         //LOG_TRACE(event.ToString());
-    }
-    
-    
-    static void SetSquareColor(glm::vec3& color)
-    {
-        m_Color_square = color;
     }
     
 private:
@@ -275,19 +329,16 @@ private:
     float m_ObjMoveSpeed = 1.5f;
     
     /* Graphics Objects */
+    std::shared_ptr<Coconuts::Shader> m_TextureShader;
     
-    /* Square / quad */
-    std::shared_ptr<Coconuts::Shader> m_Shader_square;
+    std::shared_ptr<Coconuts::Texture2D> m_Texture2D;
+    
     std::shared_ptr<Coconuts::VertexArray> m_VertexArray_square;
     std::shared_ptr<Coconuts::VertexBuffer> m_VertexBuffer_square;
     std::shared_ptr<Coconuts::IndexBuffer> m_IndexBuffer_square;
-    
-    // Color
-    static glm::vec3 m_Color_square;
-    
 };
 
-glm::vec3 ExampleLayer::m_Color_square = { 1.0f, 0.0f, 1.0f };
+//glm::vec3 ExampleLayer::m_Color_square = { 1.0f, 0.0f, 1.0f };
 
 
 /* GUI - Settings */
@@ -307,14 +358,10 @@ public:
     
     void OnUpdate(Coconuts::Timestep ts) override
     {   
-        ImGui::Begin("Settings");
-        ImGui::ColorEdit3("Square Color", glm::value_ptr(m_Color));
-        ExampleLayer::SetSquareColor(m_Color);
-        ImGui::End();
+        
     }
     
 private:
-    glm::vec3 m_Color;
 };
 /* ------------------------------------------------------------ */
 

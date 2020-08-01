@@ -23,6 +23,7 @@
 #include <coconuts/graphics/VertexArray.h>
 #include <coconuts/graphics/VertexBuffer.h>
 #include <coconuts/graphics/IndexBuffer.h>
+#include <coconuts/graphics/Texture.h>
 #include <memory>
 #include <glm/glm.hpp>
 

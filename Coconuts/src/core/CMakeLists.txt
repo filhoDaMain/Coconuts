@@ -14,7 +14,8 @@ add_library(ccncore core.cpp
                     graphics/Renderer.cpp
                     graphics/RendererAPI.cpp
                     graphics/LowLevelAPI.cpp
-                    graphics/cameras/OrthographicCamera.cpp)
+                    graphics/cameras/OrthographicCamera.cpp
+                    graphics/Texture.cpp)
 
 # Platform Specific files
 # Mac OS
@@ -32,7 +33,8 @@ target_include_directories(ccncore PRIVATE "${PROJECT_SOURCE_DIR}/include"
                                         "${PROJECT_SOURCE_DIR}/vendor/spdlog/include"
                                         "${PROJECT_SOURCE_DIR}/vendor/glfw/include"
                                         "${PROJECT_SOURCE_DIR}/vendor/glad/include"
-                                        "${PROJECT_SOURCE_DIR}/vendor/glm")
+                                        "${PROJECT_SOURCE_DIR}/vendor/glm"
+                                        "${PROJECT_SOURCE_DIR}/vendor/stb")
 
 set_target_properties(ccncore PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/lib")
 

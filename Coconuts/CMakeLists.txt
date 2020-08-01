@@ -25,6 +25,9 @@ add_subdirectory(vendor/spdlog/)
 #Makes the GLFW header not include any OpenGL or OpenGL ES API header (done by GLAD)
 add_definitions(-DGLFW_INCLUDE_NONE)
 
+#Needed before including stb_image.h
+add_definitions(-DSTB_IMAGE_IMPLEMENTATION)
+
 
 # Coconuts source
 add_subdirectory(src/core)

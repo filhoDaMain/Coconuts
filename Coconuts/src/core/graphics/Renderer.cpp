@@ -25,6 +25,12 @@ namespace Coconuts
     Renderer::SceneData* Renderer::m_SceneData = new Renderer::SceneData;
     
     // static
+    void Renderer::Init()
+    {
+        Graphics::LowLevelAPI::Init();
+    }
+    
+    // static
     void Renderer::BeginScene(OrthographicCamera& camera)
     {
         m_SceneData->viewProjMatrix = camera.GetViewProjMatrix();

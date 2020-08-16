@@ -47,6 +47,10 @@ namespace Coconuts
         LOG_DEBUG("Sandbox App created!");
         p_Window = std::unique_ptr<Window>(Window::Create());
         
+        /* Initialize abstracted Renderer */
+        Renderer::Init();
+        LOG_DEBUG("High-Level Coconuts Renderer initialized");
+        
         /* VSync enable/disable */
         p_Window->SetVSync(true);
         

@@ -183,6 +183,8 @@ public:
         
         /* Pick an Image and add it a Texture2D object + add filters and interpolations */
         m_Texture2D.reset(Texture2D::Create("../assets/textures/Moris.png"));
+        
+        m_Coconuts2D.reset(Texture2D::Create("../assets/textures/coconuts.png"));
     }
         
     /**
@@ -299,6 +301,13 @@ public:
              * 
              */
             Renderer::Submit(m_TextureShader, m_VertexArray_square, transform);
+            
+            
+            /**
+             * Blend a second texture
+             */
+            m_Coconuts2D->Bind();
+            Renderer::Submit(m_TextureShader, m_VertexArray_square, transform);
         }
         Renderer::EndScene();
         
@@ -331,14 +340,13 @@ private:
     /* Graphics Objects */
     std::shared_ptr<Coconuts::Shader> m_TextureShader;
     
-    std::shared_ptr<Coconuts::Texture2D> m_Texture2D;
+    std::shared_ptr<Coconuts::Texture2D> m_Texture2D, m_Coconuts2D;
     
     std::shared_ptr<Coconuts::VertexArray> m_VertexArray_square;
     std::shared_ptr<Coconuts::VertexBuffer> m_VertexBuffer_square;
     std::shared_ptr<Coconuts::IndexBuffer> m_IndexBuffer_square;
 };
 
-//glm::vec3 ExampleLayer::m_Color_square = { 1.0f, 0.0f, 1.0f };
 
 
 /* GUI - Settings */

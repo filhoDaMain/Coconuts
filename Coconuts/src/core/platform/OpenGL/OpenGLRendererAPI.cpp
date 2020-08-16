@@ -17,8 +17,16 @@
 #include "OpenGLRendererAPI.h"
 #include <glad/glad.h>
 
+#include <coconuts/Logger.h>
+
 namespace Coconuts
 {
+    
+    void OpenGLRendererAPI::Init()
+    {
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    }
     
     void OpenGLRendererAPI::SetClearColor(const glm::vec4& color)
     {

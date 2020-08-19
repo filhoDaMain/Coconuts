@@ -23,7 +23,28 @@
 
 namespace Coconuts
 {
-   
+   //static
+    Shader* Shader::Create()
+    {
+        switch(Renderer::GetRendererAPI())
+        {
+            case RendererAPI::API::OpenGL:
+            {
+                return new OpenGLShader();
+                
+                break;
+            }
+            
+            default:
+            {
+                LOG_CRITICAL("Shader - Unknown RendererAPI {}", Renderer::GetRendererAPI());
+                exit(1);
+            }
+        }
+        
+        return nullptr;
+    }
+    
     //static
     Shader* Shader::Create(const std::string& vertexShaderSrc,
                            const std::string& fragmentShaderSrc)

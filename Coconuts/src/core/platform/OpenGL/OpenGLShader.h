@@ -20,14 +20,25 @@
 
 namespace Coconuts
 {
+    enum class OpenGLShaderTypes
+    {
+        Unknown         = 0,
+        GLSL_Vertex     = 1,
+        GLSL_Fragment   = 2
+    };
     
     class OpenGLShader : public Shader
     {
     public:
+        OpenGLShader();
+        
         OpenGLShader(const std::string& vertexShaderSrc,
                      const std::string& fragmentShaderSrc);
         
         virtual ~OpenGLShader();
+        
+        void AttachFromFile(ShaderTypes shaderType, const std::string& filepath) override;
+        void DoneAttach() override;
         
         void Bind() override;
         void Unbind() override;
@@ -66,8 +77,15 @@ namespace Coconuts
         // 4
         void UploadUniformFloat4(const std::string& name, const glm::vec4& values) override;
         
+    private:        
+        void AttachVertexShader(const std::string& filepath) override;
+        void AttachFragmentShader(const std::string& filepath) override;
+        OpenGLShaderTypes ParseFileExtension(const std::string& filepath);
+        
     private:
-        uint32_t m_RendererID;
+        uint32_t m_ProgramID;   // program ID
+        uint32_t m_VertexID;    // vertex shader ID
+        uint32_t m_FragmentID;  // fragment shader ID
     };
     
 }

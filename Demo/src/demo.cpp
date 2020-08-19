@@ -31,6 +31,14 @@
 #include <glm/gtc/type_ptr.hpp>
 
 
+
+
+
+
+
+#include <fstream>
+#include <streambuf>
+
 /**
  * Define a new custom Layer, inherited from Coconuts::Layer base class.
  * 
@@ -137,49 +145,19 @@ public:
         /* -------------------------------------------------------------------- */
         
         
-        /* Writing Shaders */
+        /* -------------------------------------------------------------------- */
+        /* Create a Shader from files  */
+        m_Shader.reset(Shader::Create());
         
-        /* Vertex Shader */
-        std::string vertexSrc_textureShader = R"(
-            
-                #version 330 core
-                
-                layout(location = 0) in vec3 a_Position;
-                layout(location = 1) in vec2 a_TexCoord;
-                
-                uniform mat4 u_ViewProj;
-                uniform mat4 u_Transform;
-                   
-                out vec2 v_TexCoord;
-                
-                void main()
-                {
-                    v_TexCoord = a_TexCoord;
-                    gl_Position = u_ViewProj * u_Transform * vec4(a_Position, 1.0);
-                }
-                
-            )";
-
-        /* Fragment / Pixel Shader */
-        std::string fragmentSrc_textureShader = R"(
-            
-                #version 330 core
-                
-                layout(location = 0) out vec4 color;
-                
-                in vec2 v_TexCoord;
-                
-                uniform sampler2D u_Texture;
-                
-                void main()
-                {
-                    color = texture(u_Texture, v_TexCoord);
-                }
-                
-            )";
-       
-        /* Add Shader source code to a Shader Object = Compile shader source code */
-        m_TextureShader.reset(Shader::Create(vertexSrc_textureShader, fragmentSrc_textureShader));
+        m_Shader->AttachFromFile(
+            ShaderTypes::VERTEX, "../assets/shaders/TextureGLSL.vert");
+        
+        m_Shader->AttachFromFile(
+            ShaderTypes::FRAGMENT, "../assets/shaders/TextureGLSL.frag");
+        
+        m_Shader->DoneAttach(); // FINISH Editing the Shader (Link them)
+        /* -------------------------------------------------------------------- */
+        
         
         /* Pick an Image and add it a Texture2D object + add filters and interpolations */
         m_Texture2D.reset(Texture2D::Create("../assets/textures/Moris.png"));
@@ -300,14 +278,14 @@ public:
              *          scene begins as ell (BeginScene)
              * 
              */
-            Renderer::Submit(m_TextureShader, m_VertexArray_square, transform);
+            Renderer::Submit(m_Shader, m_VertexArray_square, transform);
             
             
             /**
-             * Blend a second texture
+             * Draw a second texture on top
              */
             m_Coconuts2D->Bind();
-            Renderer::Submit(m_TextureShader, m_VertexArray_square, transform);
+            Renderer::Submit(m_Shader, m_VertexArray_square, transform);
         }
         Renderer::EndScene();
         
@@ -338,10 +316,14 @@ private:
     float m_ObjMoveSpeed = 1.5f;
     
     /* Graphics Objects */
-    std::shared_ptr<Coconuts::Shader> m_TextureShader;
     
+    /* Shader */
+    std::shared_ptr<Coconuts::Shader> m_Shader;
+    
+    /* Textures */
     std::shared_ptr<Coconuts::Texture2D> m_Texture2D, m_Coconuts2D;
     
+    /* Buffers */
     std::shared_ptr<Coconuts::VertexArray> m_VertexArray_square;
     std::shared_ptr<Coconuts::VertexBuffer> m_VertexBuffer_square;
     std::shared_ptr<Coconuts::IndexBuffer> m_IndexBuffer_square;

@@ -23,14 +23,24 @@
 
 namespace Coconuts
 {
+    enum class ShaderTypes
+    {
+        VERTEX      = 0,
+        FRAGMENT    = 1
+    };
     
     class Shader
     {
-    public:        
+    public:
+        static Shader* Create();
+        
         static Shader* Create(const std::string& vertexShaderSrc,
                               const std::string& fragmentShaderSrc);
         
         virtual ~Shader() = default;
+        
+        virtual void AttachFromFile(ShaderTypes shaderType, const std::string& filepath) = 0;
+        virtual void DoneAttach() = 0;
         
         virtual void Bind() = 0;
         virtual void Unbind() = 0;
@@ -70,6 +80,8 @@ namespace Coconuts
         virtual void UploadUniformFloat4(const std::string& name, const glm::vec4& values) = 0;
         
     private:
+        virtual void AttachVertexShader(const std::string& filepath) = 0;
+        virtual void AttachFragmentShader(const std::string& filepath) = 0;
     };
     
 }

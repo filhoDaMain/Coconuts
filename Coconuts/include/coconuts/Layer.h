@@ -18,7 +18,7 @@
 
 #include <coconuts/EventSystem.h>
 #include <string>
-#include <coconuts/layer_system/Timestep.h>
+#include <coconuts/time/Timestep.h>
 
 namespace Coconuts
 {

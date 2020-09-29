@@ -23,7 +23,7 @@
 #include <stdint.h>
 #include <coconuts/graphics/BufferLayout.h>
 #include <coconuts/Renderer.h>
-#include <coconuts/layer_system/Timestep.h>
+#include <coconuts/time/Timestep.h>
 #include <GLFW/glfw3.h>
 #include <coconuts/editor_gui/GUILayer.h>
 

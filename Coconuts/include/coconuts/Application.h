@@ -26,7 +26,7 @@
 #include <coconuts/graphics/VertexBuffer.h>
 #include <coconuts/graphics/IndexBuffer.h>
 #include <coconuts/graphics/VertexArray.h>
-#include <coconuts/graphics/cameras/OrthographicCamera.h>
+#include <coconuts/cameras/OrthographicCamera.h>
 
 namespace Coconuts
 {

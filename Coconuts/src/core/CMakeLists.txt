@@ -6,6 +6,7 @@ add_library(ccncore core.cpp
                     event_system/EventDispatcher.cpp
                     layer_system/Layer.cpp
                     layer_system/LayerStack.cpp
+                    cameras/OrthographicCamera.cpp
                     graphics/Shader.cpp
                     graphics/Shader.cpp
                     graphics/VertexBuffer.cpp
@@ -14,7 +15,6 @@ add_library(ccncore core.cpp
                     graphics/Renderer.cpp
                     graphics/RendererAPI.cpp
                     graphics/LowLevelAPI.cpp
-                    graphics/cameras/OrthographicCamera.cpp
                     graphics/Texture.cpp)
 
 # Platform Specific files

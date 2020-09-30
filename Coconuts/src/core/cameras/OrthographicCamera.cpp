@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include <coconuts/graphics/cameras/OrthographicCamera.h>
+#include <coconuts/cameras/OrthographicCamera.h>
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace Coconuts

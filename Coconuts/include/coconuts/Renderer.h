@@ -28,7 +28,7 @@
 #include <glm/glm.hpp>
 
 /* Cameras */
-#include <coconuts/graphics/cameras/OrthographicCamera.h>
+#include <coconuts/cameras/OrthographicCamera.h>
 
 namespace Coconuts
 {

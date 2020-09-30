@@ -1,4 +1,4 @@
-add_executable(demo demo.cpp)
+add_executable(demo demo.cpp CameraController.cpp)
 
 target_include_directories(demo PRIVATE "${PROJECT_SOURCE_DIR}/include" "${PROJECT_SOURCE_DIR}/../Coconuts/include" "${PROJECT_SOURCE_DIR}/../Coconuts/include/vendor")
 set_target_properties(demo PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/bin")

@@ -30,7 +30,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-
+#include "CameraController.h"
 
 
 
@@ -68,6 +68,7 @@ public:
     ExampleLayer(const std::string& layerName)
         :   Layer(layerName),
             m_Camera(-1.6f, 1.6f, -0.9f, 0.9f),
+             m_CameraController(m_Camera),
             m_ObjPos(0.0f)
     {
         using namespace Coconuts;    
@@ -181,7 +182,7 @@ public:
          * Input polling from Keyboard to 
          * move and rotate Camera
          */
-        
+#if 0
         /* LEFT */
         if (Polling::IsKeyPressed(Keyboard::KEY_LEFT))
         {
@@ -205,7 +206,7 @@ public:
         {
             m_CameraRotation += m_CameraRotationSpeed * ts.GetSeconds();
         }
-        
+#endif
         
         /**
          * Input polling from Keyboard to 
@@ -235,17 +236,19 @@ public:
         {
             m_ObjPos.y -= m_ObjMoveSpeed * ts.GetSeconds();
         }
+
         
         /* Update Camera's object position */
-        m_Camera.SetPosition(m_CameraPos);
+       // m_Camera.SetPosition(m_CameraPos);
         
         /* Update Camera's object rotation */
-        m_Camera.SetRotation(m_CameraRotation);
+        //m_Camera.SetRotation(m_CameraRotation);
         
         glm::mat4 transform = glm::translate(glm::mat4(1.0f), m_ObjPos);
         
         
-        
+        /* Update Camera movement */
+        m_CameraController.OnUpdate(ts);
         
         
         /* :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: */
@@ -305,6 +308,9 @@ public:
 private:
     /* Camera */
     Coconuts::OrthographicCamera m_Camera;
+    
+    /* Camera Controller */
+    CameraController m_CameraController;
     
     glm::vec3 m_CameraPos = {0.0f, 0.0f, 0.0f};
     float m_CameraMoveSpeed = 1.0f;

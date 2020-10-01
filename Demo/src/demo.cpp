@@ -269,17 +269,6 @@ private:
     /* Camera Controller */
     CameraController m_CameraController;
     
-    glm::vec3 m_CameraPos = {0.0f, 0.0f, 0.0f};
-    float m_CameraMoveSpeed = 1.0f;
-    
-    float m_CameraRotation = 0.0f;
-    float m_CameraRotationSpeed = 35.0f;    // degrees/seconds
-    
-    glm::vec3 m_ObjPos;
-    float m_ObjMoveSpeed = 1.5f;
-    
-    /* Graphics Objects */
-    
     /* Shader */
     std::shared_ptr<Coconuts::Shader> m_Shader;
     
@@ -290,6 +279,11 @@ private:
     std::shared_ptr<Coconuts::VertexArray> m_VertexArray_square;
     std::shared_ptr<Coconuts::VertexBuffer> m_VertexBuffer_square;
     std::shared_ptr<Coconuts::IndexBuffer> m_IndexBuffer_square;
+    
+    
+    /* Game Objects data */
+    glm::vec3 m_ObjPos;
+    float m_ObjMoveSpeed = 1.5f;
 };
 
 

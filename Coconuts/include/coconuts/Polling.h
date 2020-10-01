@@ -16,8 +16,6 @@
 #ifndef POLLING_H
 #define POLLING_H
 
-//#include <coconuts/input_polling/InputPolling.h>
-
 namespace Coconuts
 {
     class Polling

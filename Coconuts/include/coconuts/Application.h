@@ -22,11 +22,6 @@
 #include <coconuts/EventSystem.h>
 #include <coconuts/Layer.h>
 #include <coconuts/layer_system/LayerStack.h>
-#include <coconuts/graphics/Shader.h>
-#include <coconuts/graphics/VertexBuffer.h>
-#include <coconuts/graphics/IndexBuffer.h>
-#include <coconuts/graphics/VertexArray.h>
-#include <coconuts/cameras/OrthographicCamera.h>
 
 namespace Coconuts
 {

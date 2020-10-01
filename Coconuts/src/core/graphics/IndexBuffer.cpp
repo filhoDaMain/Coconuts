@@ -16,11 +16,11 @@
 
 #include <coconuts/graphics/IndexBuffer.h>
 #include <coconuts/Renderer.h>
+#include <coconuts/graphics/RendererAPI.h>
 #include <coconuts/Logger.h>
 
 // Platform - OpenGL
 #include "OpenGLIndexBuffer.h"
-
 
 namespace Coconuts
 {

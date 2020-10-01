@@ -15,13 +15,7 @@
  */
 
 #include <coconuts/Application.h>
-#include <coconuts/core.h>
-#include <coconuts/EventSystem.h>
 #include <coconuts/Logger.h>
-#include <functional>
-#include <string>
-#include <stdint.h>
-#include <coconuts/graphics/BufferLayout.h>
 #include <coconuts/Renderer.h>
 #include <coconuts/time/Timestep.h>
 #include <GLFW/glfw3.h>
@@ -113,9 +107,7 @@ namespace Coconuts
                 else
                 {
                     layer->OnUpdate(timestep);
-                }
-                
-                
+                } 
             }
             
             p_Window->OnUpdate();

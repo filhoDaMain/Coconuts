@@ -16,6 +16,7 @@
 
 #include <coconuts/graphics/VertexArray.h>
 #include <coconuts/Renderer.h>
+#include <coconuts/graphics/RendererAPI.h>
 #include <coconuts/Logger.h>
 
 // Platform - OpenGL

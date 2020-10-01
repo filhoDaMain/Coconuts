@@ -17,7 +17,7 @@
 #define GUILAYER_H
 
 #include <coconuts/Layer.h>
-#include <coconuts/EventSystem.h>
+#include <coconuts/time/Timestep.h>
 
 namespace Coconuts
 {

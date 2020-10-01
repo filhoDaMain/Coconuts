@@ -16,6 +16,7 @@
 
 #include <coconuts/graphics/Texture.h>
 #include <coconuts/Renderer.h>
+#include <coconuts/graphics/RendererAPI.h>
 #include <coconuts/Layer.h>
 
 // Platform - OpenGL

@@ -17,6 +17,7 @@
 #define OPENGLRENDERERAPI_H
 
 #include <coconuts/graphics/RendererAPI.h>
+#include <coconuts/graphics/VertexArray.h>
 
 namespace Coconuts
 {

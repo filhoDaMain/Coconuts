@@ -16,7 +16,6 @@
 #ifndef MACINPUTPOLLING_H
 #define MACINPUTPOLLING_H
 
-//#include <coconuts/input_polling/InputPolling.h>
 #include <coconuts/Polling.h>
 
 namespace Coconuts

@@ -30,12 +30,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-
-
-
-
-
-
+#include "CameraController.h"
 #include <fstream>
 #include <streambuf>
 
@@ -68,6 +63,7 @@ public:
     ExampleLayer(const std::string& layerName)
         :   Layer(layerName),
             m_Camera(-1.6f, 1.6f, -0.9f, 0.9f),
+            m_CameraController(m_Camera),
             m_ObjPos(0.0f)
     {
         using namespace Coconuts;    
@@ -99,7 +95,7 @@ public:
         
         /**
          * NOTE:
-         * The idea is to map the edges of aa square formed by two intersected triangles
+         * The idea is to map the edges of a square formed by two intersected triangles
          * (a_Position) to the edges of an image (a_TexCoord).
          * 
          * We then pick the texture's color of each pixel and paint the screen, by
@@ -176,37 +172,6 @@ public:
         Graphics::LowLevelAPI::SetClearColor({0.02f, 0.31f, 0.7f, 1});
         Graphics::LowLevelAPI::Clear();
         
-        
-        /**
-         * Input polling from Keyboard to 
-         * move and rotate Camera
-         */
-        
-        /* LEFT */
-        if (Polling::IsKeyPressed(Keyboard::KEY_LEFT))
-        {
-            m_CameraPos.x -= m_CameraMoveSpeed * ts.GetSeconds();
-        }
-        
-        /* RIGHT */
-        if (Polling::IsKeyPressed(Keyboard::KEY_RIGHT))
-        {
-            m_CameraPos.x += m_CameraMoveSpeed * ts.GetSeconds();
-        }
-        
-        /* DOWN - Clockwise rotation */
-        if (Polling::IsKeyPressed(Keyboard::KEY_DOWN))
-        {
-            m_CameraRotation -= m_CameraRotationSpeed * ts.GetSeconds();
-        }
-        
-        /* UP - Counterclockwise rotation */
-        if (Polling::IsKeyPressed(Keyboard::KEY_UP))
-        {
-            m_CameraRotation += m_CameraRotationSpeed * ts.GetSeconds();
-        }
-        
-        
         /**
          * Input polling from Keyboard to 
          * move rendered object
@@ -236,16 +201,11 @@ public:
             m_ObjPos.y -= m_ObjMoveSpeed * ts.GetSeconds();
         }
         
-        /* Update Camera's object position */
-        m_Camera.SetPosition(m_CameraPos);
-        
-        /* Update Camera's object rotation */
-        m_Camera.SetRotation(m_CameraRotation);
-        
         glm::mat4 transform = glm::translate(glm::mat4(1.0f), m_ObjPos);
         
-        
-        
+       
+        /* Update Camera movement */
+        m_CameraController.OnUpdate(ts);
         
         
         /* :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: */
@@ -305,6 +265,9 @@ public:
 private:
     /* Camera */
     Coconuts::OrthographicCamera m_Camera;
+    
+    /* Camera Controller */
+    CameraController m_CameraController;
     
     glm::vec3 m_CameraPos = {0.0f, 0.0f, 0.0f};
     float m_CameraMoveSpeed = 1.0f;

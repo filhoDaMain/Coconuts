@@ -107,9 +107,7 @@ namespace Coconuts
                 else
                 {
                     layer->OnUpdate(timestep);
-                }
-                
-                
+                } 
             }
             
             p_Window->OnUpdate();

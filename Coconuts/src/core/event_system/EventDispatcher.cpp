@@ -16,7 +16,6 @@
 
 #include <coconuts/EventSystem.h>
 #include <coconuts/Application.h>
-//#include <coconuts/editor.h>
 #include <coconuts/Logger.h>
 
 namespace Coconuts

@@ -40,6 +40,7 @@ namespace Coconuts
         void Run(void);
         void OnEvent(Event& event);
         bool OnWindowClose(WindowEvent::WindowClose& event);
+        bool OnWindowResize(WindowEvent::WindowResize& event);
         
         void PushLayer(Layer* layer);
         void PushOverlay(Layer* overlay);

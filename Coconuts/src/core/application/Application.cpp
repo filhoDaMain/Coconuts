@@ -133,6 +133,9 @@ namespace Coconuts
         // Window Close
         dispatcher.Dispatch<WindowEvent::WindowClose>(BIND_EVENT_FUNCTION(Application::OnWindowClose));
         
+        // Window Resize
+        dispatcher.Dispatch<WindowEvent::WindowResize>(BIND_EVENT_FUNCTION(Application::OnWindowResize));
+        
         /**
          * Dispatch the event (Window Event or not) to the respective
          * OnEvent() callback on which the layer has occured
@@ -159,6 +162,13 @@ namespace Coconuts
     {
         LOG_WARN("Performing a graceful shutdown sequence...");
         m_isRunning = false;
+        
+        return true;    /* Event was handled */
+    }
+    
+    bool Application::OnWindowResize(WindowEvent::WindowResize& event)
+    {
+        LOG_TRACE("Window Resize: {} x {}", event.GetWidth(), event.GetHeight());
         
         return true;    /* Event was handled */
     }

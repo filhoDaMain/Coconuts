@@ -20,6 +20,7 @@
 #include <coconuts/time/Timestep.h>
 #include <GLFW/glfw3.h>
 #include <coconuts/editor_gui/GUILayer.h>
+#include <coconuts/types.h>
 
 
 namespace Coconuts
@@ -73,7 +74,7 @@ namespace Coconuts
         }
         
         /* Set the callback function for all Window Manager library events */
-        p_Window->SetEventCallback( std::bind(&Application::OnEvent, this, std::placeholders::_1) );
+        p_Window->SetEventCallback(BIND_EVENT_FUNCTION(Application::OnEvent));
     }
     
     Application::~Application()
@@ -121,22 +122,28 @@ namespace Coconuts
         /* Log Event */
         //LOG_TRACE(event.ToString());
         
-        /* Dispatch Event */
-        handled = EventDispatcher::StaticDispatch<Application>(event, this);
+        /* Dispatch Window Related events to the appropriate Applicattion::Callback() */
         
-        if (!handled)
-        {
-            //LOG_WARN("Event could not be dispatched by the EventDispatcher");
-        }
+        /**
+         * Dispatch Window Related events to the appropriate
+         * Application::OnEventCallback()
+         */
+        EventDispatcher dispatcher(event);
         
-        /* it is casted to a Layer */
+        // Window Close
+        dispatcher.Dispatch<WindowEvent::WindowClose>(BIND_EVENT_FUNCTION(Application::OnWindowClose));
+        
+        /**
+         * Dispatch the event (Window Event or not) to the respective
+         * OnEvent() callback on which the layer has occured
+         */
         for (auto it = m_LayerStack.end(); it != m_LayerStack.begin(); )
         {
             /**
              *  We start from the TOP View (last drawn Layer)
-             *  and we go up to first drawn Layer
+             *  and we go down to the first drawn Layer
              */
-            (*--it)->OnEvent(event);    /* We try to dispatch de Layer to the upmost Layer */
+            (*--it)->OnEvent(event);    /* We try to dispatch the event to the upmost Layer */
             
             /**
              * We break on the Layer on which the event belongs to (was handled)
@@ -148,7 +155,7 @@ namespace Coconuts
         }
     }
     
-    bool Application::OnWindowClose()
+    bool Application::OnWindowClose(WindowEvent::WindowClose& event)
     {
         LOG_WARN("Performing a graceful shutdown sequence...");
         m_isRunning = false;

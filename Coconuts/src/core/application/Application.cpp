@@ -163,14 +163,14 @@ namespace Coconuts
         LOG_WARN("Performing a graceful shutdown sequence...");
         m_isRunning = false;
         
-        return true;    /* Event was handled */
+        return true;    /* Event was handled. Stop the event propagation */
     }
     
     bool Application::OnWindowResize(WindowEvent::WindowResize& event)
     {
         LOG_TRACE("Window Resize: {} x {}", event.GetWidth(), event.GetHeight());
         
-        return true;    /* Event was handled */
+        return false;    /* Let event propagate to lower layers */
     }
     
     void Application::PushLayer(Layer* layer)

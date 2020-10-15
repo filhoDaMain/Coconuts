@@ -52,8 +52,7 @@ namespace Coconuts
                 
                 case EventType::WindowClose:
                 {
-                    event.handled = object->OnWindowClose();
-                    return true;
+                    return false;
                     break;
                 }
                 

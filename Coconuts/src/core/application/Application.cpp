@@ -20,6 +20,7 @@
 #include <coconuts/time/Timestep.h>
 #include <GLFW/glfw3.h>
 #include <coconuts/editor_gui/GUILayer.h>
+#include <coconuts/types.h>
 
 
 namespace Coconuts
@@ -73,7 +74,7 @@ namespace Coconuts
         }
         
         /* Set the callback function for all Window Manager library events */
-        p_Window->SetEventCallback( std::bind(&Application::OnEvent, this, std::placeholders::_1) );
+        p_Window->SetEventCallback(BIND_EVENT_FUNCTION(Application::OnEvent));
     }
     
     Application::~Application()

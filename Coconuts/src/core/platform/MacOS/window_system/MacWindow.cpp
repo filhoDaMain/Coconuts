@@ -132,6 +132,25 @@ namespace Coconuts
             });
             LOG_TRACE("* <WindowSizeCallback>   initialized");
             
+            /* Window Minimize */
+            glfwSetWindowIconifyCallback(p_glfwWindow, [](GLFWwindow* window, int iconified)
+            {
+                 /**
+                 * Get the user pointer associated to the GLFW Window on which
+                 * this event has occured
+                 */
+                MacWindowData &thisWinData = *((MacWindowData*)glfwGetWindowUserPointer(window));
+            
+                /* Create the associated Coconuts Event for this kind of event */
+                bool isMinimized = (iconified == GLFW_TRUE) ? true : false;
+                
+                WindowEvent::WindowMinimize winMinimizeEvent(isMinimized);
+            
+                /* Dispatch this event to the callback function associated with this window */
+                thisWinData.eventCallback(winMinimizeEvent);
+            });
+            LOG_TRACE("* <WindowSizeCallback>   initialized");
+            
             /* Keyboard Inputs */
             glfwSetKeyCallback(p_glfwWindow, [](GLFWwindow* window, int key, int scancode, int action, int mods)
             {

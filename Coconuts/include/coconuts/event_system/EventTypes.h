@@ -21,6 +21,7 @@
 /* Log Output Event names */
 #define EVENT_NAME_WINDOW_RESIZE        "Event <WindowResize>"
 #define EVENT_NAME_WINDOW_CLOSE         "Event <WindowClose>"
+#define EVENT_NAME_WINDOW_MINIMIZE      "Event <WindowMinimize>"
 
 #define EVENT_NAME_KEY_PRESS            "Event <KeyPress>"
 #define EVENT_NAME_KEY_RELEASE          "Event <KeyRelease>"
@@ -44,6 +45,7 @@ namespace Coconuts
         None = 0,           
         WindowResize,
         WindowClose,
+        WindowMinimize,
         KeyPress,
         KeyRelease,
         MouseButtonPress,

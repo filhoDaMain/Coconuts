@@ -98,16 +98,20 @@ namespace Coconuts
                 /* GUI Layer */
                 if (layer->IsGUI() == true)
                 {
-                    Editor::GUILayer* gui = dynamic_cast<Editor::GUILayer*>(layer);
-                    gui->Begin();
-                    gui->OnUpdate(timestep);
-                    gui->End();
+                        Editor::GUILayer* gui = dynamic_cast<Editor::GUILayer*>(layer);
+                        gui->Begin();
+                        gui->OnUpdate(timestep);
+                        gui->End();
                 }
-                
+                    
                 /* Normal Layer */
                 else
-                {
-                    layer->OnUpdate(timestep);
+                {   
+                    /* Only update layers if main window is not minimized */
+                    if (!m_isMainWindMinimized)
+                    {
+                        layer->OnUpdate(timestep);
+                    }
                 } 
             }
             
@@ -135,6 +139,9 @@ namespace Coconuts
         
         // Window Resize
         dispatcher.Dispatch<WindowEvent::WindowResize>(BIND_EVENT_FUNCTION(Application::OnWindowResize));
+        
+        // Window Minimize
+        dispatcher.Dispatch<WindowEvent::WindowMinimize>(BIND_EVENT_FUNCTION(Application::OnWindowMinimize));
         
         /**
          * Dispatch the event (Window Event or not) to the respective
@@ -170,7 +177,24 @@ namespace Coconuts
     {
         LOG_TRACE("Window Resize: {} x {}", event.GetWidth(), event.GetHeight());
         
+        Renderer::UpdateRenderScreenSize(event.GetWidth(), event.GetHeight());
         return false;    /* Let event propagate to lower layers */
+    }
+    
+    bool Application::OnWindowMinimize(WindowEvent::WindowMinimize& event)
+    {
+        if (event.IsMinimized() == true)
+        {
+            LOG_TRACE("Window Minimized: status = true (minimized)");
+            m_isMainWindMinimized = true;
+        }
+        
+        else
+        {
+            LOG_TRACE("Window Minimized: status = false");
+        }
+        
+        return true;    /* Stop the event propagation */
     }
     
     void Application::PushLayer(Layer* layer)

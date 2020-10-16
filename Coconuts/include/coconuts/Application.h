@@ -41,6 +41,7 @@ namespace Coconuts
         void OnEvent(Event& event);
         bool OnWindowClose(WindowEvent::WindowClose& event);
         bool OnWindowResize(WindowEvent::WindowResize& event);
+        bool OnWindowMinimize(WindowEvent::WindowMinimize& event);
         
         void PushLayer(Layer* layer);
         void PushOverlay(Layer* overlay);
@@ -50,6 +51,7 @@ namespace Coconuts
         static Application* s_Instance;
         
         bool m_isRunning = false;
+        bool m_isMainWindMinimized = false;
         
         /* Generic Window tied to a platform dependent Window sublclass */
         std::unique_ptr<Window> p_Window;

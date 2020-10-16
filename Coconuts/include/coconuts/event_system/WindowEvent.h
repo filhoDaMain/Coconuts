@@ -62,6 +62,28 @@ namespace Coconuts
                 return ss.str();
             }
         };
+        
+        class WindowMinimize : public Event
+        {
+        public:
+            SET_EVENT_CATEGORIES(Category_WindowEvent);
+            SET_EVENT_TYPE(EventType::WindowMinimize);
+            
+            WindowMinimize(bool isMinimized)
+                :   m_isMinimized(isMinimized) {}
+            
+            std::string ToString() const override
+            {
+                std::stringstream ss;
+                ss << EVENT_NAME_WINDOW_MINIMIZE;
+                return ss.str();
+            }
+            
+            bool IsMinimized() const { return m_isMinimized; }
+            
+        private:
+            bool m_isMinimized = false;
+        };
     }
 }
 

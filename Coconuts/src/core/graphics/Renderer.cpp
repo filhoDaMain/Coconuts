@@ -31,6 +31,12 @@ namespace Coconuts
     }
     
     // static
+    void Renderer::UpdateRenderScreenSize(uint32_t width, uint32_t height)
+    {
+        Graphics::LowLevelAPI::SetViewport(0, 0, width, height);
+    }
+    
+    // static
     void Renderer::BeginScene(OrthographicCamera& camera)
     {
         m_SceneData->viewProjMatrix = camera.GetViewProjMatrix();

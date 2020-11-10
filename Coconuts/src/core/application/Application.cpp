@@ -17,6 +17,7 @@
 #include <coconuts/Application.h>
 #include <coconuts/Logger.h>
 #include <coconuts/Renderer.h>
+#include <coconuts/graphics/Renderer2D.h>
 #include <coconuts/time/Timestep.h>
 #include <GLFW/glfw3.h>
 #include <coconuts/editor_gui/GUILayer.h>
@@ -44,6 +45,8 @@ namespace Coconuts
         
         /* Initialize abstracted Renderer */
         Renderer::Init();
+        Renderer2D::Init();
+        
         LOG_DEBUG("High-Level Coconuts Renderer initialized");
         
         /* VSync enable/disable */

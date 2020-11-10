@@ -27,6 +27,8 @@
 #include <memory>
 #include <glm/glm.hpp>
 
+#include <coconuts/graphics/Renderer2D.h>
+
 /* Cameras */
 #include <coconuts/cameras/OrthographicCamera.h>
 

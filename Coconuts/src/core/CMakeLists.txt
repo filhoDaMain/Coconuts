@@ -15,7 +15,8 @@ add_library(ccncore core.cpp
                     graphics/Renderer.cpp
                     graphics/RendererAPI.cpp
                     graphics/LowLevelAPI.cpp
-                    graphics/Texture.cpp)
+                    graphics/Texture.cpp
+                    graphics/Renderer2D.cpp)
 
 # Platform Specific files
 # Mac OS

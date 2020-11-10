@@ -66,6 +66,10 @@ public:
             m_CameraController(m_Camera),
             m_ObjPos(0.0f)
     {
+            
+            
+            
+#if 0
         using namespace Coconuts;    
         
         /**
@@ -159,6 +163,7 @@ public:
         m_Texture2D.reset(Texture2D::Create("../assets/textures/Moris.png"));
         
         m_Coconuts2D.reset(Texture2D::Create("../assets/textures/coconuts.png"));
+#endif
     }
         
     /**
@@ -166,6 +171,19 @@ public:
      */
     void OnUpdate(Coconuts::Timestep ts) override
     {
+        m_CameraController.OnUpdate(ts);
+        
+        Coconuts::Graphics::LowLevelAPI::SetClearColor({0.02f, 0.31f, 0.7f, 1});
+        Coconuts::Graphics::LowLevelAPI::Clear();
+        
+        Coconuts::Renderer2D::BeginScene(m_Camera);
+        Coconuts::Renderer2D::DrawQuad({0.0f, 0.0f}, {1.0f, 0.0f}, {0.8f, 1.0f, 0.1f, 1.0f});
+        Coconuts::Renderer2D::EndScene();
+        
+        
+        
+        
+#if 0
         //LOG_TRACE("Delta time = {} ms", ts.GetMilliseconds());
         
         using namespace Coconuts;
@@ -251,6 +269,7 @@ public:
         
         /* ******************************************************************** */
         /* :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: */
+#endif
     }
         
     /**

@@ -30,6 +30,7 @@ namespace Coconuts
         
         s_Data->vertexArray_Quad.reset(VertexArray::Create());
         s_Data->shader_FlatColor.reset(Shader::Create());
+        s_Data->shader_Texture.reset(Shader::Create());
         
          float vertices_quad[5 * 4] = {
         /* |---- a_Position ----|-- a_TexCoord --| */
@@ -95,6 +96,7 @@ namespace Coconuts
         /* -------------------------------------------------------------------- */
         
         
+        // Flat Color Shader
         /* -------------------------------------------------------------------- */
         /* Create a Shader from files  */
         s_Data->shader_FlatColor->AttachFromFile(
@@ -104,6 +106,21 @@ namespace Coconuts
             ShaderTypes::FRAGMENT, "../assets/shaders/FlatColor.frag");
         
         s_Data->shader_FlatColor->DoneAttach(); // FINISH Editing the Shader (Link them)
+        /* -------------------------------------------------------------------- */
+        
+        // Texture Shader
+        /* -------------------------------------------------------------------- */
+        /* Create a Shader from files  */
+        s_Data->shader_Texture->AttachFromFile(
+            ShaderTypes::VERTEX, "../assets/shaders/TextureGLSL.vert");
+        
+        s_Data->shader_Texture->AttachFromFile(
+            ShaderTypes::FRAGMENT, "../assets/shaders/TextureGLSL.frag");
+        
+        s_Data->shader_Texture->DoneAttach(); // FINISH Editing the Shader (Link them)
+        
+        s_Data->shader_Texture->Bind();
+        s_Data->shader_Texture->SetInt1("u_Texture", 0 /*slot number*/);
         /* -------------------------------------------------------------------- */
     }
     
@@ -116,6 +133,9 @@ namespace Coconuts
     {
         s_Data->shader_FlatColor->Bind();
         s_Data->shader_FlatColor->SetMat4("u_ViewProj", camera.GetViewProjMatrix());
+        
+        s_Data->shader_Texture->Bind();
+        s_Data->shader_Texture->SetMat4("u_ViewProj", camera.GetViewProjMatrix());
     }
     
     void Renderer2D::EndScene()
@@ -138,6 +158,27 @@ namespace Coconuts
                 {size.x, size.y, 1.0f}
         );
         s_Data->shader_FlatColor->SetMat4("u_Transform", transform);
+        
+        s_Data->vertexArray_Quad->Bind();
+        Graphics::LowLevelAPI::DrawIndexed(s_Data->vertexArray_Quad);
+    }
+    
+    void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const std::shared_ptr<Texture2D>& texture)
+    {
+        DrawQuad({position.x, position.y, 0.0f}, size, texture);
+    }
+    
+    void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const std::shared_ptr<Texture2D>& texture)
+    {
+        s_Data->shader_Texture->Bind();
+        
+        glm::mat4 transform = glm::translate(
+                glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f) /* * rotation */, 
+                {size.x, size.y, 1.0f}
+        );
+        s_Data->shader_Texture->SetMat4("u_Transform", transform);
+        
+        texture->Bind(0);   /* Bind slot '0' */
         
         s_Data->vertexArray_Quad->Bind();
         Graphics::LowLevelAPI::DrawIndexed(s_Data->vertexArray_Quad);

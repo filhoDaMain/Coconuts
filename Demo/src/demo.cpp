@@ -63,9 +63,10 @@ public:
     ExampleLayer(const std::string& layerName)
         :   Layer(layerName),
             m_Camera(-1.6f, 1.6f, -0.9f, 0.9f),
-            m_CameraController(m_Camera),
-            m_ObjPos(0.0f)
+            m_CameraController(m_Camera)
     {
+        /* Init Texture image */
+        m_MorisTexture.reset(Coconuts::Texture2D::Create("../assets/textures/Moris.png"));
     }
         
     /**
@@ -81,6 +82,7 @@ public:
         Coconuts::Renderer2D::BeginScene(m_Camera);
         Coconuts::Renderer2D::DrawQuad({-0.7f, 0.0f}, {0.8f, 0.8f}, {0.8f, 1.0f, 0.1f, 1.0f});
         Coconuts::Renderer2D::DrawQuad({0.5f, -0.3f}, {0.5f, 0.75f}, {0.5f, 0.1f, 0.5f, 1.0f});
+        Coconuts::Renderer2D::DrawQuad({0.0f, 0.3f}, {0.5f, 0.5f}, m_MorisTexture);
         Coconuts::Renderer2D::EndScene();
     }
         
@@ -100,21 +102,8 @@ private:
     /* Camera Controller */
     CameraController m_CameraController;
     
-    /* Shader */
-    std::shared_ptr<Coconuts::Shader> m_Shader;
-    
     /* Textures */
-    std::shared_ptr<Coconuts::Texture2D> m_Texture2D, m_Coconuts2D;
-    
-    /* Buffers */
-    std::shared_ptr<Coconuts::VertexArray> m_VertexArray_square;
-    std::shared_ptr<Coconuts::VertexBuffer> m_VertexBuffer_square;
-    std::shared_ptr<Coconuts::IndexBuffer> m_IndexBuffer_square;
-    
-    
-    /* Game Objects data */
-    glm::vec3 m_ObjPos;
-    float m_ObjMoveSpeed = 1.5f;
+    std::shared_ptr<Coconuts::Texture2D> m_MorisTexture;
 };
 
 

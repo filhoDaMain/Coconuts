@@ -20,6 +20,7 @@
 #include <memory>
 #include <coconuts/graphics/VertexArray.h>
 #include <coconuts/graphics/Shader.h>
+#include <coconuts/graphics/Texture.h>
 
 /* Cameras */
 #include <coconuts/cameras/OrthographicCamera.h>
@@ -31,6 +32,7 @@ namespace Coconuts
     {
         std::shared_ptr<VertexArray>  vertexArray_Quad;
         std::shared_ptr<Shader>       shader_FlatColor;
+        std::shared_ptr<Shader>       shader_Texture;
     };
     
     class Renderer2D
@@ -44,6 +46,9 @@ namespace Coconuts
         
         static void DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color);
         static void DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color);
+        
+        static void DrawQuad(const glm::vec2& position, const glm::vec2& size, const std::shared_ptr<Texture2D>& texture);
+        static void DrawQuad(const glm::vec3& position, const glm::vec2& size, const std::shared_ptr<Texture2D>& texture);
     };
     
 }

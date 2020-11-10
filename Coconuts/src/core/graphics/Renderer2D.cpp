@@ -16,7 +16,8 @@
 
 #include <coconuts/graphics/Renderer2D.h>
 #include <coconuts/graphics/LowLevelAPI.h>
-#include "OpenGLShader.h"
+
+#include "glm/ext/matrix_transform.hpp"
 
 namespace Coconuts
 {    
@@ -113,9 +114,8 @@ namespace Coconuts
     
     void Renderer2D::BeginScene(const OrthographicCamera& camera)
     {
-        std::dynamic_pointer_cast<OpenGLShader>(s_Data->shader_FlatColor)->Bind();
-        std::dynamic_pointer_cast<OpenGLShader>(s_Data->shader_FlatColor)->UploadUniformMat4("u_ViewProj", camera.GetViewProjMatrix());
-        std::dynamic_pointer_cast<OpenGLShader>(s_Data->shader_FlatColor)->UploadUniformMat4("u_Transform", glm::mat4(1.0f));
+        s_Data->shader_FlatColor->Bind();
+        s_Data->shader_FlatColor->SetMat4("u_ViewProj", camera.GetViewProjMatrix());
     }
     
     void Renderer2D::EndScene()
@@ -130,8 +130,14 @@ namespace Coconuts
     
     void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
     {
-        std::dynamic_pointer_cast<OpenGLShader>(s_Data->shader_FlatColor)->Bind();
-        std::dynamic_pointer_cast<OpenGLShader>(s_Data->shader_FlatColor)->UploadUniformFloat4("u_Color", color);
+        s_Data->shader_FlatColor->Bind();
+        s_Data->shader_FlatColor->SetFloat4("u_Color", color);
+        
+        glm::mat4 transform = glm::translate(
+                glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f) /* * rotation */, 
+                {size.x, size.y, 1.0f}
+        );
+        s_Data->shader_FlatColor->SetMat4("u_Transform", transform);
         
         s_Data->vertexArray_Quad->Bind();
         Graphics::LowLevelAPI::DrawIndexed(s_Data->vertexArray_Quad);

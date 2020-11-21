@@ -3,8 +3,23 @@ project(COCONUTS VERSION 0.1 LANGUAGES CXX)
 
 set (CMAKE_CXX_STANDARD 11)
 
-# Store Build Tree root directory location
+# Generate macro for Build Tree root directory
 add_definitions(-DCOCONUTS_BUILDTREE_ROOTDIR="${PROJECT_SOURCE_DIR}")
+
+# Set Default Shaders location
+set(DEFAULT_SHADER_SRCDIR "${PROJECT_SOURCE_DIR}/include/coconuts/graphics/shaders")
+
+
+# OpenGL Platform macros
+# Default GLSL Vertex Shader
+set(DEFAULT_GLSL_SHADER_VERTEX "${DEFAULT_SHADER_SRCDIR}/GLSL_Default.vert")
+
+# Default Fragment Shader
+set(DEFAULT_GLSL_SHADER_FRAGMENT "${DEFAULT_SHADER_SRCDIR}/GLSL_Default.frag")
+
+# Generate C macros for default shader locations
+add_definitions(-DCOCONUTS_DEFAULT_GLSL_SHADER_VERTEX="${DEFAULT_GLSL_SHADER_VERTEX}")
+add_definitions(-DCOCONUTS_DEFAULT_GLSL_SHADER_FRAGMENT="${DEFAULT_GLSL_SHADER_FRAGMENT}")
 
 # Vendor
 # -------------------------------------------------------------------------------------------

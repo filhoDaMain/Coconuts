@@ -29,7 +29,6 @@ namespace Coconuts
         s_Data = new Renderer2DStorage();
         
         s_Data->vertexArray_Quad.reset(VertexArray::Create());
-        s_Data->shader_FlatColor.reset(Shader::Create());
         s_Data->shader_Texture.reset(Shader::Create());
           
         /* Create a white texture of 1x1 pixel */

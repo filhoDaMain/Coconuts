@@ -25,6 +25,27 @@
 namespace Coconuts
 {
     
+    Texture2D* Texture2D::Create(uint32_t width, uint32_t height, void* data, uint32_t size)
+    {
+        switch(Renderer::GetRendererAPI())
+        {
+            case RendererAPI::API::OpenGL:
+            {
+                return new OpenGLTexture2D(width, height, data, size);
+                
+                break;
+            }
+            
+            default:
+            {
+                LOG_CRITICAL("Texture2D - Unknown RendererAPI {}", Renderer::GetRendererAPI());
+                exit(1);
+            }
+        }
+        
+        return nullptr;
+    }
+    
     Texture2D* Texture2D::Create(const std::string& path)
     {
         switch(Renderer::GetRendererAPI())

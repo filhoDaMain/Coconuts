@@ -30,9 +30,10 @@ namespace Coconuts
     
     struct Renderer2DStorage
     {
-        std::shared_ptr<VertexArray>  vertexArray_Quad;
-        std::shared_ptr<Shader>       shader_FlatColor;
-        std::shared_ptr<Shader>       shader_Texture;
+        std::shared_ptr<VertexArray>    vertexArray_Quad;
+        std::shared_ptr<Shader>         shader_Texture;
+        std::shared_ptr<Shader>         shader_FlatColor;
+        std::shared_ptr<Texture2D>      texture2D_Blank; 
     };
     
     class Renderer2D

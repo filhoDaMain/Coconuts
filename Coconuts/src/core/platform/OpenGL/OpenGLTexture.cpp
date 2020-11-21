@@ -15,12 +15,40 @@
  */
 
 #include "OpenGLTexture.h"
-#include <glad/glad.h>
 #include <stb/stb_image.h>
 #include <coconuts/Logger.h>
 
 namespace Coconuts
 {
+    OpenGLTexture2D::OpenGLTexture2D(uint32_t width, uint32_t height, void* data, uint32_t size)
+        : m_Width(width), m_Height(height)
+    {
+        GLenum internalFormat = GL_RGBA8;
+        GLenum dataFormat = GL_RGBA;
+        
+        m_InternalFormat = internalFormat;
+        m_DataFormat = dataFormat;
+        
+        glGenTextures(1, &m_RendererID);
+        glBindTexture(GL_TEXTURE_2D, m_RendererID);
+        
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        
+        /* Specify a 2D Texture Image */        
+        glTexImage2D(GL_TEXTURE_2D,
+                     0, internalFormat,
+                     m_Width, m_Height,
+                     0,
+                     dataFormat,
+                     GL_UNSIGNED_BYTE,
+                     data);
+        
+        /* Unbind Texture */
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
     
     OpenGLTexture2D::OpenGLTexture2D(const std::string& path)
         :   m_Path(path)
@@ -60,6 +88,9 @@ namespace Coconuts
             dataFormat = GL_RGB;
         }
         
+        m_InternalFormat = internalFormat;
+        m_DataFormat = dataFormat;
+        
         glGenTextures(1, &m_RendererID);
         glBindTexture(GL_TEXTURE_2D, m_RendererID);
         
@@ -89,6 +120,21 @@ namespace Coconuts
     OpenGLTexture2D::~OpenGLTexture2D()
     {
         glDeleteTextures(1, &m_RendererID);
+    }
+    
+    void OpenGLTexture2D::SetData(void* data, uint32_t size)
+    {
+        //glGenTextures(1, &m_RendererID);
+        glBindTexture(GL_TEXTURE_2D, m_RendererID);
+        
+        /* Specify a 2D Texture Image */        
+        glTexImage2D(GL_TEXTURE_2D,
+                     0, m_InternalFormat,
+                     m_Width, m_Height,
+                     0,
+                     m_DataFormat,
+                     GL_UNSIGNED_BYTE,
+                     data);
     }
     
     void OpenGLTexture2D::Bind(uint32_t slot) const

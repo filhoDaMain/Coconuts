@@ -46,7 +46,6 @@ namespace Coconuts
         /* Initialize abstracted Renderer */
         Renderer::Init();
         Renderer2D::Init();
-        
         LOG_DEBUG("High-Level Coconuts Renderer initialized");
         
         /* VSync enable/disable */

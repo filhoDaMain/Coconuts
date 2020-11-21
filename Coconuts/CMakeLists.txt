@@ -3,6 +3,9 @@ project(COCONUTS VERSION 0.1 LANGUAGES CXX)
 
 set (CMAKE_CXX_STANDARD 11)
 
+# Store Build Tree root directory location
+add_definitions(-DCOCONUTS_BUILDTREE_ROOTDIR="${PROJECT_SOURCE_DIR}")
+
 # Vendor
 # -------------------------------------------------------------------------------------------
 #GLFW
@@ -27,7 +30,6 @@ add_definitions(-DGLFW_INCLUDE_NONE)
 
 #Needed before including stb_image.h
 add_definitions(-DSTB_IMAGE_IMPLEMENTATION)
-
 
 # Coconuts source
 add_subdirectory(src/core)

@@ -18,6 +18,8 @@
 
 #include <coconuts/graphics/Shader.h>
 
+#define EXPAND(x) x
+
 namespace Coconuts
 {
     enum class OpenGLShaderTypes
@@ -84,6 +86,16 @@ namespace Coconuts
         uint32_t m_ProgramID;   // program ID
         uint32_t m_VertexID;    // vertex shader ID
         uint32_t m_FragmentID;  // fragment shader ID
+        
+        /* Embed default shaders source code */
+        const std::string m_SrcCodeDefault_Vertex =
+        #include EXPAND(COCONUTS_DEFAULT_GLSL_SHADER_VERTEX)
+        ;
+        
+        const std::string m_SrcCodeDefault_Fragment =
+        #include EXPAND(COCONUTS_DEFAULT_GLSL_SHADER_FRAGMENT)
+        ;
+        
     };
     
 }

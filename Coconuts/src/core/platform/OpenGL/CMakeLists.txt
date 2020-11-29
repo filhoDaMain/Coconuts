@@ -29,13 +29,7 @@ add_custom_target(defaultshaders ALL
 # Run defaultshaders pre-processing always before main target
 add_dependencies(ccncore defaultshaders)
 
-# Create macros to access generated files path by code
-add_definitions(-DCOCONUTS_DEFAULT_GLSL_SHADER_FRAGMENT="${OUT_DEFAULT_FRAGMENT_GLSL_FILEPATH}")
-add_definitions(-DCOCONUTS_DEFAULT_GLSL_SHADER_VERTEX="${OUT_DEFAULT_VERTEX_GLSL_FILEPATH}")
-
-
 # Source files for OpenGL platform
-
 target_sources(ccncore PRIVATE  "${PROJECT_SOURCE_DIR}/src/core/platform/OpenGL/OpenGLGraphicsContext.cpp"
                                 "${PROJECT_SOURCE_DIR}/src/core/platform/OpenGL/OpenGLVertexBuffer.cpp"
                                 "${PROJECT_SOURCE_DIR}/src/core/platform/OpenGL/OpenGLIndexBuffer.cpp"
@@ -45,3 +39,6 @@ target_sources(ccncore PRIVATE  "${PROJECT_SOURCE_DIR}/src/core/platform/OpenGL/
                                 "${PROJECT_SOURCE_DIR}/src/core/platform/OpenGL/OpenGLTexture.cpp")
 
 target_include_directories(ccncore PRIVATE "${PROJECT_SOURCE_DIR}/src/core/platform/OpenGL")
+
+# Create macros to access generated files path by code
+target_compile_definitions(ccncore PRIVATE COCONUTS_DEFAULT_GLSL_SHADER_FRAGMENT="${OUT_DEFAULT_FRAGMENT_GLSL_FILEPATH}" COCONUTS_DEFAULT_GLSL_SHADER_VERTEX="${OUT_DEFAULT_VERTEX_GLSL_FILEPATH}")

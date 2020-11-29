@@ -98,14 +98,18 @@ namespace Coconuts
         s_Data->vertexArray_Quad->SetIndexBuffer(indexBuffer_Quad);
         /* -------------------------------------------------------------------- */
         
+        /* Use default shaders */
+        s_Data->shader_Texture->UseDefaultShaders();
+        
+        
         /* Create shader from files */
-        s_Data->shader_Texture->AttachFromFile(
-            ShaderTypes::VERTEX, "../assets/shaders/Default.vert");
+        //s_Data->shader_Texture->AttachFromFile(
+        //    ShaderTypes::VERTEX, "../assets/shaders/Default.vert");
         
-        s_Data->shader_Texture->AttachFromFile(
-            ShaderTypes::FRAGMENT, "../assets/shaders/Default.frag");
+        //s_Data->shader_Texture->AttachFromFile(
+        //    ShaderTypes::FRAGMENT, "../assets/shaders/Default.frag");
         
-        s_Data->shader_Texture->DoneAttach(); // FINISH Editing the Shader (Link them)
+        //s_Data->shader_Texture->DoneAttach(); // FINISH Editing the Shader (Link them)
     }
     
     void Renderer2D::Shutdown()

@@ -39,6 +39,7 @@ namespace Coconuts
         
         virtual ~Shader() = default;
         
+        virtual void UseDefaultShaders() = 0;
         virtual void AttachFromFile(ShaderTypes shaderType, const std::string& filepath) = 0;
         virtual void DoneAttach() = 0;
         

@@ -39,6 +39,7 @@ namespace Coconuts
         
         virtual ~OpenGLShader();
         
+        virtual void UseDefaultShaders() override;
         void AttachFromFile(ShaderTypes shaderType, const std::string& filepath) override;
         void DoneAttach() override;
         

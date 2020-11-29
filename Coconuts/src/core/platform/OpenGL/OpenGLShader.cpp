@@ -180,6 +180,119 @@ namespace Coconuts
         glDetachShader(program, fragmentShader);
     }
     
+    void OpenGLShader::UseDefaultShaders()
+    {
+        /**
+         * Reference:
+         *  https://www.khronos.org/opengl/wiki/Shader_Compilation#Example
+         */
+        
+        LOG_DEBUG("No custom Shaders specified: using default Coconuts GLSL shaders");
+        
+        /* Create an empty vertex shader handle */
+        m_VertexID = 0;   // reset
+        m_VertexID = glCreateShader(GL_VERTEX_SHADER);
+        
+        if (0 == m_VertexID)
+        {
+            LOG_ERROR("Error creating a vertex shader object!");
+            return;
+        }
+        
+        /* Send the vertex shader source code to GL */
+        const GLchar *source = (const GLchar *)m_SrcCodeDefault_Vertex.c_str();
+        glShaderSource(m_VertexID, 1, &source, 0);
+        
+        /* Compile the vertex shader */
+        glCompileShader(m_VertexID);
+        
+        /* Check for compilation errors */
+        GLint isCompiled = 0;
+        glGetShaderiv(m_VertexID, GL_COMPILE_STATUS, &isCompiled);
+        
+        /* Compilation FAILED */
+        if(isCompiled == GL_FALSE)
+        {
+            GLint maxLength = 0;
+            glGetShaderiv(m_VertexID, GL_INFO_LOG_LENGTH, &maxLength);
+            
+            /* The maxLength includes the NULL character */
+            std::vector<GLchar> infoLog(maxLength);
+            glGetShaderInfoLog(m_VertexID, maxLength, &maxLength, &infoLog[0]);
+            
+            /* We don't need the shader anymore. */
+            glDeleteShader(m_VertexID);
+            
+            LOG_ERROR("Vertex Shader compilation failed!");
+            LOG_ERROR("* m_ProgramID:    {}", m_ProgramID);
+            LOG_ERROR("* m_VertexID:     {}", m_VertexID);
+            LOG_TRACE("* FILE: Embedded default shader");
+            LOG_ERROR("* ELOG: {}", infoLog.data());
+            
+            return;
+        }
+        
+        /* SUCCESS */
+        LOG_DEBUG("Vertex shader successfully compiled ( {} )", m_VertexID);
+        LOG_TRACE("* m_ProgramID:    {}", m_ProgramID);
+        LOG_TRACE("* m_VertexID:     {}", m_VertexID);
+        LOG_TRACE("* FILE: Embedded default shader");
+        
+        // ----
+        
+        /* Create an empty fragment shader handle */
+        m_FragmentID = 0;   // reset
+        m_FragmentID = glCreateShader(GL_FRAGMENT_SHADER);
+        
+        if (0 == m_FragmentID)
+        {
+            LOG_ERROR("Error creating a fragment shader object!");
+            return;
+        }
+        
+        /* Send the fragment shader source code to GL */
+        source = (const GLchar *)m_SrcCodeDefault_Fragment.c_str();
+        glShaderSource(m_FragmentID, 1, &source, 0);
+        
+        /* Compile the fragment shader */
+        glCompileShader(m_FragmentID);
+        
+        /* Check for compilation errors */
+        isCompiled = 0;
+        glGetShaderiv(m_FragmentID, GL_COMPILE_STATUS, &isCompiled);
+        
+        /* Compilation FAILED */
+        if(isCompiled == GL_FALSE)
+        {
+            GLint maxLength = 0;
+            glGetShaderiv(m_FragmentID, GL_INFO_LOG_LENGTH, &maxLength);
+            
+            /* The maxLength includes the NULL character */
+            std::vector<GLchar> infoLog(maxLength);
+            glGetShaderInfoLog(m_FragmentID, maxLength, &maxLength, &infoLog[0]);
+            
+            /* We don't need the shader anymore. */
+            glDeleteShader(m_FragmentID);
+            
+            LOG_ERROR("Fragment Shader compilation failed!");
+            LOG_ERROR("* m_ProgramID:    {}", m_ProgramID);
+            LOG_ERROR("* m_FragmentID:   {}", m_FragmentID);
+            LOG_TRACE("* FILE: Embedded default shader");
+            LOG_ERROR("* ELOG: {}", infoLog.data());
+            
+            return;
+        }
+        
+        /* SUCCESS */
+        LOG_DEBUG("Fragment shader successfully compiled ( {} )", m_FragmentID);
+        LOG_TRACE("* m_ProgramID:    {}", m_ProgramID);
+        LOG_TRACE("* m_FragmentID:   {}", m_FragmentID);
+        LOG_TRACE("* FILE: Embedded default shader");
+        
+        /* Link them */
+        DoneAttach();
+    }
+    
     void OpenGLShader::AttachFromFile(ShaderTypes shaderType, const std::string& filepath)
     {
         LOG_TRACE("Attaching new shader from file: {}", filepath);
@@ -451,11 +564,10 @@ namespace Coconuts
         glDetachShader(m_ProgramID, m_VertexID);
         glDetachShader(m_ProgramID, m_FragmentID);
         
-        LOG_DEBUG("Shader program successfully linked and ready to Bind");
+        LOG_DEBUG("Shader program successfully linked");
         LOG_TRACE("* m_ProgramID:    {}", m_ProgramID);
         LOG_TRACE("* m_VertexID:     {}", m_VertexID);
         LOG_TRACE("* m_FragmentID:   {}", m_FragmentID);
-        LOG_TRACE("* Not bound yet!");
     }
     
     void OpenGLShader::Bind()

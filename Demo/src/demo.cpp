@@ -75,14 +75,14 @@ public:
      * Called once per frame
      */
     void OnUpdate(Coconuts::Timestep ts) override
-    {
+    {   
         m_CameraController.OnUpdate(ts);
         
         Coconuts::Graphics::LowLevelAPI::SetClearColor({0.02f, 0.31f, 0.7f, 1});
         Coconuts::Graphics::LowLevelAPI::Clear();
         
         Coconuts::Renderer2D::BeginScene(m_Camera);
-        Coconuts::Renderer2D::DrawRotatedQuad({0.0f, 0.0f}, {2.0f, 2.0f}, 0.8f, m_CheckerboardTexture, 10.0f, {0.3f, 0.7f, 0.4f, 1.0f});
+        Coconuts::Renderer2D::DrawRotatedQuad({0.0f, 0.0f}, {2.0f, 2.0f}, 0.8f, m_CheckerboardTexture, 10.0f, s_CheckerBoardTint);
         Coconuts::Renderer2D::DrawQuad({-0.7f, 0.0f}, {0.8f, 0.8f}, {0.8f, 1.0f, 0.1f, 1.0f});
         Coconuts::Renderer2D::DrawRotatedQuad({0.5f, -0.3f}, {0.5f, 0.75f}, 0.4f, {0.5f, 0.1f, 0.5f, 1.0f});
         Coconuts::Renderer2D::DrawQuad({0.0f, 0.0f}, {1.0f, 1.0f}, m_MorisTexture);
@@ -99,6 +99,11 @@ public:
         //LOG_TRACE(event.ToString());
     }
     
+    static void SetCheckerBoardTint(const glm::vec3& tint)
+    {
+        s_CheckerBoardTint = {tint.x, tint.y, tint.z, 1.0f};
+    }
+    
 private:
     /* Camera */
     Coconuts::OrthographicCamera m_Camera;
@@ -110,8 +115,11 @@ private:
     std::shared_ptr<Coconuts::Texture2D> m_MorisTexture;
     std::shared_ptr<Coconuts::Texture2D> m_CheckerboardTexture;
     std::shared_ptr<Coconuts::Texture2D> m_CoconutsTextTexture;
+    
+    static glm::vec4 s_CheckerBoardTint;
 };
 
+glm::vec4 ExampleLayer::s_CheckerBoardTint = glm::vec4(1.0f);
 
 
 /* GUI - Settings */
@@ -131,10 +139,17 @@ public:
     
     void OnUpdate(Coconuts::Timestep ts) override
     {   
+        /* New ImGui Window */
+        ImGui::Begin("Coconuts Settings");
+        ImGui::ColorEdit3("Tint", glm::value_ptr(m_CheckerBoardTint));
+        ImGui::End();
         
+        /* Pass picked color */
+        ExampleLayer::SetCheckerBoardTint(m_CheckerBoardTint);
     }
     
 private:
+    glm::vec3 m_CheckerBoardTint;
 };
 /* ------------------------------------------------------------ */
 

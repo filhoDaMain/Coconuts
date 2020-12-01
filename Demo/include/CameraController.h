@@ -9,6 +9,7 @@ class CameraController
 public:
     CameraController(Coconuts::OrthographicCamera& camera) : m_Camera(camera)
     {
+        
     }
     
     void OnUpdate(Coconuts::Timestep& ts);
@@ -19,9 +20,6 @@ private:
     
     glm::vec3 m_CameraPos = {0.0f, 0.0f, 0.0f};
     float m_CameraMoveSpeed = 1.0f;
-    
-    //float m_CameraRotation = 0.0f;
-    //float m_CameraRotationSpeed = 35.0f;    // degrees/seconds
 };
 
 #endif /* CAMERACONTROLLER_H */

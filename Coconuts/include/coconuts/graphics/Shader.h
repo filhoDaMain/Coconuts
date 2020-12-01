@@ -39,45 +39,28 @@ namespace Coconuts
         
         virtual ~Shader() = default;
         
+        virtual void UseDefaultShaders() = 0;
         virtual void AttachFromFile(ShaderTypes shaderType, const std::string& filepath) = 0;
         virtual void DoneAttach() = 0;
         
         virtual void Bind() = 0;
         virtual void Unbind() = 0;
         
+        
         /**
-         * Upload Uniforms
+         * Set Uniforms
          */
         
-        /**************/
-        /*   Matrix   */
-        /**************/
-        // 2x2
-        virtual void UploadUniformMat2(const std::string& name, const glm::mat2& matrix) = 0;
-        // 3x3
-        virtual void UploadUniformMat3(const std::string& name, const glm::mat3& matrix) = 0;
-        // 4x4
-        virtual void UploadUniformMat4(const std::string& name, const glm::mat4& matrix) = 0;
+        virtual void SetFloat1(const std::string& name, float value) = 0;
+        virtual void SetFloat2(const std::string& name, const glm::vec2& values) = 0;
+        virtual void SetFloat3(const std::string& name, const glm::vec3& values) = 0;
+        virtual void SetFloat4(const std::string& name, const glm::vec4& values) = 0;
         
+        virtual void SetInt1(const std::string& name, int value) = 0;
         
-        /**************/
-        /*  Integer   */
-        /**************/
-        // 1
-        virtual void UploadUniformInt1(const std::string& name, int value) = 0;
-        
-        
-        /**************/
-        /*   Float    */
-        /**************/
-        // 1
-        virtual void UploadUniformFloat1(const std::string& name, float value) = 0;
-        // 2
-        virtual void UploadUniformFloat2(const std::string& name, const glm::vec2& values) = 0;
-        // 3
-        virtual void UploadUniformFloat3(const std::string& name, const glm::vec3& values) = 0;
-        // 4
-        virtual void UploadUniformFloat4(const std::string& name, const glm::vec4& values) = 0;
+        virtual void SetMat2(const std::string& name, const glm::mat2& matrix) = 0;
+        virtual void SetMat3(const std::string& name, const glm::mat3& matrix) = 0;
+        virtual void SetMat4(const std::string& name, const glm::mat4& matrix) = 0;
         
     private:
         virtual void AttachVertexShader(const std::string& filepath) = 0;

@@ -18,10 +18,10 @@ ADD_CUSTOM_COMMAND(TARGET ccneditor POST_BUILD
                    COMMAND ${CMAKE_COMMAND} -E copy_directory
                        "${PROJECT_SOURCE_DIR}/vendor/imgui/imgui"
                        "${PROJECT_SOURCE_DIR}/include/vendor/imgui"
-                   COMMENT "Copying 3rd party header files indirectly included by Sandbox App into ./include/vendor/")
+                   COMMENT "Copying 3rd party header files")
 
 ADD_CUSTOM_COMMAND(TARGET ccneditor POST_BUILD
                    COMMAND ${CMAKE_COMMAND} -E copy
                        "${PROJECT_SOURCE_DIR}/vendor/imgui/imgui/LICENSE.txt"
                        "${PROJECT_SOURCE_DIR}/include/vendor/imgui"
-                   COMMENT "Copying 3rd party LICENSE files into ./include/vendor/")
+                   COMMENT "Copying 3rd party LICENSE files")

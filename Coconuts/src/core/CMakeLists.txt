@@ -15,7 +15,8 @@ add_library(ccncore core.cpp
                     graphics/Renderer.cpp
                     graphics/RendererAPI.cpp
                     graphics/LowLevelAPI.cpp
-                    graphics/Texture.cpp)
+                    graphics/Texture.cpp
+                    graphics/Renderer2D.cpp)
 
 # Platform Specific files
 # Mac OS
@@ -46,7 +47,7 @@ ADD_CUSTOM_COMMAND(TARGET ccncore POST_BUILD
                    COMMAND ${CMAKE_COMMAND} -E copy_directory
                        "${PROJECT_SOURCE_DIR}/vendor/glm/glm"
                        "${PROJECT_SOURCE_DIR}/include/vendor/glm"
-                   COMMENT "Copying 3rd party header files indirectly included by Sandbox App into ./include/vendor/")
+                   COMMENT "Copying 3rd party header files")
 
 ADD_CUSTOM_COMMAND(TARGET ccncore POST_BUILD
                    COMMAND ${CMAKE_COMMAND} -E copy
@@ -55,4 +56,4 @@ ADD_CUSTOM_COMMAND(TARGET ccncore POST_BUILD
                    COMMAND ${CMAKE_COMMAND} -E copy
                        "${PROJECT_SOURCE_DIR}/vendor/glm/copying.txt"
                        "${PROJECT_SOURCE_DIR}/include/vendor/glm"
-                   COMMENT "Copying 3rd party LICENSE files into ./include/vendor/")
+                   COMMENT "Including 3rd party LICENSE files")

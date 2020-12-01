@@ -18,6 +18,8 @@
 
 #include <coconuts/graphics/Shader.h>
 
+#define EXPAND(x) x
+
 namespace Coconuts
 {
     enum class OpenGLShaderTypes
@@ -37,55 +39,64 @@ namespace Coconuts
         
         virtual ~OpenGLShader();
         
+        virtual void UseDefaultShaders() override;
         void AttachFromFile(ShaderTypes shaderType, const std::string& filepath) override;
         void DoneAttach() override;
         
         void Bind() override;
         void Unbind() override;
         
+        
         /**
-         * Upload Uniforms
+         * Set Uniforms Interface
          */
-    
-        /**************/
-        /*   Matrix   */
-        /**************/
-        // 2x2
-        void UploadUniformMat2(const std::string& name, const glm::mat2& matrix) override;
-        // 3x3
-        void UploadUniformMat3(const std::string& name, const glm::mat3& matrix) override;
-        // 4x4
-        void UploadUniformMat4(const std::string& name, const glm::mat4& matrix) override;
+        
+        virtual void SetFloat1(const std::string& name, float value) override;
+        virtual void SetFloat2(const std::string& name, const glm::vec2& values) override;
+        virtual void SetFloat3(const std::string& name, const glm::vec3& values) override;
+        virtual void SetFloat4(const std::string& name, const glm::vec4& values) override;
+        
+        virtual void SetInt1(const std::string& name, int value) override;
+        
+        virtual void SetMat2(const std::string& name, const glm::mat2& matrix) override;
+        virtual void SetMat3(const std::string& name, const glm::mat3& matrix) override;
+        virtual void SetMat4(const std::string& name, const glm::mat4& matrix) override;
         
         
-        /**************/
-        /*  Integer   */
-        /**************/
-        // 1
-        void UploadUniformInt1(const std::string& name, int value) override;
         
+        /**
+         * Upload Uniforms Implementation
+         */
+        void UploadUniformMat2(const std::string& name, const glm::mat2& matrix);
+        void UploadUniformMat3(const std::string& name, const glm::mat3& matrix);
+        void UploadUniformMat4(const std::string& name, const glm::mat4& matrix);
         
-        /**************/
-        /*   Float    */
-        /**************/
-        // 1
-        void UploadUniformFloat1(const std::string& name, float value) override;
-        // 2
-        void UploadUniformFloat2(const std::string& name, const glm::vec2& values) override;
-        // 3
-        void UploadUniformFloat3(const std::string& name, const glm::vec3& values) override;
-        // 4
-        void UploadUniformFloat4(const std::string& name, const glm::vec4& values) override;
+        void UploadUniformInt1(const std::string& name, int value);
+        
+        void UploadUniformFloat1(const std::string& name, float value);
+        void UploadUniformFloat2(const std::string& name, const glm::vec2& values);
+        void UploadUniformFloat3(const std::string& name, const glm::vec3& values);
+        void UploadUniformFloat4(const std::string& name, const glm::vec4& values);
         
     private:        
-        void AttachVertexShader(const std::string& filepath) override;
-        void AttachFragmentShader(const std::string& filepath) override;
+        virtual void AttachVertexShader(const std::string& filepath) override;
+        virtual void AttachFragmentShader(const std::string& filepath) override;
         OpenGLShaderTypes ParseFileExtension(const std::string& filepath);
         
     private:
         uint32_t m_ProgramID;   // program ID
         uint32_t m_VertexID;    // vertex shader ID
         uint32_t m_FragmentID;  // fragment shader ID
+        
+        /* Embed default shaders source code */
+        const std::string m_SrcCodeDefault_Vertex =
+        #include EXPAND(COCONUTS_DEFAULT_GLSL_SHADER_VERTEX)
+        ;
+        
+        const std::string m_SrcCodeDefault_Fragment =
+        #include EXPAND(COCONUTS_DEFAULT_GLSL_SHADER_FRAGMENT)
+        ;
+        
     };
     
 }

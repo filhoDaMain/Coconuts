@@ -128,6 +128,7 @@ namespace Coconuts
         
     }
     
+    /* Flat Colors */
     void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color)
     {
         DrawQuad({position.x, position.y, 0.0f}, size, color);
@@ -151,15 +152,25 @@ namespace Coconuts
         Graphics::LowLevelAPI::DrawIndexed(s_Data->vertexArray_Quad);
     }
     
-    void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const std::shared_ptr<Texture2D>& texture /*, glm::vec4 tintColor*/)
+    /* Texture Images */
+    void Renderer2D::DrawQuad(const glm::vec2& position,
+                              const glm::vec2& size,
+                              const std::shared_ptr<Texture2D>& texture,
+                              const glm::vec4& tintColor,
+                              float tilingFactor)
     {
-        DrawQuad({position.x, position.y, 0.0f}, size, texture);
+        DrawQuad({position.x, position.y, 0.0f}, size, texture, tintColor, tilingFactor);
     }
     
-    void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const std::shared_ptr<Texture2D>& texture /*, glm::vec4 tintColor*/)
+    void Renderer2D::DrawQuad(const glm::vec3& position,
+                              const glm::vec2& size,
+                              const std::shared_ptr<Texture2D>& texture,
+                              const glm::vec4& tintColor,
+                              float tilingFactor)
     {
         /* Set taint color */
-        s_Data->shader_Texture->SetFloat4("u_Color", glm::vec4(1.0f));
+        s_Data->shader_Texture->SetFloat4("u_Color", tintColor);
+        s_Data->shader_Texture->SetFloat1("u_TilingFactor", tilingFactor);
      
         /* Bind Texture */
         texture->Bind(0);

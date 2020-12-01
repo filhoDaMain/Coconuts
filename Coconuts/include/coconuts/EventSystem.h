@@ -22,6 +22,7 @@
 #include <coconuts/event_system/WindowEvent.h>
 #include <coconuts/event_system/InputKeyEvent.h>
 #include <coconuts/event_system/InputMouseEvent.h>
+#include <coconuts/types.h>
 
 #endif /* EVENTSYSTEM_H */
 

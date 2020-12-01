@@ -63,7 +63,9 @@ public:
     ExampleLayer(const std::string& layerName)
         :   Layer(layerName),
             m_Camera(-1.6f, 1.6f, -0.9f, 0.9f),
-            m_CameraController(m_Camera)
+            m_CameraController(m_Camera),
+            m_MorisPosX(0.0f),
+            m_MorisPosY(0.0f)
     {
         /* Init Texture image */
         m_MorisTexture.reset(Coconuts::Texture2D::Create("../assets/textures/Moris.png"));
@@ -76,6 +78,8 @@ public:
      */
     void OnUpdate(Coconuts::Timestep ts) override
     {   
+        MyInputPolling(ts);
+        
         m_CameraController.OnUpdate(ts);
         
         Coconuts::Graphics::LowLevelAPI::SetClearColor({0.02f, 0.31f, 0.7f, 1});
@@ -85,18 +89,41 @@ public:
         Coconuts::Renderer2D::DrawRotatedQuad({0.0f, 0.0f}, {2.0f, 2.0f}, 0.8f, m_CheckerboardTexture, s_CheckerboardTilingFactor, s_CheckerBoardTint);
         Coconuts::Renderer2D::DrawQuad({-0.7f, 0.0f}, {0.8f, 0.8f}, {0.8f, 1.0f, 0.1f, 1.0f});
         Coconuts::Renderer2D::DrawRotatedQuad({0.5f, -0.3f}, {0.5f, 0.75f}, 0.4f, {0.5f, 0.1f, 0.5f, 1.0f});
-        Coconuts::Renderer2D::DrawQuad({0.0f, 0.0f}, {1.0f, 1.0f}, m_MorisTexture);
+        Coconuts::Renderer2D::DrawRotatedQuad({m_MorisPosX, m_MorisPosY}, {s_MorisScale, s_MorisScale}, s_MorisRotation, m_MorisTexture);
         Coconuts::Renderer2D::DrawQuad({0.0f, 0.7f}, {1.0f, 1.0f}, m_CoconutsTextTexture);
         Coconuts::Renderer2D::EndScene();
     }
+       
+    void MyInputPolling(Coconuts::Timestep& ts)
+    {
+        /* Input Polling -> Move Moris */
+        // VERTICAL
+        if (Coconuts::Polling::IsKeyPressed(Coconuts::Keyboard::KEY_W))
+        {
+            m_MorisPosY += 0.7f * ts.GetSeconds();
+        }
+        if (Coconuts::Polling::IsKeyPressed(Coconuts::Keyboard::KEY_S))
+        {
+            m_MorisPosY -= 0.7f * ts.GetSeconds();
+        }
         
+        // HORIZONTAL
+        if (Coconuts::Polling::IsKeyPressed(Coconuts::Keyboard::KEY_D))
+        {
+            m_MorisPosX += 0.7f * ts.GetSeconds();
+        }
+        if (Coconuts::Polling::IsKeyPressed(Coconuts::Keyboard::KEY_A))
+        {
+            m_MorisPosX -= 0.7f * ts.GetSeconds();
+        }
+    }
+    
     /**
      * Triggered whenever an Event occurs
      */
     void OnEvent(Coconuts::Event& event) override
     {
-        /* Log the event */
-        //LOG_TRACE(event.ToString());
+
     }
     
     static void SetCheckerBoardTint(const glm::vec3& tint)
@@ -109,7 +136,19 @@ public:
         s_CheckerboardTilingFactor = factor;
     }
     
+    static void SetMorisScale(float scale)
+    {
+        s_MorisScale = scale;
+    }
+    
+    static void SetMorisRotation(float rotation)
+    {
+        s_MorisRotation = rotation;
+    }
+    
 private:
+    /* Event dispatcher */
+    
     /* Camera */
     Coconuts::OrthographicCamera m_Camera;
     
@@ -123,10 +162,16 @@ private:
     
     static glm::vec4 s_CheckerBoardTint;
     static float s_CheckerboardTilingFactor;
+    static float s_MorisScale;
+    static float s_MorisRotation;
+    float m_MorisPosX;
+    float m_MorisPosY;
 };
 
 glm::vec4 ExampleLayer::s_CheckerBoardTint = glm::vec4(1.0f);
 float ExampleLayer::s_CheckerboardTilingFactor = 1.0f;
+float ExampleLayer::s_MorisScale = 1.0f;
+float ExampleLayer::s_MorisRotation = 0.0f;
 
 
 /* GUI - Settings */
@@ -135,7 +180,7 @@ class GUI_ColorSettings : public ::Coconuts::Editor::GUILayer
 {
 public:
     GUI_ColorSettings()
-        : m_CheckerBoardTint(glm::vec3(1.0f)), m_TilingFactor(1.0f)
+        : m_CheckerBoardTint(glm::vec3(1.0f)), m_TilingFactor(1.0f), m_Scale(1.0f), m_Rotation(0.0f)
     {
         
     }
@@ -161,16 +206,38 @@ public:
         ImGui::End();
         //------------------------------------------------------------------------
         
+        
+        /* New ImGui Window */
+        //------------------------------------------------------------------------
+        ImGui::Begin("Moris Settings");
+        ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
+        ImGui::SliderFloat("Scale", &m_Scale, 1.0f, 10.f);
+        
+        ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
+        ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
+        
+        ImGui::SliderAngle("Rotation", &m_Rotation, -180.f, 180.f);
+        ImGui::End();
+        //------------------------------------------------------------------------
+        
         /* Pass picked color */
         ExampleLayer::SetCheckerBoardTint(m_CheckerBoardTint);
         
         /* Pass selected tiling factor */
         ExampleLayer::SetCheckerboardTilingFactor(m_TilingFactor);
+        
+        /* Pass selected scale */
+        ExampleLayer::SetMorisScale(m_Scale);
+        
+        /* Pass selected rotation */
+        ExampleLayer::SetMorisRotation(m_Rotation);
     }
     
 private:
     glm::vec3 m_CheckerBoardTint;
     float m_TilingFactor;
+    float m_Scale;
+    float m_Rotation;
 };
 /* ------------------------------------------------------------ */
 

@@ -67,6 +67,8 @@ public:
     {
         /* Init Texture image */
         m_MorisTexture.reset(Coconuts::Texture2D::Create("../assets/textures/Moris.png"));
+        m_CheckerboardTexture.reset(Coconuts::Texture2D::Create("../assets/textures/checkerboard.png"));
+        m_CoconutsTextTexture.reset(Coconuts::Texture2D::Create("../assets/textures/Coconuts.png"));
     }
         
     /**
@@ -80,9 +82,11 @@ public:
         Coconuts::Graphics::LowLevelAPI::Clear();
         
         Coconuts::Renderer2D::BeginScene(m_Camera);
+        Coconuts::Renderer2D::DrawRotatedQuad({0.0f, 0.0f}, {2.0f, 2.0f}, 0.8f, m_CheckerboardTexture, 10.0f, {0.5f, 0.7f, 0.8f, 1.0f});
         Coconuts::Renderer2D::DrawQuad({-0.7f, 0.0f}, {0.8f, 0.8f}, {0.8f, 1.0f, 0.1f, 1.0f});
-        Coconuts::Renderer2D::DrawQuad({0.5f, -0.3f}, {0.5f, 0.75f}, {0.5f, 0.1f, 0.5f, 1.0f});
-        Coconuts::Renderer2D::DrawQuad({-0.5f, 0.0f}, {0.5f, 0.5f}, m_MorisTexture);
+        Coconuts::Renderer2D::DrawRotatedQuad({0.5f, -0.3f}, {0.5f, 0.75f}, 0.4f, {0.5f, 0.1f, 0.5f, 1.0f});
+        Coconuts::Renderer2D::DrawQuad({0.0f, 0.0f}, {1.0f, 1.0f}, m_MorisTexture);
+        Coconuts::Renderer2D::DrawQuad({0.0f, 0.7f}, {1.0f, 1.0f}, m_CoconutsTextTexture);
         Coconuts::Renderer2D::EndScene();
     }
         
@@ -104,6 +108,8 @@ private:
     
     /* Textures */
     std::shared_ptr<Coconuts::Texture2D> m_MorisTexture;
+    std::shared_ptr<Coconuts::Texture2D> m_CheckerboardTexture;
+    std::shared_ptr<Coconuts::Texture2D> m_CoconutsTextTexture;
 };
 
 

@@ -82,7 +82,7 @@ public:
         Coconuts::Graphics::LowLevelAPI::Clear();
         
         Coconuts::Renderer2D::BeginScene(m_Camera);
-        Coconuts::Renderer2D::DrawRotatedQuad({0.0f, 0.0f}, {2.0f, 2.0f}, 0.8f, m_CheckerboardTexture, 10.0f, s_CheckerBoardTint);
+        Coconuts::Renderer2D::DrawRotatedQuad({0.0f, 0.0f}, {2.0f, 2.0f}, 0.8f, m_CheckerboardTexture, s_CheckerboardTilingFactor, s_CheckerBoardTint);
         Coconuts::Renderer2D::DrawQuad({-0.7f, 0.0f}, {0.8f, 0.8f}, {0.8f, 1.0f, 0.1f, 1.0f});
         Coconuts::Renderer2D::DrawRotatedQuad({0.5f, -0.3f}, {0.5f, 0.75f}, 0.4f, {0.5f, 0.1f, 0.5f, 1.0f});
         Coconuts::Renderer2D::DrawQuad({0.0f, 0.0f}, {1.0f, 1.0f}, m_MorisTexture);
@@ -104,6 +104,11 @@ public:
         s_CheckerBoardTint = {tint.x, tint.y, tint.z, 1.0f};
     }
     
+    static void SetCheckerboardTilingFactor(float factor)
+    {
+        s_CheckerboardTilingFactor = factor;
+    }
+    
 private:
     /* Camera */
     Coconuts::OrthographicCamera m_Camera;
@@ -117,9 +122,11 @@ private:
     std::shared_ptr<Coconuts::Texture2D> m_CoconutsTextTexture;
     
     static glm::vec4 s_CheckerBoardTint;
+    static float s_CheckerboardTilingFactor;
 };
 
 glm::vec4 ExampleLayer::s_CheckerBoardTint = glm::vec4(1.0f);
+float ExampleLayer::s_CheckerboardTilingFactor = 1.0f;
 
 
 /* GUI - Settings */
@@ -127,7 +134,8 @@ glm::vec4 ExampleLayer::s_CheckerBoardTint = glm::vec4(1.0f);
 class GUI_ColorSettings : public ::Coconuts::Editor::GUILayer
 {
 public:
-    GUI_ColorSettings() 
+    GUI_ColorSettings()
+        : m_CheckerBoardTint(glm::vec3(1.0f)), m_TilingFactor(1.0f)
     {
         
     }
@@ -140,16 +148,29 @@ public:
     void OnUpdate(Coconuts::Timestep ts) override
     {   
         /* New ImGui Window */
-        ImGui::Begin("Coconuts Settings");
+        //------------------------------------------------------------------------
+        ImGui::Begin("Checkerboard Settings");
+        ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
+        
         ImGui::ColorEdit3("Tint", glm::value_ptr(m_CheckerBoardTint));
+        
+        ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
+        ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
+        
+        ImGui::SliderFloat("Tiling", &m_TilingFactor, 1.0f, 10.f);
         ImGui::End();
+        //------------------------------------------------------------------------
         
         /* Pass picked color */
         ExampleLayer::SetCheckerBoardTint(m_CheckerBoardTint);
+        
+        /* Pass selected tiling factor */
+        ExampleLayer::SetCheckerboardTilingFactor(m_TilingFactor);
     }
     
 private:
     glm::vec3 m_CheckerBoardTint;
+    float m_TilingFactor;
 };
 /* ------------------------------------------------------------ */
 

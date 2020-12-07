@@ -51,18 +51,17 @@ namespace Coconuts
          * When indicesCounter > maxIndices, Renderer is flushed
          * and a new Draw call is issued
          */
-        uint32_t indicesCounter     = 0;
+        uint32_t indicesCounter = 0;
         
         /* Texture Slots */
         std::array<std::shared_ptr<Texture2D>, maxTextureSlots> textureSlots; 
         const uint32_t minTextureSlotIndex  = 1; // '0' os reserved for blank/default texture
         /* Init slot index counter */
         uint32_t textureSlotsIndex = minTextureSlotIndex;
-        
-        std::array<float, maxTextureSlots> textureTilingFactors;
       
         QuadVertex* quadVertexBuffer_Base   = nullptr;
         QuadVertex* quadVertexBuffer_Ptr    = nullptr;
+        glm::vec4 quadVertexPositions[4];
     };
     
     struct Renderer2DStorage

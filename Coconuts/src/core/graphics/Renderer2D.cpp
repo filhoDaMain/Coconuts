@@ -38,8 +38,6 @@ namespace Coconuts
         s_Data->texture2D_Blank.reset(Texture2D::Create(1, 1, &whiteTexData, sizeof(whiteTexData)));
         /* Store it on Texture Slot index '0' */
         s_Data->batchRenderState.textureSlots[0] = s_Data->texture2D_Blank;
-        /* Set its tiling factor to 1 */
-        s_Data->batchRenderState.textureTilingFactors[0] = 1.0f;
         
         /* Vertex Buffer layout -> Vertex Shader */
         BufferLayout layout = {
@@ -78,6 +76,12 @@ namespace Coconuts
         s_Data->vertexArray->AddVertexBuffer(s_Data->vertexBuffer);
         s_Data->vertexArray->SetIndexBuffer(indexBuffer);
 
+        /* Init quadVertexPositions */
+        s_Data->batchRenderState.quadVertexPositions[0] = {-0.5f, -0.5f, 0.0f, 1.0f};
+        s_Data->batchRenderState.quadVertexPositions[1] = { 0.5f, -0.5f, 0.0f, 1.0f};
+        s_Data->batchRenderState.quadVertexPositions[2] = { 0.5f,  0.5f, 0.0f, 1.0f};
+        s_Data->batchRenderState.quadVertexPositions[3] = {-0.5f,  0.5f, 0.0f, 1.0f};
+        
         /* Shaders setup */
         s_Data->shader->UseDefaultShaders();
         s_Data->shader->Bind();
@@ -91,6 +95,8 @@ namespace Coconuts
         
         s_Data->shader->SetSamplers2D("u_Textures", samplers, s_Data->batchRenderState.maxTextureSlots);
         s_Data->shader->Unbind();
+        
+        
         
 #if 0
         s_Data = new Renderer2DStorage();
@@ -259,87 +265,104 @@ namespace Coconuts
          */
         
         float textureIndex = 0.0f;  // using blank texture slot
+        float tilingFactor = 1.0f;
+        
+        /* Transform matrix */
+        glm::mat4 transform =
+                glm::translate(glm::mat4(1.0f), position)
+                * glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
         
         // 0
-        s_Data->batchRenderState.quadVertexBuffer_Ptr->position     = position;
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->position     = transform * s_Data->batchRenderState.quadVertexPositions[0];
         s_Data->batchRenderState.quadVertexBuffer_Ptr->color        = color;
         s_Data->batchRenderState.quadVertexBuffer_Ptr->texCoord     = {0.0f, 0.0f};
         s_Data->batchRenderState.quadVertexBuffer_Ptr->texIndex     = textureIndex;
-        s_Data->batchRenderState.quadVertexBuffer_Ptr->tilingFactor = 1.0f;
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->tilingFactor = tilingFactor;
         s_Data->batchRenderState.quadVertexBuffer_Ptr++;
         
         // 1
-        s_Data->batchRenderState.quadVertexBuffer_Ptr->position     = {position.x + size.x, position.y, 0.0f};
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->position     = transform * s_Data->batchRenderState.quadVertexPositions[1];
         s_Data->batchRenderState.quadVertexBuffer_Ptr->color        = color;
         s_Data->batchRenderState.quadVertexBuffer_Ptr->texCoord     = {1.0f, 0.0f};
         s_Data->batchRenderState.quadVertexBuffer_Ptr->texIndex     = textureIndex;
-        s_Data->batchRenderState.quadVertexBuffer_Ptr->tilingFactor = 1.0f;
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->tilingFactor = tilingFactor;
         s_Data->batchRenderState.quadVertexBuffer_Ptr++;
         
         // 2
-        s_Data->batchRenderState.quadVertexBuffer_Ptr->position     = {position.x + size.x, position.y + size.y, 0.0f};
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->position     = transform * s_Data->batchRenderState.quadVertexPositions[2];
         s_Data->batchRenderState.quadVertexBuffer_Ptr->color        = color;
         s_Data->batchRenderState.quadVertexBuffer_Ptr->texCoord     = {1.0f, 1.0f};
         s_Data->batchRenderState.quadVertexBuffer_Ptr->texIndex     = textureIndex;
-        s_Data->batchRenderState.quadVertexBuffer_Ptr->tilingFactor = 1.0f;
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->tilingFactor = tilingFactor;
         s_Data->batchRenderState.quadVertexBuffer_Ptr++;
         
         // 3
-        s_Data->batchRenderState.quadVertexBuffer_Ptr->position     = {position.x, position.y + size.y, 0.0f};
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->position     = transform * s_Data->batchRenderState.quadVertexPositions[3];
         s_Data->batchRenderState.quadVertexBuffer_Ptr->color        = color;
         s_Data->batchRenderState.quadVertexBuffer_Ptr->texCoord     = {0.0f, 1.0f};
         s_Data->batchRenderState.quadVertexBuffer_Ptr->texIndex     = textureIndex;
-        s_Data->batchRenderState.quadVertexBuffer_Ptr->tilingFactor = 1.0f;
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->tilingFactor = tilingFactor;
         s_Data->batchRenderState.quadVertexBuffer_Ptr++;
         
         s_Data->batchRenderState.indicesCounter += s_Data->batchRenderState.indicesPerQuad;
-        
-        
-#if 0
-        /* Set Color */
-        s_Data->shader_Texture->SetFloat4("u_Color", color);
-        s_Data->shader_Texture->SetFloat1("u_TilingFactor", 1.0f);
-        
-        /* Bind a white texture */
-        s_Data->texture2D_Blank->Bind();
-        
-        glm::mat4 transform = 
-                glm::translate(glm::mat4(1.0f), position)
-                * glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
-        s_Data->shader_Texture->SetMat4("u_Transform", transform);
-        
-        s_Data->vertexArray_Quad->Bind();
-        Graphics::LowLevelAPI::DrawIndexed(s_Data->vertexArray_Quad);
-#endif
     }
     
-    // Color
+    // Color + Rotation
     void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation_radians, const glm::vec4& color)
     {
         DrawRotatedQuad({position.x, position.y, 0.0f}, size, rotation_radians, color);
     }
     
-    // Color
+    // Color + Rotation
     void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation_radians, const glm::vec4& color)
     {
+        /*
+         * Each Quad consumes 4 vertexes.
+         * Set them all.
+         */
         
-#if 0
-        /* Set Color */
-        s_Data->shader_Texture->SetFloat4("u_Color", color);
-        s_Data->shader_Texture->SetFloat1("u_TilingFactor", 1.0f);
+        float textureIndex = 0.0f;  // using blank texture slot
+        float tilingFactor = 1.0f;
         
-        /* Bind a white texture */
-        s_Data->texture2D_Blank->Bind();
-        
-        glm::mat4 transform = 
+        /* Transform matrix */
+        glm::mat4 transform =
                 glm::translate(glm::mat4(1.0f), position)
                 * glm::rotate(glm::mat4(1.0f), -rotation_radians, {0.0f, 0.0f, 0.1f})
                 * glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
-        s_Data->shader_Texture->SetMat4("u_Transform", transform);
         
-        s_Data->vertexArray_Quad->Bind();
-        Graphics::LowLevelAPI::DrawIndexed(s_Data->vertexArray_Quad);
-#endif
+        // 0
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->position     = transform * s_Data->batchRenderState.quadVertexPositions[0];
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->color        = color;
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->texCoord     = {0.0f, 0.0f};
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->texIndex     = textureIndex;
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->tilingFactor = tilingFactor;
+        s_Data->batchRenderState.quadVertexBuffer_Ptr++;
+        
+        // 1
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->position     = transform * s_Data->batchRenderState.quadVertexPositions[1];
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->color        = color;
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->texCoord     = {1.0f, 0.0f};
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->texIndex     = textureIndex;
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->tilingFactor = tilingFactor;
+        s_Data->batchRenderState.quadVertexBuffer_Ptr++;
+        
+        // 2
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->position     = transform * s_Data->batchRenderState.quadVertexPositions[2];
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->color        = color;
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->texCoord     = {1.0f, 1.0f};
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->texIndex     = textureIndex;
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->tilingFactor = tilingFactor;
+        s_Data->batchRenderState.quadVertexBuffer_Ptr++;
+        
+        // 3
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->position     = transform * s_Data->batchRenderState.quadVertexPositions[3];
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->color        = color;
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->texCoord     = {0.0f, 1.0f};
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->texIndex     = textureIndex;
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->tilingFactor = tilingFactor;
+        s_Data->batchRenderState.quadVertexBuffer_Ptr++;
+        
+        s_Data->batchRenderState.indicesCounter += s_Data->batchRenderState.indicesPerQuad;
     }
     
     // Texture2D
@@ -387,8 +410,13 @@ namespace Coconuts
             s_Data->batchRenderState.textureSlotsIndex++;
         }
         
+        /* Transform matrix */
+        glm::mat4 transform =
+                glm::translate(glm::mat4(1.0f), position)
+                * glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
+        
         // 0
-        s_Data->batchRenderState.quadVertexBuffer_Ptr->position     = position;
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->position     = transform * s_Data->batchRenderState.quadVertexPositions[0];
         s_Data->batchRenderState.quadVertexBuffer_Ptr->color        = tintColor;
         s_Data->batchRenderState.quadVertexBuffer_Ptr->texCoord     = {0.0f, 0.0f};
         s_Data->batchRenderState.quadVertexBuffer_Ptr->texIndex     = textureIndex;
@@ -396,7 +424,7 @@ namespace Coconuts
         s_Data->batchRenderState.quadVertexBuffer_Ptr++;
         
         // 1
-        s_Data->batchRenderState.quadVertexBuffer_Ptr->position     = {position.x + size.x, position.y, 0.0f};
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->position     = transform * s_Data->batchRenderState.quadVertexPositions[1];
         s_Data->batchRenderState.quadVertexBuffer_Ptr->color        = tintColor;
         s_Data->batchRenderState.quadVertexBuffer_Ptr->texCoord     = {1.0f, 0.0f};
         s_Data->batchRenderState.quadVertexBuffer_Ptr->texIndex     = textureIndex;
@@ -404,7 +432,7 @@ namespace Coconuts
         s_Data->batchRenderState.quadVertexBuffer_Ptr++;
         
         // 2
-        s_Data->batchRenderState.quadVertexBuffer_Ptr->position     = {position.x + size.x, position.y + size.y, 0.0f};
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->position     = transform * s_Data->batchRenderState.quadVertexPositions[2];
         s_Data->batchRenderState.quadVertexBuffer_Ptr->color        = tintColor;
         s_Data->batchRenderState.quadVertexBuffer_Ptr->texCoord     = {1.0f, 1.0f};
         s_Data->batchRenderState.quadVertexBuffer_Ptr->texIndex     = textureIndex;
@@ -412,7 +440,7 @@ namespace Coconuts
         s_Data->batchRenderState.quadVertexBuffer_Ptr++;
         
         // 3
-        s_Data->batchRenderState.quadVertexBuffer_Ptr->position     = {position.x, position.y + size.y, 0.0f};
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->position     = transform * s_Data->batchRenderState.quadVertexPositions[3];
         s_Data->batchRenderState.quadVertexBuffer_Ptr->color        = tintColor;
         s_Data->batchRenderState.quadVertexBuffer_Ptr->texCoord     = {0.0f, 1.0f};
         s_Data->batchRenderState.quadVertexBuffer_Ptr->texIndex     = textureIndex;
@@ -420,25 +448,9 @@ namespace Coconuts
         s_Data->batchRenderState.quadVertexBuffer_Ptr++;
         
         s_Data->batchRenderState.indicesCounter += s_Data->batchRenderState.indicesPerQuad;
-        
-#if 0
-        /* Set taint color */
-        s_Data->shader_Texture->SetFloat4("u_Color", tintColor);
-        s_Data->shader_Texture->SetFloat1("u_TilingFactor", tilingFactor);
-     
-        /* Bind Texture */
-        texture->Bind(0);
-        
-        glm::mat4 transform =
-                glm::translate(glm::mat4(1.0f), position)
-                * glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
-        s_Data->shader_Texture->SetMat4("u_Transform", transform);
-        
-        s_Data->vertexArray_Quad->Bind();
-        Graphics::LowLevelAPI::DrawIndexed(s_Data->vertexArray_Quad);
-#endif
     }
     
+    // Texture2D + Rotation
     void Renderer2D::DrawRotatedQuad(const glm::vec2& position,
                              const glm::vec2& size,
                              float rotation_radians,
@@ -449,6 +461,7 @@ namespace Coconuts
         DrawRotatedQuad({position.x, position.y, 0.0f}, size, rotation_radians, texture, tilingFactor, tintColor);
     }
     
+    // Texture2D + Rotation
     void Renderer2D::DrawRotatedQuad(const glm::vec3& position,
                              const glm::vec2& size,
                              float rotation_radians,
@@ -456,24 +469,73 @@ namespace Coconuts
                              float tilingFactor,
                              const glm::vec4& tintColor)
     {
+        /*
+         * Each Quad consumes 4 vertexes.
+         * Set them all.
+         */
         
-#if 0
-        /* Set taint color */
-        s_Data->shader_Texture->SetFloat4("u_Color", tintColor);
-        s_Data->shader_Texture->SetFloat1("u_TilingFactor", tilingFactor);
-     
-        /* Bind Texture */
-        texture->Bind(0);
+        float textureIndex = 0.0f;
+        for (uint32_t i = 1; i < s_Data->batchRenderState.textureSlotsIndex; i++)
+        {
+            if (*s_Data->batchRenderState.textureSlots[i].get() == *texture.get())
+            {
+                textureIndex = (float) i;
+                
+                // we found inside a texture slot, a texture equal (same ID)
+                // to the texture we want to draw now
+                break;
+            }
+        }
         
+        /* If the texture is "new" (not set to a texture slot before) */
+        if (textureIndex == 0.0f)
+        {
+            textureIndex = (float) s_Data->batchRenderState.textureSlotsIndex;
+            
+            /* Set it into a slot */
+            s_Data->batchRenderState.textureSlots[s_Data->batchRenderState.textureSlotsIndex] = texture;
+            s_Data->batchRenderState.textureSlotsIndex++;
+        }
+        
+        /* Transform matrix */
         glm::mat4 transform =
                 glm::translate(glm::mat4(1.0f), position)
                 * glm::rotate(glm::mat4(1.0f), -rotation_radians, {0.0f, 0.0f, 0.1f})
                 * glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
-        s_Data->shader_Texture->SetMat4("u_Transform", transform);
         
-        s_Data->vertexArray_Quad->Bind();
-        Graphics::LowLevelAPI::DrawIndexed(s_Data->vertexArray_Quad);
-#endif
+        // 0
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->position     = transform * s_Data->batchRenderState.quadVertexPositions[0];
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->color        = tintColor;
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->texCoord     = {0.0f, 0.0f};
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->texIndex     = textureIndex;
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->tilingFactor = tilingFactor;
+        s_Data->batchRenderState.quadVertexBuffer_Ptr++;
+        
+        // 1
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->position     = transform * s_Data->batchRenderState.quadVertexPositions[1];
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->color        = tintColor;
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->texCoord     = {1.0f, 0.0f};
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->texIndex     = textureIndex;
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->tilingFactor = tilingFactor;
+        s_Data->batchRenderState.quadVertexBuffer_Ptr++;
+        
+        // 2
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->position     = transform * s_Data->batchRenderState.quadVertexPositions[2];
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->color        = tintColor;
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->texCoord     = {1.0f, 1.0f};
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->texIndex     = textureIndex;
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->tilingFactor = tilingFactor;
+        s_Data->batchRenderState.quadVertexBuffer_Ptr++;
+        
+        // 3
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->position     = transform * s_Data->batchRenderState.quadVertexPositions[3];
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->color        = tintColor;
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->texCoord     = {0.0f, 1.0f};
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->texIndex     = textureIndex;
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->tilingFactor = tilingFactor;
+        s_Data->batchRenderState.quadVertexBuffer_Ptr++;
+        
+        s_Data->batchRenderState.indicesCounter += s_Data->batchRenderState.indicesPerQuad;
     }
     
 }

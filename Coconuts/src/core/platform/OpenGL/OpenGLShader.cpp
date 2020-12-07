@@ -627,6 +627,11 @@ namespace Coconuts
         UploadUniformMat4(name, matrix);
     }
     
+    void OpenGLShader::SetSamplers2D(const std::string& name, int* values, uint32_t count)
+    {
+        UploadUniformIntArray(name, values, count);
+    }
+    
     
     
     /**
@@ -682,4 +687,9 @@ namespace Coconuts
         glUniform1i(location, value); 
     }
     
+    void OpenGLShader::UploadUniformIntArray(const std::string& name, int* values, uint32_t count)
+    {
+        GLint location = glGetUniformLocation(m_ProgramID, name.c_str());
+        glUniform1iv(location, count, values); 
+    }
 }

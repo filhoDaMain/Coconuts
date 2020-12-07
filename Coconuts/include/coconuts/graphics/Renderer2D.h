@@ -28,11 +28,51 @@
 namespace Coconuts
 {
     
+    struct QuadVertex
+    {
+        glm::vec3   position;       /* vertex xyz position */
+        glm::vec4   color;
+        glm::vec2   texCoord;       /* texture coordinate to match with the vertex position */
+        float       texIndex;       /* Index/ID of the texture */
+        float       tilingFactor;   /* tiling */
+    };
+    
+    struct BacthRender
+    {
+        /* Per Draw call (batched) constants */
+        const uint32_t maxQuads         = 10000;
+        const uint32_t verticesPerQuad  = 4;
+        const uint32_t indicesPerQuad   = 6;
+        const uint32_t maxVertices      = maxQuads * verticesPerQuad;
+        const uint32_t maxIndices       = maxQuads * indicesPerQuad;
+        static const uint32_t maxTextureSlots  = 16;    // system dependent
+        
+        /* 
+         * When indicesCounter > maxIndices, Renderer is flushed
+         * and a new Draw call is issued
+         */
+        uint32_t indicesCounter     = 0;
+        
+        /* Texture Slots */
+        std::array<std::shared_ptr<Texture2D>, maxTextureSlots> textureSlots; 
+        const uint32_t minTextureSlotIndex  = 1; // '0' os reserved for blank/default texture
+        /* Init slot index counter */
+        uint32_t textureSlotsIndex = minTextureSlotIndex;
+        
+        std::array<float, maxTextureSlots> textureTilingFactors;
+      
+        QuadVertex* quadVertexBuffer_Base   = nullptr;
+        QuadVertex* quadVertexBuffer_Ptr    = nullptr;
+    };
+    
     struct Renderer2DStorage
     {
-        std::shared_ptr<VertexArray>    vertexArray_Quad;
-        std::shared_ptr<Shader>         shader_Texture;
-        std::shared_ptr<Texture2D>      texture2D_Blank; 
+        BacthRender batchRenderState;
+        
+        std::shared_ptr<VertexArray>    vertexArray;
+        std::shared_ptr<VertexBuffer>   vertexBuffer;
+        std::shared_ptr<Shader>         shader;
+        std::shared_ptr<Texture2D>      texture2D_Blank;
     };
     
     class Renderer2D
@@ -43,6 +83,7 @@ namespace Coconuts
         
         static void BeginScene(const OrthographicCamera& camera);
         static void EndScene();
+        static void Flush();
         
         /* Flat Colors */
         static void DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color);

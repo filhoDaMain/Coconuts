@@ -62,6 +62,8 @@ namespace Coconuts
         virtual void SetMat3(const std::string& name, const glm::mat3& matrix) = 0;
         virtual void SetMat4(const std::string& name, const glm::mat4& matrix) = 0;
         
+        virtual void SetSamplers2D(const std::string& name, int* values, uint32_t count) = 0;
+        
     private:
         virtual void AttachVertexShader(const std::string& filepath) = 0;
         virtual void AttachFragmentShader(const std::string& filepath) = 0;

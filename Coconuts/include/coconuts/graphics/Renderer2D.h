@@ -27,7 +27,7 @@
 
 namespace Coconuts
 {
-    
+  
     struct QuadVertex
     {
         glm::vec3   position;       /* vertex xyz position */
@@ -37,15 +37,15 @@ namespace Coconuts
         float       tilingFactor;   /* tiling */
     };
     
-    struct BacthRender
+    struct BatchRender
     {
         /* Per Draw call (batched) constants */
-        const uint32_t maxQuads         = 10000;
-        const uint32_t verticesPerQuad  = 4;
-        const uint32_t indicesPerQuad   = 6;
-        const uint32_t maxVertices      = maxQuads * verticesPerQuad;
-        const uint32_t maxIndices       = maxQuads * indicesPerQuad;
-        static const uint32_t maxTextureSlots  = 16;    // system dependent
+        static const uint32_t maxQuads          = 10000;
+        static const uint32_t verticesPerQuad   = 4;
+        static const uint32_t indicesPerQuad    = 6;
+        static const uint32_t maxVertices       = maxQuads * verticesPerQuad;
+        static const uint32_t maxIndices        = maxQuads * indicesPerQuad;
+        static const uint32_t maxTextureSlots   = 16;    // system dependent
         
         /* 
          * When indicesCounter > maxIndices, Renderer is flushed
@@ -64,9 +64,19 @@ namespace Coconuts
         glm::vec4 quadVertexPositions[4];
     };
     
+    struct Statistics
+    {
+        uint32_t drawCalls  = 0;
+        uint32_t quadCount  = 0;
+        
+        uint32_t GetTotalVertexCount() { return quadCount * BatchRender::verticesPerQuad; }
+        uint32_t GetTotalIndexCount() { return quadCount * BatchRender::indicesPerQuad; }
+    };
+    
     struct Renderer2DStorage
     {
-        BacthRender batchRenderState;
+        BatchRender batchRenderState;
+        Statistics  stats;
         
         std::shared_ptr<VertexArray>    vertexArray;
         std::shared_ptr<VertexBuffer>   vertexBuffer;
@@ -76,13 +86,16 @@ namespace Coconuts
     
     class Renderer2D
     {
-    public:
+    public:        
         static void Init();
         static void Shutdown();
         
         static void BeginScene(const OrthographicCamera& camera);
         static void EndScene();
         static void Flush();
+        
+        static void         ResetStatistics();
+        static Statistics   GetStatistics();
         
         /* Flat Colors */
         static void DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color);
@@ -116,6 +129,9 @@ namespace Coconuts
                              const std::shared_ptr<Texture2D>& texture,
                              float tilingFactor = 1.0f,
                              const glm::vec4& tintColor = glm::vec4(1.0f));
+        
+    private:
+        static void FlushAndReset();
     };
     
 }

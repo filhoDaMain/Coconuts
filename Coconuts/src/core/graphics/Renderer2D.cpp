@@ -200,11 +200,6 @@ namespace Coconuts
         s_Data->batchRenderState.indicesCounter = 0;
         s_Data->batchRenderState.textureSlotsIndex = s_Data->batchRenderState.minTextureSlotIndex;
         s_Data->batchRenderState.quadVertexBuffer_Ptr = s_Data->batchRenderState.quadVertexBuffer_Base;
-        
-#if 0
-        s_Data->shader_Texture->Bind();
-        s_Data->shader_Texture->SetMat4("u_ViewProj", camera.GetViewProjMatrix());
-#endif
     }
     
     void Renderer2D::EndScene()
@@ -232,22 +227,39 @@ namespace Coconuts
         /* Draw Call -> GPU */
         Graphics::LowLevelAPI::DrawIndexed(s_Data->vertexArray, s_Data->batchRenderState.indicesCounter);
         
-#if 0
-                /* Bind Textures */
-        //for (uint32_t i = 0; i < s_Data->textureSlotsIndex; i++)
-        //{
-        //    s_Data->textureSlots[i]->Bind(i);
-        //}
-        LOG_TRACE("Flush; textureSlotsIndex = {}", s_Data->textureSlotsIndex);
-        LOG_TRACE("Flush; indicesCounter = {}", s_Data->indicesCounter);
+        /* Update stats */
+        s_Data->stats.drawCalls++;
+    }
+    
+    void Renderer2D::FlushAndReset()
+    {
+        // Same as EndScene() without unbinding the shader
+        {
+            uint32_t dataSize = (uint8_t*) s_Data->batchRenderState.quadVertexBuffer_Ptr - (uint8_t*) s_Data->batchRenderState.quadVertexBuffer_Base;
         
-        //s_Data->texture2D_Blank->Bind(0);
-        s_Data->textureSlots[0]->Bind(1);
-        //s_Data->textureSlots[2]->Bind(0);
+            /* Update Vertex Buffer */
+            s_Data->vertexBuffer->SetData(s_Data->batchRenderState.quadVertexBuffer_Base, dataSize);
         
+            /* Send to GPU */        
+            Flush();
+        }
         
-        Graphics::LowLevelAPI::DrawIndexed(s_Data->vertexArray_Quad, s_Data->indicesCounter);
-#endif
+        // Same as BeginScene() withou re-binding the shader
+        {
+            s_Data->batchRenderState.indicesCounter = 0;
+            s_Data->batchRenderState.textureSlotsIndex = s_Data->batchRenderState.minTextureSlotIndex;
+            s_Data->batchRenderState.quadVertexBuffer_Ptr = s_Data->batchRenderState.quadVertexBuffer_Base;
+        }
+    }
+    
+    void Renderer2D::ResetStatistics()
+    {
+        memset(&(s_Data->stats), 0x00, sizeof(Statistics));
+    }
+    
+    Statistics Renderer2D::GetStatistics()
+    {
+        return s_Data->stats;
     }
     
     // Color
@@ -259,6 +271,12 @@ namespace Coconuts
     // Color
     void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
     {   
+        /* Flush (Draw Call) current vertex buffer state and start a new batch */
+        if (s_Data->batchRenderState.indicesCounter >= s_Data->batchRenderState.maxIndices)
+        {
+            FlushAndReset();
+        }
+        
         /*
          * Each Quad consumes 4 vertexes.
          * Set them all.
@@ -305,6 +323,9 @@ namespace Coconuts
         s_Data->batchRenderState.quadVertexBuffer_Ptr++;
         
         s_Data->batchRenderState.indicesCounter += s_Data->batchRenderState.indicesPerQuad;
+        
+        /* Update stats */
+        s_Data->stats.quadCount++;
     }
     
     // Color + Rotation
@@ -316,6 +337,12 @@ namespace Coconuts
     // Color + Rotation
     void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation_radians, const glm::vec4& color)
     {
+        /* Flush (Draw Call) current vertex buffer state and start a new batch */
+        if (s_Data->batchRenderState.indicesCounter >= s_Data->batchRenderState.maxIndices)
+        {
+            FlushAndReset();
+        }
+                
         /*
          * Each Quad consumes 4 vertexes.
          * Set them all.
@@ -363,6 +390,9 @@ namespace Coconuts
         s_Data->batchRenderState.quadVertexBuffer_Ptr++;
         
         s_Data->batchRenderState.indicesCounter += s_Data->batchRenderState.indicesPerQuad;
+        
+        /* Update stats */
+        s_Data->stats.quadCount++;
     }
     
     // Texture2D
@@ -382,6 +412,12 @@ namespace Coconuts
                               float tilingFactor,
                               const glm::vec4& tintColor)
     {       
+        /* Flush (Draw Call) current vertex buffer state and start a new batch */
+        if (s_Data->batchRenderState.indicesCounter >= s_Data->batchRenderState.maxIndices)
+        {
+            FlushAndReset();
+        }
+        
         /*
          * Each Quad consumes 4 vertexes.
          * Set them all.
@@ -448,6 +484,9 @@ namespace Coconuts
         s_Data->batchRenderState.quadVertexBuffer_Ptr++;
         
         s_Data->batchRenderState.indicesCounter += s_Data->batchRenderState.indicesPerQuad;
+        
+        /* Update stats */
+        s_Data->stats.quadCount++;
     }
     
     // Texture2D + Rotation
@@ -469,6 +508,12 @@ namespace Coconuts
                              float tilingFactor,
                              const glm::vec4& tintColor)
     {
+        /* Flush (Draw Call) current vertex buffer state and start a new batch */
+        if (s_Data->batchRenderState.indicesCounter >= s_Data->batchRenderState.maxIndices)
+        {
+            FlushAndReset();
+        }
+        
         /*
          * Each Quad consumes 4 vertexes.
          * Set them all.
@@ -536,6 +581,9 @@ namespace Coconuts
         s_Data->batchRenderState.quadVertexBuffer_Ptr++;
         
         s_Data->batchRenderState.indicesCounter += s_Data->batchRenderState.indicesPerQuad;
+        
+        /* Update stats */
+        s_Data->stats.quadCount++;
     }
     
 }

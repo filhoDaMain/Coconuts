@@ -57,13 +57,14 @@ namespace Coconuts
         virtual void SetFloat4(const std::string& name, const glm::vec4& values) override;
         
         virtual void SetInt1(const std::string& name, int value) override;
-        
+                
         virtual void SetMat2(const std::string& name, const glm::mat2& matrix) override;
         virtual void SetMat3(const std::string& name, const glm::mat3& matrix) override;
         virtual void SetMat4(const std::string& name, const glm::mat4& matrix) override;
         
-        
-        
+        virtual void SetSamplers2D(const std::string& name, int* values, uint32_t count) override;
+
+           
         /**
          * Upload Uniforms Implementation
          */
@@ -72,6 +73,7 @@ namespace Coconuts
         void UploadUniformMat4(const std::string& name, const glm::mat4& matrix);
         
         void UploadUniformInt1(const std::string& name, int value);
+        void UploadUniformIntArray(const std::string& name, int* values, uint32_t count);
         
         void UploadUniformFloat1(const std::string& name, float value);
         void UploadUniformFloat2(const std::string& name, const glm::vec2& values);

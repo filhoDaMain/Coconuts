@@ -85,13 +85,29 @@ public:
         Coconuts::Graphics::LowLevelAPI::SetClearColor({0.02f, 0.31f, 0.7f, 1});
         Coconuts::Graphics::LowLevelAPI::Clear();
         
-        Coconuts::Renderer2D::BeginScene(m_Camera);
-        Coconuts::Renderer2D::DrawRotatedQuad({0.0f, 0.0f}, {2.0f, 2.0f}, 0.8f, m_CheckerboardTexture, s_CheckerboardTilingFactor, s_CheckerBoardTint);
-        Coconuts::Renderer2D::DrawQuad({-0.7f, 0.0f}, {0.8f, 0.8f}, {0.8f, 1.0f, 0.1f, 1.0f});
-        Coconuts::Renderer2D::DrawRotatedQuad({0.5f, -0.3f}, {0.5f, 0.75f}, 0.4f, {0.5f, 0.1f, 0.5f, 1.0f});
-        Coconuts::Renderer2D::DrawRotatedQuad({m_MorisPosX, m_MorisPosY}, {s_MorisScale, s_MorisScale}, s_MorisRotation, m_MorisTexture);
-        Coconuts::Renderer2D::DrawQuad({0.0f, 0.7f}, {1.0f, 1.0f}, m_CoconutsTextTexture);
-        Coconuts::Renderer2D::EndScene();
+        // Debug renderer statistics
+        Coconuts::Renderer2D::ResetStatistics();
+        {
+            Coconuts::Renderer2D::BeginScene(m_Camera);
+            
+            // Checkerboard texture (same texture slot)
+            Coconuts::Renderer2D::DrawQuad({0.0f, 0.0f}, {2.0f, 2.0f}, m_CheckerboardTexture, s_CheckerboardTilingFactor, s_CheckerBoardTint);
+            Coconuts::Renderer2D::DrawQuad({-0.7f, -0.7f}, {1.0f, 1.0f}, m_CheckerboardTexture, 1.0f);
+            
+            // Flat Colors (same texture slot)
+            Coconuts::Renderer2D::DrawQuad({-0.9f, 1.0f}, {0.8f, 0.8f}, {0.8f, 1.0f, 0.1f, 1.0f});
+            Coconuts::Renderer2D::DrawQuad({-0.7f, 0.0f}, {0.8f, 0.8f}, {0.8f, 1.0f, 0.1f, 1.0f});
+            Coconuts::Renderer2D::DrawRotatedQuad({0.5f, -0.3f}, {0.5f, 0.75f}, s_MorisRotation, {0.5f, 0.1f, 0.5f, 1.0f});
+            
+            // Moris texture (same texture slot)
+            Coconuts::Renderer2D::DrawRotatedQuad({m_MorisPosX, m_MorisPosY}, {s_MorisScale, s_MorisScale}, s_MorisRotation,  m_MorisTexture);
+            Coconuts::Renderer2D::DrawRotatedQuad({-0.5f, -0.5f}, {0.2f, 0.2f}, 0.0f,  m_MorisTexture);
+        
+            // Coconuts logo texture (same texture slot)
+            Coconuts::Renderer2D::DrawQuad({0.0f, 0.7f}, {1.0f, 1.0f}, m_CoconutsTextTexture);
+            
+            Coconuts::Renderer2D::EndScene();
+        }
     }
        
     void MyInputPolling(Coconuts::Timestep& ts)
@@ -147,8 +163,6 @@ public:
     }
     
 private:
-    /* Event dispatcher */
-    
     /* Camera */
     Coconuts::OrthographicCamera m_Camera;
     
@@ -192,6 +206,10 @@ public:
     
     void OnUpdate(Coconuts::Timestep ts) override
     {   
+        /* Get Live statistics */
+        stats = Coconuts::Renderer2D::GetStatistics();
+        
+        
         /* New ImGui Window */
         //------------------------------------------------------------------------
         ImGui::Begin("Checkerboard Settings");
@@ -220,6 +238,21 @@ public:
         ImGui::End();
         //------------------------------------------------------------------------
         
+        
+        /* New ImGui Window */
+        //------------------------------------------------------------------------
+        ImGui::Begin("Statistics");
+        ImGui::Text("Batch render statistics:");
+        ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
+        
+        ImGui::Text("%d Draw Calls", stats.drawCalls);
+        ImGui::Spacing();
+        ImGui::Text("%d Quads", stats.quadCount);
+        
+        ImGui::End();
+        //------------------------------------------------------------------------
+        
+        
         /* Pass picked color */
         ExampleLayer::SetCheckerBoardTint(m_CheckerBoardTint);
         
@@ -234,6 +267,8 @@ public:
     }
     
 private:
+    Coconuts::Renderer2DStatistics stats;   /* Renderer2D live statistics */
+    
     glm::vec3 m_CheckerBoardTint;
     float m_TilingFactor;
     float m_Scale;

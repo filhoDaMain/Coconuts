@@ -27,12 +27,61 @@
 
 namespace Coconuts
 {
+  
+    struct QuadVertex
+    {
+        glm::vec3   position;       /* vertex xyz position */
+        glm::vec4   color;
+        glm::vec2   texCoord;       /* texture coordinate to match with the vertex position */
+        float       texIndex;       /* Index/ID of the texture */
+        float       tilingFactor;   /* tiling */
+    };
+    
+    struct BatchRender
+    {
+        /* Per Draw call (batched) constants */
+        static const uint32_t maxQuads          = 10000;
+        static const uint32_t verticesPerQuad   = 4;
+        static const uint32_t indicesPerQuad    = 6;
+        static const uint32_t maxVertices       = maxQuads * verticesPerQuad;
+        static const uint32_t maxIndices        = maxQuads * indicesPerQuad;
+        static const uint32_t maxTextureSlots   = 16;   // system dependent (defined in frag shader)
+        
+        /* 
+         * When indicesCounter > maxIndices, Renderer is flushed
+         * and a new Draw call is issued
+         */
+        uint32_t indicesCounter = 0;
+        
+        /* Texture Slots */
+        std::array<std::shared_ptr<Texture2D>, maxTextureSlots> textureSlots; 
+        const uint32_t minTextureSlotIndex  = 1; // '0' os reserved for blank/default texture
+        /* Init slot index counter */
+        uint32_t textureSlotsIndex = minTextureSlotIndex;
+      
+        QuadVertex* quadVertexBuffer_Base   = nullptr;
+        QuadVertex* quadVertexBuffer_Ptr    = nullptr;
+        glm::vec4 quadVertexPositions[4];
+    };
+    
+    struct Renderer2DStatistics
+    {
+        uint32_t drawCalls  = 0;
+        uint32_t quadCount  = 0;
+        
+        uint32_t GetTotalVertexCount() { return quadCount * BatchRender::verticesPerQuad; }
+        uint32_t GetTotalIndexCount() { return quadCount * BatchRender::indicesPerQuad; }
+    };
     
     struct Renderer2DStorage
     {
-        std::shared_ptr<VertexArray>    vertexArray_Quad;
-        std::shared_ptr<Shader>         shader_Texture;
-        std::shared_ptr<Texture2D>      texture2D_Blank; 
+        BatchRender             batchRenderState;
+        Renderer2DStatistics    stats;
+        
+        std::shared_ptr<VertexArray>    vertexArray;
+        std::shared_ptr<VertexBuffer>   vertexBuffer;
+        std::shared_ptr<Shader>         shader;
+        std::shared_ptr<Texture2D>      texture2D_Blank;
     };
     
     class Renderer2D
@@ -43,6 +92,10 @@ namespace Coconuts
         
         static void BeginScene(const OrthographicCamera& camera);
         static void EndScene();
+        static void Flush();
+        
+        static void ResetStatistics();
+        static Renderer2DStatistics GetStatistics();
         
         /* Flat Colors */
         static void DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color);
@@ -76,6 +129,9 @@ namespace Coconuts
                              const std::shared_ptr<Texture2D>& texture,
                              float tilingFactor = 1.0f,
                              const glm::vec4& tintColor = glm::vec4(1.0f));
+        
+    private:
+        static void FlushAndReset();
     };
     
 }

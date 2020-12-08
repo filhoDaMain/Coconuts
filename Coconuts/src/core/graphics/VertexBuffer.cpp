@@ -27,6 +27,28 @@ namespace Coconuts
 {
     
     // static
+    VertexBuffer* VertexBuffer::Create(uint32_t size)
+    {
+        switch(Renderer::GetRendererAPI())
+        {
+            case RendererAPI::API::OpenGL:
+            {
+                return new OpenGLVertexBuffer(size);
+                
+                break;
+            }
+            
+            default:
+            {
+                LOG_CRITICAL("VertexBuffer - Unknown RendererAPI {}", Renderer::GetRendererAPI());
+                exit(1);
+            }
+        }
+        
+        return nullptr;
+    }
+    
+    // static
     VertexBuffer* VertexBuffer::Create(float* vertices, uint32_t size)
     {
         switch(Renderer::GetRendererAPI())

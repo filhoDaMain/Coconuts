@@ -3,4 +3,4 @@ project(Demo VERSION 0.1 LANGUAGES CXX)
 
 set (CMAKE_CXX_STANDARD 11)
 
-add_subdirectory(src)
+add_subdirectory(examples/batch2d)

@@ -47,6 +47,8 @@ namespace Coconuts
         static const uint32_t maxIndices        = maxQuads * indicesPerQuad;
         static const uint32_t maxTextureSlots   = 16;    // system dependent
         
+        //TODO Deal with max texture slots
+        
         /* 
          * When indicesCounter > maxIndices, Renderer is flushed
          * and a new Draw call is issued
@@ -64,7 +66,7 @@ namespace Coconuts
         glm::vec4 quadVertexPositions[4];
     };
     
-    struct Statistics
+    struct Renderer2DStatistics
     {
         uint32_t drawCalls  = 0;
         uint32_t quadCount  = 0;
@@ -75,8 +77,8 @@ namespace Coconuts
     
     struct Renderer2DStorage
     {
-        BatchRender batchRenderState;
-        Statistics  stats;
+        BatchRender             batchRenderState;
+        Renderer2DStatistics    stats;
         
         std::shared_ptr<VertexArray>    vertexArray;
         std::shared_ptr<VertexBuffer>   vertexBuffer;
@@ -86,7 +88,7 @@ namespace Coconuts
     
     class Renderer2D
     {
-    public:        
+    public:
         static void Init();
         static void Shutdown();
         
@@ -94,8 +96,8 @@ namespace Coconuts
         static void EndScene();
         static void Flush();
         
-        static void         ResetStatistics();
-        static Statistics   GetStatistics();
+        static void ResetStatistics();
+        static Renderer2DStatistics GetStatistics();
         
         /* Flat Colors */
         static void DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color);

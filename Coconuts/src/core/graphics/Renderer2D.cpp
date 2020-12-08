@@ -95,95 +95,6 @@ namespace Coconuts
         
         s_Data->shader->SetSamplers2D("u_Textures", samplers, s_Data->batchRenderState.maxTextureSlots);
         s_Data->shader->Unbind();
-        
-        
-        
-#if 0
-        s_Data = new Renderer2DStorage();
-        
-        s_Data->vertexArray_Quad.reset(VertexArray::Create());
-        s_Data->shader_Texture.reset(Shader::Create());
-          
-        /* Create a white texture of 1x1 pixel */
-        uint32_t whiteTexData = 0xffffffff;
-        s_Data->texture2D_Blank.reset(Texture2D::Create(1, 1, &whiteTexData, sizeof(whiteTexData)));
-        
-         float vertices_quad[5 * 4] = {
-        /* |---- a_Position ----|-- a_TexCoord --| */
-            -0.5f, -0.5f,  0.0f,    0.0f, 0.0f,
-             0.5f, -0.5f,  0.0f,    1.0f, 0.0f,
-             0.5f,  0.5f,  0.0f,    1.0f, 1.0f,
-            -0.5f,  0.5f,  0.0f,    0.0f, 1.0f
-        };
-        
-        /* a_Postion: vertex screen position (x,y,z) normalized in the [-1, 1] space */
-        
-        /* a_TexCoord: texture image edges (x,y) normalized in the [0, 1] space */
-        
-        /**
-         * NOTE:
-         * The idea is to map the edges of a square formed by two intersected triangles
-         * (a_Position) to the edges of an image (a_TexCoord).
-         * 
-         * We then pick the texture's color of each pixel and paint the screen, by
-         * interpolating the texture's pixels with corresponding square pixels on 
-         * the screen.
-         */
-     
-        
-        /* -------------------------------------------------------------------- */
-        /* Vertex Buffer (vb) */
-        /* -------------------------------------------------------------------- */
-        std::shared_ptr<Coconuts::VertexBuffer> vertexBuffer_Quad;
-         
-        vertexBuffer_Quad.reset(
-                    VertexBuffer::Create(vertices_quad, sizeof(vertices_quad)));
-        
-        /* (Vertex) Buffer Layout -> Group vertices_square indices in a meaningful way */
-        BufferLayout layout = {
-            { ShaderDataType::Float3, "a_Position" },   /* first 3 floats */
-            { ShaderDataType::Float2, "a_TexCoord" }    /* next 2 floats */
-        };
-        
-        /* Associate the layout with a buffer of vertices */
-        vertexBuffer_Quad->SetLayout(layout);
-       
-        /* -------------------------------------------------------------------- */
-        
-        
-        /* -------------------------------------------------------------------- */
-        /* Index Buffer (ib) */
-        /* -------------------------------------------------------------------- */
-        uint32_t indices_quad[6] = {0, 1, 2, 2, 3, 0};
-        
-        /* Pick indices (lines) of vertices_square that can be re-used to form a square */
-        
-        /* Add indices to an ib */
-        std::shared_ptr<Coconuts::IndexBuffer> indexBuffer_Quad;
-        indexBuffer_Quad.reset(
-                IndexBuffer::Create(indices_quad, sizeof(indices_quad)/sizeof(uint32_t)));
-        /* -------------------------------------------------------------------- */
-        
-        
-        /* -------------------------------------------------------------------- */
-        /* Add vb and ib to VA */
-        s_Data->vertexArray_Quad->AddVertexBuffer(vertexBuffer_Quad);
-        s_Data->vertexArray_Quad->SetIndexBuffer(indexBuffer_Quad);
-        /* -------------------------------------------------------------------- */
-        
-        /* Use default shaders */
-        s_Data->shader_Texture->UseDefaultShaders();
-        
-        
-        /* Create shader from files */
-        //s_Data->shader_Texture->AttachFromFile(
-        //    ShaderTypes::VERTEX, "../assets/shaders/Default.vert");
-        
-        //s_Data->shader_Texture->AttachFromFile(
-        //    ShaderTypes::FRAGMENT, "../assets/shaders/Default.frag");
-        
-        //s_Data->shader_Texture->DoneAttach(); // FINISH Editing the Shader (Link them)
-#endif
     }
     
     void Renderer2D::Shutdown()
@@ -271,7 +182,7 @@ namespace Coconuts
     // Color
     void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
     {   
-        /* Flush (Draw Call) current vertex buffer state and start a new batch */
+        /* Max indices reached -> Draw Call + Restart Batch */
         if (s_Data->batchRenderState.indicesCounter >= s_Data->batchRenderState.maxIndices)
         {
             FlushAndReset();
@@ -337,7 +248,7 @@ namespace Coconuts
     // Color + Rotation
     void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation_radians, const glm::vec4& color)
     {
-        /* Flush (Draw Call) current vertex buffer state and start a new batch */
+        /* Max indices reached -> Draw Call + Restart Batch */
         if (s_Data->batchRenderState.indicesCounter >= s_Data->batchRenderState.maxIndices)
         {
             FlushAndReset();
@@ -412,7 +323,7 @@ namespace Coconuts
                               float tilingFactor,
                               const glm::vec4& tintColor)
     {       
-        /* Flush (Draw Call) current vertex buffer state and start a new batch */
+        /* Max indices reached -> Draw Call + Restart Batch */
         if (s_Data->batchRenderState.indicesCounter >= s_Data->batchRenderState.maxIndices)
         {
             FlushAndReset();
@@ -439,6 +350,12 @@ namespace Coconuts
         /* If the texture is "new" (not set to a texture slot before) */
         if (textureIndex == 0.0f)
         {
+            /* Max Texture slots reached -> Draw Call + Restart Batch */
+            if (s_Data->batchRenderState.textureSlotsIndex >= s_Data->batchRenderState.maxTextureSlots)
+            {
+                FlushAndReset();    // Resets s_Data->batchRenderState.textureSlotsIndex
+            }
+            
             textureIndex = (float) s_Data->batchRenderState.textureSlotsIndex;
             
             /* Set it into a slot */
@@ -508,7 +425,7 @@ namespace Coconuts
                              float tilingFactor,
                              const glm::vec4& tintColor)
     {
-        /* Flush (Draw Call) current vertex buffer state and start a new batch */
+        /* Max indices reached -> Draw Call + Restart Batch */
         if (s_Data->batchRenderState.indicesCounter >= s_Data->batchRenderState.maxIndices)
         {
             FlushAndReset();
@@ -535,6 +452,12 @@ namespace Coconuts
         /* If the texture is "new" (not set to a texture slot before) */
         if (textureIndex == 0.0f)
         {
+            /* Max Texture slots reached -> Draw Call + Restart Batch */
+            if (s_Data->batchRenderState.textureSlotsIndex >= s_Data->batchRenderState.maxTextureSlots)
+            {
+                FlushAndReset();    // Resets s_Data->batchRenderState.textureSlotsIndex
+            }
+            
             textureIndex = (float) s_Data->batchRenderState.textureSlotsIndex;
             
             /* Set it into a slot */

@@ -45,9 +45,7 @@ namespace Coconuts
         static const uint32_t indicesPerQuad    = 6;
         static const uint32_t maxVertices       = maxQuads * verticesPerQuad;
         static const uint32_t maxIndices        = maxQuads * indicesPerQuad;
-        static const uint32_t maxTextureSlots   = 16;    // system dependent
-        
-        //TODO Deal with max texture slots
+        static const uint32_t maxTextureSlots   = 16;   // system dependent (defined in frag shader)
         
         /* 
          * When indicesCounter > maxIndices, Renderer is flushed

@@ -89,15 +89,23 @@ public:
         Coconuts::Renderer2D::ResetStatistics();
         {
             Coconuts::Renderer2D::BeginScene(m_Camera);
+            
+            // Checkerboard texture (same texture slot)
             Coconuts::Renderer2D::DrawQuad({0.0f, 0.0f}, {2.0f, 2.0f}, m_CheckerboardTexture, s_CheckerboardTilingFactor, s_CheckerBoardTint);
             Coconuts::Renderer2D::DrawQuad({-0.7f, -0.7f}, {1.0f, 1.0f}, m_CheckerboardTexture, 1.0f);
-
+            
+            // Flat Colors (same texture slot)
+            Coconuts::Renderer2D::DrawQuad({-0.9f, 1.0f}, {0.8f, 0.8f}, {0.8f, 1.0f, 0.1f, 1.0f});
             Coconuts::Renderer2D::DrawQuad({-0.7f, 0.0f}, {0.8f, 0.8f}, {0.8f, 1.0f, 0.1f, 1.0f});
             Coconuts::Renderer2D::DrawRotatedQuad({0.5f, -0.3f}, {0.5f, 0.75f}, s_MorisRotation, {0.5f, 0.1f, 0.5f, 1.0f});
+            
+            // Moris texture (same texture slot)
             Coconuts::Renderer2D::DrawRotatedQuad({m_MorisPosX, m_MorisPosY}, {s_MorisScale, s_MorisScale}, s_MorisRotation,  m_MorisTexture);
             Coconuts::Renderer2D::DrawRotatedQuad({-0.5f, -0.5f}, {0.2f, 0.2f}, 0.0f,  m_MorisTexture);
         
+            // Coconuts logo texture (same texture slot)
             Coconuts::Renderer2D::DrawQuad({0.0f, 0.7f}, {1.0f, 1.0f}, m_CoconutsTextTexture);
+            
             Coconuts::Renderer2D::EndScene();
         }
     }

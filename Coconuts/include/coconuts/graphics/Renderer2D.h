@@ -21,6 +21,7 @@
 #include <coconuts/graphics/VertexArray.h>
 #include <coconuts/graphics/Shader.h>
 #include <coconuts/graphics/Texture.h>
+#include <coconuts/graphics/Sprite.h>
 
 /* Cameras */
 #include <coconuts/cameras/OrthographicCamera.h>
@@ -127,6 +128,33 @@ namespace Coconuts
                              const glm::vec2& size,
                              float rotation_radians,
                              const std::shared_ptr<Texture2D>& texture,
+                             float tilingFactor = 1.0f,
+                             const glm::vec4& tintColor = glm::vec4(1.0f));
+        
+        /* Sprites */
+        static void DrawQuad(const glm::vec2& position,
+                             const glm::vec2& size,
+                             const std::shared_ptr<Sprite>& sprite,
+                             float tilingFactor = 1.0f,
+                             const glm::vec4& tintColor = glm::vec4(1.0f));
+        
+        static void DrawQuad(const glm::vec3& position,
+                             const glm::vec2& size,
+                             const std::shared_ptr<Sprite>& sprite,
+                             float tilingFactor = 1.0f,
+                             const glm::vec4& tintColor = glm::vec4(1.0f));
+        
+        static void DrawRotatedQuad(const glm::vec2& position,
+                             const glm::vec2& size,
+                             float rotation_radians,
+                             const std::shared_ptr<Sprite>& sprite,
+                             float tilingFactor = 1.0f,
+                             const glm::vec4& tintColor = glm::vec4(1.0f));
+        
+        static void DrawRotatedQuad(const glm::vec3& position,
+                             const glm::vec2& size,
+                             float rotation_radians,
+                             const std::shared_ptr<Sprite>& sprite,
                              float tilingFactor = 1.0f,
                              const glm::vec4& tintColor = glm::vec4(1.0f));
         

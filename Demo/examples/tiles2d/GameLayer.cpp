@@ -31,7 +31,7 @@ void GameLayer::OnEvent(Coconuts::Event& event)
 GameLayer::GameLayer()
     : m_CameraAR_x(16.0f),
       m_CameraAR_y(9.0f),
-      m_ZoomLevel(4.0f),
+      m_ZoomLevel(5.0f),
       m_Camera(-m_CameraAR_x * m_ZoomLevel, -m_CameraAR_x * m_ZoomLevel, -m_CameraAR_y * m_ZoomLevel, m_CameraAR_y * m_ZoomLevel),
       m_CameraController(m_Camera, m_CameraAR_x, m_CameraAR_y, m_ZoomLevel)
 {

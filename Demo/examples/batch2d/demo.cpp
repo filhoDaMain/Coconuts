@@ -70,6 +70,15 @@ public:
         m_MorisTexture.reset(Coconuts::Texture2D::Create("../assets/textures/Moris.png"));
         m_CheckerboardTexture.reset(Coconuts::Texture2D::Create("../assets/textures/Checkerboard.png"));
         m_CoconutsTextTexture.reset(Coconuts::Texture2D::Create("../assets/textures/Coconuts.png"));
+        
+        /* Init Spritesheet texture image */
+        m_AnimalsSpritesheet.reset(Coconuts::Texture2D::Create("../assets/textures/square_nodetailsOutline.png"));
+        
+        /* Init Sprites */
+        m_SpriteCow.reset(Coconuts::Sprite::Create(m_AnimalsSpritesheet, {544, 136}, {136, 136}));
+        m_SpriteMonkey.reset(Coconuts::Sprite::Create(m_AnimalsSpritesheet, {544, 680}, {136, 136}));
+        m_SpritePenguin.reset(Coconuts::Sprite::Create(m_AnimalsSpritesheet, {136, 272}, {136, 136}));
+        m_SpritePig.reset(Coconuts::Sprite::Create(m_AnimalsSpritesheet, {136, 136}, {136, 136}));
     }
         
     /**
@@ -101,7 +110,13 @@ public:
             // Moris texture (same texture slot)
             Coconuts::Renderer2D::DrawRotatedQuad({m_MorisPosX, m_MorisPosY}, {s_MorisScale, s_MorisScale}, s_MorisRotation,  m_MorisTexture);
             Coconuts::Renderer2D::DrawRotatedQuad({-0.5f, -0.5f}, {0.2f, 0.2f}, 0.0f,  m_MorisTexture);
-        
+            
+            /* Draw Sprites from same Spritesheet (same texture slot) */
+            Coconuts::Renderer2D::DrawQuad({-0.5f,  0.5f}, {0.5f, 0.5f}, m_SpriteCow);
+            Coconuts::Renderer2D::DrawQuad({ 0.5f,  0.5f}, {0.5f, 0.5f}, m_SpriteMonkey);
+            Coconuts::Renderer2D::DrawQuad({-0.5f, -0.5f}, {0.5f, 0.5f}, m_SpritePenguin);
+            Coconuts::Renderer2D::DrawQuad({ 0.5f, -0.5f}, {0.5f, 0.5f}, m_SpritePig);
+            
             // Coconuts logo texture (same texture slot)
             Coconuts::Renderer2D::DrawQuad({0.0f, 0.7f}, {1.0f, 1.0f}, m_CoconutsTextTexture);
             
@@ -173,6 +188,15 @@ private:
     std::shared_ptr<Coconuts::Texture2D> m_CheckerboardTexture;
     std::shared_ptr<Coconuts::Texture2D> m_CoconutsTextTexture;
     
+    /* Sprite Sheet */
+    std::shared_ptr<Coconuts::Texture2D> m_AnimalsSpritesheet;
+    
+    /* Sprites */
+    std::shared_ptr<Coconuts::Sprite> m_SpriteCow;
+    std::shared_ptr<Coconuts::Sprite> m_SpriteMonkey;
+    std::shared_ptr<Coconuts::Sprite> m_SpritePenguin;
+    std::shared_ptr<Coconuts::Sprite> m_SpritePig;
+    
     static glm::vec4 s_CheckerBoardTint;
     static float s_CheckerboardTilingFactor;
     static float s_MorisScale;
@@ -208,7 +232,7 @@ public:
         /* Get Live statistics */
         stats = Coconuts::Renderer2D::GetStatistics();
         
-        
+#if 0
         /* New ImGui Window */
         //------------------------------------------------------------------------
         ImGui::Begin("Checkerboard Settings");
@@ -236,7 +260,7 @@ public:
         ImGui::SliderAngle("Rotation", &m_Rotation, -180.f, 180.f);
         ImGui::End();
         //------------------------------------------------------------------------
-        
+#endif
         
         /* New ImGui Window */
         //------------------------------------------------------------------------
@@ -253,16 +277,16 @@ public:
         
         
         /* Pass picked color */
-        ExampleLayer::SetCheckerBoardTint(m_CheckerBoardTint);
+        //ExampleLayer::SetCheckerBoardTint(m_CheckerBoardTint);
         
         /* Pass selected tiling factor */
-        ExampleLayer::SetCheckerboardTilingFactor(m_TilingFactor);
+        //ExampleLayer::SetCheckerboardTilingFactor(m_TilingFactor);
         
         /* Pass selected scale */
-        ExampleLayer::SetMorisScale(m_Scale);
+        //ExampleLayer::SetMorisScale(m_Scale);
         
         /* Pass selected rotation */
-        ExampleLayer::SetMorisRotation(m_Rotation);
+        //ExampleLayer::SetMorisRotation(m_Rotation);
     }
     
 private:

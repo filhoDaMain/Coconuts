@@ -1,8 +1,6 @@
 # Example Source Code
 add_executable(demo demo.cpp CameraController.cpp)
 
-#target_include_directories(demo PRIVATE "${PROJECT_SOURCE_DIR}/include" "${PROJECT_SOURCE_DIR}/../Coconuts/include" "${PROJECT_SOURCE_DIR}/../Coconuts/include/vendor")
-
 # Coconuts Includes
 target_include_directories(demo PRIVATE "${PROJECT_SOURCE_DIR}/../Coconuts/include"
                                         "${PROJECT_SOURCE_DIR}/../Coconuts/include/vendor")

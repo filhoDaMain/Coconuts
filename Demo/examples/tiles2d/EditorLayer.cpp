@@ -98,7 +98,7 @@ void EditorLayer::OnUpdate(Coconuts::Timestep ts)
     }
     
     ImGui::Begin("ViewPort");
-    ImGui::Image(INT2VOIDP(viewPortTexID), ImVec2{320.0f, 174.0f});
+    ImGui::Image(INT2VOIDP(viewPortTexID), ImVec2{320.0f, 174.0f}, ImVec2{0, 1}, ImVec2{1, 0});
     ImGui::End();
     
     ImGui::Begin("Statistics");

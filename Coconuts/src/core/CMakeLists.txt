@@ -7,6 +7,7 @@ add_library(ccncore core.cpp
                     layer_system/Layer.cpp
                     layer_system/LayerStack.cpp
                     cameras/OrthographicCamera.cpp
+                    cameras/CameraController.cpp
                     graphics/Shader.cpp
                     graphics/Shader.cpp
                     graphics/VertexBuffer.cpp

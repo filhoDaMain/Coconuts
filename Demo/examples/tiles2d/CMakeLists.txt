@@ -1,5 +1,5 @@
 # Example Source Code
-add_executable(tiles2d main.cpp MainApp.cpp GameLayer.cpp EditorLayer.cpp CameraController.cpp)
+add_executable(tiles2d main.cpp MainApp.cpp GameLayer.cpp EditorLayer.cpp)
 
 # Coconuts Includes
 target_include_directories(tiles2d PRIVATE "${PROJECT_SOURCE_DIR}/../Coconuts/include"

@@ -5,7 +5,7 @@
 #include <coconuts/Renderer.h>
 #include <coconuts/Layer.h>
 #include <coconuts/cameras/OrthographicCamera.h>
-#include "CameraController.h"
+#include <coconuts/cameras/CameraController.h>
 
 class GameLayer : public Coconuts::Layer
 {
@@ -17,7 +17,7 @@ class GameLayer : public Coconuts::Layer
         Coconuts::OrthographicCamera m_Camera;
         
         /* CameraController */
-        CameraController m_CameraController;
+        Coconuts::CameraController m_CameraController;
         
         /* Sprites */
         std::shared_ptr<Coconuts::Sprite> m_TreeSprite;

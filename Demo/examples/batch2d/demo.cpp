@@ -19,6 +19,8 @@
 #include <coconuts/Keyboard.h>
 #include <coconuts/Mouse.h>
 #include <coconuts/Renderer.h>
+#include <coconuts/cameras/OrthographicCamera.h>
+#include <coconuts/cameras/CameraController.h>
 
 /* Editor Library stuff */
 #include <coconuts/editor.h>
@@ -28,8 +30,6 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-
-#include "CameraController.h"
 #include <fstream>
 #include <streambuf>
 
@@ -61,11 +61,17 @@ class ExampleLayer : public ::Coconuts::Layer
 public:
     ExampleLayer(const std::string& layerName)
         :   Layer(layerName),
-            m_Camera(-1.6f, 1.6f, -0.9f, 0.9f),
-            m_CameraController(m_Camera),
+            m_CameraAR_x(16.0f),
+            m_CameraAR_y(9.0f),
+            m_ZoomLevel(1.0f),
+            m_Camera(-m_CameraAR_x * m_ZoomLevel, -m_CameraAR_x * m_ZoomLevel, -m_CameraAR_y * m_ZoomLevel, m_CameraAR_y * m_ZoomLevel),
+            m_CameraController(m_Camera, m_CameraAR_x, m_CameraAR_y, m_ZoomLevel),
             m_MorisPosX(0.0f),
             m_MorisPosY(0.0f)
     {
+        float aspectRatio = (float) (m_CameraAR_x / m_CameraAR_y);
+        m_Camera.SetProjection(-aspectRatio * m_ZoomLevel, aspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
+            
         /* Init Texture image */
         m_MorisTexture.reset(Coconuts::Texture2D::Create("../assets/textures/Moris.png"));
         m_CheckerboardTexture.reset(Coconuts::Texture2D::Create("../assets/textures/Checkerboard.png"));
@@ -153,7 +159,7 @@ public:
      */
     void OnEvent(Coconuts::Event& event) override
     {
-
+        m_CameraController.OnEvent(event);
     }
     
     static void SetCheckerBoardTint(const glm::vec3& tint)
@@ -178,10 +184,13 @@ public:
     
 private:
     /* Camera */
+    float m_CameraAR_x; // Aspect Ratio X
+    float m_CameraAR_y; // Aspect Ratio X
+    float m_ZoomLevel;
     Coconuts::OrthographicCamera m_Camera;
-    
-    /* Camera Controller */
-    CameraController m_CameraController;
+        
+    /* CameraController */
+    Coconuts::CameraController m_CameraController;
     
     /* Textures */
     std::shared_ptr<Coconuts::Texture2D> m_MorisTexture;
@@ -232,7 +241,6 @@ public:
         /* Get Live statistics */
         stats = Coconuts::Renderer2D::GetStatistics();
         
-#if 0
         /* New ImGui Window */
         //------------------------------------------------------------------------
         ImGui::Begin("Checkerboard Settings");
@@ -260,7 +268,7 @@ public:
         ImGui::SliderAngle("Rotation", &m_Rotation, -180.f, 180.f);
         ImGui::End();
         //------------------------------------------------------------------------
-#endif
+        
         
         /* New ImGui Window */
         //------------------------------------------------------------------------
@@ -277,16 +285,16 @@ public:
         
         
         /* Pass picked color */
-        //ExampleLayer::SetCheckerBoardTint(m_CheckerBoardTint);
+        ExampleLayer::SetCheckerBoardTint(m_CheckerBoardTint);
         
         /* Pass selected tiling factor */
-        //ExampleLayer::SetCheckerboardTilingFactor(m_TilingFactor);
+        ExampleLayer::SetCheckerboardTilingFactor(m_TilingFactor);
         
         /* Pass selected scale */
-        //ExampleLayer::SetMorisScale(m_Scale);
+        ExampleLayer::SetMorisScale(m_Scale);
         
         /* Pass selected rotation */
-        //ExampleLayer::SetMorisRotation(m_Rotation);
+        ExampleLayer::SetMorisRotation(m_Rotation);
     }
     
 private:

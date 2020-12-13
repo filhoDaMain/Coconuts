@@ -44,8 +44,8 @@ namespace Coconuts
 
         
     private:
-        std::string m_Path;
         uint32_t m_Width, m_Height;
+        std::string m_Path;
         uint32_t m_RendererID;
         GLenum m_InternalFormat, m_DataFormat;
     };

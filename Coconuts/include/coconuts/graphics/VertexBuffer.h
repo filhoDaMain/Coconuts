@@ -16,7 +16,7 @@
 #ifndef VERTEXBUFFER_H
 #define VERTEXBUFFER_H
 
-#include <stdint.h>
+#include <cstdint>
 #include <coconuts/graphics/BufferLayout.h>
 
 namespace Coconuts

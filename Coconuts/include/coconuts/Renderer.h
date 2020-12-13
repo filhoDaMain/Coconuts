@@ -25,6 +25,7 @@
 #include <coconuts/graphics/IndexBuffer.h>
 #include <coconuts/graphics/Texture.h>
 #include <coconuts/graphics/Sprite.h>
+#include <coconuts/graphics/Framebuffer.h>
 #include <memory>
 #include <glm/glm.hpp>
 

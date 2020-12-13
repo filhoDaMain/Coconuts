@@ -13,39 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef TEXTURE_H
-#define TEXTURE_H
+#ifndef FRAMEBUFFER_H
+#define FRAMEBUFFER_H
 
 #include <cstdint>
-#include <memory>
-#include <string>
 
 namespace Coconuts
 {
     
-    class Texture
+    struct FramebufferSpecification
     {
-    public:
-        virtual ~Texture() = default;
-        
-        virtual uint32_t GetWidth() const = 0;
-        virtual uint32_t GetHeight() const = 0;
-        
-        virtual void SetData(void* data, uint32_t size) = 0;
-        
-        virtual void Bind(uint32_t slot = 0) const = 0;
-        
-        virtual bool operator == (const Texture& other) const = 0;
+        uint32_t    width;
+        uint32_t    height;
+        uint32_t    samples = 1;
+        bool        swapChainTarget = false;
     };
     
-    class Texture2D : public Texture
+    class Framebuffer
     {
     public:
-        static Texture2D* Create(uint32_t width, uint32_t height, void* data, uint32_t size);
-        static Texture2D* Create(const std::string& path);
+        virtual void Bind() = 0;
+        virtual void Unbind() = 0;
+        
+        static Framebuffer* Create(const FramebufferSpecification& spec);
+
+        virtual const FramebufferSpecification& GetFramebufferSpecification() const = 0;
+        virtual uint32_t GetColorAttachID() const = 0;
     };
     
 }
 
-#endif /* TEXTURE_H */
+#endif /* FRAMEBUFFER_H */
 

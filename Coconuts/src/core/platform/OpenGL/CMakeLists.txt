@@ -36,7 +36,8 @@ target_sources(ccncore PRIVATE  "${PROJECT_SOURCE_DIR}/src/core/platform/OpenGL/
                                 "${PROJECT_SOURCE_DIR}/src/core/platform/OpenGL/OpenGLVertexArray.cpp"
                                 "${PROJECT_SOURCE_DIR}/src/core/platform/OpenGL/OpenGLRendererAPI.cpp"
                                 "${PROJECT_SOURCE_DIR}/src/core/platform/OpenGL/OpenGLShader.cpp"
-                                "${PROJECT_SOURCE_DIR}/src/core/platform/OpenGL/OpenGLTexture.cpp")
+                                "${PROJECT_SOURCE_DIR}/src/core/platform/OpenGL/OpenGLTexture.cpp"
+                                "${PROJECT_SOURCE_DIR}/src/core/platform/OpenGL/OpenGLFramebuffer.cpp")
 
 target_include_directories(ccncore PRIVATE "${PROJECT_SOURCE_DIR}/src/core/platform/OpenGL")
 

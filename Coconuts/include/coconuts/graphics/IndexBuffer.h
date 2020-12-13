@@ -16,7 +16,7 @@
 #ifndef INDEXBUFFER_H
 #define INDEXBUFFER_H
 
-#include <stdint.h>
+#include <cstdint>
 
 namespace Coconuts
 {

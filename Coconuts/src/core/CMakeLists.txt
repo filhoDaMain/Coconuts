@@ -18,7 +18,8 @@ add_library(ccncore core.cpp
                     graphics/LowLevelAPI.cpp
                     graphics/Texture.cpp
                     graphics/Renderer2D.cpp
-                    graphics/Sprite.cpp)
+                    graphics/Sprite.cpp
+                    graphics/Framebuffer.cpp)
 
 # Platform Specific files
 # Mac OS

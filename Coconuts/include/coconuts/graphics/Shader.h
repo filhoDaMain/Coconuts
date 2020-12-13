@@ -17,7 +17,7 @@
 #define SHADER_H
 
 #include <string>
-#include <stdint.h>
+#include <cstdint>
 #include <glm/glm.hpp>
 
 

@@ -1,4 +1,4 @@
-/*
+ /*
  * Copyright 2020 Andre Temprilho
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,32 +13,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef OPENGLINDEXBUFFER_H
-#define OPENGLINDEXBUFFER_H
+#ifndef OPENGLFRAMEBUFFER_H
+#define OPENGLFRAMEBUFFER_H
 
-#include <coconuts/graphics/IndexBuffer.h>
-#include <stdint.h>
+#include <coconuts/graphics/Framebuffer.h>
 
 namespace Coconuts
 {
     
-    class OpenGLIndexBuffer : public IndexBuffer
+    class OpenGLFramebuffer : public Framebuffer
     {
     public:
-        OpenGLIndexBuffer(uint32_t* indices, uint32_t count);
-        virtual ~OpenGLIndexBuffer();
+        OpenGLFramebuffer(const FramebufferSpecification& spec);
+        virtual ~OpenGLFramebuffer();
         
-        inline uint32_t GetCount() const override { return m_Count; }
+        virtual void Bind() override;
+        virtual void Unbind() override;
         
-        void Bind() const override;
-        void Unbind() const override;
+        virtual const FramebufferSpecification& GetFramebufferSpecification() const override { return m_Spec; }
+        virtual uint32_t GetColorAttachID() const override { return m_ColorAttachID; }
+        
+        void Invalidate();
         
     private:
-        uint32_t m_Count;
+        FramebufferSpecification m_Spec;
         uint32_t m_RendererID;
+        uint32_t m_ColorAttachID;
+        uint32_t m_DepthAttachID;
     };
     
 }
 
-#endif /* OPENGLINDEXBUFFER_H */
+#endif /* OPENGLFRAMEBUFFER_H */
 

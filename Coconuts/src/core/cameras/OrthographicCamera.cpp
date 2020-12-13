@@ -36,4 +36,10 @@ namespace Coconuts
         m_ViewProjMatrix = m_ProjMatrix * m_ViewMatrix;
     }
     
+    void OrthographicCamera::SetProjection(float left, float right, float bottom, float top)
+    {
+        m_ProjMatrix = glm::ortho(left, right, bottom, top, -1.0f, 1.0f);
+	m_ViewProjMatrix = m_ProjMatrix * m_ViewMatrix;
+    }
+    
 }

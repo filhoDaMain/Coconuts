@@ -7,6 +7,7 @@ add_library(ccncore core.cpp
                     layer_system/Layer.cpp
                     layer_system/LayerStack.cpp
                     cameras/OrthographicCamera.cpp
+                    cameras/CameraController.cpp
                     graphics/Shader.cpp
                     graphics/Shader.cpp
                     graphics/VertexBuffer.cpp
@@ -16,7 +17,8 @@ add_library(ccncore core.cpp
                     graphics/RendererAPI.cpp
                     graphics/LowLevelAPI.cpp
                     graphics/Texture.cpp
-                    graphics/Renderer2D.cpp)
+                    graphics/Renderer2D.cpp
+                    graphics/Sprite.cpp)
 
 # Platform Specific files
 # Mac OS

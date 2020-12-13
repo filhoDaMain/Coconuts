@@ -29,6 +29,7 @@ namespace Coconuts
         inline const glm::vec3& GetPosition() const { return m_Position; }
         inline float GetRotation() const { return m_Rotation; }
         
+        void SetProjection(float left, float right, float bottom, float top);
         inline void SetPosition(const glm::vec3& position) { m_Position = position; RecalculateViewMatrix(); }
         inline void SetRotation(float rotation) { m_Rotation = rotation; RecalculateViewMatrix(); }
         

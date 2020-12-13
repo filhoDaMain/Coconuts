@@ -24,6 +24,7 @@
 #include <coconuts/graphics/VertexBuffer.h>
 #include <coconuts/graphics/IndexBuffer.h>
 #include <coconuts/graphics/Texture.h>
+#include <coconuts/graphics/Sprite.h>
 #include <memory>
 #include <glm/glm.hpp>
 

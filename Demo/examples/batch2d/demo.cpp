@@ -19,6 +19,8 @@
 #include <coconuts/Keyboard.h>
 #include <coconuts/Mouse.h>
 #include <coconuts/Renderer.h>
+#include <coconuts/cameras/OrthographicCamera.h>
+#include <coconuts/cameras/CameraController.h>
 
 /* Editor Library stuff */
 #include <coconuts/editor.h>
@@ -28,8 +30,6 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-
-#include "CameraController.h"
 #include <fstream>
 #include <streambuf>
 
@@ -61,15 +61,30 @@ class ExampleLayer : public ::Coconuts::Layer
 public:
     ExampleLayer(const std::string& layerName)
         :   Layer(layerName),
-            m_Camera(-1.6f, 1.6f, -0.9f, 0.9f),
-            m_CameraController(m_Camera),
+            m_CameraAR_x(16.0f),
+            m_CameraAR_y(9.0f),
+            m_ZoomLevel(1.0f),
+            m_Camera(-m_CameraAR_x * m_ZoomLevel, -m_CameraAR_x * m_ZoomLevel, -m_CameraAR_y * m_ZoomLevel, m_CameraAR_y * m_ZoomLevel),
+            m_CameraController(m_Camera, m_CameraAR_x, m_CameraAR_y, m_ZoomLevel),
             m_MorisPosX(0.0f),
             m_MorisPosY(0.0f)
     {
+        float aspectRatio = (float) (m_CameraAR_x / m_CameraAR_y);
+        m_Camera.SetProjection(-aspectRatio * m_ZoomLevel, aspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
+            
         /* Init Texture image */
         m_MorisTexture.reset(Coconuts::Texture2D::Create("../assets/textures/Moris.png"));
         m_CheckerboardTexture.reset(Coconuts::Texture2D::Create("../assets/textures/Checkerboard.png"));
         m_CoconutsTextTexture.reset(Coconuts::Texture2D::Create("../assets/textures/Coconuts.png"));
+        
+        /* Init Spritesheet texture image */
+        m_AnimalsSpritesheet.reset(Coconuts::Texture2D::Create("../assets/textures/square_nodetailsOutline.png"));
+        
+        /* Init Sprites */
+        m_SpriteCow.reset(Coconuts::Sprite::Create(m_AnimalsSpritesheet, {544, 136}, {136, 136}));
+        m_SpriteMonkey.reset(Coconuts::Sprite::Create(m_AnimalsSpritesheet, {544, 680}, {136, 136}));
+        m_SpritePenguin.reset(Coconuts::Sprite::Create(m_AnimalsSpritesheet, {136, 272}, {136, 136}));
+        m_SpritePig.reset(Coconuts::Sprite::Create(m_AnimalsSpritesheet, {136, 136}, {136, 136}));
     }
         
     /**
@@ -101,7 +116,13 @@ public:
             // Moris texture (same texture slot)
             Coconuts::Renderer2D::DrawRotatedQuad({m_MorisPosX, m_MorisPosY}, {s_MorisScale, s_MorisScale}, s_MorisRotation,  m_MorisTexture);
             Coconuts::Renderer2D::DrawRotatedQuad({-0.5f, -0.5f}, {0.2f, 0.2f}, 0.0f,  m_MorisTexture);
-        
+            
+            /* Draw Sprites from same Spritesheet (same texture slot) */
+            Coconuts::Renderer2D::DrawQuad({-0.5f,  0.5f}, {0.5f, 0.5f}, m_SpriteCow);
+            Coconuts::Renderer2D::DrawQuad({ 0.5f,  0.5f}, {0.5f, 0.5f}, m_SpriteMonkey);
+            Coconuts::Renderer2D::DrawQuad({-0.5f, -0.5f}, {0.5f, 0.5f}, m_SpritePenguin);
+            Coconuts::Renderer2D::DrawQuad({ 0.5f, -0.5f}, {0.5f, 0.5f}, m_SpritePig);
+            
             // Coconuts logo texture (same texture slot)
             Coconuts::Renderer2D::DrawQuad({0.0f, 0.7f}, {1.0f, 1.0f}, m_CoconutsTextTexture);
             
@@ -138,7 +159,7 @@ public:
      */
     void OnEvent(Coconuts::Event& event) override
     {
-
+        m_CameraController.OnEvent(event);
     }
     
     static void SetCheckerBoardTint(const glm::vec3& tint)
@@ -163,15 +184,27 @@ public:
     
 private:
     /* Camera */
+    float m_CameraAR_x; // Aspect Ratio X
+    float m_CameraAR_y; // Aspect Ratio X
+    float m_ZoomLevel;
     Coconuts::OrthographicCamera m_Camera;
-    
-    /* Camera Controller */
-    CameraController m_CameraController;
+        
+    /* CameraController */
+    Coconuts::CameraController m_CameraController;
     
     /* Textures */
     std::shared_ptr<Coconuts::Texture2D> m_MorisTexture;
     std::shared_ptr<Coconuts::Texture2D> m_CheckerboardTexture;
     std::shared_ptr<Coconuts::Texture2D> m_CoconutsTextTexture;
+    
+    /* Sprite Sheet */
+    std::shared_ptr<Coconuts::Texture2D> m_AnimalsSpritesheet;
+    
+    /* Sprites */
+    std::shared_ptr<Coconuts::Sprite> m_SpriteCow;
+    std::shared_ptr<Coconuts::Sprite> m_SpriteMonkey;
+    std::shared_ptr<Coconuts::Sprite> m_SpritePenguin;
+    std::shared_ptr<Coconuts::Sprite> m_SpritePig;
     
     static glm::vec4 s_CheckerBoardTint;
     static float s_CheckerboardTilingFactor;
@@ -207,7 +240,6 @@ public:
     {   
         /* Get Live statistics */
         stats = Coconuts::Renderer2D::GetStatistics();
-        
         
         /* New ImGui Window */
         //------------------------------------------------------------------------

@@ -322,7 +322,7 @@ namespace Coconuts
                               const std::shared_ptr<Texture2D>& texture,
                               float tilingFactor,
                               const glm::vec4& tintColor)
-    {       
+    {
         /* Max indices reached -> Draw Call + Restart Batch */
         if (s_Data->batchRenderState.indicesCounter >= s_Data->batchRenderState.maxIndices)
         {
@@ -499,6 +499,215 @@ namespace Coconuts
         s_Data->batchRenderState.quadVertexBuffer_Ptr->position     = transform * s_Data->batchRenderState.quadVertexPositions[3];
         s_Data->batchRenderState.quadVertexBuffer_Ptr->color        = tintColor;
         s_Data->batchRenderState.quadVertexBuffer_Ptr->texCoord     = {0.0f, 1.0f};
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->texIndex     = textureIndex;
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->tilingFactor = tilingFactor;
+        s_Data->batchRenderState.quadVertexBuffer_Ptr++;
+        
+        s_Data->batchRenderState.indicesCounter += s_Data->batchRenderState.indicesPerQuad;
+        
+        /* Update stats */
+        s_Data->stats.quadCount++;
+    }
+    
+    // Sprite
+    void Renderer2D::DrawQuad(const glm::vec2& position,
+                              const glm::vec2& size,
+                              const std::shared_ptr<Sprite>& sprite,
+                              float tilingFactor,
+                              const glm::vec4& tintColor)
+    {
+        DrawQuad({position.x, position.y, 0.0f}, size, sprite, tilingFactor, tintColor);
+    }
+    
+    // Sprite
+    void Renderer2D::DrawQuad(const glm::vec3& position,
+                              const glm::vec2& size,
+                              const std::shared_ptr<Sprite>& sprite,
+                              float tilingFactor,
+                              const glm::vec4& tintColor)
+    {
+        const glm::vec2* textureCoords              = sprite->GetTextureCoords();
+        const std::shared_ptr<Texture2D> texture    = sprite->GetTexture();
+        
+        /* Max indices reached -> Draw Call + Restart Batch */
+        if (s_Data->batchRenderState.indicesCounter >= s_Data->batchRenderState.maxIndices)
+        {
+            FlushAndReset();
+        }
+        
+        /*
+         * Each Quad consumes 4 vertexes.
+         * Set them all.
+         */
+        
+        float textureIndex = 0.0f;
+        for (uint32_t i = 1; i < s_Data->batchRenderState.textureSlotsIndex; i++)
+        {
+            if (*s_Data->batchRenderState.textureSlots[i].get() == *texture.get())
+            {
+                textureIndex = (float) i;
+                
+                // we found inside a texture slot, a texture equal (same ID)
+                // to the texture we want to draw now
+                break;
+            }
+        }
+        
+        /* If the texture is "new" (not set to a texture slot before) */
+        if (textureIndex == 0.0f)
+        {
+            /* Max Texture slots reached -> Draw Call + Restart Batch */
+            if (s_Data->batchRenderState.textureSlotsIndex >= s_Data->batchRenderState.maxTextureSlots)
+            {
+                FlushAndReset();    // Resets s_Data->batchRenderState.textureSlotsIndex
+            }
+            
+            textureIndex = (float) s_Data->batchRenderState.textureSlotsIndex;
+            
+            /* Set it into a slot */
+            s_Data->batchRenderState.textureSlots[s_Data->batchRenderState.textureSlotsIndex] = texture;
+            s_Data->batchRenderState.textureSlotsIndex++;
+        }
+        
+        /* Transform matrix */
+        glm::mat4 transform =
+                glm::translate(glm::mat4(1.0f), position)
+                * glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
+        
+        // 0
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->position     = transform * s_Data->batchRenderState.quadVertexPositions[0];
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->color        = tintColor;
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->texCoord     = textureCoords[0];
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->texIndex     = textureIndex;
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->tilingFactor = tilingFactor;
+        s_Data->batchRenderState.quadVertexBuffer_Ptr++;
+        
+        // 1
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->position     = transform * s_Data->batchRenderState.quadVertexPositions[1];
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->color        = tintColor;
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->texCoord     = textureCoords[1];
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->texIndex     = textureIndex;
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->tilingFactor = tilingFactor;
+        s_Data->batchRenderState.quadVertexBuffer_Ptr++;
+        
+        // 2
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->position     = transform * s_Data->batchRenderState.quadVertexPositions[2];
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->color        = tintColor;
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->texCoord     = textureCoords[2];
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->texIndex     = textureIndex;
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->tilingFactor = tilingFactor;
+        s_Data->batchRenderState.quadVertexBuffer_Ptr++;
+        
+        // 3
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->position     = transform * s_Data->batchRenderState.quadVertexPositions[3];
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->color        = tintColor;
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->texCoord     = textureCoords[3];
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->texIndex     = textureIndex;
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->tilingFactor = tilingFactor;
+        s_Data->batchRenderState.quadVertexBuffer_Ptr++;
+        
+        s_Data->batchRenderState.indicesCounter += s_Data->batchRenderState.indicesPerQuad;
+        
+        /* Update stats */
+        s_Data->stats.quadCount++;
+    }
+    
+    // Sprite + Rotation
+    void Renderer2D::DrawRotatedQuad(const glm::vec2& position,
+                              const glm::vec2& size,
+                              float rotation_radians,
+                              const std::shared_ptr<Sprite>& sprite,
+                              float tilingFactor,
+                              const glm::vec4& tintColor)
+    {
+        DrawRotatedQuad({position.x, position.y, 0.0f}, size, rotation_radians, sprite, tilingFactor, tintColor);
+    }
+    
+    // Sprite + Rotation
+    void Renderer2D::DrawRotatedQuad(const glm::vec3& position,
+                              const glm::vec2& size,
+                              float rotation_radians,
+                              const std::shared_ptr<Sprite>& sprite,
+                              float tilingFactor,
+                              const glm::vec4& tintColor)
+    {
+        const glm::vec2* textureCoords              = sprite->GetTextureCoords();
+        const std::shared_ptr<Texture2D> texture    = sprite->GetTexture();
+        
+        /* Max indices reached -> Draw Call + Restart Batch */
+        if (s_Data->batchRenderState.indicesCounter >= s_Data->batchRenderState.maxIndices)
+        {
+            FlushAndReset();
+        }
+        
+        /*
+         * Each Quad consumes 4 vertexes.
+         * Set them all.
+         */
+        
+        float textureIndex = 0.0f;
+        for (uint32_t i = 1; i < s_Data->batchRenderState.textureSlotsIndex; i++)
+        {
+            if (*s_Data->batchRenderState.textureSlots[i].get() == *texture.get())
+            {
+                textureIndex = (float) i;
+                
+                // we found inside a texture slot, a texture equal (same ID)
+                // to the texture we want to draw now
+                break;
+            }
+        }
+        
+        /* If the texture is "new" (not set to a texture slot before) */
+        if (textureIndex == 0.0f)
+        {
+            /* Max Texture slots reached -> Draw Call + Restart Batch */
+            if (s_Data->batchRenderState.textureSlotsIndex >= s_Data->batchRenderState.maxTextureSlots)
+            {
+                FlushAndReset();    // Resets s_Data->batchRenderState.textureSlotsIndex
+            }
+            
+            textureIndex = (float) s_Data->batchRenderState.textureSlotsIndex;
+            
+            /* Set it into a slot */
+            s_Data->batchRenderState.textureSlots[s_Data->batchRenderState.textureSlotsIndex] = texture;
+            s_Data->batchRenderState.textureSlotsIndex++;
+        }
+        
+        /* Transform matrix */
+        glm::mat4 transform =
+                glm::translate(glm::mat4(1.0f), position)
+                * glm::rotate(glm::mat4(1.0f), -rotation_radians, {0.0f, 0.0f, 0.1f})
+                * glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
+        
+        // 0
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->position     = transform * s_Data->batchRenderState.quadVertexPositions[0];
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->color        = tintColor;
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->texCoord     = textureCoords[0];
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->texIndex     = textureIndex;
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->tilingFactor = tilingFactor;
+        s_Data->batchRenderState.quadVertexBuffer_Ptr++;
+        
+        // 1
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->position     = transform * s_Data->batchRenderState.quadVertexPositions[1];
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->color        = tintColor;
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->texCoord     = textureCoords[1];
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->texIndex     = textureIndex;
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->tilingFactor = tilingFactor;
+        s_Data->batchRenderState.quadVertexBuffer_Ptr++;
+        
+        // 2
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->position     = transform * s_Data->batchRenderState.quadVertexPositions[2];
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->color        = tintColor;
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->texCoord     = textureCoords[2];
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->texIndex     = textureIndex;
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->tilingFactor = tilingFactor;
+        s_Data->batchRenderState.quadVertexBuffer_Ptr++;
+        
+        // 3
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->position     = transform * s_Data->batchRenderState.quadVertexPositions[3];
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->color        = tintColor;
+        s_Data->batchRenderState.quadVertexBuffer_Ptr->texCoord     = textureCoords[3];
         s_Data->batchRenderState.quadVertexBuffer_Ptr->texIndex     = textureIndex;
         s_Data->batchRenderState.quadVertexBuffer_Ptr->tilingFactor = tilingFactor;
         s_Data->batchRenderState.quadVertexBuffer_Ptr++;

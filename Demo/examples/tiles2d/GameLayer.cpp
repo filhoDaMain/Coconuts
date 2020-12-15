@@ -4,7 +4,6 @@
 
 #define GAMELAYER_SPRITESHEET_PATH  "../assets/textures/RPGpack_sheet_2X.png";
 
-std::shared_ptr<Coconuts::Framebuffer> GameLayer::s_Framebuffer;
 
 void GameLayer::OnUpdate(Coconuts::Timestep ts)
 {
@@ -13,9 +12,6 @@ void GameLayer::OnUpdate(Coconuts::Timestep ts)
     
     Coconuts::Graphics::LowLevelAPI::SetClearColor({0.0f, 0.0f, 0.0f, 1});
     Coconuts::Graphics::LowLevelAPI::Clear();
-    
-    /* Bind Framebuffer */
-    s_Framebuffer->Bind();
     
     /* Set backgound color*/
     Coconuts::Graphics::LowLevelAPI::SetClearColor({0.02f, 0.31f, 0.7f, 1});
@@ -28,9 +24,6 @@ void GameLayer::OnUpdate(Coconuts::Timestep ts)
     Coconuts::Renderer2D::DrawQuad({0.0f, 0.0f}, {1.0f, 2.0f}, m_TreeSprite);
     
     Coconuts::Renderer2D::EndScene();
-    
-    /* Unbind Framebuffer */
-    s_Framebuffer->Unbind();
 }
 
 void GameLayer::OnEvent(Coconuts::Event& event)
@@ -58,13 +51,6 @@ void GameLayer::OnAttach()
     
     /* Load Sprites */
     m_TreeSprite.reset( Coconuts::Sprite::Create(m_SpritesheetTexture2D, {2, 1}, {128, 128}, {1, 2}) );
-    
-    /* Create Framebuffer */
-    Coconuts::FramebufferSpecification spec;
-    spec.width = 1280;
-    spec.height = 696;
-    
-    s_Framebuffer.reset( Coconuts::Framebuffer::Create(spec) );
 }
 
 void GameLayer::OnDetach()

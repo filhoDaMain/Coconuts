@@ -26,6 +26,21 @@
 extern void coconuts_version(void);
 
 
+/* Entry Point for Standalone Editor */
+#ifdef __COCONUTS_STANDALONE_EDITOR_APP__
+int main (void)
+{
+    Coconuts::Logger::Init();
+    auto app = Coconuts::CreateApplication();
+    app->Run();
+    delete app;
+    
+    LOG_TRACE("Closing Editor window");
+    LOG_WARN("Goodbye!");
+    return 0;
+}
+#endif
+
 /* Entry Point for Sandbox applications */
 #ifdef __COCONUTS_SANDBOX_APP__
 int main (void)

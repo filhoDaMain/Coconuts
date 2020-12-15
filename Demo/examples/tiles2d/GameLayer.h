@@ -24,9 +24,6 @@ class GameLayer : public Coconuts::Layer
         
         /* Spritesheet Texture */
         std::shared_ptr<Coconuts::Texture2D> m_SpritesheetTexture2D;
-        
-        /* Framebuffer */
-        static std::shared_ptr<Coconuts::Framebuffer> s_Framebuffer;
     
     public:
         GameLayer();
@@ -36,8 +33,6 @@ class GameLayer : public Coconuts::Layer
         virtual void OnDetach() override;
         virtual void OnUpdate(Coconuts::Timestep ts) override;
         virtual void OnEvent(Coconuts::Event& event) override;
-        
-        static std::shared_ptr<Coconuts::Framebuffer>& GetFramebuffer() { return s_Framebuffer; }
 };
 
 #endif /* GAMELAYER_H */

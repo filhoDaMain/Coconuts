@@ -18,6 +18,7 @@
 
 #include <coconuts/event_system/EventTypes.h>
 #include <coconuts/event_system/Event.h>
+#include <cstdint>
 
 namespace Coconuts
 {
@@ -39,11 +40,11 @@ namespace Coconuts
                 return ss.str();
             }
                    
-            unsigned int GetWidth() const { return m_Width; }
-            unsigned int GetHeight() const { return m_Height; }
+            float GetWidth() const { return m_Width; }
+            float GetHeight() const { return m_Height; }
             
         private:
-            unsigned int m_Width, m_Height;
+            float m_Width, m_Height;
         };
         
         

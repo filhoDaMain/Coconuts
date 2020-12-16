@@ -15,7 +15,6 @@
  */
 
 #include "EditorLayer.h"
-#include "GameLayer.h"
 #include <cstdint>
 
 #define INT2VOIDP(i) (void*)(uintptr_t)(i)
@@ -25,13 +24,6 @@ namespace Coconuts
     
     void EditorLayer::OnUpdate(Timestep ts)
     {
-        /* Get Renderer Live statistics */
-        stats = Renderer2D::GetStatistics();
-
-        /* Get Framebuffer (where live rendering is happening) */
-        uint32_t viewPortTexID = GameLayer::GetFramebuffer()->GetColorAttachID();
-
-
         /**
          * SET UP DOCK SPACE
          * 
@@ -116,11 +108,34 @@ namespace Coconuts
             ImGui::EndMenuBar();
         }
 
-        ImGui::Begin("ViewPort");
-        ImGui::Image(INT2VOIDP(viewPortTexID), ImVec2{320.0f, 174.0f}, ImVec2{0, 1}, ImVec2{1, 0});
+        
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{0, 0});
+        ImGui::Begin("Viewport");
+        
+        ImVec2 imguiViewportPanelSize = ImGui::GetContentRegionAvail(); // float
+        
+        /**
+         * When View Port Pannel changes, update the
+         * GameLayer's Framebuffer size
+         */
+        if ( (imguiViewportPanelSize.x != m_ViewportSize.x) && 
+             (imguiViewportPanelSize.y != m_ViewportSize.y))
+        {
+            m_ViewportSize = { imguiViewportPanelSize.x, imguiViewportPanelSize.y };
+            m_Framebuffer->Resize( m_ViewportSize.x, m_ViewportSize.y );
+            m_CameraController->ScreenResize(m_ViewportSize.x, m_ViewportSize.y);
+        }
+        
+        ImGui::Image(INT2VOIDP(m_ViewPortTexID), ImVec2{m_ViewportSize.x, m_ViewportSize.y}, ImVec2{0, 1}, ImVec2{1, 0});
         ImGui::End();
+        ImGui::PopStyleVar();
 
+        
         ImGui::Begin("Statistics");
+        
+        /* Get Renderer Live statistics */
+        stats = Renderer2D::GetStatistics();
+        
         ImGui::Text("Batch render statistics:");
         ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();    
         ImGui::Text("%d Draw Calls", stats.drawCalls);
@@ -134,9 +149,27 @@ namespace Coconuts
         // DOCK SPACE END
     }
 
+    void EditorLayer::OnPostAttach()
+    {
+        LOG_TRACE("Editor Layer OnPostAttach()");
+        
+        /* Get GameLayer's Framebuffer */
+        m_Framebuffer = m_GameLayerPtr->GetFramebuffer();
+        m_ViewPortTexID = m_Framebuffer->GetColorAttachID();
+        
+        /* Get GameLayer's Camera Controller */
+        m_CameraController = m_GameLayerPtr->GetCameraController();
+    }
+    
     EditorLayer::EditorLayer()
     {
 
+    }
+    
+    EditorLayer::EditorLayer(GameLayer* gameLayer)
+    : m_GameLayerPtr(gameLayer)
+    {
+      
     }
     
 }

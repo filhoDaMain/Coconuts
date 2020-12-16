@@ -15,8 +15,6 @@
  */
 
 #include "MainApp.h"
-#include "GameLayer.h"
-#include "EditorLayer.h"
 
 namespace Coconuts
 {
@@ -24,8 +22,11 @@ namespace Coconuts
     MainApp::MainApp()
     : Application("Coconuts Editor")
     {
-        PushLayer( new GameLayer() );       // In-Game graphics
-        PushOverlay( new EditorLayer() );   // Editor UI graphics
+        m_GameLayerPtr      = new GameLayer();
+        m_EditorLayerPtr    = new EditorLayer(m_GameLayerPtr);
+        
+        PushLayer(m_GameLayerPtr);          // In-Game graphics
+        PushOverlay(m_EditorLayerPtr);      // Editor UI graphics
     }
     
 }

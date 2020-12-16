@@ -18,6 +18,8 @@
 
 #include <coconuts/editor.h>
 #include <coconuts/Renderer.h>
+#include "GameLayer.h"
+#include <glm/glm.hpp>
 
 namespace Coconuts
 {
@@ -26,13 +28,29 @@ namespace Coconuts
     {
     public:
         EditorLayer();
+        EditorLayer(GameLayer* gameLayer);
         virtual ~EditorLayer() = default;
   
-        virtual void OnUpdate(Timestep ts) override;  
+        virtual void OnUpdate(Timestep ts) override;
+        virtual void OnPostAttach() override;
         
     private:
+        GameLayer* m_GameLayerPtr;
+        
         /* Renderer2D live statistics */
         Renderer2DStatistics stats;
+        
+        /* GameLayer's Framebuffer (init during OnPostAttach()) */
+        std::shared_ptr<Framebuffer> m_Framebuffer;
+        
+        /* Framebuffer's Color attach texture ID */
+        uint32_t m_ViewPortTexID;
+        
+        /* GameLayer's CameraController */
+        std::shared_ptr<CameraController> m_CameraController;
+        
+        /* Viewport panel size */
+        glm::vec2 m_ViewportSize;
     };
     
 }

@@ -22,7 +22,7 @@ namespace Coconuts
 {
 
     OpenGLFramebuffer::OpenGLFramebuffer(const FramebufferSpecification& spec)
-        : m_Spec(spec)
+        : m_Spec(spec), m_RendererID(0)
     {
         Invalidate();
     }
@@ -32,12 +32,12 @@ namespace Coconuts
         glDeleteFramebuffers(1, &m_RendererID);
         glDeleteTextures(1, &m_ColorAttachID);
 	glDeleteTextures(1, &m_DepthAttachID);
-
     }
     
     void OpenGLFramebuffer::Bind()
     {
         glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
+        glViewport(0, 0, m_Spec.width, m_Spec.height);
     }
     
     void OpenGLFramebuffer::Unbind()
@@ -45,8 +45,24 @@ namespace Coconuts
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
     
+    void OpenGLFramebuffer::Resize(float width, float height)
+    {
+        m_Spec.width = width;
+        m_Spec.width = height;
+        Invalidate();
+    }
+    
     void OpenGLFramebuffer::Invalidate()
-    {        
+    {
+        /* Framebuffer was previously initliazied */
+        if (m_RendererID)
+        {
+            glDeleteFramebuffers(1, &m_RendererID);
+            glDeleteTextures(1, &m_ColorAttachID);
+            glDeleteTextures(1, &m_DepthAttachID);
+            // Create a new ...
+        }
+        
         glGenFramebuffers(1, &m_RendererID);
         glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
       
@@ -56,8 +72,8 @@ namespace Coconuts
         glTexImage2D(GL_TEXTURE_2D,
                      0,
                      GL_RGBA8,
-                     m_Spec.width,
-                     m_Spec.height,
+                     (GLsizei)m_Spec.width,
+                     (GLsizei)m_Spec.height,
                      0,
                      GL_RGBA,
                      GL_UNSIGNED_BYTE,
@@ -76,8 +92,8 @@ namespace Coconuts
         glTexImage2D(GL_TEXTURE_2D,
                      0,
                      GL_DEPTH24_STENCIL8,
-                     m_Spec.width,
-                     m_Spec.height,
+                     (GLsizei)m_Spec.width,
+                     (GLsizei)m_Spec.height,
                      0,
                      GL_DEPTH_STENCIL,
                      GL_UNSIGNED_INT_24_8,
@@ -92,8 +108,6 @@ namespace Coconuts
             glBindFramebuffer(GL_TEXTURE_2D, 0);
             exit(1);
         }
-        
-        LOG_DEBUG("Framebuffer is OK");
         
         /* Unbind Framebuffer */
         glBindFramebuffer(GL_FRAMEBUFFER, 0);

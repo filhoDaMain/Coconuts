@@ -32,6 +32,11 @@ namespace Coconuts
     {
         
     }
+    
+    void Layer::OnPostAttach()
+    {
+        
+    }
 
     void Layer::OnDetach()
     {

@@ -17,6 +17,8 @@
 #define MAINAPP_H
 
 #include <coconuts/Application.h>
+#include "GameLayer.h"
+#include "EditorLayer.h"
 
 namespace Coconuts
 {
@@ -26,6 +28,10 @@ namespace Coconuts
     public:
         MainApp();
         ~MainApp() = default;
+        
+    private:
+        GameLayer*      m_GameLayerPtr;
+        EditorLayer*    m_EditorLayerPtr;
     };
 
 }

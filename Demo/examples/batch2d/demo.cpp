@@ -65,7 +65,7 @@ public:
             m_CameraAR_y(9.0f),
             m_ZoomLevel(1.0f),
             m_Camera(-m_CameraAR_x * m_ZoomLevel, -m_CameraAR_x * m_ZoomLevel, -m_CameraAR_y * m_ZoomLevel, m_CameraAR_y * m_ZoomLevel),
-            m_CameraController(m_Camera, m_CameraAR_x, m_CameraAR_y, m_ZoomLevel),
+            m_CameraController(m_Camera, (float) (m_CameraAR_x/m_CameraAR_y), m_ZoomLevel),
             m_MorisPosX(0.0f),
             m_MorisPosY(0.0f)
     {

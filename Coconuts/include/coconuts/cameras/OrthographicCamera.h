@@ -41,6 +41,8 @@ namespace Coconuts
         void RecalculateViewMatrix();
         
     private:
+        float m_AspectRatio;
+        
         glm::mat4 m_ProjMatrix;
         glm::mat4 m_ViewMatrix;
         glm::mat4 m_ViewProjMatrix;

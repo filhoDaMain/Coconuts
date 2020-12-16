@@ -17,14 +17,15 @@
 #define FRAMEBUFFER_H
 
 #include <cstdint>
+#include <glm/glm.hpp>
 
 namespace Coconuts
 {
     
     struct FramebufferSpecification
     {
-        uint32_t    width;
-        uint32_t    height;
+        float    width;
+        float    height;
         uint32_t    samples = 1;
         bool        swapChainTarget = false;
     };
@@ -37,6 +38,8 @@ namespace Coconuts
         
         static Framebuffer* Create(const FramebufferSpecification& spec);
 
+        virtual void Resize(float width, float height) = 0;
+        
         virtual const FramebufferSpecification& GetFramebufferSpecification() const = 0;
         virtual uint32_t GetColorAttachID() const = 0;
     };

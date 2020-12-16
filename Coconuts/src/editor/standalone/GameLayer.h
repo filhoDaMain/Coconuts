@@ -29,16 +29,18 @@ namespace Coconuts
     {
         private:
             /* Camera */
-            float m_CameraAR_x; // Aspect Ratio X
-            float m_CameraAR_y; // Aspect Ratio X
+            float m_AspectRatio;
             float m_ZoomLevel;
             OrthographicCamera m_Camera;
 
             /* CameraController */
-            CameraController m_CameraController;
+            std::shared_ptr<CameraController> m_CameraController;
 
-            /* Framebuffer */
-            static std::shared_ptr<Framebuffer> s_Framebuffer;
+            /**
+             * Init during OnAttach to make it available for
+             * EditorLayer's OnPostAttach() phase!
+             */
+            std::shared_ptr<Framebuffer> m_Framebuffer;
 
         public:
             GameLayer();
@@ -48,8 +50,9 @@ namespace Coconuts
             virtual void OnDetach() override;
             virtual void OnUpdate(Timestep ts) override;
             virtual void OnEvent(Event& event) override;
-
-            static std::shared_ptr<Framebuffer>& GetFramebuffer() { return s_Framebuffer; }
+            
+            std::shared_ptr<Framebuffer>& GetFramebuffer() { return m_Framebuffer; }
+            std::shared_ptr<CameraController> GetCameraController() { return m_CameraController; }
     };
     
 }

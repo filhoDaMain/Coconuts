@@ -29,6 +29,7 @@ namespace Coconuts
         virtual ~Layer();
         
         virtual void OnAttach();
+        virtual void OnPostAttach();
         virtual void OnDetach();
         virtual void OnUpdate(Timestep ts);
         virtual void OnEvent(Event& event);

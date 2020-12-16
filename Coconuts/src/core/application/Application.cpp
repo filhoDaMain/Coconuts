@@ -204,11 +204,13 @@ namespace Coconuts
     {
         m_LayerStack.PushLayer(layer);
         layer->OnAttach();
+        layer->OnPostAttach();
     }
     
     void Application::PushOverlay(Layer* overlay)
     {
         m_LayerStack.PushOverlay(overlay);
         overlay->OnAttach();
+        overlay->OnPostAttach();
     }
 }

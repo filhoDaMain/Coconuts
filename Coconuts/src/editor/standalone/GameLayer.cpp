@@ -20,19 +20,17 @@
 
 namespace Coconuts
 {
-    
-    std::shared_ptr<Framebuffer> GameLayer::s_Framebuffer;
 
     void GameLayer::OnUpdate(Timestep ts)
     {
         /* Update Camera Controller */
-        m_CameraController.OnUpdate(ts);
+        m_CameraController->OnUpdate(ts);
 
         Graphics::LowLevelAPI::SetClearColor({0.0f, 0.0f, 0.0f, 1});
         Graphics::LowLevelAPI::Clear();
 
         /* Bind Framebuffer */
-        s_Framebuffer->Bind();
+        m_Framebuffer->Bind();
 
         /* Set backgound color*/
         Graphics::LowLevelAPI::SetClearColor({0.02f, 0.31f, 0.7f, 1});
@@ -42,39 +40,37 @@ namespace Coconuts
         Renderer2D::ResetStatistics();
         Renderer2D::BeginScene(m_Camera);
 
-        Renderer2D::DrawQuad({-0.9f, 1.0f}, {0.8f, 0.8f}, {0.8f, 1.0f, 0.1f, 1.0f});
+        Renderer2D::DrawQuad({0.0f, 0.0f}, {0.8f, 0.8f}, {0.8f, 1.0f, 0.1f, 1.0f});
 
         Renderer2D::EndScene();
 
         /* Unbind Framebuffer */
-        s_Framebuffer->Unbind();
+        m_Framebuffer->Unbind();
     }
 
     void GameLayer::OnEvent(Event& event)
     {
         /* Update CameraController */
-        m_CameraController.OnEvent(event);
+        m_CameraController->OnEvent(event);
     }
-
+    
     GameLayer::GameLayer()
-        : m_CameraAR_x(16.0f),
-          m_CameraAR_y(9.0f),
-          m_ZoomLevel(5.0f),
-          m_Camera(-m_CameraAR_x * m_ZoomLevel, -m_CameraAR_x * m_ZoomLevel, -m_CameraAR_y * m_ZoomLevel, m_CameraAR_y * m_ZoomLevel),
-          m_CameraController(m_Camera, m_CameraAR_x, m_CameraAR_y, m_ZoomLevel)
+    : m_AspectRatio((float) (16.0f/9.0f)), m_ZoomLevel(1.0f), m_Camera(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel)
     {
-        float aspectRatio = (float) (m_CameraAR_x / m_CameraAR_y);
-        m_Camera.SetProjection(-aspectRatio * m_ZoomLevel, aspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
+        m_CameraController = std::make_shared<CameraController>(m_Camera, m_AspectRatio, m_ZoomLevel);
+        m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
     }
 
     void GameLayer::OnAttach()
-    {    
+    {   
+        LOG_TRACE("Game Layer OnAttach()");
+        
         /* Create Framebuffer */
         FramebufferSpecification spec;
-        spec.width = 1280;
-        spec.height = 696;
+        spec.width = 1280.0f;
+        spec.height = 696.0f;
 
-        s_Framebuffer.reset( Framebuffer::Create(spec) );
+        m_Framebuffer.reset( Framebuffer::Create(spec) );
     }
 
     void GameLayer::OnDetach()

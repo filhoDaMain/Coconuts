@@ -23,8 +23,11 @@ namespace Coconuts
 
     void GameLayer::OnUpdate(Timestep ts)
     {
-        /* Update Camera Controller */
-        m_CameraController->OnUpdate(ts);
+        if (!m_HaltEvents)
+        {
+            /* Update Camera Controller */
+            m_CameraController->OnUpdate(ts);   // camera input keys
+        }
 
         Graphics::LowLevelAPI::SetClearColor({0.0f, 0.0f, 0.0f, 1});
         Graphics::LowLevelAPI::Clear();
@@ -50,12 +53,22 @@ namespace Coconuts
 
     void GameLayer::OnEvent(Event& event)
     {
-        /* Update CameraController */
+        /* Don't handle any events */
+        if (m_HaltEvents)
+        {
+            return;
+        }
+        
+        /* Update CameraController random events */
         m_CameraController->OnEvent(event);
     }
     
     GameLayer::GameLayer()
-    : m_AspectRatio((float) (16.0f/9.0f)), m_ZoomLevel(1.0f), m_Camera(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel)
+    : m_AspectRatio((float) (16.0f/9.0f)),
+      m_ZoomLevel(1.0f),
+      m_Camera(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel),
+      m_HaltEvents(false)
+      
     {
         m_CameraController = std::make_shared<CameraController>(m_Camera, m_AspectRatio, m_ZoomLevel);
         m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
@@ -76,6 +89,12 @@ namespace Coconuts
     void GameLayer::OnDetach()
     {
 
+    }
+    
+    bool GameLayer::HaltEvents(bool state)
+    {
+        m_HaltEvents = state;
+        return m_HaltEvents;
     }
     
 }

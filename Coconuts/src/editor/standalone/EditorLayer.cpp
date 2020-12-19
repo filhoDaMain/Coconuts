@@ -109,8 +109,19 @@ namespace Coconuts
         }
 
         
+        // VIEW PORT PANNEL
+        //////////////////////////////////////////////////////////////////////////
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{0, 0});
         ImGui::Begin("Viewport");
+        
+        /* Change on viewport panel focused state */
+        if (m_IsViewportPanelFocused != ImGui::IsWindowFocused())
+        {
+            m_IsViewportPanelFocused = ImGui::IsWindowFocused();
+            
+            /* Halt event handling on Game Layer (view port) if not focused */
+            m_GameLayerPtr->HaltEvents(!m_IsViewportPanelFocused);
+        }
         
         ImVec2 imguiViewportPanelSize = ImGui::GetContentRegionAvail(); // float
         
@@ -129,6 +140,7 @@ namespace Coconuts
         ImGui::Image(INT2VOIDP(m_ViewPortTexID), ImVec2{m_ViewportSize.x, m_ViewportSize.y}, ImVec2{0, 1}, ImVec2{1, 0});
         ImGui::End();
         ImGui::PopStyleVar();
+        //////////////////////////////////////////////////////////////////////////
 
         
         ImGui::Begin("Statistics");
@@ -167,7 +179,8 @@ namespace Coconuts
     }
     
     EditorLayer::EditorLayer(GameLayer* gameLayer)
-    : m_GameLayerPtr(gameLayer)
+    : m_GameLayerPtr(gameLayer),
+      m_IsViewportPanelFocused(false)
     {
       
     }

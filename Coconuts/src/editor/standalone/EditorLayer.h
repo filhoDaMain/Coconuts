@@ -37,6 +37,8 @@ namespace Coconuts
     private:
         GameLayer* m_GameLayerPtr;
         
+        bool m_IsViewportPanelFocused;
+        
         /* Renderer2D live statistics */
         Renderer2DStatistics stats;
         

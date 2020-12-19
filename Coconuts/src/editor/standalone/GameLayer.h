@@ -32,6 +32,8 @@ namespace Coconuts
             float m_AspectRatio;
             float m_ZoomLevel;
             OrthographicCamera m_Camera;
+            
+            bool m_HaltEvents = false;
 
             /* CameraController */
             std::shared_ptr<CameraController> m_CameraController;
@@ -50,6 +52,17 @@ namespace Coconuts
             virtual void OnDetach() override;
             virtual void OnUpdate(Timestep ts) override;
             virtual void OnEvent(Event& event) override;
+            
+            /**
+             * Halts and re-establishes event handling on this layer.
+             * 
+             * Input:
+             * state    - true:  Halts Event Handling. This layer will not respond to any events.
+             *          - false: Re-establishes event handling. This layer responds to its events.
+             * 
+             * Returns: current halt state after change.
+             */
+            bool HaltEvents(bool state = true);
             
             std::shared_ptr<Framebuffer>& GetFramebuffer() { return m_Framebuffer; }
             std::shared_ptr<CameraController> GetCameraController() { return m_CameraController; }

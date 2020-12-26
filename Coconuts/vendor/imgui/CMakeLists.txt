@@ -15,13 +15,12 @@
 
 #Include imgui .cpp files in ccneditor target
 file(GLOB IMGUI_SRC_FILES ${PROJECT_SOURCE_DIR}/vendor/imgui/imgui/*.cpp
-# Workaround! Include   examples/imgui_impl_opengl3.cpp example
-                          ${PROJECT_SOURCE_DIR}/vendor/imgui/imgui/examples/imgui_impl_opengl3.cpp
-# Workaround! Include   examples/imgui_impl_glfw.cpp example
-                          ${PROJECT_SOURCE_DIR}/vendor/imgui/imgui/examples/imgui_impl_glfw.cpp)
+# OpenGL3 implementation file
+                          ${PROJECT_SOURCE_DIR}/vendor/imgui/imgui/backends/imgui_impl_opengl3.cpp
+# GLFW implementation file
+                          ${PROJECT_SOURCE_DIR}/vendor/imgui/imgui/backends/imgui_impl_glfw.cpp)
 target_sources(ccneditor PRIVATE ${IMGUI_SRC_FILES})
 
 #Include imgui headers in ccneditor target
 target_include_directories(ccneditor PRIVATE "${PROJECT_SOURCE_DIR}/vendor/imgui"
-# Workaround to enable local includes from examples/imgui_impl_opengl3.cpp example
                                              "${PROJECT_SOURCE_DIR}/vendor/imgui/imgui")

@@ -22,43 +22,36 @@ namespace spdlog {
 namespace sinks {
 
 /*
- * Generator of daily log file names in format basename.YYYY-MM-DD.ext
+ * Generator of Houlry log file names in format basename.YYYY-MM-DD-HH.ext
  */
-struct daily_filename_calculator
+struct hourly_filename_calculator
 {
-    // Create filename for the form basename.YYYY-MM-DD
+    // Create filename for the form basename.YYYY-MM-DD-H
     static filename_t calc_filename(const filename_t &filename, const tm &now_tm)
     {
         filename_t basename, ext;
         std::tie(basename, ext) = details::file_helper::split_by_extension(filename);
         return fmt::format(
-            SPDLOG_FILENAME_T("{}_{:04d}-{:02d}-{:02d}{}"), basename, now_tm.tm_year + 1900, now_tm.tm_mon + 1, now_tm.tm_mday, ext);
+            SPDLOG_FILENAME_T("{}_{:04d}{:02d}{:02d}_{:02d}{}"), basename, now_tm.tm_year + 1900, now_tm.tm_mon + 1, now_tm.tm_mday, now_tm.tm_hour, ext);
     }
 };
 
 /*
- * Rotating file sink based on date.
+ * Rotating file sink based on time.
  * If truncate != false , the created file will be truncated.
  * If max_files > 0, retain only the last max_files and delete previous.
  */
-template<typename Mutex, typename FileNameCalc = daily_filename_calculator>
-class daily_file_sink final : public base_sink<Mutex>
+template<typename Mutex, typename FileNameCalc = hourly_filename_calculator>
+class hourly_file_sink final : public base_sink<Mutex>
 {
 public:
-    // create daily file sink which rotates on given time
-    daily_file_sink(filename_t base_filename, int rotation_hour, int rotation_minute, bool truncate = false, uint16_t max_files = 0)
+    // create hourly file sink which rotates on given time
+    hourly_file_sink(filename_t base_filename, bool truncate = false, uint16_t max_files = 0)
         : base_filename_(std::move(base_filename))
-        , rotation_h_(rotation_hour)
-        , rotation_m_(rotation_minute)
         , truncate_(truncate)
         , max_files_(max_files)
         , filenames_q_()
     {
-        if (rotation_hour < 0 || rotation_hour > 23 || rotation_minute < 0 || rotation_minute > 59)
-        {
-            throw_spdlog_ex("daily_file_sink: Invalid rotation time in ctor");
-        }
-
         auto now = log_clock::now();
         auto filename = FileNameCalc::calc_filename(base_filename_, now_tm(now));
         file_helper_.open(filename, truncate_);
@@ -119,7 +112,7 @@ private:
                 break;
             }
             filenames.emplace_back(filename);
-            now -= std::chrono::hours(24);
+            now -= std::chrono::hours(1);
         }
         for (auto iter = filenames.rbegin(); iter != filenames.rend(); ++iter)
         {
@@ -137,15 +130,14 @@ private:
     {
         auto now = log_clock::now();
         tm date = now_tm(now);
-        date.tm_hour = rotation_h_;
-        date.tm_min = rotation_m_;
+        date.tm_min = 0;
         date.tm_sec = 0;
         auto rotation_time = log_clock::from_time_t(std::mktime(&date));
         if (rotation_time > now)
         {
             return rotation_time;
         }
-        return {rotation_time + std::chrono::hours(24)};
+        return {rotation_time + std::chrono::hours(1)};
     }
 
     // Delete the file N rotations ago.
@@ -164,15 +156,13 @@ private:
             if (!ok)
             {
                 filenames_q_.push_back(std::move(current_file));
-                throw_spdlog_ex("Failed removing daily file " + filename_to_str(old_filename), errno);
+                throw_spdlog_ex("Failed removing hourly file " + filename_to_str(old_filename), errno);
             }
         }
         filenames_q_.push_back(std::move(current_file));
     }
 
     filename_t base_filename_;
-    int rotation_h_;
-    int rotation_m_;
     log_clock::time_point rotation_tp_;
     details::file_helper file_helper_;
     bool truncate_;
@@ -180,8 +170,8 @@ private:
     details::circular_q<filename_t> filenames_q_;
 };
 
-using daily_file_sink_mt = daily_file_sink<std::mutex>;
-using daily_file_sink_st = daily_file_sink<details::null_mutex>;
+using hourly_file_sink_mt = hourly_file_sink<std::mutex>;
+using hourly_file_sink_st = hourly_file_sink<details::null_mutex>;
 
 } // namespace sinks
 
@@ -189,16 +179,16 @@ using daily_file_sink_st = daily_file_sink<details::null_mutex>;
 // factory functions
 //
 template<typename Factory = spdlog::synchronous_factory>
-inline std::shared_ptr<logger> daily_logger_mt(
-    const std::string &logger_name, const filename_t &filename, int hour = 0, int minute = 0, bool truncate = false, uint16_t max_files = 0)
+inline std::shared_ptr<logger> hourly_logger_mt(
+    const std::string &logger_name, const filename_t &filename, bool truncate = false, uint16_t max_files = 0)
 {
-    return Factory::template create<sinks::daily_file_sink_mt>(logger_name, filename, hour, minute, truncate, max_files);
+    return Factory::template create<sinks::hourly_file_sink_mt>(logger_name, filename, truncate, max_files);
 }
 
 template<typename Factory = spdlog::synchronous_factory>
-inline std::shared_ptr<logger> daily_logger_st(
-    const std::string &logger_name, const filename_t &filename, int hour = 0, int minute = 0, bool truncate = false, uint16_t max_files = 0)
+inline std::shared_ptr<logger> hourly_logger_st(
+    const std::string &logger_name, const filename_t &filename, bool truncate = false, uint16_t max_files = 0)
 {
-    return Factory::template create<sinks::daily_file_sink_st>(logger_name, filename, hour, minute, truncate, max_files);
+    return Factory::template create<sinks::hourly_file_sink_st>(logger_name, filename, truncate, max_files);
 }
 } // namespace spdlog

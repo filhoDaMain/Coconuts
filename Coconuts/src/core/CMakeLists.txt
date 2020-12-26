@@ -43,6 +43,12 @@ target_include_directories(ccncore PRIVATE "${PROJECT_SOURCE_DIR}/include"
 set_target_properties(ccncore PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/lib")
 
 
+# Copy 3rd party header files meant to be available to client
+
+# Delete last
+ADD_CUSTOM_COMMAND(TARGET ccncore POST_BUILD COMMAND rm -rf "${PROJECT_SOURCE_DIR}/include/vendor")
+
+# Copy
 ADD_CUSTOM_COMMAND(TARGET ccncore POST_BUILD
                    COMMAND ${CMAKE_COMMAND} -E copy_directory
                        "${PROJECT_SOURCE_DIR}/vendor/spdlog/include"

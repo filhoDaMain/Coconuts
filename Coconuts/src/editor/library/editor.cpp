@@ -85,6 +85,11 @@ void GUILayer::OnAttach()
     LOG_DEBUG("GUI Layer attached");
 }
 
+void GUILayer::OnPostAttach()
+{
+    
+}
+
 void GUILayer::OnDetach()
 {
     /**

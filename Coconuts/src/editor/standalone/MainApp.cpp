@@ -14,42 +14,19 @@
  * limitations under the License.
  */
 
-#include <coconuts/Layer.h>
+#include "MainApp.h"
 
 namespace Coconuts
 {
-    Layer::Layer(const std::string& name)   : m_Name(name)
+    
+    MainApp::MainApp()
+    : Application("Coconuts Editor")
     {
+        m_GameLayerPtr      = new GameLayer();
+        m_EditorLayerPtr    = new EditorLayer(m_GameLayerPtr);
         
+        PushLayer(m_GameLayerPtr);          // In-Game graphics
+        PushOverlay(m_EditorLayerPtr);      // Editor UI graphics
     }
     
-    Layer::~Layer()
-    {
-        
-    }
-    
-    void Layer::OnAttach()
-    {
-        
-    }
-    
-    void Layer::OnPostAttach()
-    {
-        
-    }
-
-    void Layer::OnDetach()
-    {
-        
-    }
-
-    void Layer::OnUpdate(Timestep ts)
-    {
-        
-    }
-    
-    void Layer::OnEvent(Event& event)
-    {
-        
-    }
 }

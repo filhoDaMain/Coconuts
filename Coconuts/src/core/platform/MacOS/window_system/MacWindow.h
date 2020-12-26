@@ -16,6 +16,7 @@
 #ifndef MACWINDOW_H
 #define MACWINDOW_H
 
+#include <cstdint>
 #include <coconuts/window_system/Window.h>
 #include <GLFW/glfw3.h>
 #include <coconuts/graphics/GraphicsContext.h>
@@ -37,8 +38,8 @@ namespace Coconuts
             m_WindowData.eventCallback = callbackFn;
         }
         bool InitWindowManagerCallbacks(const char* library) override;
-        unsigned int GetWidth() const override { return m_WindowData.width; }
-        unsigned int GetHeight() const override { return m_WindowData.height; }
+        uint32_t GetWidth() const override { return m_WindowData.width; }
+        uint32_t GetHeight() const override { return m_WindowData.height; }
         
         void SetVSync(bool enable) override;
         bool IsVsyncEnabled() const override;
@@ -52,7 +53,7 @@ namespace Coconuts
         struct MacWindowData
         {
             std::string title;
-            unsigned int width, height;
+            uint32_t width, height;
             bool VSync;
             
             /* Called to dispatch any MacWindow Event */

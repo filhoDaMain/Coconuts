@@ -18,6 +18,7 @@
 #define APPLICATION_H
 
 #include <memory>
+#include <string>
 #include <coconuts/window_system/Window.h>
 #include <coconuts/EventSystem.h>
 #include <coconuts/Layer.h>
@@ -31,7 +32,7 @@ namespace Coconuts
     class Application
     {   
     public:
-        Application();
+        Application(const std::string& appname = "Application");
         ~Application();
         
         inline static Application& GetInstance() { return *s_Instance; }

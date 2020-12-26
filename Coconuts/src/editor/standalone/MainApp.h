@@ -13,43 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#ifndef MAINAPP_H
+#define MAINAPP_H
 
-#include <coconuts/Layer.h>
+#include <coconuts/Application.h>
+#include "GameLayer.h"
+#include "EditorLayer.h"
 
 namespace Coconuts
 {
-    Layer::Layer(const std::string& name)   : m_Name(name)
-    {
-        
-    }
     
-    Layer::~Layer()
+    class MainApp : public Application
     {
+    public:
+        MainApp();
+        ~MainApp() = default;
         
-    }
-    
-    void Layer::OnAttach()
-    {
-        
-    }
-    
-    void Layer::OnPostAttach()
-    {
-        
-    }
+    private:
+        GameLayer*      m_GameLayerPtr;
+        EditorLayer*    m_EditorLayerPtr;
+    };
 
-    void Layer::OnDetach()
-    {
-        
-    }
-
-    void Layer::OnUpdate(Timestep ts)
-    {
-        
-    }
-    
-    void Layer::OnEvent(Event& event)
-    {
-        
-    }
 }
+
+#endif /* MAINAPP_H */
+

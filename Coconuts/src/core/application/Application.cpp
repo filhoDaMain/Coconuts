@@ -29,7 +29,7 @@ namespace Coconuts
     /* Singleton Pattern */
     Application* Application::s_Instance = nullptr;
     
-    Application::Application()
+    Application::Application(const std::string& appname)
     {
         /* Assert that the Singleton Pattern is respected */
         if (s_Instance != nullptr)
@@ -39,9 +39,10 @@ namespace Coconuts
         }
         
         s_Instance = this;
+      
+        LOG_DEBUG("App created!");
         
-        LOG_DEBUG("Sandbox App created!");
-        p_Window = std::unique_ptr<Window>(Window::Create());
+        p_Window = std::unique_ptr<Window>(Window::Create( WindowProperties(appname) ));
         
         /* Initialize abstracted Renderer */
         Renderer::Init();
@@ -87,7 +88,7 @@ namespace Coconuts
     void Application::Run()
     {
         m_isRunning = true;
-        LOG_INFO("Sandbox App is now running...");
+        LOG_INFO("App is now running...");
         
         while(m_isRunning)
         {
@@ -203,11 +204,13 @@ namespace Coconuts
     {
         m_LayerStack.PushLayer(layer);
         layer->OnAttach();
+        layer->OnPostAttach();
     }
     
     void Application::PushOverlay(Layer* overlay)
     {
         m_LayerStack.PushOverlay(overlay);
         overlay->OnAttach();
+        overlay->OnPostAttach();
     }
 }

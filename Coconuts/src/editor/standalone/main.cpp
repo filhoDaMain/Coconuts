@@ -14,42 +14,21 @@
  * limitations under the License.
  */
 
-#include <coconuts/Layer.h>
+/* Standalone Editor entry point */
+#ifndef __COCONUTS_STANDALONE_EDITOR_APP__
+#define __COCONUTS_STANDALONE_EDITOR_APP__
+#endif  // __COCONUTS_STANDALONE_EDITOR_APP__
+
+#include <coconuts/core.h>
+#include "MainApp.h"
 
 namespace Coconuts
 {
-    Layer::Layer(const std::string& name)   : m_Name(name)
-    {
-        
-    }
     
-    Layer::~Layer()
+    Application* CreateApplication()
     {
-        
-    }
-    
-    void Layer::OnAttach()
-    {
-        
-    }
-    
-    void Layer::OnPostAttach()
-    {
-        
+        return new MainApp();
     }
 
-    void Layer::OnDetach()
-    {
-        
-    }
-
-    void Layer::OnUpdate(Timestep ts)
-    {
-        
-    }
-    
-    void Layer::OnEvent(Event& event)
-    {
-        
-    }
 }
+

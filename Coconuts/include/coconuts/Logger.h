@@ -27,11 +27,13 @@ namespace Coconuts
     public:
         static void Init();
         
-        inline static std::shared_ptr<spdlog::logger>& GetCoreLogger() { return s_CoreLogger; }
-        inline static std::shared_ptr<spdlog::logger>& GetClientLogger() { return s_ClientLogger; }
+        inline static std::shared_ptr<spdlog::logger>& GetCoreLogger()      { return s_CoreLogger; }
+        inline static std::shared_ptr<spdlog::logger>& GetEditorLogger()    { return s_EditorLogger; }
+        inline static std::shared_ptr<spdlog::logger>& GetClientLogger()    { return s_ClientLogger; }
         
     private:
         static std::shared_ptr<spdlog::logger> s_CoreLogger;
+        static std::shared_ptr<spdlog::logger> s_EditorLogger;
         static std::shared_ptr<spdlog::logger> s_ClientLogger;
     };
 }
@@ -43,14 +45,23 @@ namespace Coconuts
 #define LOG_WARN(...)       Coconuts::Logger::GetClientLogger()->warn(__VA_ARGS__)
 #define LOG_ERROR(...)      Coconuts::Logger::GetClientLogger()->error(__VA_ARGS__)
 #define LOG_CRITICAL(...)   Coconuts::Logger::GetClientLogger()->critical(__VA_ARGS__)
-#else
+#else   // !__COCONUTS_SANDBOX_APP__
+#ifdef __COCONUTS_STANDALONE_EDITOR_APP__
+#define LOG_TRACE(...)      Coconuts::Logger::GetEditorLogger()->trace(__VA_ARGS__)
+#define LOG_DEBUG(...)      Coconuts::Logger::GetEditorLogger()->debug(__VA_ARGS__)
+#define LOG_INFO(...)       Coconuts::Logger::GetEditorLogger()->info(__VA_ARGS__)
+#define LOG_WARN(...)       Coconuts::Logger::GetEditorLogger()->warn(__VA_ARGS__)
+#define LOG_ERROR(...)      Coconuts::Logger::GetEditorLogger()->error(__VA_ARGS__)
+#define LOG_CRITICAL(...)   Coconuts::Logger::GetEditorLogger()->critical(__VA_ARGS__)
+#else   // !__COCONUTS_SANDBOX_APP__ && !__COCONUTS_STANDALONE_EDITOR_APP__ &&
 #define LOG_TRACE(...)      Coconuts::Logger::GetCoreLogger()->trace(__VA_ARGS__)
 #define LOG_DEBUG(...)      Coconuts::Logger::GetCoreLogger()->debug(__VA_ARGS__)
 #define LOG_INFO(...)       Coconuts::Logger::GetCoreLogger()->info(__VA_ARGS__)
 #define LOG_WARN(...)       Coconuts::Logger::GetCoreLogger()->warn(__VA_ARGS__)
 #define LOG_ERROR(...)      Coconuts::Logger::GetCoreLogger()->error(__VA_ARGS__)
 #define LOG_CRITICAL(...)   Coconuts::Logger::GetCoreLogger()->critical(__VA_ARGS__)
-#endif
+#endif  // inner else
+#endif  // outer else
 
 #endif /* LOGGER_H */
 

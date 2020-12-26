@@ -32,6 +32,7 @@ namespace Coconuts
             inline bool IsGUI() override { return true; } 
             
             void OnAttach() override;
+            void OnPostAttach() override;
             void OnDetach() override;
             void OnUpdate(Timestep ts) override;          
             void Begin();

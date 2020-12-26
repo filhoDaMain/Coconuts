@@ -17,6 +17,7 @@
 #define WINDOW_H
 
 #include <string>
+#include <cstdint>
 #include <functional>
 #include <coconuts/EventSystem.h>
 
@@ -25,14 +26,13 @@ namespace Coconuts
     struct WindowProperties
     {
         std::string m_Title;
-        unsigned int m_Width;
-        unsigned int  m_Height;
+        uint32_t m_Width;
+        uint32_t  m_Height;
         
-        WindowProperties(const std::string& title  = "Coconuts" /* Default name */,
-                         unsigned int width = 1280, unsigned int height = 696)
-                : m_Title(title), m_Width(width), m_Height(height)
+        WindowProperties(const std::string& title = "title", uint32_t width = 1280, uint32_t height = 696)
+            : m_Title(title), m_Width(width), m_Height(height)
         {
-            //do nothing
+            
         }
     };
     
@@ -49,8 +49,8 @@ namespace Coconuts
         /* MUST be implemented by a platform dependent sub Window class */
         virtual void SetEventCallback(const EventCallbackFunction& callbackFn) = 0;
         virtual bool InitWindowManagerCallbacks(const char* library) = 0;
-        virtual unsigned int GetWidth() const = 0;
-        virtual unsigned int GetHeight() const = 0;
+        virtual uint32_t GetWidth() const = 0;
+        virtual uint32_t GetHeight() const = 0;
         
         virtual void SetVSync(bool enable) = 0;
         virtual bool IsVsyncEnabled() const = 0;

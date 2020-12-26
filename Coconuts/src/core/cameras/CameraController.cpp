@@ -22,7 +22,7 @@
 
 namespace Coconuts
 {
-    
+     
     void CameraController::OnUpdate(Timestep& ts)
     {
         /**
@@ -61,17 +61,11 @@ namespace Coconuts
         /* Update Camera's object rotation */
         //m_Camera.SetRotation(m_CameraRotation);
     }
-
-    bool CameraController::OnScrollEvent(InputMouseEvent::MouseScroll& e)
+    
+    void CameraController::ScreenResize(float width, float height)
     {
-        m_ZoomLevel -= e.GetOffsetY() * 0.25f;
-        m_ZoomLevel = std::max(m_ZoomLevel, 0.25f);
-
-        float aspectRatio = (float) (m_CameraAR_x / m_CameraAR_y);
-
-        m_Camera.SetProjection(-aspectRatio * m_ZoomLevel, aspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
-
-        return true;    /* Event was handled. Stop the event propagation */
+        m_AspectRatio = (float) (width / height);
+        m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
     }
 
     void CameraController::OnEvent(Event& event)
@@ -81,6 +75,28 @@ namespace Coconuts
         /* Dispatch Mouse Scroll Events */
         dispatcher.Dispatch<InputMouseEvent::MouseScroll>
             (BIND_EVENT_FUNCTION(CameraController::OnScrollEvent));
+        
+        /* Dispatch Window Resize Events */
+        dispatcher.Dispatch<WindowEvent::WindowResize>
+            (BIND_EVENT_FUNCTION(CameraController::OnWindowResizeEvent));
+    }
+    
+    
+    bool CameraController::OnScrollEvent(InputMouseEvent::MouseScroll& e)
+    {
+        m_ZoomLevel -= (float) ( (float)e.GetOffsetY() * 0.25f);
+        m_ZoomLevel = std::max<float>(m_ZoomLevel, 0.25f);
+
+        m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
+        
+        return true;    /* Event was handled. Stop the event propagation */
+    }
+    
+    
+    bool CameraController::OnWindowResizeEvent(WindowEvent::WindowResize& e)
+    {           
+        ScreenResize(e.GetWidth(), e.GetHeight());
+        return true;    /* Event was handled. Stop the event propagation */
     }
     
 }

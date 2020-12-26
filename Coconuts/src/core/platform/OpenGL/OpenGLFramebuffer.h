@@ -30,6 +30,8 @@ namespace Coconuts
         virtual void Bind() override;
         virtual void Unbind() override;
         
+        virtual void Resize(float width, float height) override;
+        
         virtual const FramebufferSpecification& GetFramebufferSpecification() const override { return m_Spec; }
         virtual uint32_t GetColorAttachID() const override { return m_ColorAttachID; }
         

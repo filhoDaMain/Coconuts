@@ -19,16 +19,20 @@
 namespace Coconuts
 {
     std::shared_ptr<spdlog::logger> Logger::s_CoreLogger;
+    std::shared_ptr<spdlog::logger> Logger::s_EditorLogger;
     std::shared_ptr<spdlog::logger> Logger::s_ClientLogger;
     
     void Logger::Init()
     {        
         spdlog::set_pattern("%d-%m-%Y %H:%M:%S.%e [%-8n] %^%-8l  %v%$");
         
-        s_CoreLogger = spdlog::stdout_color_mt  ("COCONUTS");
+        s_CoreLogger = spdlog::stdout_color_mt  ("ccn-core");
         s_CoreLogger->set_level(spdlog::level::trace);
         
-        s_ClientLogger = spdlog::stdout_color_mt("Sandbox");
+        s_EditorLogger = spdlog::stdout_color_mt  ("ccn-edtr");
+        s_EditorLogger->set_level(spdlog::level::trace);
+        
+        s_ClientLogger = spdlog::stdout_color_mt("APP-GAME");
         s_ClientLogger->set_level(spdlog::level::trace);
     }
 }

@@ -13,3 +13,6 @@
 [submodule "Coconuts/vendor/stb/stb"]
 	path = Coconuts/vendor/stb/stb
 	url = https://github.com/nothings/stb
+[submodule "Coconuts/vendor/entt"]
+	path = Coconuts/vendor/entt
+	url = https://github.com/skypjack/entt

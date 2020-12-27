@@ -33,6 +33,8 @@ set_target_properties(glad PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "${PROJECT_SOURCE
 add_subdirectory(vendor/spdlog/)
 
 #ENTITYX
+set(ENTITYX_BUILD_TESTING false CACHE BOOL "Enable building of tests." FORCE)
+set(ENTITYX_BUILD_SHARED false CACHE BOOL "Build shared libraries?" FORCE)
 add_subdirectory(vendor/entityx/)
 set_target_properties(entityx PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/lib")
 # -------------------------------------------------------------------------------------------

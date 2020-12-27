@@ -6,13 +6,15 @@ target_include_directories(ccneditor_standalone PRIVATE "${PROJECT_SOURCE_DIR}/i
                                         "${PROJECT_SOURCE_DIR}/vendor/glfw/include"
                                         "${PROJECT_SOURCE_DIR}/vendor/glad/include"
                                         "${PROJECT_SOURCE_DIR}/vendor/glm"
-                                        "${PROJECT_SOURCE_DIR}/vendor/imgui")
+                                        "${PROJECT_SOURCE_DIR}/vendor/imgui"
+                                        "${PROJECT_SOURCE_DIR}/vendor/entityx")
 
-# Coconuts + Editor Lib Linkage
+# Coconuts + Editor + vendor Lib Linkage
 target_link_libraries(ccneditor_standalone  "${PROJECT_SOURCE_DIR}/lib/libccncore.a"
-                            "${PROJECT_SOURCE_DIR}/lib/libccneditor.a"
-                            "${PROJECT_SOURCE_DIR}/lib/libglfw3.a"
-                            "${PROJECT_SOURCE_DIR}/lib/libglad.a")
+                                            "${PROJECT_SOURCE_DIR}/lib/libccneditor.a"
+                                            "${PROJECT_SOURCE_DIR}/lib/libglfw3.a"
+                                            "${PROJECT_SOURCE_DIR}/lib/libglad.a"
+                                            "${PROJECT_SOURCE_DIR}/lib/libentityx.a")
 
 # Output directory
 set_target_properties(ccneditor_standalone PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/bin")

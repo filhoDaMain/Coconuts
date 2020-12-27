@@ -38,7 +38,8 @@ target_include_directories(ccncore PRIVATE "${PROJECT_SOURCE_DIR}/include"
                                         "${PROJECT_SOURCE_DIR}/vendor/glfw/include"
                                         "${PROJECT_SOURCE_DIR}/vendor/glad/include"
                                         "${PROJECT_SOURCE_DIR}/vendor/glm"
-                                        "${PROJECT_SOURCE_DIR}/vendor/stb")
+                                        "${PROJECT_SOURCE_DIR}/vendor/stb"
+                                        "${PROJECT_SOURCE_DIR}/vendor/entityx")
 
 set_target_properties(ccncore PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/lib")
 
@@ -50,22 +51,56 @@ ADD_CUSTOM_COMMAND(TARGET ccncore POST_BUILD COMMAND rm -rf "${PROJECT_SOURCE_DI
 
 # Copy
 ADD_CUSTOM_COMMAND(TARGET ccncore POST_BUILD
+                   
+                   # spdlog
                    COMMAND ${CMAKE_COMMAND} -E copy_directory
                        "${PROJECT_SOURCE_DIR}/vendor/spdlog/include"
                        "${PROJECT_SOURCE_DIR}/include/vendor"
+
+                   # glm
                    COMMAND ${CMAKE_COMMAND} -E copy_directory
                        "${PROJECT_SOURCE_DIR}/vendor/glm/glm"
                        "${PROJECT_SOURCE_DIR}/include/vendor/glm"
+
+                   # entt
                    COMMAND ${CMAKE_COMMAND} -E copy_directory
                        "${PROJECT_SOURCE_DIR}/vendor/entt/src"
                        "${PROJECT_SOURCE_DIR}/include/vendor"
+
+                   # entityx (partitioned in severeal header files copies)
+                   COMMAND ${CMAKE_COMMAND} -E make_directory "${PROJECT_SOURCE_DIR}/include/vendor/entityx"
+                   COMMAND ${CMAKE_COMMAND} -E make_directory "${PROJECT_SOURCE_DIR}/include/vendor/entityx/3rdparty"
+                   COMMAND ${CMAKE_COMMAND} -E make_directory "${PROJECT_SOURCE_DIR}/include/vendor/entityx/deps"
+                   COMMAND ${CMAKE_COMMAND} -E make_directory "${PROJECT_SOURCE_DIR}/include/vendor/entityx/help"
+                   COMMAND ${CMAKE_COMMAND} -E make_directory "${PROJECT_SOURCE_DIR}/include/vendor/entityx/tags"
+                   COMMAND cp -f "${PROJECT_SOURCE_DIR}/vendor/entityx/entityx/*.h"
+                                 "${PROJECT_SOURCE_DIR}/include/vendor/entityx/"
+                   COMMAND cp -f "${PROJECT_SOURCE_DIR}/vendor/entityx/entityx/3rdparty/*.h"
+                                 "${PROJECT_SOURCE_DIR}/include/vendor/entityx/3rdparty/"
+                   COMMAND cp -f "${PROJECT_SOURCE_DIR}/vendor/entityx/entityx/deps/*.h"
+                                 "${PROJECT_SOURCE_DIR}/include/vendor/entityx/deps/"
+                   COMMAND cp -f "${PROJECT_SOURCE_DIR}/vendor/entityx/entityx/help/*.h"
+                                 "${PROJECT_SOURCE_DIR}/include/vendor/entityx/help/"
+                   COMMAND cp -f "${PROJECT_SOURCE_DIR}/vendor/entityx/entityx/tags/*.h"
+                                 "${PROJECT_SOURCE_DIR}/include/vendor/entityx/tags/"
+
                    COMMENT "Copying 3rd party header files")
 
 ADD_CUSTOM_COMMAND(TARGET ccncore POST_BUILD
+
+                   # spdlog
                    COMMAND ${CMAKE_COMMAND} -E copy
                        "${PROJECT_SOURCE_DIR}/vendor/spdlog/LICENSE"
                        "${PROJECT_SOURCE_DIR}/include/vendor/spdlog"
+
+                   # glm
                    COMMAND ${CMAKE_COMMAND} -E copy
                        "${PROJECT_SOURCE_DIR}/vendor/glm/copying.txt"
                        "${PROJECT_SOURCE_DIR}/include/vendor/glm"
+
+                   # entityx
+                   COMMAND ${CMAKE_COMMAND} -E copy
+                       "${PROJECT_SOURCE_DIR}/vendor/entityx/COPYING"
+                       "${PROJECT_SOURCE_DIR}/include/vendor/entityx"
+
                    COMMENT "Including 3rd party LICENSE files")

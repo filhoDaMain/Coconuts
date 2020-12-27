@@ -62,11 +62,6 @@ ADD_CUSTOM_COMMAND(TARGET ccncore POST_BUILD
                        "${PROJECT_SOURCE_DIR}/vendor/glm/glm"
                        "${PROJECT_SOURCE_DIR}/include/vendor/glm"
 
-                   # entt
-                   COMMAND ${CMAKE_COMMAND} -E copy_directory
-                       "${PROJECT_SOURCE_DIR}/vendor/entt/src"
-                       "${PROJECT_SOURCE_DIR}/include/vendor"
-
                    # entityx (partitioned in severeal header files copies)
                    COMMAND ${CMAKE_COMMAND} -E make_directory "${PROJECT_SOURCE_DIR}/include/vendor/entityx"
                    COMMAND ${CMAKE_COMMAND} -E make_directory "${PROJECT_SOURCE_DIR}/include/vendor/entityx/3rdparty"

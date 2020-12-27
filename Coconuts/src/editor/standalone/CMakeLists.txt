@@ -30,3 +30,7 @@ elseif(UNIX AND NOT APPLE)
     target_link_libraries(ccneditor_standalone OpenGL::GL)
     target_link_libraries(ccneditor_standalone "-ldl" "-pthread")
 endif()
+
+# AFTER COMPILATION INFO
+ADD_CUSTOM_COMMAND(TARGET ccneditor_standalone POST_BUILD
+                   COMMENT "Third-party header files and their Licenses were exported into [include/vendor/]")

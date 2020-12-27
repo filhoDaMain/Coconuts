@@ -31,6 +31,10 @@ set_target_properties(glad PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "${PROJECT_SOURCE
 
 #SPDLOG
 add_subdirectory(vendor/spdlog/)
+
+#ENTITYX
+add_subdirectory(vendor/entityx/)
+set_target_properties(entityx PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/lib")
 # -------------------------------------------------------------------------------------------
 
 

@@ -38,8 +38,7 @@ target_include_directories(ccncore PRIVATE "${PROJECT_SOURCE_DIR}/include"
                                         "${PROJECT_SOURCE_DIR}/vendor/glfw/include"
                                         "${PROJECT_SOURCE_DIR}/vendor/glad/include"
                                         "${PROJECT_SOURCE_DIR}/vendor/glm"
-                                        "${PROJECT_SOURCE_DIR}/vendor/stb"
-                                        "${PROJECT_SOURCE_DIR}/vendor/entt/src")
+                                        "${PROJECT_SOURCE_DIR}/vendor/stb")
 
 set_target_properties(ccncore PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/lib")
 
@@ -69,7 +68,4 @@ ADD_CUSTOM_COMMAND(TARGET ccncore POST_BUILD
                    COMMAND ${CMAKE_COMMAND} -E copy
                        "${PROJECT_SOURCE_DIR}/vendor/glm/copying.txt"
                        "${PROJECT_SOURCE_DIR}/include/vendor/glm"
-                   COMMAND ${CMAKE_COMMAND} -E copy
-                       "${PROJECT_SOURCE_DIR}/vendor/entt/LICENSE"
-                       "${PROJECT_SOURCE_DIR}/include/vendor/entt"
                    COMMENT "Including 3rd party LICENSE files")

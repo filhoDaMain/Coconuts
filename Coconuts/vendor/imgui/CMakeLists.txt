@@ -22,5 +22,4 @@ file(GLOB IMGUI_SRC_FILES ${PROJECT_SOURCE_DIR}/vendor/imgui/imgui/*.cpp
 target_sources(ccneditor PRIVATE ${IMGUI_SRC_FILES})
 
 #Include imgui headers in ccneditor target
-target_include_directories(ccneditor PRIVATE "${PROJECT_SOURCE_DIR}/vendor/imgui"
-                                             "${PROJECT_SOURCE_DIR}/vendor/imgui/imgui")
+target_include_directories(ccneditor PRIVATE "${PROJECT_SOURCE_DIR}/vendor/imgui/imgui")

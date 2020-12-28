@@ -1,25 +1,14 @@
 # CORE LIBRARY
 
-add_library(ccncore core.cpp
-                    application/Application.cpp
-                    logger/Logger.cpp
-                    event_system/EventDispatcher.cpp
-                    layer_system/Layer.cpp
-                    layer_system/LayerStack.cpp
-                    cameras/OrthographicCamera.cpp
-                    cameras/CameraController.cpp
-                    graphics/Shader.cpp
-                    graphics/Shader.cpp
-                    graphics/VertexBuffer.cpp
-                    graphics/IndexBuffer.cpp
-                    graphics/VertexArray.cpp
-                    graphics/Renderer.cpp
-                    graphics/RendererAPI.cpp
-                    graphics/LowLevelAPI.cpp
-                    graphics/Texture.cpp
-                    graphics/Renderer2D.cpp
-                    graphics/Sprite.cpp
-                    graphics/Framebuffer.cpp)
+add_library(ccncore core.cpp)
+
+add_subdirectory(application)
+add_subdirectory(logger)
+add_subdirectory(event_system)
+add_subdirectory(layer_system)
+add_subdirectory(cameras)
+add_subdirectory(graphics)
+
 
 # Platform Specific files
 # Mac OS

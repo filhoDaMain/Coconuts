@@ -1,5 +1,4 @@
-# CORE LIBRARY
+# CORE LIBRARY - Platform / MacOS
 
-# Window System
 add_subdirectory(window_system)
 add_subdirectory(polling)

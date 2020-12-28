@@ -1,4 +1,4 @@
-# CORE LIBRARY
+# CORE LIBRARY - Platform / OpenGL
 
 # graphics - OpenGL
 

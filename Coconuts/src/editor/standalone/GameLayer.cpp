@@ -18,6 +18,9 @@
 #include <coconuts/Renderer.h>
 #include "GameLayer.h"
 
+
+#include <coconuts/ecs/Scene.h>
+
 namespace Coconuts
 {
 
@@ -84,6 +87,8 @@ namespace Coconuts
         spec.height = 696.0f;
 
         m_Framebuffer.reset( Framebuffer::Create(spec) );
+        
+        Scene myScene;
     }
 
     void GameLayer::OnDetach()

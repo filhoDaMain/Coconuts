@@ -1,6 +1,7 @@
-# CORE LIBRARY
+# CORE LIBRARY - Platform / MacOS / Polling
 
-# Input Polling
+# Source files
+target_sources(ccncore PRIVATE  "${CMAKE_CURRENT_SOURCE_DIR}/MacPolling.cpp")
 
-target_sources(ccncore PRIVATE "${PROJECT_SOURCE_DIR}/src/core/platform/MacOS/polling/MacPolling.cpp")
-target_include_directories(ccncore PRIVATE "${PROJECT_SOURCE_DIR}/src/core/platform/MacOS/polling/")
+# Local header files
+target_include_directories(ccncore PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")

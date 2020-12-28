@@ -14,9 +14,11 @@ add_subdirectory(${PROJECT_SOURCE_DIR}/vendor/imgui vendor/imgui/imgui)
 
 set_target_properties(ccneditor PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/lib")
 
+# Copy 3rd party header files meant to be available to client
 ADD_CUSTOM_COMMAND(TARGET ccneditor POST_BUILD
 
                    # imgui (partitioned in severeal header files copies)
+                   COMMAND rm -rf "${PROJECT_SOURCE_DIR}/include/vendor/imgui/*"
                    COMMAND ${CMAKE_COMMAND} -E make_directory "${PROJECT_SOURCE_DIR}/include/vendor/imgui"
                    COMMAND ${CMAKE_COMMAND} -E make_directory "${PROJECT_SOURCE_DIR}/include/vendor/imgui/backends"
                    COMMAND cp -f "${PROJECT_SOURCE_DIR}/vendor/imgui/imgui/*.h"

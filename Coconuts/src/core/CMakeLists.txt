@@ -35,24 +35,22 @@ set_target_properties(ccncore PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "${PROJECT_SOU
 
 
 # Copy 3rd party header files meant to be available to client
-
-# Delete last
-ADD_CUSTOM_COMMAND(TARGET ccncore POST_BUILD COMMAND rm -rf "${PROJECT_SOURCE_DIR}/include/vendor")
-
-# Copy
 ADD_CUSTOM_COMMAND(TARGET ccncore POST_BUILD
                    
                    # spdlog
+                   COMMAND rm -rf "${PROJECT_SOURCE_DIR}/include/vendor/spdlog/*"
                    COMMAND ${CMAKE_COMMAND} -E copy_directory
                        "${PROJECT_SOURCE_DIR}/vendor/spdlog/include"
                        "${PROJECT_SOURCE_DIR}/include/vendor"
 
                    # glm
+                   COMMAND rm -rf "${PROJECT_SOURCE_DIR}/include/vendor/glm/*"
                    COMMAND ${CMAKE_COMMAND} -E copy_directory
                        "${PROJECT_SOURCE_DIR}/vendor/glm/glm"
                        "${PROJECT_SOURCE_DIR}/include/vendor/glm"
 
                    # entityx (partitioned in severeal header files copies)
+                   COMMAND rm -rf "${PROJECT_SOURCE_DIR}/include/vendor/entityx/*"
                    COMMAND ${CMAKE_COMMAND} -E make_directory "${PROJECT_SOURCE_DIR}/include/vendor/entityx"
                    COMMAND ${CMAKE_COMMAND} -E make_directory "${PROJECT_SOURCE_DIR}/include/vendor/entityx/3rdparty"
                    COMMAND ${CMAKE_COMMAND} -E make_directory "${PROJECT_SOURCE_DIR}/include/vendor/entityx/deps"

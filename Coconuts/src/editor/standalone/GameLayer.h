@@ -74,6 +74,9 @@ namespace Coconuts
             
             std::shared_ptr<Framebuffer>& GetFramebuffer() { return m_Framebuffer; }
             std::shared_ptr<CameraController> GetCameraController() { return m_CameraController; }
+            
+            //Debug Color change
+            Entity& GetEntity() {return m_Entity; }
     };
     
 }

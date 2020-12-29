@@ -17,6 +17,11 @@
 #include "EditorLayer.h"
 #include <cstdint>
 
+#include <coconuts/ecs/components/SpriteComponent.h>
+
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 #define INT2VOIDP(i) (void*)(uintptr_t)(i)
 
 namespace Coconuts
@@ -154,6 +159,11 @@ namespace Coconuts
         ImGui::Spacing();
         ImGui::Text("%d Quads", stats.quadCount);
         ImGui::End();
+        
+        ImGui::Begin("Inspector");
+        ImGui::ColorEdit3("Tint", glm::value_ptr(  m_GameLayerPtr->GetEntity().GetComponent<SpriteComponent>().tintColor  ));
+        ImGui::End();
+        //ImGui::ColorEdit4("Color Tint", glm::value_ptr(m_GameLayerPtr->GetEntity().GetComponent<SpriteComponent>().tintColor));
 
 
         ImGui::End();

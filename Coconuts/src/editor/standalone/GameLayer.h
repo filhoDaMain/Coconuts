@@ -21,6 +21,7 @@
 #include <coconuts/Layer.h>
 #include <coconuts/cameras/OrthographicCamera.h>
 #include <coconuts/cameras/CameraController.h>
+#include <coconuts/ecs/Scene.h>
 
 namespace Coconuts
 {
@@ -43,6 +44,8 @@ namespace Coconuts
              * EditorLayer's OnPostAttach() phase!
              */
             std::shared_ptr<Framebuffer> m_Framebuffer;
+            
+            std::shared_ptr<Scene> m_ActiveScene;
 
         public:
             GameLayer();

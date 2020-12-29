@@ -23,8 +23,14 @@
 namespace Coconuts
 {
     
+    void Scene::OnUpdate(Timestep ts)
+    {
+        
+    }
+    
     Scene::Scene()
     {
+#if 0
         entityx::Entity entity = m_Registry.entities.create();
         entityx::Entity entity2 = m_Registry.entities.create();
         
@@ -43,11 +49,17 @@ namespace Coconuts
             
             LOG_WARN("I'm an entity with a TransformComponent. My ID is {}", entituxa.id().id());
         });
+#endif
     }
     
     Scene::~Scene()
     {
         
+    }
+    
+    entityx::Entity Scene::CreateEntity()
+    {
+        return m_EntityManager.entities.create();
     }
     
 }

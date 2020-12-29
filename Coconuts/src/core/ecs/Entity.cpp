@@ -13,32 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef SCENE_H
-#define SCENE_H
 
-#include <entityx/entityx.h>
-#include <coconuts/time/Timestep.h>
+#include <coconuts/ecs/Entity.h>
 
 namespace Coconuts
 {
     
-    class Scene
+    Entity::Entity(std::shared_ptr<Scene> scene)
+    : m_Scene(scene)
     {
-    public:
-        Scene();
-        ~Scene();
+        /* Create/Add *this* Entity to its Scene */
+        m_EntityxEntity = m_Scene->CreateEntity();
+    }
+    
+    Entity::~Entity()
+    {
         
-        void OnUpdate(Timestep ts);
-        
-        entityx::Entity CreateEntity();
-        
-        size_t GetNumberOfEntities() const { return m_EntityManager.entities.size(); }
-        
-    private:
-        entityx::EntityX m_EntityManager;
-    };
+    }
     
 }
-
-#endif /* SCENE_H */
-

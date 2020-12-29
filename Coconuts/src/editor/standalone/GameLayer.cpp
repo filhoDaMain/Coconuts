@@ -21,6 +21,12 @@
 
 #include <coconuts/ecs/Scene.h>
 
+#include <coconuts/ecs/Entity.h>
+
+#include <coconuts/ecs/components/TransformComponent.h>
+
+#include <coconuts/Logger.h>
+
 namespace Coconuts
 {
 
@@ -88,7 +94,14 @@ namespace Coconuts
 
         m_Framebuffer.reset( Framebuffer::Create(spec) );
         
-        Scene myScene;
+        m_ActiveScene = std::make_shared<Scene>();
+        
+        Entity myEntity(m_ActiveScene);
+        
+        myEntity.AddComponent<TransformComponent>();
+        
+        LOG_WARN("Has TransfromComponent ?: {}", myEntity.HasComponent<TransformComponent>() ? "yes" : "no");
+        LOG_WARN("Number of entities on scene: {}", m_ActiveScene->GetNumberOfEntities());
     }
 
     void GameLayer::OnDetach()

@@ -38,6 +38,12 @@ namespace Coconuts
         }
         
         template <typename C>
+        void RemoveComponent()
+        {
+            m_EntityxEntity.remove<C>();
+        }
+        
+        template <typename C>
         C& GetComponent()
         {
             return (m_EntityxEntity.component<C>().get());

@@ -102,6 +102,9 @@ namespace Coconuts
         
         LOG_WARN("Has TransfromComponent ?: {}", myEntity.HasComponent<TransformComponent>() ? "yes" : "no");
         LOG_WARN("Number of entities on scene: {}", m_ActiveScene->GetNumberOfEntities());
+        
+        myEntity.RemoveComponent<TransformComponent>();
+        LOG_WARN("Has TransfromComponent ?: {}", myEntity.HasComponent<TransformComponent>() ? "yes" : "no");
     }
 
     void GameLayer::OnDetach()

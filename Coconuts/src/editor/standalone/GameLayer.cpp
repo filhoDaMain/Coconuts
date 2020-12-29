@@ -25,14 +25,21 @@
 
 #include <coconuts/ecs/components/TransformComponent.h>
 #include <coconuts/ecs/components/TagComponent.h>
+#include <coconuts/ecs/components/SpriteComponent.h>
 
 #include <coconuts/Logger.h>
+
+
+#define GAMELAYER_SPRITESHEET_PATH  "../../Demo/examples/tiles2d/assets/textures/RPGpack_sheet_2X.png";
 
 namespace Coconuts
 {
 
     void GameLayer::OnUpdate(Timestep ts)
     {
+        //LOG_ERROR("Position OnAttach: {} {}", m_Entity.GetComponent<TransformComponent>().position.x,
+        //                                        m_Entity.GetComponent<TransformComponent>().position.y);
+        
         if (!m_HaltEvents)
         {
             /* Update Camera Controller */
@@ -53,7 +60,8 @@ namespace Coconuts
         Renderer2D::ResetStatistics();
         Renderer2D::BeginScene(m_Camera);
 
-        Renderer2D::DrawQuad({0.0f, 0.0f}, {0.8f, 0.8f}, {0.8f, 1.0f, 0.1f, 1.0f});
+        m_ActiveScene->OnUpdate(ts);
+        //Renderer2D::DrawQuad({0.0f, 0.0f}, {0.8f, 0.8f}, {0.8f, 1.0f, 0.1f, 1.0f});
 
         Renderer2D::EndScene();
 
@@ -97,24 +105,48 @@ namespace Coconuts
         
         m_ActiveScene = std::make_shared<Scene>();
         
-        Entity myEntity(m_ActiveScene);
+        //Entity myEntity(m_ActiveScene);
+        m_Entity = Entity(m_ActiveScene);
         
-        myEntity.AddComponent<TransformComponent>();
+        glm::vec2 myPostion{1.0f, 2.0f};
+        m_Entity.AddComponent<TransformComponent>(myPostion);
         
-        LOG_WARN("Has TransfromComponent ?: {}", myEntity.HasComponent<TransformComponent>() ? "yes" : "no");
+        LOG_WARN("Has TransfromComponent ?: {}", m_Entity.HasComponent<TransformComponent>() ? "yes" : "no");
         LOG_WARN("Number of entities on scene: {}", m_ActiveScene->GetNumberOfEntities());
         
-        myEntity.RemoveComponent<TransformComponent>();
-        LOG_WARN("Has TransfromComponent ?: {}", myEntity.HasComponent<TransformComponent>() ? "yes" : "no");
+        // Current Position
+        LOG_CRITICAL("Position OnAttach: {} {}", m_Entity.GetComponent<TransformComponent>().position.x,
+                                             m_Entity.GetComponent<TransformComponent>().position.y);
         
-        if (myEntity.HasComponent<TagComponent>())
+        myPostion = {3.0f, 4.0f};
+        LOG_CRITICAL("Position OnAttach: {} {}", m_Entity.GetComponent<TransformComponent>().position.x,
+                                             m_Entity.GetComponent<TransformComponent>().position.y);
+        
+        
+        
+        if (m_Entity.HasComponent<TagComponent>())
         {
-            LOG_WARN("Default tag name: {}", myEntity.GetComponent<TagComponent>().tag);
+            LOG_WARN("Default tag name: {}", m_Entity.GetComponent<TagComponent>().tag);
             
             // Retag
-            myEntity.GetComponent<TagComponent>().tag = "Andre";
-            LOG_WARN("Re-tagged to: {}", myEntity.GetComponent<TagComponent>().tag);
+            m_Entity.GetComponent<TagComponent>().tag = "Tree";
+            LOG_WARN("Re-tagged to: {}", m_Entity.GetComponent<TagComponent>().tag);
         }
+       
+        // Sprites
+        /* Sprites */
+        std::shared_ptr<Coconuts::Sprite> m_TreeSprite;
+        
+        /* Spritesheet Texture */
+        std::shared_ptr<Coconuts::Texture2D> m_SpritesheetTexture2D;
+        
+        const std::string path = GAMELAYER_SPRITESHEET_PATH;
+        m_SpritesheetTexture2D.reset( Coconuts::Texture2D::Create(path) );
+    
+        /* Load Sprites */
+        m_TreeSprite.reset( Coconuts::Sprite::Create(m_SpritesheetTexture2D, {2, 1}, {128, 128}, {1, 2}) );
+        
+        m_Entity.AddComponent<SpriteComponent>(m_TreeSprite);
     }
 
     void GameLayer::OnDetach()

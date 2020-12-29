@@ -13,26 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef TRANSFORMCOMPONENT_H
-#define TRANSFORMCOMPONENT_H
+#ifndef SPRITECOMPONENT_H
+#define SPRITECOMPONENT_H
 
+#include <coconuts/graphics/Sprite.h>
 #include <glm/glm.hpp>
+#include <memory>
 
 namespace Coconuts
 {
     
-    struct TransformComponent
+    struct SpriteComponent
     {
         //data
-        //glm::mat4 transform;
-        glm::vec2 position;
+        std::shared_ptr<Sprite> sprite;
+        glm::vec4               tintColor{ 1.0f, 1.0f, 1.0f, 1.0f };
         
-        TransformComponent() = default;
-        //TransformComponent(const glm::mat4& val) : transform(val) {}
-        TransformComponent(const glm::vec2& pos) : position(pos) {}
+        SpriteComponent() = default;
+        SpriteComponent(const std::shared_ptr<Sprite>& spr, const glm::vec4& color = glm::vec4(1.0f))
+        : sprite(spr), tintColor(color) {}
     };
     
 }
 
-#endif /* TRANSFORMCOMPONENT_H */
+#endif /* SPRITECOMPONENT_H */
 

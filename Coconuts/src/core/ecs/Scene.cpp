@@ -17,15 +17,25 @@
 #include <coconuts/ecs/Scene.h>
 
 #include <coconuts/ecs/components/TransformComponent.h>
+#include <coconuts/ecs/components/TagComponent.h>
+#include <coconuts/ecs/components/SpriteComponent.h>
 
 #include <coconuts/Logger.h>
+
+#include <coconuts/graphics/Renderer2D.h>
 
 namespace Coconuts
 {
     
     void Scene::OnUpdate(Timestep ts)
     {
-        
+        m_EntityManager.entities.each<TagComponent, SpriteComponent>([](entityx::Entity thisEntityxEntity, TagComponent& thisTagComponent, SpriteComponent& thisSpriteComponent)
+        {
+            // Draw
+            LOG_INFO("Drawing: {}", thisTagComponent.tag);
+            
+            Renderer2D::DrawQuad({0.0f, 0.0f}, {1.0f, 2.0f}, thisSpriteComponent.sprite);
+        });
     }
     
     Scene::Scene()

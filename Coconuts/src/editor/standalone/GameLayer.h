@@ -23,6 +23,9 @@
 #include <coconuts/cameras/CameraController.h>
 #include <coconuts/ecs/Scene.h>
 
+
+#include <coconuts/ecs/Entity.h>
+
 namespace Coconuts
 {
     
@@ -46,6 +49,8 @@ namespace Coconuts
             std::shared_ptr<Framebuffer> m_Framebuffer;
             
             std::shared_ptr<Scene> m_ActiveScene;
+            
+            Entity m_Entity;
 
         public:
             GameLayer();

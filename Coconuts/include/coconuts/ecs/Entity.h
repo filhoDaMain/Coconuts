@@ -28,6 +28,7 @@ namespace Coconuts
     class Entity
     {
     public:
+        Entity() = default;
         Entity(std::shared_ptr<Scene> scene);
         ~Entity();
         

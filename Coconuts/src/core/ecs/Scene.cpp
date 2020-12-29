@@ -30,10 +30,7 @@ namespace Coconuts
     void Scene::OnUpdate(Timestep ts)
     {
         m_EntityManager.entities.each<TagComponent, SpriteComponent>([](entityx::Entity thisEntityxEntity, TagComponent& thisTagComponent, SpriteComponent& thisSpriteComponent)
-        {
-            // Draw
-            LOG_INFO("Drawing: {}", thisTagComponent.tag);
-            
+        {   
             Renderer2D::DrawQuad({0.0f, 0.0f}, {1.0f, 2.0f}, thisSpriteComponent.sprite, thisSpriteComponent.tilingFactor, thisSpriteComponent.tintColor);
         });
     }

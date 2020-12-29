@@ -27,11 +27,14 @@ namespace Coconuts
     {
         //data
         std::shared_ptr<Sprite> sprite;
-        glm::vec4               tintColor{ 1.0f, 1.0f, 1.0f, 1.0f };
+        glm::vec4               tintColor;
+        float                   tilingFactor;
         
         SpriteComponent() = default;
-        SpriteComponent(const std::shared_ptr<Sprite>& spr, const glm::vec4& color = glm::vec4(1.0f))
-        : sprite(spr), tintColor(color) {}
+        SpriteComponent(const std::shared_ptr<Sprite>& spr,
+                        const glm::vec4& color = glm::vec4(1.0f),
+                        float factor = 1.0f)
+        : sprite(spr), tintColor(color), tilingFactor(factor) {}
     };
     
 }

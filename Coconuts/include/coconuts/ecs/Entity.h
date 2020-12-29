@@ -46,7 +46,7 @@ namespace Coconuts
         template <typename C>
         C& GetComponent()
         {
-            return (m_EntityxEntity.component<C>().get());
+            return *(m_EntityxEntity.component<C>().get());
         }
         
         template <typename C>

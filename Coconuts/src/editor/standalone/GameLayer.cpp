@@ -24,6 +24,7 @@
 #include <coconuts/ecs/Entity.h>
 
 #include <coconuts/ecs/components/TransformComponent.h>
+#include <coconuts/ecs/components/TagComponent.h>
 
 #include <coconuts/Logger.h>
 
@@ -105,6 +106,15 @@ namespace Coconuts
         
         myEntity.RemoveComponent<TransformComponent>();
         LOG_WARN("Has TransfromComponent ?: {}", myEntity.HasComponent<TransformComponent>() ? "yes" : "no");
+        
+        if (myEntity.HasComponent<TagComponent>())
+        {
+            LOG_WARN("Default tag name: {}", myEntity.GetComponent<TagComponent>().tag);
+            
+            // Retag
+            myEntity.GetComponent<TagComponent>().tag = "Andre";
+            LOG_WARN("Re-tagged to: {}", myEntity.GetComponent<TagComponent>().tag);
+        }
     }
 
     void GameLayer::OnDetach()

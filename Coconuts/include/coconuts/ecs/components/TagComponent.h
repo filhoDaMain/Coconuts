@@ -13,26 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#ifndef TAGCOMPONENT_H
+#define TAGCOMPONENT_H
 
-#include <coconuts/ecs/Entity.h>
-#include <coconuts/ecs/components/TagComponent.h>
+#include <string>
 
 namespace Coconuts
 {
     
-    Entity::Entity(std::shared_ptr<Scene> scene)
-    : m_Scene(scene)
+    struct TagComponent
     {
-        /* Create/Add *this* Entity to its Scene */
-        m_EntityxEntity = m_Scene->CreateEntity();
+        //data
+        std::string tag;
         
-        /* Add default Components */
-        this->AddComponent<TagComponent>("Untagged");   // Entity tag
-    }
-    
-    Entity::~Entity()
-    {
-        
-    }
+        TagComponent() = default;
+        TagComponent(const std::string& tagName) : tag(tagName) {}
+    };
     
 }
+
+#endif /* TAGCOMPONENT_H */
+

@@ -35,7 +35,7 @@ namespace Coconuts
         :   aspectRatio(aR),
             zoomLevel(zoom),
             camera(-aspectRatio * zoomLevel, aspectRatio * zoomLevel, -zoomLevel, zoomLevel),
-            controller(camera, &aspectRatio, &zoomLevel)
+            controller(camera, aspectRatio, zoomLevel)
         {}
     };
     

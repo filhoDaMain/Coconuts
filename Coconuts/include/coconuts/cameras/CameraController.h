@@ -26,12 +26,7 @@ namespace Coconuts
     
     class CameraController
     {
-    public:
-        CameraController(OrthographicCamera& camera, float* aspectRatio, float* zoomLevel)
-        : m_Camera(camera), m_AspectRatioPtr(aspectRatio), m_ZoomLevelPtr(zoomLevel)
-        {         
-        }
-        
+    public:        
         CameraController(OrthographicCamera& camera, float aspectRatio, float zoomLevel)
         : m_Camera(camera), m_AspectRatio(aspectRatio), m_ZoomLevel(zoomLevel)
         {         
@@ -49,16 +44,14 @@ namespace Coconuts
     
         /* Reference to a Camera object */
         OrthographicCamera& m_Camera;
-        float* m_AspectRatioPtr;
-        float* m_ZoomLevelPtr;
+        
+        float m_AspectRatio;
+        float m_ZoomLevel = 1.0f;
+        
     
         float m_CameraAR_x;
         float m_CameraAR_y;
         
-        
-        
-        float m_AspectRatio;
-        float m_ZoomLevel       = 1.0f;
         glm::vec3 m_CameraPos   = {0.0f, 0.0f, 0.0f};
         float m_CameraMoveSpeed = 1.0f;
         

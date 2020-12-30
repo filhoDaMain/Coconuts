@@ -47,13 +47,19 @@ namespace Coconuts
             // Update Controller
             thisOrthoCameraComponent.controller.OnUpdate(ts);
             
+            LOG_DEBUG("zoom: {}", thisOrthoCameraComponent.zoomLevel);
+            LOG_DEBUG("AR: {}", thisOrthoCameraComponent.aspectRatio);
+            
             // Begin Scene
             Renderer2D::BeginScene(thisOrthoCameraComponent.camera);
+            
+            
+            Renderer2D::DrawQuad({0.0f, 0.0f}, {0.8f, 0.8f}, {0.8f, 1.0f, 0.1f, 1.0f});
             
             // Draw All Sprites for this Scene
             m_EntityManager.entities.each<TagComponent, SpriteComponent>([](entityx::Entity thisEntityxEntity, TagComponent& thisTagComponent, SpriteComponent& thisSpriteComponent)
             {   
-                Renderer2D::DrawQuad({0.0f, 0.0f}, {1.0f, 2.0f}, thisSpriteComponent.sprite, thisSpriteComponent.tilingFactor, thisSpriteComponent.tintColor);
+                //Renderer2D::DrawQuad({0.0f, 0.0f}, {1.0f, 2.0f}, thisSpriteComponent.sprite, thisSpriteComponent.tilingFactor, thisSpriteComponent.tintColor);
             });
             
             // End Scene

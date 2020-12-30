@@ -66,8 +66,8 @@ namespace Coconuts
     
     void CameraController::ScreenResize(float width, float height)
     {
-        m_AspectRatio = (float) (width / height);
-        m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
+        *m_AspectRatioPtr = (float) (width / height);
+        m_Camera.SetProjection(-(*m_AspectRatioPtr) * (*m_ZoomLevelPtr), (*m_AspectRatioPtr) * (*m_ZoomLevelPtr), -(*m_ZoomLevelPtr), (*m_ZoomLevelPtr));
     }
 
     void CameraController::OnEvent(Event& event)
@@ -94,10 +94,10 @@ namespace Coconuts
     
     bool CameraController::OnScrollEvent(InputMouseEvent::MouseScroll& e)
     {
-        m_ZoomLevel -= (float) ( (float)e.GetOffsetY() * 0.25f);
-        m_ZoomLevel = std::max<float>(m_ZoomLevel, 0.25f);
+        *m_ZoomLevelPtr -= (float) ( (float)e.GetOffsetY() * 0.25f);
+        *m_ZoomLevelPtr = std::max<float>(*m_ZoomLevelPtr, 0.25f);
 
-        m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
+        m_Camera.SetProjection(-(*m_AspectRatioPtr) * (*m_ZoomLevelPtr), (*m_AspectRatioPtr) * (*m_ZoomLevelPtr), -(*m_ZoomLevelPtr), (*m_ZoomLevelPtr));
         
         return true;    /* Event was handled. Stop the event propagation */
     }

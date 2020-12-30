@@ -25,7 +25,8 @@ namespace Coconuts
      
     void CameraController::OnUpdate(Timestep& ts)
     {
-#if 0
+        m_DeltaTime = ts;
+        
         /**
          * Input polling from Keyboard to 
          * move and rotate Camera
@@ -34,25 +35,25 @@ namespace Coconuts
         /* Left */
         if (Polling::IsKeyPressed(Keyboard::KEY_LEFT))
         {
-            m_CameraPos.x -= m_CameraMoveSpeed * ts.GetSeconds();
+            m_CameraPos.x -= m_CameraMoveSpeed * m_DeltaTime.GetSeconds();
         }
 
         /* Right */
         if (Polling::IsKeyPressed(Keyboard::KEY_RIGHT))
         {
-            m_CameraPos.x += m_CameraMoveSpeed * ts.GetSeconds();
+            m_CameraPos.x += m_CameraMoveSpeed * m_DeltaTime.GetSeconds();
         }
 
         /* Up */
         if (Polling::IsKeyPressed(Keyboard::KEY_UP))
         {
-            m_CameraPos.y += m_CameraMoveSpeed * ts.GetSeconds();
+            m_CameraPos.y += m_CameraMoveSpeed * m_DeltaTime.GetSeconds();
         }
 
         /* Down */
         if (Polling::IsKeyPressed(Keyboard::KEY_DOWN))
         {
-            m_CameraPos.y -= m_CameraMoveSpeed * ts.GetSeconds();
+            m_CameraPos.y -= m_CameraMoveSpeed * m_DeltaTime.GetSeconds();
         }
 
 
@@ -61,7 +62,6 @@ namespace Coconuts
 
         /* Update Camera's object rotation */
         //m_Camera.SetRotation(m_CameraRotation);
-#endif
     }
     
     void CameraController::ScreenResize(float width, float height)
@@ -74,6 +74,14 @@ namespace Coconuts
     {
         EventDispatcher dispatcher(event);
 
+        /* Dispatch Input Key Press Events */
+        dispatcher.Dispatch<InputKeyEvent::KeyPress>
+            (BIND_EVENT_FUNCTION(CameraController::OnInputKeyPressEvent));
+        
+        /* Dispatch Input Key Release Events */
+        dispatcher.Dispatch<InputKeyEvent::KeyRelease>
+            (BIND_EVENT_FUNCTION(CameraController::OnInputKeyReleaseEvent));
+        
         /* Dispatch Mouse Scroll Events */
         dispatcher.Dispatch<InputMouseEvent::MouseScroll>
             (BIND_EVENT_FUNCTION(CameraController::OnScrollEvent));
@@ -97,7 +105,20 @@ namespace Coconuts
     
     bool CameraController::OnWindowResizeEvent(WindowEvent::WindowResize& e)
     {           
-        ScreenResize(e.GetWidth(), e.GetHeight());
+        LOG_DEBUG("Resize");
+        //ScreenResize(e.GetWidth(), e.GetHeight());
+        return true;    /* Event was handled. Stop the event propagation */
+    }
+    
+    bool CameraController::OnInputKeyPressEvent(InputKeyEvent::KeyPress& e)
+    {
+        //do nothing
+        return true;    /* Event was handled. Stop the event propagation */
+    }
+    
+    bool CameraController::OnInputKeyReleaseEvent(InputKeyEvent::KeyRelease& e)
+    {
+        //do nothing
         return true;    /* Event was handled. Stop the event propagation */
     }
     

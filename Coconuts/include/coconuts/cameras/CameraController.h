@@ -39,6 +39,8 @@ namespace Coconuts
     private:
         bool OnScrollEvent(InputMouseEvent::MouseScroll& e);
         bool OnWindowResizeEvent(WindowEvent::WindowResize& e);
+        bool OnInputKeyPressEvent(InputKeyEvent::KeyPress& e);
+        bool OnInputKeyReleaseEvent(InputKeyEvent::KeyRelease& e);
     
         /* Reference to a Camera object */
         OrthographicCamera& m_Camera;
@@ -50,6 +52,8 @@ namespace Coconuts
         float m_ZoomLevel       = 1.0f;
         glm::vec3 m_CameraPos   = {0.0f, 0.0f, 0.0f};
         float m_CameraMoveSpeed = 1.0f;
+        
+        Timestep m_DeltaTime;
     };
 }
 

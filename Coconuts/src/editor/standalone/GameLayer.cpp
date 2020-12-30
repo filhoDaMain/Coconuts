@@ -74,12 +74,10 @@ namespace Coconuts
     void GameLayer::OnEvent(Event& event)
     {
         /* Don't handle any events */
-        if (m_HaltEvents)
-        {
-            return;
-        }
-        
-        LOG_CRITICAL("Event!");
+        //if (m_HaltEvents)
+        //{
+        //    return;
+        //}
         
         // Dispatch all events to Scene
         m_ActiveScene->OnEvent(event);

@@ -33,14 +33,14 @@ namespace Coconuts
     {
         private:
             /* Camera */
-            float m_AspectRatio;
-            float m_ZoomLevel;
-            OrthographicCamera m_Camera;
+            //float m_AspectRatio;
+            //float m_ZoomLevel;
+            //OrthographicCamera m_Camera;
             
             bool m_HaltEvents = false;
 
             /* CameraController */
-            std::shared_ptr<CameraController> m_CameraController;
+            //std::shared_ptr<CameraController> m_CameraController;
 
             /**
              * Init during OnAttach to make it available for
@@ -49,6 +49,8 @@ namespace Coconuts
             std::shared_ptr<Framebuffer> m_Framebuffer;
             
             std::shared_ptr<Scene> m_ActiveScene;
+            
+            Entity m_CameraEntity;
             
             Entity m_Entity;
 
@@ -73,7 +75,7 @@ namespace Coconuts
             bool HaltEvents(bool state = true);
             
             std::shared_ptr<Framebuffer>& GetFramebuffer() { return m_Framebuffer; }
-            std::shared_ptr<CameraController> GetCameraController() { return m_CameraController; }
+            //std::shared_ptr<CameraController> GetCameraController() { return m_CameraController; }
             
             //Debug Color change
             Entity& GetEntity() {return m_Entity; }

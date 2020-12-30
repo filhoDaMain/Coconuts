@@ -26,6 +26,7 @@
 #include <coconuts/ecs/components/TransformComponent.h>
 #include <coconuts/ecs/components/TagComponent.h>
 #include <coconuts/ecs/components/SpriteComponent.h>
+#include <coconuts/ecs/components/OrthoCameraComponent.h>
 
 #include <coconuts/Logger.h>
 
@@ -43,27 +44,28 @@ namespace Coconuts
         if (!m_HaltEvents)
         {
             /* Update Camera Controller */
-            m_CameraController->OnUpdate(ts);   // camera input keys
+            //m_CameraController->OnUpdate(ts);   // camera input keys
         }
 
-        Graphics::LowLevelAPI::SetClearColor({0.0f, 0.0f, 0.0f, 1});
-        Graphics::LowLevelAPI::Clear();
+        //Graphics::LowLevelAPI::SetClearColor({0.0f, 0.0f, 0.0f, 1});
+        //Graphics::LowLevelAPI::Clear();
 
         /* Bind Framebuffer */
         m_Framebuffer->Bind();
 
         /* Set backgound color*/
-        Graphics::LowLevelAPI::SetClearColor({0.02f, 0.31f, 0.7f, 1});
-        Graphics::LowLevelAPI::Clear();
+        //Graphics::LowLevelAPI::SetClearColor({0.02f, 0.31f, 0.7f, 1});
+        //Graphics::LowLevelAPI::Clear();
 
         /* Render */
-        Renderer2D::ResetStatistics();
-        Renderer2D::BeginScene(m_Camera);
+        //Renderer2D::ResetStatistics();
+        
+        //Renderer2D::BeginScene(m_Camera);
 
         m_ActiveScene->OnUpdate(ts);
         //Renderer2D::DrawQuad({0.0f, 0.0f}, {0.8f, 0.8f}, {0.8f, 1.0f, 0.1f, 1.0f});
 
-        Renderer2D::EndScene();
+        //Renderer2D::EndScene();
 
         /* Unbind Framebuffer */
         m_Framebuffer->Unbind();
@@ -78,18 +80,18 @@ namespace Coconuts
         }
         
         /* Update CameraController random events */
-        m_CameraController->OnEvent(event);
+        //m_CameraController->OnEvent(event);
     }
     
     GameLayer::GameLayer()
-    : m_AspectRatio((float) (16.0f/9.0f)),
-      m_ZoomLevel(1.0f),
-      m_Camera(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel),
+    : //m_AspectRatio((float) (16.0f/9.0f)),
+      //m_ZoomLevel(1.0f),
+      //m_Camera(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel),
       m_HaltEvents(false)
       
     {
-        m_CameraController = std::make_shared<CameraController>(m_Camera, m_AspectRatio, m_ZoomLevel);
-        m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
+        //m_CameraController = std::make_shared<CameraController>(m_Camera, m_AspectRatio, m_ZoomLevel);
+        //m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
     }
 
     void GameLayer::OnAttach()
@@ -147,6 +149,11 @@ namespace Coconuts
         m_TreeSprite.reset( Coconuts::Sprite::Create(m_SpritesheetTexture2D, {2, 1}, {128, 128}, {1, 2}) );
         
         m_Entity.AddComponent<SpriteComponent>(m_TreeSprite);
+        
+        
+        m_CameraEntity = Entity(m_ActiveScene);
+        LOG_WARN("Number of entities on scene: {}", m_ActiveScene->GetNumberOfEntities());
+        m_CameraEntity.AddComponent<OrthoCameraComponent>((float)(16.0f/9.0f), 1.0f);
     }
 
     void GameLayer::OnDetach()

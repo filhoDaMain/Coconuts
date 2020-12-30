@@ -19,20 +19,48 @@
 #include <coconuts/ecs/components/TransformComponent.h>
 #include <coconuts/ecs/components/TagComponent.h>
 #include <coconuts/ecs/components/SpriteComponent.h>
+#include <coconuts/ecs/components/OrthoCameraComponent.h>
 
 #include <coconuts/Logger.h>
 
-#include <coconuts/graphics/Renderer2D.h>
+#include <coconuts/Renderer.h>
 
 namespace Coconuts
 {
     
     void Scene::OnUpdate(Timestep ts)
     {
-        m_EntityManager.entities.each<TagComponent, SpriteComponent>([](entityx::Entity thisEntityxEntity, TagComponent& thisTagComponent, SpriteComponent& thisSpriteComponent)
-        {   
-            Renderer2D::DrawQuad({0.0f, 0.0f}, {1.0f, 2.0f}, thisSpriteComponent.sprite, thisSpriteComponent.tilingFactor, thisSpriteComponent.tintColor);
+        // Clear Screen
+        Graphics::LowLevelAPI::SetClearColor({0.0f, 0.0f, 0.0f, 1});
+        Graphics::LowLevelAPI::Clear();
+        
+        // Reset all Rendering statistics
+        Renderer2D::ResetStatistics();
+        
+        /**
+         * NOTE:    We're looping through all entities that have a OrthoCameraComponent,
+         *          but there should only be 1 Camera per Scene!!!     
+         *
+         */
+        m_EntityManager.entities.each<OrthoCameraComponent>([&](entityx::Entity thisEntityxEntity, OrthoCameraComponent& thisOrthoCameraComponent)
+        {
+            // Update Controller
+            thisOrthoCameraComponent.controller.OnUpdate(ts);
+            
+            // Begin Scene
+            Renderer2D::BeginScene(thisOrthoCameraComponent.camera);
+            
+            // Draw All Sprites for this Scene
+            m_EntityManager.entities.each<TagComponent, SpriteComponent>([](entityx::Entity thisEntityxEntity, TagComponent& thisTagComponent, SpriteComponent& thisSpriteComponent)
+            {   
+                Renderer2D::DrawQuad({0.0f, 0.0f}, {1.0f, 2.0f}, thisSpriteComponent.sprite, thisSpriteComponent.tilingFactor, thisSpriteComponent.tintColor);
+            });
+            
+            // End Scene
+            Renderer2D::EndScene();
         });
+        
+
     }
     
     Scene::Scene()

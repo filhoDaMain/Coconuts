@@ -63,6 +63,16 @@ namespace Coconuts
 
     }
     
+    // Temporary
+    void Scene::OnEvent(Event& e)
+    {
+        // For now, just update CameraController Events, when they exist
+        m_EntityManager.entities.each<OrthoCameraComponent>([&](entityx::Entity thisEntityxEntity, OrthoCameraComponent& thisOrthoCameraComponent)
+        {
+            thisOrthoCameraComponent.controller.OnEvent(e);
+        });
+    }
+    
     Scene::Scene()
     {
 #if 0

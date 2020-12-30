@@ -79,6 +79,11 @@ namespace Coconuts
             return;
         }
         
+        LOG_CRITICAL("Event!");
+        
+        // Dispatch all events to Scene
+        m_ActiveScene->OnEvent(event);
+        
         /* Update CameraController random events */
         //m_CameraController->OnEvent(event);
     }

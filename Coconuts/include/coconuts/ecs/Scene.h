@@ -18,6 +18,7 @@
 
 #include <entityx/entityx.h>
 #include <coconuts/time/Timestep.h>
+#include <coconuts/EventSystem.h>
 
 namespace Coconuts
 {
@@ -29,6 +30,9 @@ namespace Coconuts
         ~Scene();
         
         void OnUpdate(Timestep ts);
+        
+        // Temporary
+        void OnEvent(Event& e);
         
         entityx::Entity CreateEntity();
         

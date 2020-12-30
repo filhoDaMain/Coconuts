@@ -25,6 +25,7 @@ namespace Coconuts
      
     void CameraController::OnUpdate(Timestep& ts)
     {
+#if 0
         /**
          * Input polling from Keyboard to 
          * move and rotate Camera
@@ -60,6 +61,7 @@ namespace Coconuts
 
         /* Update Camera's object rotation */
         //m_Camera.SetRotation(m_CameraRotation);
+#endif
     }
     
     void CameraController::ScreenResize(float width, float height)

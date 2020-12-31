@@ -44,8 +44,12 @@ namespace Coconuts
          */
         m_EntityManager.entities.each<OrthoCameraComponent>([&](entityx::Entity thisEntityxEntity, OrthoCameraComponent& thisOrthoCameraComponent)
         {
+            
             // Update Controller
-            thisOrthoCameraComponent.controller.OnUpdate(ts);
+            if (!m_HaltEditorCameraNavigation)
+            {
+                thisOrthoCameraComponent.controller.OnUpdate(ts);
+            }
             
             // Begin Scene
             Renderer2D::BeginScene(thisOrthoCameraComponent.camera);
@@ -69,6 +73,11 @@ namespace Coconuts
     // Temporary
     void Scene::OnEvent(Event& e)
     {
+        if (m_HaltAllEvents)
+        {
+            return;
+        }
+        
         // For now, just update CameraController Events, when they exist
         m_EntityManager.entities.each<OrthoCameraComponent>([&](entityx::Entity thisEntityxEntity, OrthoCameraComponent& thisOrthoCameraComponent)
         {
@@ -118,4 +127,15 @@ namespace Coconuts
         return m_EntityManager.entities.create();
     }
     
+    bool Scene::HaltAllEvents(bool state)
+    {
+        m_HaltAllEvents = state;
+        return m_HaltAllEvents;
+    }
+    
+    bool Scene::HaltEditorCameraNavigation(bool state)
+    {
+        m_HaltEditorCameraNavigation = state;
+        return m_HaltEditorCameraNavigation;
+    }
 }

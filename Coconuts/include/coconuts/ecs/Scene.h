@@ -40,8 +40,14 @@ namespace Coconuts
         
         size_t GetNumberOfEntities() const { return m_EntityManager.entities.size(); }
         
+        bool HaltAllEvents(bool state = true);
+        bool HaltEditorCameraNavigation(bool state = true);
+        
     private:
         entityx::EntityX m_EntityManager;
+        
+        bool m_HaltAllEvents = false;
+        bool m_HaltEditorCameraNavigation = false;
     };
     
 }

@@ -166,8 +166,9 @@ namespace Coconuts
     
     bool GameLayer::HaltEvents(bool state)
     {
-        m_HaltEvents = state;
-        return m_HaltEvents;
+        m_ActiveScene->HaltAllEvents(state);
+        m_ActiveScene->HaltEditorCameraNavigation(state);
+        return state;
     }
     
     void GameLayer::ChangeViewport(float x, float y)

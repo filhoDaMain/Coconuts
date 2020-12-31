@@ -24,12 +24,13 @@ namespace Coconuts
     struct TransformComponent
     {
         //data
-        glm::vec2 position;
-        glm::vec2 size;
+        glm::vec2   position;
+        glm::vec2   size;
+        float       rotationRadians;
         
         TransformComponent() = default;
-        TransformComponent(const glm::vec2& pos, const glm::vec2& sz = glm::vec2(1.0f))
-        : position(pos), size(sz) {}
+        TransformComponent(const glm::vec2& pos, const glm::vec2& sz = glm::vec2(1.0f), float rotationInRadians = 0.0f)
+        : position(pos), size(sz), rotationRadians(rotationInRadians) {}
     };
     
 }

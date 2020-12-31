@@ -75,7 +75,8 @@ namespace Coconuts
         /* Add TransformComponent */
         glm::vec2 position = {0.0f, 0.0f};
         glm::vec2 size = {0.5f, 1.0f};
-        m_Entity.AddComponent<TransformComponent>(position, size);
+        float rotationRadians = 0.79f;
+        m_Entity.AddComponent<TransformComponent>(position, size, rotationRadians);
        
         /* Add SpriteComponent */
         /* 1) Init Spritesheet Texture */

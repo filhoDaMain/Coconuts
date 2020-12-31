@@ -58,7 +58,12 @@ namespace Coconuts
             m_EntityManager.entities.each<TransformComponent, SpriteComponent>([]
             (entityx::Entity thisEntityxEntity, TransformComponent& thisTransformComponent, SpriteComponent& thisSpriteComponent)
             {   
-                Renderer2D::DrawQuad(thisTransformComponent.position, thisTransformComponent.size, thisSpriteComponent.sprite, thisSpriteComponent.tilingFactor, thisSpriteComponent.tintColor);
+                Renderer2D::DrawRotatedQuad(thisTransformComponent.position,
+                                            thisTransformComponent.size,
+                                            thisTransformComponent.rotationRadians,
+                                            thisSpriteComponent.sprite,
+                                            thisSpriteComponent.tilingFactor,
+                                            thisSpriteComponent.tintColor);
             });
             
             /* End Scene */

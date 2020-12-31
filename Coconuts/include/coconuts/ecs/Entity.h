@@ -29,7 +29,7 @@ namespace Coconuts
     {
     public:
         Entity() = default;
-        Entity(std::shared_ptr<Scene> scene);
+        Entity(std::shared_ptr<Scene> scene, const std::string& name = "Untagged");
         ~Entity();
         
         template <typename C, typename ... Args>

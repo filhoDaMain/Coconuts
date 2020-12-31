@@ -70,14 +70,11 @@ namespace Coconuts
         m_ActiveScene = std::make_shared<Scene>();
         
         /* Create an entity on Scene */
-        m_Entity = Entity(m_ActiveScene);
+        m_Entity = Entity(m_ActiveScene, "Tree");
         
         /* Add TransformComponent */
         glm::vec2 myPostion{0.0f, 0.0f};
         m_Entity.AddComponent<TransformComponent>(myPostion);
-        
-        /* Retag */
-        m_Entity.GetComponent<TagComponent>().tag = "Tree";
        
         /* Add SpriteComponent */
         /* 1) Init Spritesheet Texture */

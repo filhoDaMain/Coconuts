@@ -20,14 +20,14 @@
 namespace Coconuts
 {
     
-    Entity::Entity(std::shared_ptr<Scene> scene)
+    Entity::Entity(std::shared_ptr<Scene> scene, const std::string& name)
     : m_Scene(scene)
     {
         /* Create/Add *this* Entity to its Scene */
         m_EntityxEntity = m_Scene->CreateEntity();
         
         /* Add default Components */
-        this->AddComponent<TagComponent>("Untagged");   // Entity tag
+        this->AddComponent<TagComponent>(name); // Entity tag
     }
     
     Entity::~Entity()

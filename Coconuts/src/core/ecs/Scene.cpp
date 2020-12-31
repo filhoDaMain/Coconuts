@@ -30,47 +30,43 @@ namespace Coconuts
     
     void Scene::OnUpdate(Timestep ts)
     {
-        // Clear Screen
+        /* Clear Screen */
         Graphics::LowLevelAPI::SetClearColor({0.0f, 0.0f, 0.0f, 1});
         Graphics::LowLevelAPI::Clear();
         
-        // Reset all Rendering statistics
+        /* Reset all Rendering statistics for next draw call */
         Renderer2D::ResetStatistics();
         
         /**
          * NOTE:    We're looping through all entities that have a OrthoCameraComponent,
-         *          but there should only be 1 Camera per Scene!!!     
+         *          but there should be only 1 Camera per Scene!!!     
          *
          */
         m_EntityManager.entities.each<OrthoCameraComponent>([&](entityx::Entity thisEntityxEntity, OrthoCameraComponent& thisOrthoCameraComponent)
         {
             
-            // Update Controller
+            /* Update Controller */
             if (!m_HaltEditorCameraNavigation)
             {
                 thisOrthoCameraComponent.controller.OnUpdate(ts);
             }
             
-            // Begin Scene
+            /* Begin Scene */
             Renderer2D::BeginScene(thisOrthoCameraComponent.camera);
             
-            
-            Renderer2D::DrawQuad({0.0f, 0.0f}, {0.8f, 0.8f}, {0.8f, 1.0f, 0.1f, 1.0f});
-            
-            // Draw All Sprites for this Scene
+            /* Draw All Sprites on this Scene */
             m_EntityManager.entities.each<TagComponent, SpriteComponent>([](entityx::Entity thisEntityxEntity, TagComponent& thisTagComponent, SpriteComponent& thisSpriteComponent)
             {   
-                //Renderer2D::DrawQuad({0.0f, 0.0f}, {1.0f, 2.0f}, thisSpriteComponent.sprite, thisSpriteComponent.tilingFactor, thisSpriteComponent.tintColor);
+                Renderer2D::DrawQuad({0.0f, 0.0f}, {1.0f, 2.0f}, thisSpriteComponent.sprite, thisSpriteComponent.tilingFactor, thisSpriteComponent.tintColor);
             });
             
-            // End Scene
+            /* End Scene */
             Renderer2D::EndScene();
         });
         
 
     }
     
-    // Temporary
     void Scene::OnEvent(Event& e)
     {
         if (m_HaltAllEvents)
@@ -95,31 +91,10 @@ namespace Coconuts
     
     Scene::Scene()
     {
-#if 0
-        entityx::Entity entity = m_Registry.entities.create();
-        entityx::Entity entity2 = m_Registry.entities.create();
-        
-        entity.assign<TransformComponent>(glm::mat4(1.0f));
-        entity2.assign<TransformComponent>(glm::mat4(1.0f));
-        
-        TransformComponent* transform = entity.component<TransformComponent>().get();
-        
-        LOG_WARN("entity id = {}", entity.id().id());
-        LOG_WARN("entity2 id = {}", entity2.id().id());
-        
-        
-        m_Registry.entities.each<TransformComponent>([](entityx::Entity entituxa, TransformComponent &transform)
-        {
-            // Execute for each entity that has a TransformComponent
-            
-            LOG_WARN("I'm an entity with a TransformComponent. My ID is {}", entituxa.id().id());
-        });
-#endif
     }
     
     Scene::~Scene()
-    {
-        
+    {    
     }
     
     entityx::Entity Scene::CreateEntity()

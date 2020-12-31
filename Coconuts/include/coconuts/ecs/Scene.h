@@ -30,14 +30,11 @@ namespace Coconuts
         ~Scene();
         
         void OnUpdate(Timestep ts);
-        
-        // Temporary
         void OnEvent(Event& e);
         
         void OnChangeViewport(float x, float y);
         
         entityx::Entity CreateEntity();
-        
         size_t GetNumberOfEntities() const { return m_EntityManager.entities.size(); }
         
         bool HaltAllEvents(bool state = true);

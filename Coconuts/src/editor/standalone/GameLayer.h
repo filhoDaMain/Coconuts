@@ -79,6 +79,8 @@ namespace Coconuts
             
             //Debug Color change
             Entity& GetEntity() {return m_Entity; }
+            
+            void ChangeViewport(float x, float y);
     };
     
 }

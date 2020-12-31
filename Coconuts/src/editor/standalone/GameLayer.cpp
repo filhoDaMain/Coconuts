@@ -170,4 +170,9 @@ namespace Coconuts
         return m_HaltEvents;
     }
     
+    void GameLayer::ChangeViewport(float x, float y)
+    {
+        m_ActiveScene->OnChangeViewport(x, y);
+    }
+    
 }

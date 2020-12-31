@@ -134,12 +134,12 @@ namespace Coconuts
          * When View Port Pannel changes, update the
          * GameLayer's Framebuffer size
          */
-        if ( (imguiViewportPanelSize.x != m_ViewportSize.x) && 
+        if ( (imguiViewportPanelSize.x != m_ViewportSize.x) || 
              (imguiViewportPanelSize.y != m_ViewportSize.y))
         {
             m_ViewportSize = { imguiViewportPanelSize.x, imguiViewportPanelSize.y };
             m_Framebuffer->Resize( m_ViewportSize.x, m_ViewportSize.y );
-            //m_CameraController->ScreenResize(m_ViewportSize.x, m_ViewportSize.y);
+            m_GameLayerPtr->ChangeViewport(m_ViewportSize.x, m_ViewportSize.y);
         }
         
         ImGui::Image(INT2VOIDP(m_ViewPortTexID), ImVec2{m_ViewportSize.x, m_ViewportSize.y}, ImVec2{0, 1}, ImVec2{1, 0});

@@ -47,9 +47,6 @@ namespace Coconuts
             // Update Controller
             thisOrthoCameraComponent.controller.OnUpdate(ts);
             
-            LOG_DEBUG("zoom: {}", thisOrthoCameraComponent.zoomLevel);
-            LOG_DEBUG("AR: {}", thisOrthoCameraComponent.aspectRatio);
-            
             // Begin Scene
             Renderer2D::BeginScene(thisOrthoCameraComponent.camera);
             
@@ -76,6 +73,14 @@ namespace Coconuts
         m_EntityManager.entities.each<OrthoCameraComponent>([&](entityx::Entity thisEntityxEntity, OrthoCameraComponent& thisOrthoCameraComponent)
         {
             thisOrthoCameraComponent.controller.OnEvent(e);
+        });
+    }
+    
+    void Scene::OnChangeViewport(float x, float y)
+    {
+        m_EntityManager.entities.each<OrthoCameraComponent>([x, y](entityx::Entity thisEntityxEntity, OrthoCameraComponent& thisOrthoCameraComponent)
+        {
+            thisOrthoCameraComponent.controller.ScreenResize(x, y);
         });
     }
     

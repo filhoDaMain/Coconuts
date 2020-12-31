@@ -105,7 +105,6 @@ namespace Coconuts
     
     bool CameraController::OnWindowResizeEvent(WindowEvent::WindowResize& e)
     {           
-        LOG_DEBUG("Resize");
         ScreenResize(e.GetWidth(), e.GetHeight());
         return true;    /* Event was handled. Stop the event propagation */
     }

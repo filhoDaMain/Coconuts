@@ -34,6 +34,8 @@ namespace Coconuts
         // Temporary
         void OnEvent(Event& e);
         
+        void OnChangeViewport(float x, float y);
+        
         entityx::Entity CreateEntity();
         
         size_t GetNumberOfEntities() const { return m_EntityManager.entities.size(); }

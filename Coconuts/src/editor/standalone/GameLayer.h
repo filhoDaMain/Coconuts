@@ -32,26 +32,17 @@ namespace Coconuts
     class GameLayer : public Layer
     {
         private:
-            /* Camera */
-            //float m_AspectRatio;
-            //float m_ZoomLevel;
-            //OrthographicCamera m_Camera;
-            
-            bool m_HaltEvents = false;
-
-            /* CameraController */
-            //std::shared_ptr<CameraController> m_CameraController;
-
             /**
              * Init during OnAttach to make it available for
              * EditorLayer's OnPostAttach() phase!
              */
             std::shared_ptr<Framebuffer> m_Framebuffer;
             
+            /* Active Scene */
             std::shared_ptr<Scene> m_ActiveScene;
             
+            /* Entity handlers */
             Entity m_CameraEntity;
-            
             Entity m_Entity;
 
         public:
@@ -74,13 +65,16 @@ namespace Coconuts
              */
             bool HaltEvents(bool state = true);
             
+            /* Get Framebuffer where active scene is being drawn */
             std::shared_ptr<Framebuffer>& GetFramebuffer() { return m_Framebuffer; }
-            //std::shared_ptr<CameraController> GetCameraController() { return m_CameraController; }
             
-            //Debug Color change
-            Entity& GetEntity() {return m_Entity; }
-            
+            /* Change on viewport notification */
             void ChangeViewport(float x, float y);
+            
+            // --------------------------------------
+            // Debug Color change
+            Entity& GetEntity() {return m_Entity; }
+            // --------------------------------------
     };
     
 }

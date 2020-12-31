@@ -73,8 +73,9 @@ namespace Coconuts
         m_Entity = Entity(m_ActiveScene, "Tree");
         
         /* Add TransformComponent */
-        glm::vec2 myPostion{0.0f, 0.0f};
-        m_Entity.AddComponent<TransformComponent>(myPostion);
+        glm::vec2 position = {0.0f, 0.0f};
+        glm::vec2 size = {0.5f, 1.0f};
+        m_Entity.AddComponent<TransformComponent>(position, size);
        
         /* Add SpriteComponent */
         /* 1) Init Spritesheet Texture */

@@ -55,9 +55,10 @@ namespace Coconuts
             Renderer2D::BeginScene(thisOrthoCameraComponent.camera);
             
             /* Draw All Sprites on this Scene */
-            m_EntityManager.entities.each<TagComponent, SpriteComponent>([](entityx::Entity thisEntityxEntity, TagComponent& thisTagComponent, SpriteComponent& thisSpriteComponent)
+            m_EntityManager.entities.each<TransformComponent, SpriteComponent>([]
+            (entityx::Entity thisEntityxEntity, TransformComponent& thisTransformComponent, SpriteComponent& thisSpriteComponent)
             {   
-                Renderer2D::DrawQuad({0.0f, 0.0f}, {1.0f, 2.0f}, thisSpriteComponent.sprite, thisSpriteComponent.tilingFactor, thisSpriteComponent.tintColor);
+                Renderer2D::DrawQuad(thisTransformComponent.position, thisTransformComponent.size, thisSpriteComponent.sprite, thisSpriteComponent.tilingFactor, thisSpriteComponent.tintColor);
             });
             
             /* End Scene */

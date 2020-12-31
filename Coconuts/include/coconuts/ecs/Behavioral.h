@@ -13,59 +13,48 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef ENTITY_H
-#define ENTITY_H
+#ifndef BEHAVIORAL_H
+#define BEHAVIORAL_H
 
-#include <cstdint>
-#include <utility>
-#include <memory>
-#include <entityx/entityx.h>
-#include <coconuts/ecs/Scene.h>
+#include <coconuts/ecs/Entity.h>
+#include <coconuts/ecs/components/BehaviorComponent.h>
 
 namespace Coconuts
 {
     
-    class Entity
+    class Behavioral
     {
     public:
-        Entity() = default;
-        Entity(std::shared_ptr<Scene> scene, const std::string& name = "Untagged");
-        ~Entity();
         
         template <typename C, typename ... Args>
         void AddComponent(Args && ... args)
         {
-            m_EntityxEntity.assign<C>(std::forward<Args>(args) ...);
-        }
-        
-        template <typename C>
-        void RemoveComponent()
-        {
-            m_EntityxEntity.remove<C>();
+            m_Entity.AddComponent<C>();
         }
         
         template <typename C>
         C& GetComponent()
         {
-            return *(m_EntityxEntity.component<C>().get());
+            return m_Entity.GetComponent<C>();
         }
         
         template <typename C>
         bool HasComponent()
         {
-            return m_EntityxEntity.has_component<C>();
+            return m_Entity.HasComponent<C>();
         }
         
-        uint64_t GetId() const { return m_EntityxEntity.id().id(); }
+        uint64_t GetAffectedEntityId() const
+        {
+            return m_Entity.GetId();
+        }
         
     private:
-        std::shared_ptr<Scene> m_Scene;     /* The Scene this Entity belongs to */
-        entityx::Entity m_EntityxEntity;    /* Entity Handler */
-        friend class Scene;
-        //uint64_t id;
+        Entity m_Entity;    // Linked with an Entity / Entities (future)
+        friend struct BehaviorComponent;
     };
     
 }
 
-#endif /* ENTITY_H */
+#endif /* BEHAVIORAL_H */
 

@@ -27,6 +27,9 @@
 #include <coconuts/ecs/components/TagComponent.h>
 #include <coconuts/ecs/components/SpriteComponent.h>
 #include <coconuts/ecs/components/OrthoCameraComponent.h>
+#include <coconuts/ecs/components/BehaviorComponent.h>
+
+#include <coconuts/ecs/Behavioral.h>
 
 #include <coconuts/Logger.h>
 
@@ -95,6 +98,32 @@ namespace Coconuts
         /* Create a Camera Entity*/
         m_CameraEntity = Entity(m_ActiveScene);
         m_CameraEntity.AddComponent<OrthoCameraComponent>((float)(16.0f/9.0f), 1.0f);
+        
+
+        class TreeBehavior : public Behavioral
+        {
+        public:
+            void OnCreate()
+            {
+                
+            }
+            
+            void OnDestroy()
+            {
+                
+            }
+            
+            void OnUpdate(Timestep ts)
+            {
+                LOG_CRITICAL("Behavioral OnUpdate() -> My ID:   {}", this->GetAffectedEntityId());
+                LOG_CRITICAL("Behavioral OnUpdate() -> My Tag:  {}", this->GetComponent<TagComponent>().tag);
+            }
+            
+        private:
+        };
+        
+        m_Entity.AddComponent<BehaviorComponent>();
+        m_Entity.GetComponent<BehaviorComponent>().AddBehavior<TreeBehavior>(m_Entity);
     }
 
     void GameLayer::OnDetach()

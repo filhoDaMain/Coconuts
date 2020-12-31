@@ -20,6 +20,7 @@
 #include <coconuts/ecs/components/TagComponent.h>
 #include <coconuts/ecs/components/SpriteComponent.h>
 #include <coconuts/ecs/components/OrthoCameraComponent.h>
+#include <coconuts/ecs/components/BehaviorComponent.h>
 
 #include <coconuts/Logger.h>
 
@@ -30,6 +31,21 @@ namespace Coconuts
     
     void Scene::OnUpdate(Timestep ts)
     {
+        /* Systems */
+        /* ---------------------------------------------------------------------- */
+        
+        /* Update Behavior scripts */
+        m_EntityManager.entities.each<BehaviorComponent>([&]
+        (entityx::Entity thisEntityxEntity, BehaviorComponent& thisBehaviorComponent)
+        {  
+            LOG_WARN("Updating Behavior for entity {}", thisEntityxEntity.id().id());
+            thisBehaviorComponent.OnUpdateFunc(thisBehaviorComponent.instance, ts);
+        });
+        
+        
+        /* Rendering */
+        /* ---------------------------------------------------------------------- */
+        
         /* Clear Screen */
         Graphics::LowLevelAPI::SetClearColor({0.0f, 0.0f, 0.0f, 1});
         Graphics::LowLevelAPI::Clear();

@@ -24,12 +24,12 @@ namespace Coconuts
     struct TransformComponent
     {
         //data
-        //glm::mat4 transform;
         glm::vec2 position;
+        glm::vec2 size;
         
         TransformComponent() = default;
-        //TransformComponent(const glm::mat4& val) : transform(val) {}
-        TransformComponent(const glm::vec2& pos) : position(pos) {}
+        TransformComponent(const glm::vec2& pos, const glm::vec2& sz = glm::vec2(1.0f))
+        : position(pos), size(sz) {}
     };
     
 }

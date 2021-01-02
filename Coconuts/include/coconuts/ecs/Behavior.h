@@ -44,7 +44,7 @@ namespace Coconuts
             return m_Entity.HasComponent<C>();
         }
         
-        uint64_t GetAffectedEntityId() const
+        uint64_t GetEntityId() const
         {
             return m_Entity.GetId();
         }

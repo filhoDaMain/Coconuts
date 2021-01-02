@@ -101,7 +101,7 @@ namespace Coconuts
             
             void OnUpdate(Timestep ts)
             {
-                LOG_CRITICAL("Behavior OnUpdate() -> My ID:   {}", this->GetAffectedEntityId());
+                LOG_CRITICAL("Behavior OnUpdate() -> My ID:   {}", this->GetEntityId());
                 LOG_CRITICAL("Behavior OnUpdate() -> My Tag:  {}", this->GetComponent<TagComponent>().tag);
             }
             

@@ -38,7 +38,6 @@ namespace Coconuts
         m_EntityManager.entities.each<BehaviorComponent>([&]
         (entityx::Entity thisEntityxEntity, BehaviorComponent& thisBehaviorComponent)
         {  
-            //LOG_WARN("Updating Behavior for entity {}", thisEntityxEntity.id().id());
             thisBehaviorComponent.OnUpdateFunc(thisBehaviorComponent.instance, ts);
         });
         

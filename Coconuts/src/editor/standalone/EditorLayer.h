@@ -17,11 +17,13 @@
 #define EDITORLAYER_H
 
 #include <coconuts/editor.h>
+#include <coconuts/graphics/Renderer2D.h>
 #include "GameLayer.h"
 #include <glm/glm.hpp>
 
 /* Panels */
 #include "panels/Viewport.h"
+#include "panels/Statistics.h"
 
 namespace Coconuts
 {
@@ -40,13 +42,8 @@ namespace Coconuts
         GameLayer* m_GameLayerPtr;
         
         /* Panels */
-        Panels::Viewport m_ViewportPanel;
-        
-        /* Renderer2D live statistics */
-        Renderer2DStatistics stats;
-        
-        /* GameLayer's CameraController */
-        std::shared_ptr<CameraController> m_CameraController;
+        Panels::Viewport    m_ViewportPanel;
+        Panels::Statistics  m_StatisticsPanel;
     };
     
 }

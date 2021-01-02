@@ -16,9 +16,6 @@
 
 #include "EditorLayer.h"
 #include <cstdint>
-#include <coconuts/ecs/components/SpriteComponent.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/type_ptr.hpp>
 
 #define INT2VOIDP(i) (void*)(uintptr_t)(i)
 
@@ -111,26 +108,17 @@ namespace Coconuts
             ImGui::EndMenuBar();
         }
 
+        
+        /* P A N E L S */
+        
         /* Viewport Panel */
         m_ViewportPanel.LiveUpdate();
         
-        ImGui::Begin("Statistics");
-        
-        /* Get Renderer Live statistics */
-        stats = Renderer2D::GetStatistics();
-        
-        ImGui::Text("Batch render statistics:");
-        ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();    
-        ImGui::Text("%d Draw Calls", stats.drawCalls);
-        ImGui::Spacing();
-        ImGui::Text("%d Quads", stats.quadCount);
-        ImGui::End();
-        
-        ImGui::Begin("Inspector");
-        ImGui::ColorEdit3("Tint", glm::value_ptr(  m_GameLayerPtr->GetEntity().GetComponent<SpriteComponent>().tintColor  ));
-        ImGui::End();
+        /* Statistics Panel */
+        m_StatisticsPanel.Draw(Renderer2D::GetStatistics());
 
-        ImGui::End();
+        
+        
         // ---------------------------------------------------------------------------
         // DOCK SPACE END
     }

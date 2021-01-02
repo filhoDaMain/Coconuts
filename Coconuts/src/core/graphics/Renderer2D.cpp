@@ -168,7 +168,7 @@ namespace Coconuts
         memset(&(s_Data->stats), 0x00, sizeof(Renderer2DStatistics));
     }
     
-    Renderer2DStatistics Renderer2D::GetStatistics()
+    Renderer2DStatistics& Renderer2D::GetStatistics()
     {
         return s_Data->stats;
     }

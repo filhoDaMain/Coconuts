@@ -16,7 +16,7 @@
 #ifndef BEHAVIORCOMPONENT_H
 #define BEHAVIORCOMPONENT_H
 
-#include <coconuts/ecs/Behavioral.h>
+#include <coconuts/ecs/Behavior.h>
 #include <coconuts/time/Timestep.h>
 #include <coconuts/Logger.h>
 #include <functional>
@@ -28,13 +28,13 @@ namespace Coconuts
     struct BehaviorComponent
     {
         //TODO make an array of instance pointers so an Entity can have multiple Behaviors
-        Behavioral* instance = nullptr;
+        Behavior* instance = nullptr;
         std::function<void()> Instantiate;
         std::function<void()> Destroy;
         
-        std::function<void(Behavioral*)> OnCreateFunc;
-        std::function<void(Behavioral*)> OnDestroyFunc;
-        std::function<void(Behavioral*, Timestep)> OnUpdateFunc;
+        std::function<void(Behavior*)> OnCreateFunc;
+        std::function<void(Behavior*)> OnDestroyFunc;
+        std::function<void(Behavior*, Timestep)> OnUpdateFunc;
         
         template <typename C>
         void AddBehavior(Entity& affects)
@@ -42,9 +42,9 @@ namespace Coconuts
             Instantiate = [&]() { instance = new C(); };
             Destroy = [&]() { delete (C*)instance; instance = nullptr; };
             
-            OnCreateFunc = [](Behavioral* inst) { ((C*) inst)->OnCreate(); };
-            OnDestroyFunc = [](Behavioral* inst) { ((C*) inst)->OnDestroy(); };
-            OnUpdateFunc = [](Behavioral* inst, Timestep ts) { ((C*) inst)->OnUpdate(ts); };
+            OnCreateFunc = [](Behavior* inst) { ((C*) inst)->OnCreate(); };
+            OnDestroyFunc = [](Behavior* inst) { ((C*) inst)->OnDestroy(); };
+            OnUpdateFunc = [](Behavior* inst, Timestep ts) { ((C*) inst)->OnUpdate(ts); };
             
             /* Instantiate object of Behavioral class */
             Instantiate();

@@ -86,7 +86,7 @@ namespace Coconuts
         m_CameraEntity.AddComponent<OrthoCameraComponent>((float)(16.0f/9.0f), 1.0f);
         
 
-        class TreeBehavior : public Behavioral
+        class TreeBehavior : public Behavior
         {
         public:
             void OnCreate()
@@ -101,8 +101,8 @@ namespace Coconuts
             
             void OnUpdate(Timestep ts)
             {
-                LOG_CRITICAL("Behavioral OnUpdate() -> My ID:   {}", this->GetAffectedEntityId());
-                LOG_CRITICAL("Behavioral OnUpdate() -> My Tag:  {}", this->GetComponent<TagComponent>().tag);
+                LOG_CRITICAL("Behavior OnUpdate() -> My ID:   {}", this->GetAffectedEntityId());
+                LOG_CRITICAL("Behavior OnUpdate() -> My Tag:  {}", this->GetComponent<TagComponent>().tag);
             }
             
         private:

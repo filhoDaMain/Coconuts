@@ -22,7 +22,7 @@
 namespace Coconuts
 {
     
-    class Behavioral
+    class Behavior
     {
     public:
         

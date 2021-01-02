@@ -84,12 +84,12 @@ namespace Coconuts
         /* Add SpriteComponent */
         /* 1) Init Spritesheet Texture */
         const std::string path = GAMELAYER_SPRITESHEET_PATH;
-        std::shared_ptr<Coconuts::Texture2D> m_SpritesheetTexture2D;
-        m_SpritesheetTexture2D.reset( Coconuts::Texture2D::Create(path) );
+        std::shared_ptr<Texture2D> m_SpritesheetTexture2D;
+        m_SpritesheetTexture2D.reset( Texture2D::Create(path) );
         
         /* 2) Create Sprite from the spritesheet */
-        std::shared_ptr<Coconuts::Sprite> m_TreeSprite;
-        m_TreeSprite.reset( Coconuts::Sprite::Create(m_SpritesheetTexture2D, {2, 1}, {128, 128}, {1, 2}) );
+        std::shared_ptr<Sprite> m_TreeSprite;
+        m_TreeSprite.reset( Sprite::Create(m_SpritesheetTexture2D, {2, 1}, {128, 128}, {1, 2}) );
         
         /* 3) Assign the sprite to the Entity's SpriteComponent */
         m_Entity.AddComponent<SpriteComponent>(m_TreeSprite);

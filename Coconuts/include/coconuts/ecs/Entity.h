@@ -33,9 +33,9 @@ namespace Coconuts
         ~Entity();
         
         template <typename C, typename ... Args>
-        void AddComponent(Args && ... args)
+        C& AddComponent(Args && ... args)
         {
-            m_EntityxEntity.assign<C>(std::forward<Args>(args) ...);
+            return *(m_EntityxEntity.assign<C>(std::forward<Args>(args) ...).get());
         }
         
         template <typename C>

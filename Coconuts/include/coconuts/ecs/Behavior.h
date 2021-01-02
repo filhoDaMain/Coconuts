@@ -27,9 +27,9 @@ namespace Coconuts
     public:
         
         template <typename C, typename ... Args>
-        void AddComponent(Args && ... args)
+        C& AddComponent(Args && ... args)
         {
-            m_Entity.AddComponent<C>();
+            return m_Entity.AddComponent<C>();
         }
         
         template <typename C>

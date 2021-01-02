@@ -108,8 +108,7 @@ namespace Coconuts
         private:
         };
         
-        m_Entity.AddComponent<BehaviorComponent>();
-        m_Entity.GetComponent<BehaviorComponent>().AddBehavior<TreeBehavior>(m_Entity);
+        m_Entity.AddComponent<BehaviorComponent>().AddBehavior<TreeBehavior>(m_Entity);
     }
 
     void GameLayer::OnDetach()

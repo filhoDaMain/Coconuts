@@ -16,9 +16,7 @@
 
 #include "EditorLayer.h"
 #include <cstdint>
-
 #include <coconuts/ecs/components/SpriteComponent.h>
-
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
@@ -163,8 +161,6 @@ namespace Coconuts
         ImGui::Begin("Inspector");
         ImGui::ColorEdit3("Tint", glm::value_ptr(  m_GameLayerPtr->GetEntity().GetComponent<SpriteComponent>().tintColor  ));
         ImGui::End();
-        //ImGui::ColorEdit4("Color Tint", glm::value_ptr(m_GameLayerPtr->GetEntity().GetComponent<SpriteComponent>().tintColor));
-
 
         ImGui::End();
         // ---------------------------------------------------------------------------
@@ -178,9 +174,6 @@ namespace Coconuts
         /* Get GameLayer's Framebuffer */
         m_Framebuffer = m_GameLayerPtr->GetFramebuffer();
         m_ViewPortTexID = m_Framebuffer->GetColorAttachID();
-        
-        /* Get GameLayer's Camera Controller */
-        //m_CameraController = m_GameLayerPtr->GetCameraController();
     }
     
     EditorLayer::EditorLayer()

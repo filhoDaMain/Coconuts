@@ -23,9 +23,6 @@
 #include <coconuts/cameras/CameraController.h>
 #include <coconuts/ECS.h>
 
-//#include <coconuts/ecs/Scene.h>
-//#include <coconuts/ecs/Entity.h>
-
 namespace Coconuts
 {
     

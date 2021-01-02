@@ -20,20 +20,6 @@
 #include <coconuts/ECS.h>
 #include <coconuts/Logger.h>
 
-
-//#include <coconuts/ecs/Scene.h>
-//#include <coconuts/ecs/Entity.h>
-//#include <coconuts/ecs/components/TransformComponent.h>
-//#include <coconuts/ecs/components/TagComponent.h>
-//#include <coconuts/ecs/components/SpriteComponent.h>
-//#include <coconuts/ecs/components/OrthoCameraComponent.h>
-//#include <coconuts/ecs/components/BehaviorComponent.h>
-
-//#include <coconuts/ecs/Behavioral.h>
-
-
-
-
 #define GAMELAYER_SPRITESHEET_PATH  "../../Demo/examples/tiles2d/assets/textures/RPGpack_sheet_2X.png";
 
 namespace Coconuts

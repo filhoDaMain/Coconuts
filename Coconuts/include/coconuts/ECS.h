@@ -18,7 +18,6 @@
 
 #include <coconuts/ecs/Entity.h>
 #include <coconuts/ecs/Scene.h>
-//#include <coconuts/ecs/Behavioral.h>
 
 // Base components (possibly move them into a single header file)
 #include <coconuts/ecs/components/OrthoCameraComponent.h>

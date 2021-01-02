@@ -16,6 +16,9 @@
 
 #include "EditorLayer.h"
 #include <cstdint>
+#include <coconuts/ecs/components/SpriteComponent.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #define INT2VOIDP(i) (void*)(uintptr_t)(i)
 
@@ -129,12 +132,12 @@ namespace Coconuts
          * When View Port Pannel changes, update the
          * GameLayer's Framebuffer size
          */
-        if ( (imguiViewportPanelSize.x != m_ViewportSize.x) && 
+        if ( (imguiViewportPanelSize.x != m_ViewportSize.x) || 
              (imguiViewportPanelSize.y != m_ViewportSize.y))
         {
             m_ViewportSize = { imguiViewportPanelSize.x, imguiViewportPanelSize.y };
             m_Framebuffer->Resize( m_ViewportSize.x, m_ViewportSize.y );
-            m_CameraController->ScreenResize(m_ViewportSize.x, m_ViewportSize.y);
+            m_GameLayerPtr->ChangeViewport(m_ViewportSize.x, m_ViewportSize.y);
         }
         
         ImGui::Image(INT2VOIDP(m_ViewPortTexID), ImVec2{m_ViewportSize.x, m_ViewportSize.y}, ImVec2{0, 1}, ImVec2{1, 0});
@@ -154,7 +157,10 @@ namespace Coconuts
         ImGui::Spacing();
         ImGui::Text("%d Quads", stats.quadCount);
         ImGui::End();
-
+        
+        ImGui::Begin("Inspector");
+        ImGui::ColorEdit3("Tint", glm::value_ptr(  m_GameLayerPtr->GetEntity().GetComponent<SpriteComponent>().tintColor  ));
+        ImGui::End();
 
         ImGui::End();
         // ---------------------------------------------------------------------------
@@ -168,9 +174,6 @@ namespace Coconuts
         /* Get GameLayer's Framebuffer */
         m_Framebuffer = m_GameLayerPtr->GetFramebuffer();
         m_ViewPortTexID = m_Framebuffer->GetColorAttachID();
-        
-        /* Get GameLayer's Camera Controller */
-        m_CameraController = m_GameLayerPtr->GetCameraController();
     }
     
     EditorLayer::EditorLayer()

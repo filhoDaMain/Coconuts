@@ -26,6 +26,7 @@ namespace Coconuts
     class Sprite
     {
     public:
+        Sprite() = default;
         Sprite(const std::shared_ptr<Texture2D>& spriteSheet, 
                const glm::vec2& min,
                const glm::vec2& max);

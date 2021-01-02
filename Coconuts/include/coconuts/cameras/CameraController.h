@@ -26,8 +26,8 @@ namespace Coconuts
     
     class CameraController
     {
-    public:
-        CameraController(OrthographicCamera& camera, float aspectRatio, float zoomLevel)
+    public:        
+        CameraController(OrthographicCamera& camera, float& aspectRatio, float& zoomLevel)
         : m_Camera(camera), m_AspectRatio(aspectRatio), m_ZoomLevel(zoomLevel)
         {         
         }
@@ -39,17 +39,23 @@ namespace Coconuts
     private:
         bool OnScrollEvent(InputMouseEvent::MouseScroll& e);
         bool OnWindowResizeEvent(WindowEvent::WindowResize& e);
+        bool OnInputKeyPressEvent(InputKeyEvent::KeyPress& e);
+        bool OnInputKeyReleaseEvent(InputKeyEvent::KeyRelease& e);
     
         /* Reference to a Camera object */
         OrthographicCamera& m_Camera;
+        
+        float& m_AspectRatio;
+        float& m_ZoomLevel;
+        
     
         float m_CameraAR_x;
         float m_CameraAR_y;
         
-        float m_AspectRatio;
-        float m_ZoomLevel       = 1.0f;
         glm::vec3 m_CameraPos   = {0.0f, 0.0f, 0.0f};
         float m_CameraMoveSpeed = 1.0f;
+        
+        Timestep m_DeltaTime;
     };
 }
 

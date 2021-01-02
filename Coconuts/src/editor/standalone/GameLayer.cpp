@@ -17,35 +17,20 @@
 #include <string>
 #include <coconuts/Renderer.h>
 #include "GameLayer.h"
+#include <coconuts/ECS.h>
+#include <coconuts/Logger.h>
+
+#define GAMELAYER_SPRITESHEET_PATH  "../../Demo/examples/tiles2d/assets/textures/RPGpack_sheet_2X.png";
 
 namespace Coconuts
 {
 
     void GameLayer::OnUpdate(Timestep ts)
     {
-        if (!m_HaltEvents)
-        {
-            /* Update Camera Controller */
-            m_CameraController->OnUpdate(ts);   // camera input keys
-        }
-
-        Graphics::LowLevelAPI::SetClearColor({0.0f, 0.0f, 0.0f, 1});
-        Graphics::LowLevelAPI::Clear();
-
         /* Bind Framebuffer */
         m_Framebuffer->Bind();
 
-        /* Set backgound color*/
-        Graphics::LowLevelAPI::SetClearColor({0.02f, 0.31f, 0.7f, 1});
-        Graphics::LowLevelAPI::Clear();
-
-        /* Render */
-        Renderer2D::ResetStatistics();
-        Renderer2D::BeginScene(m_Camera);
-
-        Renderer2D::DrawQuad({0.0f, 0.0f}, {0.8f, 0.8f}, {0.8f, 1.0f, 0.1f, 1.0f});
-
-        Renderer2D::EndScene();
+        m_ActiveScene->OnUpdate(ts);
 
         /* Unbind Framebuffer */
         m_Framebuffer->Unbind();
@@ -53,25 +38,11 @@ namespace Coconuts
 
     void GameLayer::OnEvent(Event& event)
     {
-        /* Don't handle any events */
-        if (m_HaltEvents)
-        {
-            return;
-        }
-        
-        /* Update CameraController random events */
-        m_CameraController->OnEvent(event);
+        m_ActiveScene->OnEvent(event);
     }
     
     GameLayer::GameLayer()
-    : m_AspectRatio((float) (16.0f/9.0f)),
-      m_ZoomLevel(1.0f),
-      m_Camera(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel),
-      m_HaltEvents(false)
-      
     {
-        m_CameraController = std::make_shared<CameraController>(m_Camera, m_AspectRatio, m_ZoomLevel);
-        m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
     }
 
     void GameLayer::OnAttach()
@@ -82,8 +53,62 @@ namespace Coconuts
         FramebufferSpecification spec;
         spec.width = 1280.0f;
         spec.height = 696.0f;
-
         m_Framebuffer.reset( Framebuffer::Create(spec) );
+        
+        /* Create a Scene */
+        m_ActiveScene = std::make_shared<Scene>();
+        
+        /* Create an entity on Scene */
+        m_Entity = Entity(m_ActiveScene, "Tree");
+        
+        /* Add TransformComponent */
+        glm::vec2 position = {0.0f, 0.0f};
+        glm::vec2 size = {0.5f, 1.0f};
+        float rotationRadians = 0.79f;
+        m_Entity.AddComponent<TransformComponent>(position, size, rotationRadians);
+       
+        /* Add SpriteComponent */
+        /* 1) Init Spritesheet Texture */
+        const std::string path = GAMELAYER_SPRITESHEET_PATH;
+        std::shared_ptr<Texture2D> m_SpritesheetTexture2D;
+        m_SpritesheetTexture2D.reset( Texture2D::Create(path) );
+        
+        /* 2) Create Sprite from the spritesheet */
+        std::shared_ptr<Sprite> m_TreeSprite;
+        m_TreeSprite.reset( Sprite::Create(m_SpritesheetTexture2D, {2, 1}, {128, 128}, {1, 2}) );
+        
+        /* 3) Assign the sprite to the Entity's SpriteComponent */
+        m_Entity.AddComponent<SpriteComponent>(m_TreeSprite);
+        
+        
+        /* Create a Camera Entity*/
+        m_CameraEntity = Entity(m_ActiveScene);
+        m_CameraEntity.AddComponent<OrthoCameraComponent>((float)(16.0f/9.0f), 1.0f);
+        
+
+        class TreeBehavior : public Behavior
+        {
+        public:
+            void OnCreate()
+            {
+                
+            }
+            
+            void OnDestroy()
+            {
+                
+            }
+            
+            void OnUpdate(Timestep ts)
+            {
+                //LOG_TRACE("Behavior OnUpdate() -> My ID:   {}", this->GetEntityId());
+                //LOG_TRACE("Behavior OnUpdate() -> My Tag:  {}", this->GetComponent<TagComponent>().tag);
+            }
+            
+        private:
+        };
+        
+        m_Entity.AddComponent<BehaviorComponent>().AddBehavior<TreeBehavior>(m_Entity);
     }
 
     void GameLayer::OnDetach()
@@ -93,8 +118,14 @@ namespace Coconuts
     
     bool GameLayer::HaltEvents(bool state)
     {
-        m_HaltEvents = state;
-        return m_HaltEvents;
+        m_ActiveScene->HaltAllEvents(state);
+        m_ActiveScene->HaltEditorCameraNavigation(state);
+        return state;
+    }
+    
+    void GameLayer::ChangeViewport(float x, float y)
+    {
+        m_ActiveScene->OnChangeViewport(x, y);
     }
     
 }

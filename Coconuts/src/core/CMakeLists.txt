@@ -8,6 +8,7 @@ add_subdirectory(event_system)
 add_subdirectory(layer_system)
 add_subdirectory(cameras)
 add_subdirectory(graphics)
+add_subdirectory(ecs)
 
 
 # Platform Specific files

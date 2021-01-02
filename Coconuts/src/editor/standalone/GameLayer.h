@@ -21,10 +21,10 @@
 #include <coconuts/Layer.h>
 #include <coconuts/cameras/OrthographicCamera.h>
 #include <coconuts/cameras/CameraController.h>
-#include <coconuts/ecs/Scene.h>
+#include <coconuts/ECS.h>
 
-
-#include <coconuts/ecs/Entity.h>
+//#include <coconuts/ecs/Scene.h>
+//#include <coconuts/ecs/Entity.h>
 
 namespace Coconuts
 {

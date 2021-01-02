@@ -18,9 +18,9 @@
 
 #include <coconuts/ecs/Behavioral.h>
 #include <coconuts/time/Timestep.h>
+#include <coconuts/Logger.h>
 #include <functional>
 
-#include <coconuts/Logger.h>
 
 namespace Coconuts
 {

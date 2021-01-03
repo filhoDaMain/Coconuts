@@ -20,7 +20,7 @@
 namespace Coconuts
 {
     
-    Entity::Entity(std::shared_ptr<Scene> scene, const std::string& name)
+    Entity::Entity(Scene* scene, const std::string& name)
     : m_Scene(scene)
     {
         /* Create/Add *this* Entity to its Scene */

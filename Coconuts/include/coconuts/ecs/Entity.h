@@ -29,7 +29,7 @@ namespace Coconuts
     {
     public:
         Entity() = default;
-        Entity(std::shared_ptr<Scene> scene, const std::string& name = "Untagged");
+        Entity(Scene* scene, const std::string& name = "Untagged");
         ~Entity();
         
         template <typename C, typename ... Args>
@@ -59,7 +59,7 @@ namespace Coconuts
         uint64_t GetId() const { return m_EntityxEntity.id().id(); }
         
     private:
-        std::shared_ptr<Scene> m_Scene;     /* The Scene this Entity belongs to */
+        Scene*          m_Scene;            /* The Scene this Entity belongs to */
         entityx::Entity m_EntityxEntity;    /* Entity Handler */
         friend class Scene;
         //uint64_t id;

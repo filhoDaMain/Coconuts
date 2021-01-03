@@ -80,11 +80,6 @@ namespace Coconuts
         /* 3) Assign the sprite to the Entity's SpriteComponent */
         m_Entity.AddComponent<SpriteComponent>(m_TreeSprite);
         
-        
-        /* Create a Camera Entity*/
-        m_CameraEntity = Entity(m_ActiveScene.get());
-        m_CameraEntity.AddComponent<OrthoCameraComponent>((float)(16.0f/9.0f), 1.0f);
-        
 
         class TreeBehavior : public Behavior
         {

@@ -23,6 +23,9 @@
 namespace Coconuts
 {
     
+    // forward declared
+    class Entity;
+    
     class Scene
     {
     public:
@@ -45,6 +48,8 @@ namespace Coconuts
         
         bool m_HaltAllEvents = false;
         bool m_HaltEditorCameraNavigation = false;
+        
+        void CreateSceneCamera();
     };
     
 }

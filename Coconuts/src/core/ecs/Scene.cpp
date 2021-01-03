@@ -15,6 +15,7 @@
  */
 
 #include <coconuts/ecs/Scene.h>
+#include <coconuts/ecs/Entity.h>
 #include <coconuts/Renderer.h>
 #include <coconuts/Logger.h>
 
@@ -121,6 +122,23 @@ namespace Coconuts
     entityx::Entity Scene::CreateEntity()
     {
         return m_EntityManager.entities.create();
+    }
+    
+    std::vector<Entity> Scene::GetAllEntities()
+    {
+        std::vector<Entity> all; all.reserve(m_EntityManager.entities.size());
+        Scene* self = this;
+        
+        m_EntityManager.entities.each<TagComponent>([&all, &self]
+        (entityx::Entity thisEntityxEntity, TagComponent& tc)
+        {  
+            Entity tmp;
+            tmp.m_EntityxEntity = thisEntityxEntity;
+            tmp.m_Scene = self;
+            all.emplace_back(tmp);
+        });
+        
+        return all;
     }
     
     bool Scene::HaltAllEvents(bool state)

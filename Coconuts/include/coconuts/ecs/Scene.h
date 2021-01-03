@@ -19,9 +19,13 @@
 #include <entityx/entityx.h>
 #include <coconuts/time/Timestep.h>
 #include <coconuts/EventSystem.h>
+#include <vector>
 
 namespace Coconuts
 {
+    
+    // forward declared
+    class Entity;
     
     class Scene
     {
@@ -36,6 +40,7 @@ namespace Coconuts
         
         entityx::Entity CreateEntity();
         size_t GetNumberOfEntities() const { return m_EntityManager.entities.size(); }
+        std::vector<Entity> GetAllEntities();
         
         bool HaltAllEvents(bool state = true);
         bool HaltEditorCameraNavigation(bool state = true);

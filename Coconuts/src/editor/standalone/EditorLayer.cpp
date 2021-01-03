@@ -127,6 +127,7 @@ namespace Coconuts
     {
         LOG_TRACE("Editor Layer OnPostAttach()");
         m_ViewportPanel.Init(m_GameLayerPtr);
+        m_SceneOverviewPanel.Init(m_GameLayerPtr);
     }
     
 }

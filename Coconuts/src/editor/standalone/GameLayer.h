@@ -22,6 +22,7 @@
 #include <coconuts/cameras/OrthographicCamera.h>
 #include <coconuts/cameras/CameraController.h>
 #include <coconuts/ECS.h>
+#include <vector>
 
 namespace Coconuts
 {
@@ -67,6 +68,8 @@ namespace Coconuts
             
             /* Change on viewport notification */
             void ChangeViewport(float x, float y);
+            
+            std::vector<Entity> GetActiveSceneEntities() const { return m_ActiveScene->GetAllEntities(); }
             
             // --------------------------------------
             // Debug Color change

@@ -59,7 +59,7 @@ namespace Coconuts
         m_ActiveScene = std::make_shared<Scene>();
         
         /* Create an entity on Scene */
-        m_Entity = Entity(m_ActiveScene, "Tree");
+        m_Entity = Entity(m_ActiveScene.get(), "Tree");
         
         /* Add TransformComponent */
         glm::vec2 position = {0.0f, 0.0f};
@@ -82,7 +82,7 @@ namespace Coconuts
         
         
         /* Create a Camera Entity*/
-        m_CameraEntity = Entity(m_ActiveScene);
+        m_CameraEntity = Entity(m_ActiveScene.get());
         m_CameraEntity.AddComponent<OrthoCameraComponent>((float)(16.0f/9.0f), 1.0f);
         
 

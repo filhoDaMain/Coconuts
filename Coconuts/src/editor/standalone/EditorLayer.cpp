@@ -120,6 +120,8 @@ namespace Coconuts
         /* Scene Overview Panel */
         m_SceneOverviewPanel.Draw();
         
+        //ImGui::ShowDemoWindow();
+        
         // ---------------------------------------------------------------------------
         // DOCK SPACE END
     }

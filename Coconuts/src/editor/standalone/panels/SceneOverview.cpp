@@ -15,7 +15,16 @@
  */
 
 #include "SceneOverview.h"
+#include <coconuts/editor.h>
+#include <string>
 #include <coconuts/Logger.h>
+
+// ECS Components
+#include <coconuts/ecs/components/TagComponent.h>
+#include <coconuts/ecs/components/OrthoCameraComponent.h>
+#include <coconuts/ecs/components/TransformComponent.h>
+#include <coconuts/ecs/components/SpriteComponent.h>
+#include <coconuts/ecs/components/BehaviorComponent.h>
 
 namespace Coconuts {
 namespace Panels
@@ -33,12 +42,16 @@ namespace Panels
         if ( m_GameLayerPtr->IsActiveSceneUpdated() )
         {
             GetLastSceneUpdate();
-            LOG_CRITICAL("Scene was updated");
         }
         
-        // Is Scene Updated?
-        //      GetLastSceneUpdate();
-        // Draw
+        ImGui::Begin("Scene Overview");
+        for (Entity thisEntity : sceneEntities)
+        {
+            // List all Tag Component
+            DrawNode(thisEntity);
+            ImGui::Spacing();
+        }
+        ImGui::End();
     }
     
     void SceneOverview::GetLastSceneUpdate()
@@ -52,6 +65,41 @@ namespace Panels
         
         /* Copy */
         sceneEntities = last;
+    }
+    
+    void SceneOverview::DrawNode(Entity& entity)
+    {
+        std::string name = entity.GetComponent<TagComponent>().tag;
+        if (ImGui::TreeNode(name.c_str()))
+        {
+            ImGui::TextDisabled("ID: %llu", entity.GetId());
+            
+            /* Camera? */
+            if (entity.HasComponent<OrthoCameraComponent>())
+            {
+                ImGui::Text("Component: OrthoCamera");
+            }
+            
+            /* Transform? */
+            if (entity.HasComponent<TransformComponent>())
+            {
+                ImGui::Text("Component: Transform");
+            }
+            
+            /* Sprite? */
+            if (entity.HasComponent<SpriteComponent>())
+            {
+                ImGui::Text("Component: Sprite");
+            }
+            
+            /* Behavior? */
+            if (entity.HasComponent<BehaviorComponent>())
+            {
+                ImGui::Text("Component: Behavior");
+            }
+            
+            ImGui::TreePop();
+        }
     }
     
 }

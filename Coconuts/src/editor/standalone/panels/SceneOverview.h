@@ -33,6 +33,7 @@ namespace Panels
         
     private:
         void GetLastSceneUpdate();
+        void DrawNode(Entity& entity);
         
         /* Pointer to the GameLayer */
         GameLayer* m_GameLayerPtr;

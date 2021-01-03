@@ -15,6 +15,7 @@
  */
 
 #include "SceneOverview.h"
+#include <coconuts/Logger.h>
 
 namespace Coconuts {
 namespace Panels
@@ -27,8 +28,14 @@ namespace Panels
         return true;
     }
     
-    void SceneOverview::LiveUpdate()
+    void SceneOverview::Draw()
     {
+        if ( m_GameLayerPtr->IsActiveSceneUpdated() )
+        {
+            GetLastSceneUpdate();
+            LOG_CRITICAL("Scene was updated");
+        }
+        
         // Is Scene Updated?
         //      GetLastSceneUpdate();
         // Draw

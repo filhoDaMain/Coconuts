@@ -42,7 +42,7 @@ namespace Coconuts
         size_t GetNumberOfEntities() const { return m_EntityManager.entities.size(); }
         std::vector<Entity> GetAllEntities();
         
-        bool SetUpdateFlag(bool update = true) { m_IsUpdated = update; return m_IsUpdated; }
+        bool SetUpdateFlag(bool update = true) { m_IsUpdated = update; return m_IsUpdated;}
         bool IsUpdated() { return m_IsUpdated; }
         bool HaltAllEvents(bool state = true);
         bool HaltEditorCameraNavigation(bool state = true);

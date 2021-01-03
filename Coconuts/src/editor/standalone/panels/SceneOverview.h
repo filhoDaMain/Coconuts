@@ -29,10 +29,11 @@ namespace Panels
         SceneOverview() = default;
         bool Init(GameLayer*& gameLayer);
         
-        void LiveUpdate();
-        void GetLastSceneUpdate();
+        void Draw();
         
     private:
+        void GetLastSceneUpdate();
+        
         /* Pointer to the GameLayer */
         GameLayer* m_GameLayerPtr;
         

@@ -117,7 +117,8 @@ namespace Coconuts
         /* Statistics Panel */
         m_StatisticsPanel.Draw(Renderer2D::GetStatistics());
 
-        
+        /* Scene Overview Panel */
+        m_SceneOverviewPanel.Draw();
         
         // ---------------------------------------------------------------------------
         // DOCK SPACE END

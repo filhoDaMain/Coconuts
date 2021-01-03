@@ -87,7 +87,7 @@ namespace Coconuts
 
         if (ImGui::BeginMenuBar())
         {
-            if (ImGui::BeginMenu("Docking"))
+            if (ImGui::BeginMenu("File"))
             {
                 // Disabling fullscreen would allow the window to be moved to the front of other windows,
                 // which we can't undo at the moment without finer window depth/z control.

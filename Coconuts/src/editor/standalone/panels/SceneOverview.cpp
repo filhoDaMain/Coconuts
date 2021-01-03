@@ -72,12 +72,12 @@ namespace Panels
         std::string name = entity.GetComponent<TagComponent>().tag;
         if (ImGui::TreeNode(name.c_str()))
         {
-            ImGui::TextDisabled("ID: %llu", entity.GetId());
+            ImGui::TextDisabled("Entity ID: %llu", entity.GetId());
             
             /* Camera? */
             if (entity.HasComponent<OrthoCameraComponent>())
             {
-                ImGui::Text("Component: OrthoCamera");
+                ImGui::Text("Component: Orthographic Camera");
             }
             
             /* Transform? */

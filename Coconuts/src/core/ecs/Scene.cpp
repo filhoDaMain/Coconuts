@@ -138,6 +138,8 @@ namespace Coconuts
             all.emplace_back(tmp);
         });
         
+        /* Scene was read. Reset update flag */
+        m_IsUpdated = false;
         return all;
     }
     

@@ -28,6 +28,8 @@ namespace Coconuts
         
         /* Add default Components */
         this->AddComponent<TagComponent>(name); // Entity tag
+        
+        m_Scene->SetUpdateFlag();
     }
     
     Entity::~Entity()

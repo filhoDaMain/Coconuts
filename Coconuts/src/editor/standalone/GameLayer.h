@@ -69,6 +69,7 @@ namespace Coconuts
             /* Change on viewport notification */
             void ChangeViewport(float x, float y);
             
+            bool IsActiveSceneUpdated() { return m_ActiveScene->IsUpdated(); }
             std::vector<Entity> GetActiveSceneEntities() const { return m_ActiveScene->GetAllEntities(); }
             
             // --------------------------------------

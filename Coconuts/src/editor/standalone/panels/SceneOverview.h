@@ -17,6 +17,7 @@
 #define SCENEOVERVIEW_H
 
 #include "../GameLayer.h"
+#include "ComponentInspector.h"
 #include <coconuts/ecs/Entity.h>
 #include <vector>
 
@@ -27,7 +28,7 @@ namespace Panels
     {
     public:
         SceneOverview() = default;
-        bool Init(GameLayer*& gameLayer);
+        bool Init(GameLayer*& gameLayer, ComponentInspector* componentInspector);
         
         void Draw();
         
@@ -37,6 +38,9 @@ namespace Panels
         
         /* Pointer to the GameLayer */
         GameLayer* m_GameLayerPtr;
+        
+        /* Pointer to the Component Inspector Panel to change context */
+        ComponentInspector* m_ComponentInspectorPtr;
         
         std::vector<Entity> sceneEntities;
     };

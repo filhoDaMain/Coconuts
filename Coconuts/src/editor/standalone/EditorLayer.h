@@ -25,6 +25,7 @@
 #include "panels/Viewport.h"
 #include "panels/Statistics.h"
 #include "panels/SceneOverview.h"
+#include "panels/ComponentInspector.h"
 
 namespace Coconuts
 {
@@ -43,9 +44,10 @@ namespace Coconuts
         GameLayer* m_GameLayerPtr;
         
         /* Panels */
-        Panels::Viewport        m_ViewportPanel;
-        Panels::Statistics      m_StatisticsPanel;
-        Panels::SceneOverview   m_SceneOverviewPanel;
+        Panels::Viewport            m_ViewportPanel;
+        Panels::Statistics          m_StatisticsPanel;
+        Panels::SceneOverview       m_SceneOverviewPanel;
+        Panels::ComponentInspector  m_ComponentInspectorPanel;
     };
     
 }

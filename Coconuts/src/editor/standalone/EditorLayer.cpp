@@ -120,6 +120,8 @@ namespace Coconuts
         /* Scene Overview Panel */
         m_SceneOverviewPanel.Draw();
         
+        m_ComponentInspectorPanel.Draw();
+        
         //DEBUG:
         //ImGui::ShowDemoWindow();
         
@@ -131,7 +133,8 @@ namespace Coconuts
     {
         LOG_TRACE("Editor Layer OnPostAttach()");
         m_ViewportPanel.Init(m_GameLayerPtr);
-        m_SceneOverviewPanel.Init(m_GameLayerPtr);
+        m_ComponentInspectorPanel.Init();
+        m_SceneOverviewPanel.Init(m_GameLayerPtr, &m_ComponentInspectorPanel);
     }
     
 }

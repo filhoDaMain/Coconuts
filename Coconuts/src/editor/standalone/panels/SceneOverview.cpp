@@ -30,9 +30,10 @@ namespace Coconuts {
 namespace Panels
 {
  
-    bool SceneOverview::Init(GameLayer*& gameLayer)
+    bool SceneOverview::Init(GameLayer*& gameLayer, ComponentInspector* componentInspector)
     {
         m_GameLayerPtr = gameLayer;
+        m_ComponentInspectorPtr = componentInspector;
         
         return true;
     }
@@ -82,6 +83,8 @@ namespace Panels
                 ImGui::SameLine();
                 if (ImGui::SmallButton("Orthographic Camera"))
                 {
+                    m_ComponentInspectorPtr->ChangeContext(
+                        &(entity.GetComponent<OrthoCameraComponent>()));
                 }
             }
             
@@ -92,6 +95,8 @@ namespace Panels
                 ImGui::SameLine();
                 if (ImGui::SmallButton("Transform"))
                 {
+                    m_ComponentInspectorPtr->ChangeContext(
+                        &(entity.GetComponent<TransformComponent>()));
                 }
             }
             
@@ -102,6 +107,8 @@ namespace Panels
                 ImGui::SameLine();
                 if (ImGui::SmallButton("Sprite"))
                 {
+                    m_ComponentInspectorPtr->ChangeContext(
+                        &(entity.GetComponent<SpriteComponent>()));
                 }
             }
             
@@ -112,6 +119,8 @@ namespace Panels
                 ImGui::SameLine();
                 if (ImGui::SmallButton("Behavior"))
                 {
+                    m_ComponentInspectorPtr->ChangeContext(
+                        &(entity.GetComponent<BehaviorComponent>()));
                 }
             }
             

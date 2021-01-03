@@ -53,12 +53,13 @@ namespace Coconuts
         bool m_HaltAllEvents = false;
         bool m_HaltEditorCameraNavigation = false;
         
-        
         /**
          * When a new Entity is added or modified m_IsUpdated is set to true.
          * It's only reset to false when GetAllEntities() is called.
          */
         bool m_IsUpdated = false;
+
+        void CreateSceneCamera();
     };
     
 }

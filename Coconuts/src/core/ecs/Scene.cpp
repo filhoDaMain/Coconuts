@@ -113,6 +113,7 @@ namespace Coconuts
     
     Scene::Scene()
     {
+        CreateSceneCamera();
     }
     
     Scene::~Scene()
@@ -153,5 +154,12 @@ namespace Coconuts
     {
         m_HaltEditorCameraNavigation = state;
         return m_HaltEditorCameraNavigation;
+    }
+    
+    void Scene::CreateSceneCamera()
+    {
+        Entity camera(this, "Camera");
+        camera.AddComponent<OrthoCameraComponent>((float)(16.0f/9.0f), 1.0f).zoomLevel = 1.0f;
+        camera.AddComponent<TransformComponent>().position = {0.0f, 0.0f};
     }
 }

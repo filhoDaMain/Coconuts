@@ -19,8 +19,6 @@
 #include <memory>
 #include <coconuts/Renderer.h>
 #include <coconuts/Layer.h>
-#include <coconuts/cameras/OrthographicCamera.h>
-#include <coconuts/cameras/CameraController.h>
 #include <coconuts/ECS.h>
 #include <vector>
 
@@ -40,7 +38,6 @@ namespace Coconuts
             std::shared_ptr<Scene> m_ActiveScene;
             
             /* Entity handlers */
-            Entity m_CameraEntity;
             Entity m_Entity;
 
         public:

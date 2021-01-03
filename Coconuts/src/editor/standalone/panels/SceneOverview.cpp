@@ -70,6 +70,7 @@ namespace Panels
     void SceneOverview::DrawNode(Entity& entity)
     {
         std::string name = entity.GetComponent<TagComponent>().tag;
+        
         if (ImGui::TreeNode(name.c_str()))
         {
             ImGui::TextDisabled("Entity ID: %llu", entity.GetId());
@@ -77,25 +78,41 @@ namespace Panels
             /* Camera? */
             if (entity.HasComponent<OrthoCameraComponent>())
             {
-                ImGui::Text("Component: Orthographic Camera");
+                ImGui::Text("Component:");
+                ImGui::SameLine();
+                if (ImGui::SmallButton("Orthographic Camera"))
+                {
+                }
             }
             
             /* Transform? */
             if (entity.HasComponent<TransformComponent>())
             {
-                ImGui::Text("Component: Transform");
+                ImGui::Text("Component:");
+                ImGui::SameLine();
+                if (ImGui::SmallButton("Transform"))
+                {
+                }
             }
             
             /* Sprite? */
             if (entity.HasComponent<SpriteComponent>())
             {
-                ImGui::Text("Component: Sprite");
+                ImGui::Text("Component:");
+                ImGui::SameLine();
+                if (ImGui::SmallButton("Sprite"))
+                {
+                }
             }
             
             /* Behavior? */
             if (entity.HasComponent<BehaviorComponent>())
             {
-                ImGui::Text("Component: Behavior");
+                ImGui::Text("Component:");
+                ImGui::SameLine();
+                if (ImGui::SmallButton("Behavior"))
+                {
+                }
             }
             
             ImGui::TreePop();

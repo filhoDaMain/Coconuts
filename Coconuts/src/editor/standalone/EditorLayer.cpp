@@ -120,6 +120,7 @@ namespace Coconuts
         /* Scene Overview Panel */
         m_SceneOverviewPanel.Draw();
         
+        //DEBUG:
         //ImGui::ShowDemoWindow();
         
         // ---------------------------------------------------------------------------

@@ -103,7 +103,7 @@ namespace Coconuts
     
     void Scene::OnChangeViewport(float x, float y)
     {
-        // Change aspect ration on Scene's camera
+        // Change aspect ratio on Scene's camera
         m_EntityManager.entities.each<OrthoCameraComponent>([x, y](entityx::Entity thisEntityxEntity, OrthoCameraComponent& thisOrthoCameraComponent)
         {
             thisOrthoCameraComponent.aspectRatio = (float) (x / y);   

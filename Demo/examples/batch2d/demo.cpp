@@ -63,9 +63,10 @@ public:
         :   Layer(layerName),
             m_CameraAR_x(16.0f),
             m_CameraAR_y(9.0f),
+            m_CameraAR(m_CameraAR_x/m_CameraAR_y),
             m_ZoomLevel(1.0f),
             m_Camera(-m_CameraAR_x * m_ZoomLevel, -m_CameraAR_x * m_ZoomLevel, -m_CameraAR_y * m_ZoomLevel, m_CameraAR_y * m_ZoomLevel),
-            m_CameraController(m_Camera, (float) (m_CameraAR_x/m_CameraAR_y), m_ZoomLevel),
+            m_CameraController(m_Camera, m_CameraAR, m_ZoomLevel),
             m_MorisPosX(0.0f),
             m_MorisPosY(0.0f)
     {
@@ -186,6 +187,7 @@ private:
     /* Camera */
     float m_CameraAR_x; // Aspect Ratio X
     float m_CameraAR_y; // Aspect Ratio X
+    float m_CameraAR;   // m_CameraAR_x / m_CameraAR_y
     float m_ZoomLevel;
     Coconuts::OrthographicCamera m_Camera;
         

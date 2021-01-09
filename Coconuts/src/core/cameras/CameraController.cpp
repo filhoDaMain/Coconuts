@@ -18,11 +18,17 @@
 #include <coconuts/Keyboard.h>
 #include <coconuts/Polling.h>
 #include <coconuts/types.h>
-#include <coconuts/Logger.h>
+
+/**
+ *  DISCLAIMER:
+ *  
+ *  2021-Jan-09:    CameraController is now deprecated!
+ *                  - Use instead an ECS BehaviorComponent to update a camera each frame
+ *                    and an ECS EventHandlerComponent to handle async events.
+ */
 
 namespace Coconuts
 {
-#if 0
     void CameraController::OnUpdate(Timestep& ts)
     {
         m_DeltaTime = ts;
@@ -120,5 +126,4 @@ namespace Coconuts
         //do nothing
         return true;    /* Event was handled. Stop the event propagation */
     }
-#endif
 }

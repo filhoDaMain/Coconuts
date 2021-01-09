@@ -48,9 +48,6 @@ namespace Coconuts
         /* Framebuffer's Color attach texture ID */
         uint32_t m_ViewPortTexID;
         
-        /* GameLayer's CameraController */
-        std::shared_ptr<CameraController> m_CameraController;
-        
         /* Viewport panel size */
         glm::vec2 m_ViewportSize;
     };

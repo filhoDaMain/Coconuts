@@ -26,7 +26,8 @@ namespace Coconuts
     
     class CameraController
     {
-    public:        
+    public:  
+#if 0
         CameraController(OrthographicCamera& camera, float& aspectRatio, float& zoomLevel)
         : m_Camera(camera), m_AspectRatio(aspectRatio), m_ZoomLevel(zoomLevel)
         {         
@@ -35,8 +36,10 @@ namespace Coconuts
         void OnUpdate(Timestep& ts);
         void ScreenResize(float width, float height);
         void OnEvent(Event& event);
+#endif
     
     private:
+#if 0
         bool OnScrollEvent(InputMouseEvent::MouseScroll& e);
         bool OnWindowResizeEvent(WindowEvent::WindowResize& e);
         bool OnInputKeyPressEvent(InputKeyEvent::KeyPress& e);
@@ -56,6 +59,7 @@ namespace Coconuts
         float m_CameraMoveSpeed = 1.0f;
         
         Timestep m_DeltaTime;
+#endif
     };
 }
 

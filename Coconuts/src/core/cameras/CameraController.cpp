@@ -22,7 +22,7 @@
 
 namespace Coconuts
 {
-     
+#if 0
     void CameraController::OnUpdate(Timestep& ts)
     {
         m_DeltaTime = ts;
@@ -120,5 +120,5 @@ namespace Coconuts
         //do nothing
         return true;    /* Event was handled. Stop the event propagation */
     }
-    
+#endif
 }

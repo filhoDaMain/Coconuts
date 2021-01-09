@@ -113,8 +113,8 @@ namespace Coconuts
     
     bool GameLayer::HaltEvents(bool state)
     {
-        m_ActiveScene->HaltAllEvents(state);
         m_ActiveScene->HaltEditorCameraNavigation(state);
+        m_ActiveScene->HaltAllEvents(state);
         return state;
     }
     

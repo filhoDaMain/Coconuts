@@ -17,7 +17,6 @@
 #define BEHAVIORAL_H
 
 #include <coconuts/ecs/Entity.h>
-#include <coconuts/ecs/components/BehaviorComponent.h>
 
 namespace Coconuts
 {
@@ -25,6 +24,11 @@ namespace Coconuts
     class Behavior
     {
     public:
+        
+        void SetAffectedEntity(Entity& entity)
+        {
+            m_Entity = entity;
+        }
         
         template <typename C, typename ... Args>
         C& AddComponent(Args && ... args)
@@ -51,7 +55,6 @@ namespace Coconuts
         
     private:
         Entity m_Entity;    // Linked with an Entity / Entities (future)
-        friend struct BehaviorComponent;
     };
     
 }

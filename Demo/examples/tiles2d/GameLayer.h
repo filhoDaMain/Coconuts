@@ -13,6 +13,7 @@ class GameLayer : public Coconuts::Layer
         /* Camera */
         float m_CameraAR_x; // Aspect Ratio X
         float m_CameraAR_y; // Aspect Ratio X
+        float m_CameraAR;   // m_CameraAR_x / m_CameraAR_y
         float m_ZoomLevel;
         Coconuts::OrthographicCamera m_Camera;
         

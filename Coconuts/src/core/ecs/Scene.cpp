@@ -25,9 +25,13 @@
 #include <coconuts/ecs/components/SpriteComponent.h>
 #include <coconuts/ecs/components/OrthoCameraComponent.h>
 #include <coconuts/ecs/components/BehaviorComponent.h>
+#include <coconuts/ecs/components/EventHandlerComponent.h>
 
-// Systems
+// Default Systems
 #include <coconuts/ecs/systems/CameraNavSystem.h>
+
+// Default Event Handlers
+#include <coconuts/ecs/event_handlers/CameraEventHandler.h>
 
 namespace Coconuts
 {
@@ -61,14 +65,7 @@ namespace Coconuts
          *
          */
         m_EntityManager.entities.each<OrthoCameraComponent>([&](entityx::Entity thisEntityxEntity, OrthoCameraComponent& thisOrthoCameraComponent)
-        {
-            
-            /* Update Controller */
-            //if (!m_HaltEditorCameraNavigation)
-            //{
-            //    thisOrthoCameraComponent.controller.OnUpdate(ts);
-            //}
-            
+        {            
             /* Begin Scene */
             Renderer2D::BeginScene(thisOrthoCameraComponent.camera);
             
@@ -88,7 +85,6 @@ namespace Coconuts
             Renderer2D::EndScene();
         });
         
-
     }
     
     void Scene::OnEvent(Event& e)
@@ -98,10 +94,10 @@ namespace Coconuts
             return;
         }
         
-        // For now, just update CameraController Events, when they exist
-        m_EntityManager.entities.each<OrthoCameraComponent>([&](entityx::Entity thisEntityxEntity, OrthoCameraComponent& thisOrthoCameraComponent)
+        /* Dispatch Event to Event Handlers */
+        m_EntityManager.entities.each<EventHandlerComponent>([&](entityx::Entity thisEntityxEntity, EventHandlerComponent& thisEventHandlerComponent)
         {
-            thisOrthoCameraComponent.controller.OnEvent(e);
+            thisEventHandlerComponent.OnEventFunc(thisEventHandlerComponent.instance, e);
         });
     }
     
@@ -145,5 +141,6 @@ namespace Coconuts
         camera.AddComponent<OrthoCameraComponent>((float)(16.0f/9.0f), 1.0f).mooveSpeed = 1.0f;
         camera.AddComponent<TransformComponent>().position = {0.0f, 0.0f};
         camera.AddComponent<BehaviorComponent>().AddBehavior<CameraNavSystem>(camera);
+        camera.AddComponent<EventHandlerComponent>().AddHandler<CameraEventHandler>(camera);
     }
 }

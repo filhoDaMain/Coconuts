@@ -62,10 +62,12 @@ namespace Coconuts
             c_transform.position.y -= c_camera.mooveSpeed * ts.GetSeconds();
         }
         
-        /* Update Camera's Position */
+        /* Update Camera's Matrices */
         glm::vec3 pos = {c_transform.position.x, c_transform.position.y, 0.0f};
+        c_camera.camera.SetProjection(-c_camera.aspectRatio * c_camera.zoomLevel, c_camera.aspectRatio * c_camera.zoomLevel, -c_camera.zoomLevel, c_camera.zoomLevel);
         c_camera.camera.SetPosition(pos);
     }
+
     
     void CameraNavSystem::OnCreate()
     {

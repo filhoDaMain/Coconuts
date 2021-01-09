@@ -1,4 +1,4 @@
-# CORE LIBRARY - ECS
+# CORE LIBRARY - ECS - system
 
 # Source files
 target_sources(ccncore PRIVATE  "${CMAKE_CURRENT_SOURCE_DIR}/CameraNavSystem.cpp")

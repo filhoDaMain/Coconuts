@@ -50,7 +50,7 @@ namespace Coconuts
             Instantiate();
             
             /* Link it to an entity affected by this behavior */
-            instance->m_Entity = affects;
+            instance->SetAffectedEntity(affects);
         }
     };
     

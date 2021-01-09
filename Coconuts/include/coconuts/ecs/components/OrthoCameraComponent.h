@@ -27,15 +27,16 @@ namespace Coconuts
         //data
         float               aspectRatio;
         float               zoomLevel;
+        float               mooveSpeed;
+        bool                halt;
         OrthographicCamera  camera;
-        CameraController    controller;
         
         OrthoCameraComponent() = default;
         OrthoCameraComponent(float aR, float zoom)
         :   aspectRatio(aR),
             zoomLevel(zoom),
-            camera(-aspectRatio * zoomLevel, aspectRatio * zoomLevel, -zoomLevel, zoomLevel),
-            controller(camera, aspectRatio, zoomLevel)
+            halt(false),
+            camera(-aspectRatio * zoomLevel, aspectRatio * zoomLevel, -zoomLevel, zoomLevel)
         {}
     };
     

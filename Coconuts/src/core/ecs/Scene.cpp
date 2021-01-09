@@ -25,7 +25,13 @@
 #include <coconuts/ecs/components/SpriteComponent.h>
 #include <coconuts/ecs/components/OrthoCameraComponent.h>
 #include <coconuts/ecs/components/BehaviorComponent.h>
+#include <coconuts/ecs/components/EventHandlerComponent.h>
 
+// Default Systems
+#include <coconuts/ecs/systems/CameraNavSystem.h>
+
+// Default Event Handlers
+#include <coconuts/ecs/event_handlers/CameraEventHandler.h>
 
 namespace Coconuts
 {
@@ -38,7 +44,7 @@ namespace Coconuts
         /* Update Behavior scripts */
         m_EntityManager.entities.each<BehaviorComponent>([&]
         (entityx::Entity thisEntityxEntity, BehaviorComponent& thisBehaviorComponent)
-        {  
+        {              
             thisBehaviorComponent.OnUpdateFunc(thisBehaviorComponent.instance, ts);
         });
         
@@ -59,14 +65,7 @@ namespace Coconuts
          *
          */
         m_EntityManager.entities.each<OrthoCameraComponent>([&](entityx::Entity thisEntityxEntity, OrthoCameraComponent& thisOrthoCameraComponent)
-        {
-            
-            /* Update Controller */
-            if (!m_HaltEditorCameraNavigation)
-            {
-                thisOrthoCameraComponent.controller.OnUpdate(ts);
-            }
-            
+        {            
             /* Begin Scene */
             Renderer2D::BeginScene(thisOrthoCameraComponent.camera);
             
@@ -86,7 +85,6 @@ namespace Coconuts
             Renderer2D::EndScene();
         });
         
-
     }
     
     void Scene::OnEvent(Event& e)
@@ -96,18 +94,20 @@ namespace Coconuts
             return;
         }
         
-        // For now, just update CameraController Events, when they exist
-        m_EntityManager.entities.each<OrthoCameraComponent>([&](entityx::Entity thisEntityxEntity, OrthoCameraComponent& thisOrthoCameraComponent)
+        /* Dispatch Event to Event Handlers */
+        m_EntityManager.entities.each<EventHandlerComponent>([&](entityx::Entity thisEntityxEntity, EventHandlerComponent& thisEventHandlerComponent)
         {
-            thisOrthoCameraComponent.controller.OnEvent(e);
+            thisEventHandlerComponent.OnEventFunc(thisEventHandlerComponent.instance, e);
         });
     }
     
     void Scene::OnChangeViewport(float x, float y)
     {
+        /* Change aspect ratio on Scene's camera */
         m_EntityManager.entities.each<OrthoCameraComponent>([x, y](entityx::Entity thisEntityxEntity, OrthoCameraComponent& thisOrthoCameraComponent)
         {
-            thisOrthoCameraComponent.controller.ScreenResize(x, y);
+            thisOrthoCameraComponent.aspectRatio = (float) (x / y);   
+            // Cameras matrices are updated by its Camera Nav System!
         });
     }
     
@@ -152,6 +152,12 @@ namespace Coconuts
     
     bool Scene::HaltEditorCameraNavigation(bool state)
     {
+        /* Halt / reactivate Camera's Nav System Update() */
+        m_EntityManager.entities.each<OrthoCameraComponent, BehaviorComponent>([state](entityx::Entity thisEntityxEntity, OrthoCameraComponent& thisOrthoCameraComponent, BehaviorComponent& thisbehaviorComponent)
+        {   
+            thisOrthoCameraComponent.halt = state;
+        });
+        
         m_HaltEditorCameraNavigation = state;
         return m_HaltEditorCameraNavigation;
     }
@@ -159,7 +165,9 @@ namespace Coconuts
     void Scene::CreateSceneCamera()
     {
         Entity camera(this, "Camera");
-        camera.AddComponent<OrthoCameraComponent>((float)(16.0f/9.0f), 1.0f).zoomLevel = 1.0f;
+        camera.AddComponent<OrthoCameraComponent>((float)(16.0f/9.0f), 1.0f).mooveSpeed = 1.0f;
         camera.AddComponent<TransformComponent>().position = {0.0f, 0.0f};
+        camera.AddComponent<BehaviorComponent>().AddBehavior<CameraNavSystem>(camera);
+        camera.AddComponent<EventHandlerComponent>().AddHandler<CameraEventHandler>(camera);
     }
 }

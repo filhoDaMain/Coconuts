@@ -19,17 +19,27 @@
 #include <coconuts/cameras/OrthographicCamera.h>
 #include <coconuts/time/Timestep.h>
 #include <coconuts/EventSystem.h>
+#include <coconuts/Logger.h>
 #include <cstdint>
+
+/**
+ *  DISCLAIMER:
+ *  
+ *  2021-Jan-09:    CameraController is now deprecated!
+ *                  - Use instead an ECS BehaviorComponent to update a camera each frame
+ *                    and an ECS EventHandlerComponent to handle async events.
+ */
 
 namespace Coconuts
 {
     
     class CameraController
     {
-    public:        
+    public:  
         CameraController(OrthographicCamera& camera, float& aspectRatio, float& zoomLevel)
         : m_Camera(camera), m_AspectRatio(aspectRatio), m_ZoomLevel(zoomLevel)
-        {         
+        {
+            LOG_WARN("WARNING! You are using a deprecated CameraController");
         }
     
         void OnUpdate(Timestep& ts);

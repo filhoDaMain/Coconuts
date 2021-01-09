@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Andre Temprilho
+ * Copyright 2021 Andre Temprilho
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,48 +13,47 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef BEHAVIORCOMPONENT_H
-#define BEHAVIORCOMPONENT_H
+#ifndef EVENTHANDLERCOMPONENT_H
+#define EVENTHANDLERCOMPONENT_H
 
-#include <coconuts/ecs/Behavior.h>
-#include <coconuts/time/Timestep.h>
-#include <coconuts/Logger.h>
+#include <coconuts/ecs/EventHandler.h>
+#include <coconuts/EventSystem.h>
 #include <functional>
 
 
 namespace Coconuts
 {
     
-    struct BehaviorComponent
+    struct EventHandlerComponent
     {
-        //TODO make an array of instance pointers so an Entity can have multiple Behaviors
-        Behavior* instance = nullptr;
+        //TODO make an array of instance pointers so an Entity can have multiple Event Handlers
+        EventHandler* instance = nullptr;
         std::function<void()> Instantiate;
         std::function<void()> Destroy;
         
-        std::function<void(Behavior*)> OnCreateFunc;
-        std::function<void(Behavior*)> OnDestroyFunc;
-        std::function<void(Behavior*, Timestep)> OnUpdateFunc;
+        std::function<void(EventHandler*)> OnCreateFunc;
+        std::function<void(EventHandler*)> OnDestroyFunc;
+        std::function<void(EventHandler*, Event&)> OnEventFunc;
         
         template <typename C>
-        void AddBehavior(Entity& affects)
+        void AddHandler(Entity& affects)
         {   
             Instantiate = [&]() { instance = new C(); };
             Destroy = [&]() { delete (C*)instance; instance = nullptr; };
             
-            OnCreateFunc = [](Behavior* inst) { ((C*) inst)->OnCreate(); };
-            OnDestroyFunc = [](Behavior* inst) { ((C*) inst)->OnDestroy(); };
-            OnUpdateFunc = [](Behavior* inst, Timestep ts) { ((C*) inst)->OnUpdate(ts); };
+            OnCreateFunc = [](EventHandler* inst) { ((C*) inst)->OnCreate(); };
+            OnDestroyFunc = [](EventHandler* inst) { ((C*) inst)->OnDestroy(); };
+            OnEventFunc = [](EventHandler* inst, Event& e) { ((C*) inst)->OnEvent(e); };
             
-            /* Instantiate object of Behavioral class */
+            /* Instantiate object of EventHandler class */
             Instantiate();
             
-            /* Link it to an entity affected by this behavior */
+            /* Link it to an entity affected by this handler */
             instance->SetAffectedEntity(affects);
         }
     };
     
 }
 
-#endif /* BEHAVIORCOMPONENT_H */
+#endif /* EVENTHANDLERCOMPONENT_H */
 

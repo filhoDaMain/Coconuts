@@ -27,6 +27,7 @@ namespace Coconuts
         //data
         float               aspectRatio;
         float               zoomLevel;
+        float               mooveSpeed;
         OrthographicCamera  camera;
         CameraController    controller;
         

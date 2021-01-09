@@ -26,6 +26,8 @@
 #include <coconuts/ecs/components/OrthoCameraComponent.h>
 #include <coconuts/ecs/components/BehaviorComponent.h>
 
+// Systems
+#include <coconuts/ecs/systems/CameraNavSystem.h>
 
 namespace Coconuts
 {
@@ -62,10 +64,10 @@ namespace Coconuts
         {
             
             /* Update Controller */
-            if (!m_HaltEditorCameraNavigation)
-            {
-                thisOrthoCameraComponent.controller.OnUpdate(ts);
-            }
+            //if (!m_HaltEditorCameraNavigation)
+            //{
+            //    thisOrthoCameraComponent.controller.OnUpdate(ts);
+            //}
             
             /* Begin Scene */
             Renderer2D::BeginScene(thisOrthoCameraComponent.camera);
@@ -140,7 +142,8 @@ namespace Coconuts
     void Scene::CreateSceneCamera()
     {
         Entity camera(this, "Camera");
-        camera.AddComponent<OrthoCameraComponent>((float)(16.0f/9.0f), 1.0f).zoomLevel = 1.0f;
+        camera.AddComponent<OrthoCameraComponent>((float)(16.0f/9.0f), 1.0f).mooveSpeed = 1.0f;
         camera.AddComponent<TransformComponent>().position = {0.0f, 0.0f};
+        camera.AddComponent<BehaviorComponent>().AddBehavior<CameraNavSystem>(camera);
     }
 }

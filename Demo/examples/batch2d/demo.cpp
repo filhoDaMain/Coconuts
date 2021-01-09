@@ -1,4 +1,9 @@
 /**
+ * NOTICE: This demo is still using a deprecated CameraController!
+ */
+
+
+/**
  * A Sandbox Application example to show Coconuts running.
  */
 

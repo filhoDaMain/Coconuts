@@ -1,4 +1,8 @@
 /**
+ * NOTICE: This demo is still using a deprecated CameraController!
+ */
+
+/**
  * Must define __COCONUTS_SANDBOX_APP__
  * to explicitly define this module
  * as the Entry Point

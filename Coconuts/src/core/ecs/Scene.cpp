@@ -44,7 +44,7 @@ namespace Coconuts
         /* Update Behavior scripts */
         m_EntityManager.entities.each<BehaviorComponent>([&]
         (entityx::Entity thisEntityxEntity, BehaviorComponent& thisBehaviorComponent)
-        {  
+        {              
             thisBehaviorComponent.OnUpdateFunc(thisBehaviorComponent.instance, ts);
         });
         
@@ -103,7 +103,7 @@ namespace Coconuts
     
     void Scene::OnChangeViewport(float x, float y)
     {
-        // Change aspect ratio on Scene's camera
+        /* Change aspect ratio on Scene's camera */
         m_EntityManager.entities.each<OrthoCameraComponent>([x, y](entityx::Entity thisEntityxEntity, OrthoCameraComponent& thisOrthoCameraComponent)
         {
             thisOrthoCameraComponent.aspectRatio = (float) (x / y);   
@@ -133,6 +133,12 @@ namespace Coconuts
     
     bool Scene::HaltEditorCameraNavigation(bool state)
     {
+        /* Halt / reactivate Camera's Nav System Update() */
+        m_EntityManager.entities.each<OrthoCameraComponent, BehaviorComponent>([state](entityx::Entity thisEntityxEntity, OrthoCameraComponent& thisOrthoCameraComponent, BehaviorComponent& thisbehaviorComponent)
+        {   
+            thisOrthoCameraComponent.halt = state;
+        });
+        
         m_HaltEditorCameraNavigation = state;
         return m_HaltEditorCameraNavigation;
     }

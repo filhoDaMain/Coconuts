@@ -31,36 +31,44 @@ namespace Coconuts
         /* Component retrieval */
         auto& c_camera = GetComponent<OrthoCameraComponent>();
         auto& c_transform = GetComponent<TransformComponent>();
-       
         
-        /**
-         * Input polling from Keyboard to 
-         * move and rotate Camera
-         */
-
-        /* Left */
-        if (Polling::IsKeyPressed(Keyboard::KEY_LEFT))
+        do
         {
-            c_transform.position.x -= c_camera.mooveSpeed * ts.GetSeconds();
-        }
+            if (c_camera.halt)
+            {
+                break;  // jump to Camera's matrices update
+            }
+            
+            /**
+             * Input polling from Keyboard to 
+             * move and rotate Camera
+             */
 
-        /* Right */
-        if (Polling::IsKeyPressed(Keyboard::KEY_RIGHT))
-        {
-            c_transform.position.x += c_camera.mooveSpeed * ts.GetSeconds();
-        }
+            /* Left */
+            if (Polling::IsKeyPressed(Keyboard::KEY_LEFT))
+            {
+                c_transform.position.x -= c_camera.mooveSpeed * ts.GetSeconds();
+            }
 
-        /* Up */
-        if (Polling::IsKeyPressed(Keyboard::KEY_UP))
-        {
-            c_transform.position.y += c_camera.mooveSpeed * ts.GetSeconds();
-        }
+            /* Right */
+            if (Polling::IsKeyPressed(Keyboard::KEY_RIGHT))
+            {
+                c_transform.position.x += c_camera.mooveSpeed * ts.GetSeconds();
+            }
 
-        /* Down */
-        if (Polling::IsKeyPressed(Keyboard::KEY_DOWN))
-        {
-            c_transform.position.y -= c_camera.mooveSpeed * ts.GetSeconds();
-        }
+            /* Up */
+            if (Polling::IsKeyPressed(Keyboard::KEY_UP))
+            {
+                c_transform.position.y += c_camera.mooveSpeed * ts.GetSeconds();
+            }
+
+            /* Down */
+            if (Polling::IsKeyPressed(Keyboard::KEY_DOWN))
+            {
+                c_transform.position.y -= c_camera.mooveSpeed * ts.GetSeconds();
+            }
+            
+        } while (false); //do once
         
         /* Update Camera's Matrices */
         glm::vec3 pos = {c_transform.position.x, c_transform.position.y, 0.0f};

@@ -103,13 +103,89 @@ namespace Panels
         ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
     }
     
+    static void DrawTableVec2(const std::string& label, glm::vec2& values, float colWidth = 100.0f)
+    {
+        ImGui::PushID(label.c_str());
+        
+        ImGui::Columns(2);
+        ImGui::SetColumnWidth(0, colWidth);
+        
+        // Col 0
+        ImGui::Text("%s", label.c_str());
+        
+        // Col 1
+        ImGui::NextColumn();
+        
+        ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{2, 4});
+        
+        if (ImGui::Button("X"))
+        {
+            values.x = 0.0f;
+        }    
+        ImGui::SameLine();
+        ImGui::DragFloat("##X", &values.x, 0.1f);
+
+        if (ImGui::Button("Y"))
+        {
+            values.y = 0.0f;
+        }    
+        ImGui::SameLine();
+        ImGui::DragFloat("##Y", &values.y, 0.1f);
+        
+        ImGui::PopStyleVar(1);
+        ImGui::Columns(1);
+        
+        ImGui::PopID();
+        ImGui::Spacing(); ImGui::Spacing(); 
+    }
+    
+    static void DrawTableFloat(const std::string& label, float& values, float colWidth = 100.0f)
+    {
+        ImGui::PushID(label.c_str());
+        
+        ImGui::Columns(2);
+        ImGui::SetColumnWidth(0, colWidth);
+        
+        // Col 0
+        ImGui::Text("%s", label.c_str());
+        
+        // Col 1
+        ImGui::NextColumn();
+        
+        ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{2, 4});
+        
+        if (ImGui::Button("R"))
+        {
+            values = 0.0f;
+        }    
+        ImGui::SameLine();
+        ImGui::DragFloat("##X", &values, 0.1f);
+        
+        ImGui::PopStyleVar(1);
+        ImGui::Columns(1);
+        
+        ImGui::PopID();
+        ImGui::Spacing(); ImGui::Spacing();
+    }
+    
     void ComponentInspector::DrawTransformComponent(void)
     {
+        ImGui::Text("Transform Component");
+        ImGui::Spacing();
+        DrawTableVec2("Position", transformComponent->position);
+        DrawTableVec2("Scale", transformComponent->size);
+        float angleDeg = glm::degrees(transformComponent->rotationRadians);
+        DrawTableFloat("Rotation", angleDeg);
+        transformComponent->rotationRadians = glm::radians(angleDeg);
+        
+        
+#if 0
         ImGui::Text("Transform Component");
         ImGui::Spacing();
         ImGui::Text("Position:  %f, %f", transformComponent->position.x, transformComponent->position.y);
         ImGui::Text("Rotation:  %f rads", transformComponent->rotationRadians);
         ImGui::Text("Size:      %f, %f", transformComponent->size.x, transformComponent->size.y);
+#endif
         
         ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
     }

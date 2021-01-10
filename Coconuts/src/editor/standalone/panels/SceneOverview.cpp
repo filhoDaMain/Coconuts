@@ -205,6 +205,9 @@ namespace Panels
          */
         if (flags & ImGuiTreeNodeFlags_Selected)
         {   
+            m_ComponentInspectorPtr->ChangeContext(
+                    &(entity.GetComponent<TagComponent>()));
+            
             if (hasCameraComponent)
             {
                 m_ComponentInspectorPtr->ChangeContext(

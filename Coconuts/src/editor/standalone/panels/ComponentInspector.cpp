@@ -16,6 +16,7 @@
 
 #include "ComponentInspector.h"
 #include <coconuts/editor.h>
+#include <string.h>
 
 namespace Coconuts {
 namespace Panels
@@ -39,6 +40,12 @@ namespace Panels
     void ComponentInspector::DrawAll()
     {
         ImGui::Begin("Component Inspector");
+        
+        if (hasTagComponent)
+        {
+            DrawTagComponent();
+            hasTagComponent = false;
+        }
         
         if (hasCameraComponent)
         {
@@ -75,14 +82,25 @@ namespace Panels
     
     void ComponentInspector::DrawTagComponent(void)
     {
-        //TODO
-        ImGui::Text("Tag Component");
+        char buffer[16];
+        memset(buffer, 0x00, sizeof(buffer));
+        strcpy(buffer, tagComponent->tag.c_str());
+        
+        ImGui::Text("Tag");
+        if (ImGui::InputText(" ", buffer, sizeof(buffer)))
+        {
+            tagComponent->tag = std::string(buffer);
+        }
+        
+        ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
     }
     
     void ComponentInspector::DrawCameraComponent(void)
     {
         //TODO
         ImGui::Text("Camera Component");
+        
+        ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
     }
     
     void ComponentInspector::DrawTransformComponent(void)
@@ -92,18 +110,24 @@ namespace Panels
         ImGui::Text("Position:  %f, %f", transformComponent->position.x, transformComponent->position.y);
         ImGui::Text("Rotation:  %f rads", transformComponent->rotationRadians);
         ImGui::Text("Size:      %f, %f", transformComponent->size.x, transformComponent->size.y);
+        
+        ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
     }
     
     void ComponentInspector::DrawSpriteComponent(void)
     {
         //TODO
         ImGui::Text("Sprite Component");
+        
+        ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
     }
     
     void ComponentInspector::DrawBehaviorComponent(void)
     {
         //TODO
         ImGui::Text("Behavior Compoent");
+        
+        ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
     }
     
     

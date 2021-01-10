@@ -256,7 +256,7 @@ namespace Panels
         if (open)
         {
             ImGui::Spacing(); ImGui::Spacing();
-            //TODO
+            ImGui::TextDisabled("TODO");
             ImGui::TreePop();
         }
         
@@ -273,8 +273,7 @@ namespace Panels
         if (open)
         {
             ImGui::Spacing(); ImGui::Spacing();
-            //TODO
-            
+            ImGui::TextDisabled("TODO");
             ImGui::TreePop();
         }
         

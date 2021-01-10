@@ -35,6 +35,7 @@ namespace Panels
     private:
         void GetLastSceneUpdate();
         void DrawNode(Entity& entity);
+        void DrawNodeOnComponentInspector(Entity& entity);
         
         /* Pointer to the GameLayer */
         GameLayer* m_GameLayerPtr;

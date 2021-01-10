@@ -35,6 +35,38 @@ namespace Panels
         ImGui::End();
     }
     
+    /* Draw All Components */
+    void ComponentInspector::DrawAll()
+    {
+        ImGui::Begin("Component Inspector");
+        
+        if (hasCameraComponent)
+        {
+            DrawCameraComponent();
+            hasCameraComponent = false;
+        }
+        
+        if (hasTransformComponent)
+        {
+            DrawTransformComponent();
+            hasTransformComponent = false;
+        }
+        
+        if (hasSpriteComponent)
+        {
+            DrawSpriteComponent();
+            hasSpriteComponent = false;
+        }
+        
+        if (hasBehaviorComponent)
+        {
+            DrawBehaviorComponent();
+            hasBehaviorComponent = false;
+        }
+        
+        ImGui::End();
+    }
+    
     /* Draw current context */
     void ComponentInspector::DrawEmpty(void)
     {
@@ -44,11 +76,13 @@ namespace Panels
     void ComponentInspector::DrawTagComponent(void)
     {
         //TODO
+        ImGui::Text("Tag Component");
     }
     
     void ComponentInspector::DrawCameraComponent(void)
     {
         //TODO
+        ImGui::Text("Camera Component");
     }
     
     void ComponentInspector::DrawTransformComponent(void)
@@ -63,11 +97,13 @@ namespace Panels
     void ComponentInspector::DrawSpriteComponent(void)
     {
         //TODO
+        ImGui::Text("Sprite Component");
     }
     
     void ComponentInspector::DrawBehaviorComponent(void)
     {
         //TODO
+        ImGui::Text("Behavior Compoent");
     }
     
     
@@ -77,6 +113,7 @@ namespace Panels
     {
         tagComponent = component;
         DrawComponentFunc = [&]() { this->DrawTagComponent(); };
+        hasTagComponent = true;
     }
     
     template<>
@@ -84,6 +121,7 @@ namespace Panels
     {
         cameraComponent = component;
         DrawComponentFunc = [&]() { this->DrawCameraComponent(); };
+        hasCameraComponent = true;
     }
     
     template<>
@@ -91,6 +129,7 @@ namespace Panels
     {
         transformComponent = component;
         DrawComponentFunc = [&]() { this->DrawTransformComponent(); };
+        hasTransformComponent = true;
     }
     
     template<>
@@ -98,6 +137,7 @@ namespace Panels
     {
         spriteComponent = component;
         DrawComponentFunc = [&]() { this->DrawSpriteComponent(); };
+        hasSpriteComponent = true;
     }
     
     template<>
@@ -105,6 +145,7 @@ namespace Panels
     {
         behaviorComponent = component;
         DrawComponentFunc = [&]() { this->DrawBehaviorComponent(); };
+        hasBehaviorComponent = true;
     }
     
 }

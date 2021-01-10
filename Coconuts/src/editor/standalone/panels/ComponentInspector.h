@@ -36,6 +36,7 @@ namespace Panels
         bool Init();
         
         void Draw();
+        void DrawAll();
         
         template <typename C>
         void ChangeContext(C* component);
@@ -54,10 +55,20 @@ namespace Panels
         
         // Component references
         TagComponent*           tagComponent;
+        bool                    hasTagComponent = false;
+        
         OrthoCameraComponent*   cameraComponent;
+        bool                    hasCameraComponent = false;
+        
         TransformComponent*     transformComponent;
+        bool                    hasTransformComponent = false;
+        
         SpriteComponent*        spriteComponent;
+        bool                    hasSpriteComponent = false;
+        
         BehaviorComponent*      behaviorComponent;
+        bool                    hasBehaviorComponent = false;
+        
     };
     
 }

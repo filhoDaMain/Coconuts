@@ -49,7 +49,8 @@ namespace Panels
         for (Entity thisEntity : sceneEntities)
         {
             // List all Tag Component
-            DrawNode(thisEntity);
+            //DrawNode(thisEntity);
+            DrawNodeOnComponentInspector(thisEntity);
             ImGui::Spacing();
         }
         ImGui::End();
@@ -126,6 +127,114 @@ namespace Panels
             
             ImGui::TreePop();
         }
+    }
+    
+    void SceneOverview::DrawNodeOnComponentInspector(Entity& entity)
+    {
+        std::string tag = entity.GetComponent<TagComponent>().tag;
+        	
+        static uint64_t context_id = 0;
+        bool hasCameraComponent = false;
+        bool hasTransformComponent = false;
+        bool hasSpriteComponent = false;
+        bool hasBehaviorComponent = false;
+        
+        ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_OpenOnArrow;
+        flags |= context_id == entity.GetId() ? ImGuiTreeNodeFlags_Selected : 0;
+        
+        bool open = ImGui::TreeNodeEx(tag.c_str() , flags);
+        
+        if (ImGui::IsItemClicked())
+        {
+            context_id = entity.GetId();
+        }
+        
+        /* Query All Components */
+        if (entity.HasComponent<OrthoCameraComponent>())
+        {
+            hasCameraComponent = true;
+        }
+        
+        if (entity.HasComponent<TransformComponent>())
+        {
+            hasTransformComponent = true;
+        }
+        
+        if (entity.HasComponent<SpriteComponent>())
+        {
+            hasSpriteComponent = true;
+        }
+        
+        if (entity.HasComponent<BehaviorComponent>())
+        {
+            hasBehaviorComponent = true;
+        }
+        
+        /* Draw simple components */
+        if (open)
+        {
+            ImGui::TextDisabled("ID: %llu", entity.GetId());
+            
+            if (hasCameraComponent)
+            {
+                ImGui::Text("Camera");
+            }
+            
+            if (hasTransformComponent)
+            {
+                ImGui::Text("Transform");
+            }
+            
+            if (hasSpriteComponent)
+            {
+                ImGui::Text("Sprite");
+            }
+            
+            if (hasBehaviorComponent)
+            {
+                ImGui::Text("Behavior");
+            }
+            
+            ImGui::TreePop();
+        }
+        
+        /**
+         * This entity is currently selected.
+         * Draw its components on Component Inspector Panel.
+         * 
+         */
+        if (flags & ImGuiTreeNodeFlags_Selected)
+        {   
+            if (hasCameraComponent)
+            {
+                m_ComponentInspectorPtr->ChangeContext(
+                    &(entity.GetComponent<OrthoCameraComponent>()));
+            }
+            
+            if (hasTransformComponent)
+            {
+                m_ComponentInspectorPtr->ChangeContext(
+                    &(entity.GetComponent<TransformComponent>()));
+            }
+            
+            if (hasSpriteComponent)
+            {
+                m_ComponentInspectorPtr->ChangeContext(
+                    &(entity.GetComponent<SpriteComponent>()));
+            }
+            
+            if (hasBehaviorComponent)
+            {
+                m_ComponentInspectorPtr->ChangeContext(
+                    &(entity.GetComponent<BehaviorComponent>()));
+            }
+        }
+        
+        //if (ImGui::TreeNode((void*)entity.GetId(), flags, tag.c_str()))
+        //{
+        //    
+        //    ImGui::TreePop();
+        //}
     }
     
 }

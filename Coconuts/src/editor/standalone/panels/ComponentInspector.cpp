@@ -60,7 +60,7 @@ namespace Panels
         ImGui::Spacing(); ImGui::Spacing(); 
     }
     
-    static void DrawTableFloat(const std::string& label, const std::string& param, float& values, float colWidth = 100.0f)
+    static void DrawTableFloat(const std::string& label, const std::string& param, float& values, bool positive = false, float colWidth = 100.0f)
     {
         ImGui::PushID(label.c_str());
         
@@ -80,7 +80,14 @@ namespace Panels
             values = 0.0f;
         }    
         ImGui::SameLine();
-        ImGui::DragFloat("##X", &values, 0.1f);
+        if (positive)
+        {
+            ImGui::DragFloat("##X", &values, 0.1f, 0, 100);
+        }
+        else
+        {
+            ImGui::DragFloat("##X", &values, 0.1f);
+        }
         
         ImGui::PopStyleVar(1);
         ImGui::Columns(1);
@@ -210,7 +217,7 @@ namespace Panels
             
             DrawTableTextButton("Aspect Ratio", AR);
             DrawTableFloat("Zoom Level", "Z", cameraComponent->zoomLevel);
-            DrawTableFloat("Moove Speed", "S", cameraComponent->mooveSpeed);
+            DrawTableFloat("Moove Speed", "S", cameraComponent->mooveSpeed, true);
             
             ImGui::TreePop();
         }

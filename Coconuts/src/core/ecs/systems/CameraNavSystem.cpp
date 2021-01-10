@@ -72,8 +72,9 @@ namespace Coconuts
         
         /* Update Camera's Matrices */
         glm::vec3 pos = {c_transform.position.x, c_transform.position.y, 0.0f};
-        c_camera.camera.SetProjection(-c_camera.aspectRatio * c_camera.zoomLevel, c_camera.aspectRatio * c_camera.zoomLevel, -c_camera.zoomLevel, c_camera.zoomLevel);
         c_camera.camera.SetPosition(pos);
+        c_camera.camera.SetRotation(c_transform.rotationRadians);
+        c_camera.camera.SetProjection(-c_camera.aspectRatio * c_camera.zoomLevel, c_camera.aspectRatio * c_camera.zoomLevel, -c_camera.zoomLevel, c_camera.zoomLevel);
     }
 
     

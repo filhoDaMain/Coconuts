@@ -85,20 +85,29 @@ namespace Panels
         char buffer[16];
         memset(buffer, 0x00, sizeof(buffer));
         strcpy(buffer, tagComponent->tag.c_str());
-        
+
         ImGui::Text("Tag");
         if (ImGui::InputText(" ", buffer, sizeof(buffer)))
         {
             tagComponent->tag = std::string(buffer);
         }
-        
+
         ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
     }
     
     void ComponentInspector::DrawCameraComponent(void)
     {
         //TODO
-        ImGui::Text("Camera Component");
+        ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_DefaultOpen;
+        bool open = ImGui::TreeNodeEx("Camera Component" , flags);
+ 
+        /* Draw Component */
+        if (open)
+        {
+            ImGui::Spacing(); ImGui::Spacing();
+            //TODO
+            ImGui::TreePop();
+        }
         
         ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
     }
@@ -170,22 +179,21 @@ namespace Panels
     
     void ComponentInspector::DrawTransformComponent(void)
     {
-        ImGui::Text("Transform Component");
-        ImGui::Spacing();
-        DrawTableVec2("Position", transformComponent->position);
-        DrawTableVec2("Scale", transformComponent->size);
-        float angleDeg = glm::degrees(transformComponent->rotationRadians);
-        DrawTableFloat("Rotation", angleDeg);
-        transformComponent->rotationRadians = glm::radians(angleDeg);
-        
-        
-#if 0
-        ImGui::Text("Transform Component");
-        ImGui::Spacing();
-        ImGui::Text("Position:  %f, %f", transformComponent->position.x, transformComponent->position.y);
-        ImGui::Text("Rotation:  %f rads", transformComponent->rotationRadians);
-        ImGui::Text("Size:      %f, %f", transformComponent->size.x, transformComponent->size.y);
-#endif
+        ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_DefaultOpen;
+        bool open = ImGui::TreeNodeEx("Transform Component" , flags);
+ 
+        /* Draw Component */
+        if (open)
+        {
+            ImGui::Spacing(); ImGui::Spacing();
+            DrawTableVec2("Position", transformComponent->position);
+            DrawTableVec2("Scale", transformComponent->size);
+            float angleDeg = glm::degrees(transformComponent->rotationRadians);
+            DrawTableFloat("Rotation", angleDeg);
+            transformComponent->rotationRadians = glm::radians(angleDeg);
+            
+            ImGui::TreePop();
+        }
         
         ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
     }
@@ -193,7 +201,16 @@ namespace Panels
     void ComponentInspector::DrawSpriteComponent(void)
     {
         //TODO
-        ImGui::Text("Sprite Component");
+        ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_DefaultOpen;
+        bool open = ImGui::TreeNodeEx("Sprite Component" , flags);
+ 
+        /* Draw Component */
+        if (open)
+        {
+            ImGui::Spacing(); ImGui::Spacing();
+            //TODO
+            ImGui::TreePop();
+        }
         
         ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
     }
@@ -201,7 +218,17 @@ namespace Panels
     void ComponentInspector::DrawBehaviorComponent(void)
     {
         //TODO
-        ImGui::Text("Behavior Compoent");
+        ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_DefaultOpen;
+        bool open = ImGui::TreeNodeEx("Behavior Component" , flags);
+ 
+        /* Draw Component */
+        if (open)
+        {
+            ImGui::Spacing(); ImGui::Spacing();
+            //TODO
+            
+            ImGui::TreePop();
+        }
         
         ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
     }

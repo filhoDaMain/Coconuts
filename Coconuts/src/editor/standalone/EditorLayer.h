@@ -21,6 +21,9 @@
 #include "GameLayer.h"
 #include <glm/glm.hpp>
 
+/* Menu Bar */
+#include "menu_bar/FileMenu.h"
+
 /* Panels */
 #include "panels/Viewport.h"
 #include "panels/Statistics.h"
@@ -42,6 +45,9 @@ namespace Coconuts
         
     private:
         GameLayer* m_GameLayerPtr;
+        
+        /* Menu Bar menus */
+        MenuBar::FileMenu           m_FileMenu;
         
         /* Panels */
         Panels::Viewport            m_ViewportPanel;

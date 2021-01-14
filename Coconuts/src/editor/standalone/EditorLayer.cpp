@@ -84,7 +84,7 @@ namespace Coconuts
             ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
         }
 
-
+#if 0
         if (ImGui::BeginMenuBar())
         {
             if (ImGui::BeginMenu("File"))
@@ -107,9 +107,21 @@ namespace Coconuts
 
             ImGui::EndMenuBar();
         }
-
+#endif
         
-        /* P A N E L S */
+        
+        /*  M E N U   B A R  */
+        
+        if (ImGui::BeginMainMenuBar())
+        {
+            /* File Menu */
+            m_FileMenu.Draw();
+            
+            ImGui::EndMainMenuBar();
+        }
+        
+        
+        /*  P A N E L S  */
         
         /* Viewport Panel */
         m_ViewportPanel.LiveUpdate();

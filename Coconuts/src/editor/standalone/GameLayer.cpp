@@ -150,4 +150,11 @@ namespace Coconuts
         m_ActiveScene->OnChangeViewport(x, y);
     }
     
+    bool GameLayer::NewEntity()
+    {
+        /* Create on active scene */
+        Entity empty(m_ActiveScene.get());
+        return true;
+    }
+    
 }

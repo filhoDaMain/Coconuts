@@ -69,6 +69,9 @@ namespace Coconuts
             bool IsActiveSceneUpdated() { return m_ActiveScene->IsUpdated(); }
             std::vector<Entity> GetActiveSceneEntities() const { return m_ActiveScene->GetAllEntities(); }
             
+            /* Create New Empty Entity on current active Scene */
+            bool NewEntity();
+            
             // --------------------------------------
             // Debug Color change
             Entity& GetEntity() {return m_Entity; }

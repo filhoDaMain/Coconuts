@@ -117,6 +117,9 @@ namespace Coconuts
             /* File Menu */
             m_FileMenu.Draw();
             
+            /* Entity Menu */
+            m_EntityMenu.Draw();
+            
             ImGui::EndMainMenuBar();
         }
         
@@ -145,9 +148,14 @@ namespace Coconuts
     void EditorLayer::OnPostAttach()
     {
         LOG_TRACE("Editor Layer OnPostAttach()");
+        
+        m_FileMenu.Init(m_GameLayerPtr);
+        m_EntityMenu.Init(m_GameLayerPtr);
+        
         m_ViewportPanel.Init(m_GameLayerPtr);
         m_ComponentInspectorPanel.Init();
         m_SceneOverviewPanel.Init(m_GameLayerPtr, &m_ComponentInspectorPanel);
+        
     }
     
 }

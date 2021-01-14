@@ -23,6 +23,7 @@
 
 /* Menu Bar */
 #include "menu_bar/FileMenu.h"
+#include "menu_bar/EntityMenu.h"
 
 /* Panels */
 #include "panels/Viewport.h"
@@ -48,6 +49,7 @@ namespace Coconuts
         
         /* Menu Bar menus */
         MenuBar::FileMenu           m_FileMenu;
+        MenuBar::EntityMenu         m_EntityMenu;
         
         /* Panels */
         Panels::Viewport            m_ViewportPanel;

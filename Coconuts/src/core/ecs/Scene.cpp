@@ -125,6 +125,15 @@ namespace Coconuts
         return m_EntityManager.entities.create();
     }
     
+    void Scene::DestroyEntity(uint64_t id)
+    {
+        /* Create an Entityx ID based on raw id number */
+        entityx::Entity::Id entityID(id);
+        
+        /* Destroy Entity */
+        m_EntityManager.entities.destroy(entityID);
+    }
+    
     bool Scene::HaltAllEvents(bool state)
     {
         m_HaltAllEvents = state;

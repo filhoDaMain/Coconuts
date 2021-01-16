@@ -109,6 +109,9 @@ namespace Coconuts
         }
 #endif
         
+        /* PopUps triggering flags */
+        static bool showPopUp_ImportTexture2D = false;
+        
         
         /*  M E N U   B A R  */
         
@@ -121,11 +124,15 @@ namespace Coconuts
             m_EntityMenu.Draw();
             
             /* Assets Menu */
-            m_AssetsMenu.Draw();
+            m_AssetsMenu.Draw(&showPopUp_ImportTexture2D);
             
             ImGui::EndMainMenuBar();
         }
         
+        if (showPopUp_ImportTexture2D)
+        {
+            
+        }
         
         /*  P A N E L S  */
         

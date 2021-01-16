@@ -26,12 +26,9 @@ namespace MenuBar
     {
     public:
         AssetsMenu() = default;
-        
-        void Draw();
+        void Draw(bool* showPopUp_ImportTexture2D);
         
     private:
-        void ImportTexture2D();
-        void CreateSprite();
     };
     
 }

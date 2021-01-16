@@ -16,27 +16,23 @@
 
 #include "AssetsMenu.h"
 #include <coconuts/editor.h>
+#include <coconuts/Logger.h>
 
 namespace Coconuts {
 namespace MenuBar
 {
     
-    void AssetsMenu::Draw()
+    void AssetsMenu::Draw(bool* showPopUp_ImportTexture2D)
     {
         if (ImGui::BeginMenu("Assets"))
         {
             if (ImGui::MenuItem("Import Texture2D", "", false, true))
             {
-                
+                *showPopUp_ImportTexture2D = true;
             }
             
             ImGui::EndMenu();
         }
-    }
-    
-    void AssetsMenu::ImportTexture2D()
-    {
-        
     }
     
 }

@@ -26,7 +26,7 @@ namespace Coconuts
     struct SpriteComponent
     {
         //data
-        std::shared_ptr<Sprite> sprite;
+        std::shared_ptr<Sprite> sprite = nullptr;
         glm::vec4               tintColor;
         float                   tilingFactor;
         

@@ -44,7 +44,13 @@ namespace Coconuts
         /* Update Behavior scripts */
         m_EntityManager.entities.each<BehaviorComponent>([&]
         (entityx::Entity thisEntityxEntity, BehaviorComponent& thisBehaviorComponent)
-        {              
+        {
+            /* Prevent against non-initialized Behavior Component */
+            if (thisBehaviorComponent.instance == nullptr)
+            {
+                return;
+            }
+            
             thisBehaviorComponent.OnUpdateFunc(thisBehaviorComponent.instance, ts);
         });
         
@@ -72,7 +78,13 @@ namespace Coconuts
             /* Draw All Sprites on this Scene */
             m_EntityManager.entities.each<TransformComponent, SpriteComponent>([]
             (entityx::Entity thisEntityxEntity, TransformComponent& thisTransformComponent, SpriteComponent& thisSpriteComponent)
-            {   
+            {
+                /* Prevent against non-initialized Sprite Component */
+                if (thisSpriteComponent.sprite == nullptr)
+                {
+                    return;
+                }
+                
                 Renderer2D::DrawRotatedQuad(thisTransformComponent.position,
                                             thisTransformComponent.size,
                                             thisTransformComponent.rotationRadians,
@@ -97,6 +109,12 @@ namespace Coconuts
         /* Dispatch Event to Event Handlers */
         m_EntityManager.entities.each<EventHandlerComponent>([&](entityx::Entity thisEntityxEntity, EventHandlerComponent& thisEventHandlerComponent)
         {
+            /* Prevent against non-initialized Event Handler Component */
+            if (thisEventHandlerComponent.instance == nullptr)
+            {
+                return;
+            }
+            
             thisEventHandlerComponent.OnEventFunc(thisEventHandlerComponent.instance, e);
         });
     }

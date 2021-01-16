@@ -72,6 +72,9 @@ namespace Coconuts
             /* Create New Empty Entity on current active Scene */
             bool NewEntity();
             
+            /* Destroy Entity */
+            bool DestroyEntity(uint64_t id);
+            
             // --------------------------------------
             // Debug Color change
             Entity& GetEntity() {return m_Entity; }

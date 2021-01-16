@@ -157,4 +157,9 @@ namespace Coconuts
         return true;
     }
     
+    bool GameLayer::DestroyEntity(uint64_t id)
+    {
+        return m_ActiveScene->DestroyEntity(id);
+    }
+    
 }

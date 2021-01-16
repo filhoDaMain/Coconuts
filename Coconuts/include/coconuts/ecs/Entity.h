@@ -35,19 +35,24 @@ namespace Coconuts
         template <typename C, typename ... Args>
         C& AddComponent(Args && ... args)
         {
-            return *(m_EntityxEntity.assign<C>(std::forward<Args>(args) ...).get());
+            auto& cmp = *(m_EntityxEntity.assign<C>(std::forward<Args>(args) ...).get());
+            m_Scene->SetUpdateFlag();
+            return cmp;
         }
         
         template <typename C>
         void RemoveComponent()
         {
             m_EntityxEntity.remove<C>();
+            m_Scene->SetUpdateFlag();
         }
         
         template <typename C>
         C& GetComponent()
         {
-            return *(m_EntityxEntity.component<C>().get());
+            auto& cmp = *(m_EntityxEntity.component<C>().get());
+            m_Scene->SetUpdateFlag();
+            return cmp;
         }
         
         template <typename C>

@@ -17,9 +17,19 @@
 #define EDITORLAYER_H
 
 #include <coconuts/editor.h>
-#include <coconuts/Renderer.h>
+#include <coconuts/graphics/Renderer2D.h>
 #include "GameLayer.h"
 #include <glm/glm.hpp>
+
+/* Menu Bar */
+#include "menu_bar/FileMenu.h"
+#include "menu_bar/EntityMenu.h"
+
+/* Panels */
+#include "panels/Viewport.h"
+#include "panels/Statistics.h"
+#include "panels/SceneOverview.h"
+#include "panels/ComponentInspector.h"
 
 namespace Coconuts
 {
@@ -27,8 +37,8 @@ namespace Coconuts
     class EditorLayer : public Editor::GUILayer
     {
     public:
-        EditorLayer();
-        EditorLayer(GameLayer* gameLayer);
+        EditorLayer() = default;
+        EditorLayer(GameLayer* gameLayer) : m_GameLayerPtr(gameLayer) {}
         virtual ~EditorLayer() = default;
   
         virtual void OnUpdate(Timestep ts) override;
@@ -37,19 +47,15 @@ namespace Coconuts
     private:
         GameLayer* m_GameLayerPtr;
         
-        bool m_IsViewportPanelFocused;
+        /* Menu Bar menus */
+        MenuBar::FileMenu           m_FileMenu;
+        MenuBar::EntityMenu         m_EntityMenu;
         
-        /* Renderer2D live statistics */
-        Renderer2DStatistics stats;
-        
-        /* GameLayer's Framebuffer (init during OnPostAttach()) */
-        std::shared_ptr<Framebuffer> m_Framebuffer;
-        
-        /* Framebuffer's Color attach texture ID */
-        uint32_t m_ViewPortTexID;
-        
-        /* Viewport panel size */
-        glm::vec2 m_ViewportSize;
+        /* Panels */
+        Panels::Viewport            m_ViewportPanel;
+        Panels::Statistics          m_StatisticsPanel;
+        Panels::SceneOverview       m_SceneOverviewPanel;
+        Panels::ComponentInspector  m_ComponentInspectorPanel;
     };
     
 }

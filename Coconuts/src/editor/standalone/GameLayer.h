@@ -20,6 +20,7 @@
 #include <coconuts/Renderer.h>
 #include <coconuts/Layer.h>
 #include <coconuts/ECS.h>
+#include <vector>
 
 namespace Coconuts
 {
@@ -64,6 +65,15 @@ namespace Coconuts
             
             /* Change on viewport notification */
             void ChangeViewport(float x, float y);
+            
+            bool IsActiveSceneUpdated() { return m_ActiveScene->IsUpdated(); }
+            std::vector<Entity> GetActiveSceneEntities() const { return m_ActiveScene->GetAllEntities(); }
+            
+            /* Create New Empty Entity on current active Scene */
+            bool NewEntity();
+            
+            /* Destroy Entity */
+            bool DestroyEntity(uint64_t id);
             
             // --------------------------------------
             // Debug Color change

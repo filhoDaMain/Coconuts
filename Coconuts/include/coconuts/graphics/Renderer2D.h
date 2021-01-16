@@ -96,7 +96,7 @@ namespace Coconuts
         static void Flush();
         
         static void ResetStatistics();
-        static Renderer2DStatistics GetStatistics();
+        static Renderer2DStatistics& GetStatistics();
         
         /* Flat Colors */
         static void DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color);

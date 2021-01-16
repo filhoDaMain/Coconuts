@@ -20,6 +20,10 @@
 #include <coconuts/ECS.h>
 #include <coconuts/Logger.h>
 
+// Debug Behavior
+#include <coconuts/Polling.h>
+#include <coconuts/Keyboard.h>
+
 #define GAMELAYER_SPRITESHEET_PATH  "../../Demo/examples/tiles2d/assets/textures/RPGpack_sheet_2X.png";
 
 namespace Coconuts
@@ -64,7 +68,7 @@ namespace Coconuts
         /* Add TransformComponent */
         glm::vec2 position = {0.0f, 0.0f};
         glm::vec2 size = {0.5f, 1.0f};
-        float rotationRadians = 0.79f;
+        float rotationRadians = 0;
         m_Entity.AddComponent<TransformComponent>(position, size, rotationRadians);
        
         /* Add SpriteComponent */
@@ -96,11 +100,34 @@ namespace Coconuts
             
             void OnUpdate(Timestep ts)
             {
+                auto& tr = GetComponent<TransformComponent>();
+                
+                if (Polling::IsKeyPressed(Keyboard::KEY_A))
+                {
+                    tr.position.x -= moveSpeed * ts.GetSeconds();
+                }
+                
+                if (Polling::IsKeyPressed(Keyboard::KEY_D))
+                {
+                    tr.position.x += moveSpeed * ts.GetSeconds();
+                }
+                
+                if (Polling::IsKeyPressed(Keyboard::KEY_W))
+                {
+                    tr.position.y += moveSpeed * ts.GetSeconds();
+                }
+                
+                if (Polling::IsKeyPressed(Keyboard::KEY_S))
+                {
+                    tr.position.y -= moveSpeed * ts.GetSeconds();
+                }
+                
                 //LOG_TRACE("Behavior OnUpdate() -> My ID:   {}", this->GetEntityId());
                 //LOG_TRACE("Behavior OnUpdate() -> My Tag:  {}", this->GetComponent<TagComponent>().tag);
             }
             
         private:
+            float moveSpeed = 1.0f;
         };
         
         m_Entity.AddComponent<BehaviorComponent>().AddBehavior<TreeBehavior>(m_Entity);
@@ -121,6 +148,18 @@ namespace Coconuts
     void GameLayer::ChangeViewport(float x, float y)
     {
         m_ActiveScene->OnChangeViewport(x, y);
+    }
+    
+    bool GameLayer::NewEntity()
+    {
+        /* Create on active scene */
+        Entity empty(m_ActiveScene.get());
+        return true;
+    }
+    
+    bool GameLayer::DestroyEntity(uint64_t id)
+    {
+        return m_ActiveScene->DestroyEntity(id);
     }
     
 }

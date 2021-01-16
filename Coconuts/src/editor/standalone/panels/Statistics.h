@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Andre Temprilho
+ * Copyright 2021 Andre Temprilho
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,28 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#ifndef STATISTICS_H
+#define STATISTICS_H
 
-#include <coconuts/ecs/Entity.h>
-#include <coconuts/ecs/components/TagComponent.h>
+#include <coconuts/graphics/Renderer2D.h>
 
-namespace Coconuts
+namespace Coconuts {
+namespace Panels
 {
-    
-    Entity::Entity(Scene* scene, const std::string& name)
-    : m_Scene(scene)
+ 
+    class Statistics
     {
-        /* Create/Add *this* Entity to its Scene */
-        m_EntityxEntity = m_Scene->CreateEntity();
-        
-        /* Add default Components */
-        this->AddComponent<TagComponent>(name); // Entity tag
-        
-        m_Scene->SetUpdateFlag();
-    }
-    
-    Entity::~Entity()
-    {
-        
-    }
+    public:
+        Statistics() = default;
+        void Draw(Renderer2DStatistics& stats);
+    };
     
 }
+}
+
+#endif /* STATISTICS_H */
+

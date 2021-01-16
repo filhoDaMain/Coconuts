@@ -143,6 +143,25 @@ namespace Coconuts
         return m_EntityManager.entities.create();
     }
     
+    std::vector<Entity> Scene::GetAllEntities()
+    {
+        std::vector<Entity> all; all.reserve(m_EntityManager.entities.size());
+        Scene* self = this;
+        
+        m_EntityManager.entities.each<TagComponent>([&all, &self]
+        (entityx::Entity thisEntityxEntity, TagComponent& tc)
+        {  
+            Entity tmp;
+            tmp.m_EntityxEntity = thisEntityxEntity;
+            tmp.m_Scene = self;
+            all.emplace_back(tmp);
+        });
+        
+        /* Scene was read. Reset update flag */
+        m_IsUpdated = false;
+        return all;
+    }
+        
     bool Scene::DestroyEntity(uint64_t id)
     {
         /* Create an Entityx ID based on raw id number */

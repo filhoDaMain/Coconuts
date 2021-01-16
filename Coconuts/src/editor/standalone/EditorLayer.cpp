@@ -16,9 +16,6 @@
 
 #include "EditorLayer.h"
 #include <cstdint>
-#include <coconuts/ecs/components/SpriteComponent.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/type_ptr.hpp>
 
 #define INT2VOIDP(i) (void*)(uintptr_t)(i)
 
@@ -87,10 +84,10 @@ namespace Coconuts
             ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
         }
 
-
+#if 0
         if (ImGui::BeginMenuBar())
         {
-            if (ImGui::BeginMenu("Docking"))
+            if (ImGui::BeginMenu("File"))
             {
                 // Disabling fullscreen would allow the window to be moved to the front of other windows,
                 // which we can't undo at the moment without finer window depth/z control.
@@ -110,59 +107,40 @@ namespace Coconuts
 
             ImGui::EndMenuBar();
         }
-
+#endif
         
-        // VIEW PORT PANNEL
-        //////////////////////////////////////////////////////////////////////////
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{0, 0});
-        ImGui::Begin("Viewport");
         
-        /* Change on viewport panel focused state */
-        if (m_IsViewportPanelFocused != ImGui::IsWindowFocused())
+        /*  M E N U   B A R  */
+        
+        if (ImGui::BeginMainMenuBar())
         {
-            m_IsViewportPanelFocused = ImGui::IsWindowFocused();
+            /* File Menu */
+            m_FileMenu.Draw();
             
-            /* Halt event handling on Game Layer (view port) if not focused */
-            m_GameLayerPtr->HaltEvents(!m_IsViewportPanelFocused);
+            /* Entity Menu */
+            m_EntityMenu.Draw();
+            
+            ImGui::EndMainMenuBar();
         }
         
-        ImVec2 imguiViewportPanelSize = ImGui::GetContentRegionAvail(); // float
         
-        /**
-         * When View Port Pannel changes, update the
-         * GameLayer's Framebuffer size
-         */
-        if ( (imguiViewportPanelSize.x != m_ViewportSize.x) || 
-             (imguiViewportPanelSize.y != m_ViewportSize.y))
-        {
-            m_ViewportSize = { imguiViewportPanelSize.x, imguiViewportPanelSize.y };
-            m_Framebuffer->Resize( m_ViewportSize.x, m_ViewportSize.y );
-            m_GameLayerPtr->ChangeViewport(m_ViewportSize.x, m_ViewportSize.y);
-        }
+        /*  P A N E L S  */
         
-        ImGui::Image(INT2VOIDP(m_ViewPortTexID), ImVec2{m_ViewportSize.x, m_ViewportSize.y}, ImVec2{0, 1}, ImVec2{1, 0});
-        ImGui::End();
-        ImGui::PopStyleVar();
-        //////////////////////////////////////////////////////////////////////////
+        /* Viewport Panel */
+        m_ViewportPanel.LiveUpdate();
+        
+        /* Statistics Panel */
+        m_StatisticsPanel.Draw(Renderer2D::GetStatistics());
 
+        /* Scene Overview Panel */
+        m_SceneOverviewPanel.Draw();
         
-        ImGui::Begin("Statistics");
+        /* Component Inspector */
+        m_ComponentInspectorPanel.Draw();
         
-        /* Get Renderer Live statistics */
-        stats = Renderer2D::GetStatistics();
+        //DEBUG:
+        //ImGui::ShowDemoWindow();
         
-        ImGui::Text("Batch render statistics:");
-        ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();    
-        ImGui::Text("%d Draw Calls", stats.drawCalls);
-        ImGui::Spacing();
-        ImGui::Text("%d Quads", stats.quadCount);
-        ImGui::End();
-        
-        ImGui::Begin("Inspector");
-        ImGui::ColorEdit3("Tint", glm::value_ptr(  m_GameLayerPtr->GetEntity().GetComponent<SpriteComponent>().tintColor  ));
-        ImGui::End();
-
-        ImGui::End();
         // ---------------------------------------------------------------------------
         // DOCK SPACE END
     }
@@ -171,21 +149,13 @@ namespace Coconuts
     {
         LOG_TRACE("Editor Layer OnPostAttach()");
         
-        /* Get GameLayer's Framebuffer */
-        m_Framebuffer = m_GameLayerPtr->GetFramebuffer();
-        m_ViewPortTexID = m_Framebuffer->GetColorAttachID();
-    }
-    
-    EditorLayer::EditorLayer()
-    {
-
-    }
-    
-    EditorLayer::EditorLayer(GameLayer* gameLayer)
-    : m_GameLayerPtr(gameLayer),
-      m_IsViewportPanelFocused(false)
-    {
-      
+        m_FileMenu.Init(m_GameLayerPtr);
+        m_EntityMenu.Init(m_GameLayerPtr);
+        
+        m_ViewportPanel.Init(m_GameLayerPtr);
+        m_ComponentInspectorPanel.Init();
+        m_SceneOverviewPanel.Init(m_GameLayerPtr, &m_ComponentInspectorPanel);
+        
     }
     
 }

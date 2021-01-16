@@ -19,6 +19,7 @@
 #include <entityx/entityx.h>
 #include <coconuts/time/Timestep.h>
 #include <coconuts/EventSystem.h>
+#include <vector>
 
 namespace Coconuts
 {
@@ -40,7 +41,10 @@ namespace Coconuts
         entityx::Entity CreateEntity();
         bool DestroyEntity(uint64_t id);
         size_t GetNumberOfEntities() const { return m_EntityManager.entities.size(); }
+        std::vector<Entity> GetAllEntities();
         
+        bool SetUpdateFlag(bool update = true) { m_IsUpdated = update; return m_IsUpdated;}
+        bool IsUpdated() { return m_IsUpdated; }
         bool HaltAllEvents(bool state = true);
         bool HaltEditorCameraNavigation(bool state = true);
         
@@ -50,6 +54,12 @@ namespace Coconuts
         bool m_HaltAllEvents = false;
         bool m_HaltEditorCameraNavigation = false;
         
+        /**
+         * When a new Entity is added or modified m_IsUpdated is set to true.
+         * It's only reset to false when GetAllEntities() is called.
+         */
+        bool m_IsUpdated = false;
+
         void CreateSceneCamera();
     };
     

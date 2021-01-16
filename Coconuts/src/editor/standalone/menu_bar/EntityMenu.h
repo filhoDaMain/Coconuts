@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Andre Temprilho
+ * Copyright 2021 Andre Temprilho
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,28 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#ifndef ENTITYMENU_H
+#define ENTITYMENU_H
 
-#include <coconuts/ecs/Entity.h>
-#include <coconuts/ecs/components/TagComponent.h>
+#include "../GameLayer.h"
 
-namespace Coconuts
+namespace Coconuts {
+namespace MenuBar
 {
     
-    Entity::Entity(Scene* scene, const std::string& name)
-    : m_Scene(scene)
+    class EntityMenu
     {
-        /* Create/Add *this* Entity to its Scene */
-        m_EntityxEntity = m_Scene->CreateEntity();
+    public:
+        EntityMenu() = default;
+        bool Init(GameLayer*& gameLayer);
         
-        /* Add default Components */
-        this->AddComponent<TagComponent>(name); // Entity tag
+        void Draw();
         
-        m_Scene->SetUpdateFlag();
-    }
-    
-    Entity::~Entity()
-    {
+    private:
+        void CreateEmpty();
         
-    }
+    private:
+        /* Pointer to the GameLayer */
+        GameLayer* m_GameLayerPtr;
+    };
     
 }
+}
+
+#endif /* ENTITYMENU_H */
+

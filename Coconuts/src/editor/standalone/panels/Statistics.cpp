@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Andre Temprilho
+ * Copyright 2021 Andre Temprilho
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,27 +14,24 @@
  * limitations under the License.
  */
 
-#include <coconuts/ecs/Entity.h>
-#include <coconuts/ecs/components/TagComponent.h>
+#include "Statistics.h"
+#include <coconuts/editor.h>
 
-namespace Coconuts
+namespace Coconuts {
+namespace Panels
 {
     
-    Entity::Entity(Scene* scene, const std::string& name)
-    : m_Scene(scene)
+    void Statistics::Draw(Renderer2DStatistics& stats)
     {
-        /* Create/Add *this* Entity to its Scene */
-        m_EntityxEntity = m_Scene->CreateEntity();
+        ImGui::Begin("Statistics");
         
-        /* Add default Components */
-        this->AddComponent<TagComponent>(name); // Entity tag
-        
-        m_Scene->SetUpdateFlag();
+        ImGui::Text("Renderer statistics:");
+        ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();    
+        ImGui::Text("%d Draw Calls", stats.drawCalls);
+        ImGui::Spacing();
+        ImGui::Text("%d Quads", stats.quadCount);
+        ImGui::End();
     }
     
-    Entity::~Entity()
-    {
-        
-    }
-    
+}
 }

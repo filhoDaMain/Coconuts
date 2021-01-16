@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Andre Temprilho
+ * Copyright 2021 Andre Temprilho
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,27 +14,32 @@
  * limitations under the License.
  */
 
-#include <coconuts/ecs/Entity.h>
-#include <coconuts/ecs/components/TagComponent.h>
+#include "FileMenu.h"
+#include <coconuts/editor.h>
+#include <coconuts/Logger.h>
 
-namespace Coconuts
+namespace Coconuts {
+namespace MenuBar
 {
-    
-    Entity::Entity(Scene* scene, const std::string& name)
-    : m_Scene(scene)
+ 
+    bool FileMenu::Init(GameLayer*& gameLayer)
     {
-        /* Create/Add *this* Entity to its Scene */
-        m_EntityxEntity = m_Scene->CreateEntity();
-        
-        /* Add default Components */
-        this->AddComponent<TagComponent>(name); // Entity tag
-        
-        m_Scene->SetUpdateFlag();
+        m_GameLayerPtr = gameLayer;
+        return true;
     }
     
-    Entity::~Entity()
+    void FileMenu::Draw()
     {
-        
+        if (ImGui::BeginMenu("File"))
+        {
+            if (ImGui::MenuItem("Close", "", false, true))
+            {
+                LOG_TRACE("File Menu: Close");
+            }
+            
+            ImGui::EndMenu();
+        }
     }
     
+}
 }

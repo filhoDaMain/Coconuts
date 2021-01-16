@@ -22,9 +22,186 @@
 namespace Coconuts {
 namespace Panels
 {
+     
+    bool ComponentInspector::Init()
+    {
+        return true;
+    }
     
+    /* Draw */
+    void ComponentInspector::Draw()
+    {
+        ImGui::Begin("Component Inspector");
+        
+        /* Draw all Components */
+        if (hasValidContext)
+        {   
+            /* Tag */
+            if (m_Context->HasComponent<TagComponent>())
+            {
+                DrawTagComponent();
+            }
+            
+            /* Camera */
+            if (m_Context->HasComponent<OrthoCameraComponent>())
+            {
+                DrawCameraComponent();
+            }
+            
+            /* Transform */
+            if (m_Context->HasComponent<TransformComponent>())
+            {
+                DrawTransformComponent();
+            }
+            
+            /* Sprite */
+            if (m_Context->HasComponent<SpriteComponent>())
+            {
+                DrawSpriteComponent();
+            }
+            
+            /* Behavior */
+            if (m_Context->HasComponent<BehaviorComponent>())
+            {
+                DrawBehaviorComponent();
+            }
+        }
+        
+        else
+        {
+            DrawEmpty();
+        }
+        
+        ImGui::End();
+    }
+    
+    /* Empty Inspector */
+    void ComponentInspector::DrawEmpty(void)
+    {
+        // such empty :)
+    }
+    
+    
+    /* ************************************************************************* */
+    /* Component Specific Drawing functions */
+    
+    /* Tag */
+    void ComponentInspector::DrawTagComponent(void)
+    {
+        TagComponent& tagComponent = m_Context->GetComponent<TagComponent>();
+
+        char buffer[16];
+        memset(buffer, 0x00, sizeof(buffer));
+        strcpy(buffer, tagComponent.tag.c_str());
+
+        ImGui::Text("Tag");
+        if (ImGui::InputText(" ", buffer, sizeof(buffer)))
+        {
+            tagComponent.tag = std::string(buffer);
+        }
+
+        ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
+    }
+    
+    /* Camera */
+    void ComponentInspector::DrawCameraComponent(void)
+    {
+        OrthoCameraComponent& cameraComponent = m_Context->GetComponent<OrthoCameraComponent>();
+        
+        ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_DefaultOpen;
+        bool open = ImGui::TreeNodeEx("Camera Component" , flags);
+ 
+        /* Draw Component */
+        if (open)
+        {
+            ImGui::Spacing(); ImGui::Spacing();
+            DrawTableTextButton("Camera Type", "Othographic");
+            
+            /* Convert AR to text */
+            std::ostringstream ss;
+            ss << cameraComponent.aspectRatio;
+            std::string AR(ss.str());
+            
+            DrawTableTextButton("Aspect Ratio", AR);
+            DrawTableFloat("Zoom Level", "Z", cameraComponent.zoomLevel);
+            DrawTableFloat("Moove Speed", "S", cameraComponent.mooveSpeed, true);
+            
+            ImGui::TreePop();
+        }
+        
+        ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
+    }
+    
+    /* Transform */
+    void ComponentInspector::DrawTransformComponent(void)
+    {
+        TransformComponent& transformComponent = m_Context->GetComponent<TransformComponent>();
+        
+        ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_DefaultOpen;
+        bool open = ImGui::TreeNodeEx("Transform Component" , flags);
+ 
+        /* Draw Component */
+        if (open)
+        {
+            ImGui::Spacing(); ImGui::Spacing();
+            DrawTableVec2("Position", transformComponent.position);
+            DrawTableVec2("Scale", transformComponent.size);
+            float angleDeg = glm::degrees(transformComponent.rotationRadians);
+            DrawTableFloat("Rotation", "R", angleDeg);
+            transformComponent.rotationRadians = glm::radians(angleDeg);
+            
+            ImGui::TreePop();
+        }
+        
+        ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
+    }
+    
+    /* Sprite */
+    void ComponentInspector::DrawSpriteComponent(void)
+    {
+        SpriteComponent& spriteComponent = m_Context->GetComponent<SpriteComponent>();
+        
+        //TODO
+        ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_DefaultOpen;
+        bool open = ImGui::TreeNodeEx("Sprite Component" , flags);
+ 
+        /* Draw Component */
+        if (open)
+        {
+            ImGui::Spacing(); ImGui::Spacing();
+            ImGui::TextDisabled("TODO");
+            ImGui::TreePop();
+        }
+        
+        ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
+    }
+    
+    /* Behavior */
+    void ComponentInspector::DrawBehaviorComponent(void)
+    {
+        BehaviorComponent& behaviorcomponent = m_Context->GetComponent<BehaviorComponent>();
+        
+        //TODO
+        ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_DefaultOpen;
+        bool open = ImGui::TreeNodeEx("Behavior Component" , flags);
+ 
+        /* Draw Component */
+        if (open)
+        {
+            ImGui::Spacing(); ImGui::Spacing();
+            ImGui::TextDisabled("TODO");
+            ImGui::TreePop();
+        }
+        
+        ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
+    }
+    
+    
+    /* ************************************************************************* */
     /* Helper functions */
-    static void DrawTableVec2(const std::string& label, glm::vec2& values, float colWidth = 100.0f)
+    
+    //static
+    void ComponentInspector::DrawTableVec2(const std::string& label, glm::vec2& values, float colWidth)
     {
         ImGui::PushID(label.c_str());
         
@@ -60,7 +237,8 @@ namespace Panels
         ImGui::Spacing(); ImGui::Spacing(); 
     }
     
-    static void DrawTableFloat(const std::string& label, const std::string& param, float& values, bool positive = false, float colWidth = 100.0f)
+    //static
+    void ComponentInspector::DrawTableFloat(const std::string& label, const std::string& param, float& values, bool positive, float colWidth)
     {
         ImGui::PushID(label.c_str());
         
@@ -96,7 +274,8 @@ namespace Panels
         ImGui::Spacing(); ImGui::Spacing();
     }
     
-    static void DrawTableTextButton(const std::string& label, const std::string& text, float colWidth = 100.0f)
+    //static
+    void ComponentInspector::DrawTableTextButton(const std::string& label, const std::string& text, float colWidth)
     {
         ImGui::PushID(label.c_str());
         
@@ -121,205 +300,6 @@ namespace Panels
         
         ImGui::PopID();
         ImGui::Spacing(); ImGui::Spacing();
-    }
-    
-    
-    bool ComponentInspector::Init()
-    {
-        DrawComponentFunc = [&]() { this->DrawEmpty(); };
-        return true;
-    }
-    
-    /* Draw */
-    void ComponentInspector::Draw()
-    {
-        ImGui::Begin("Component Inspector");
-        DrawComponentFunc();
-        ImGui::End();
-    }
-    
-    /* Draw All Components */
-    void ComponentInspector::DrawAll()
-    {
-        ImGui::Begin("Component Inspector");
-        
-        if (hasTagComponent)
-        {
-            DrawTagComponent();
-            hasTagComponent = false;
-        }
-        
-        if (hasCameraComponent)
-        {
-            DrawCameraComponent();
-            hasCameraComponent = false;
-        }
-        
-        if (hasTransformComponent)
-        {
-            DrawTransformComponent();
-            hasTransformComponent = false;
-        }
-        
-        if (hasSpriteComponent)
-        {
-            DrawSpriteComponent();
-            hasSpriteComponent = false;
-        }
-        
-        if (hasBehaviorComponent)
-        {
-            DrawBehaviorComponent();
-            hasBehaviorComponent = false;
-        }
-        
-        ImGui::End();
-    }
-    
-    /* Draw current context */
-    void ComponentInspector::DrawEmpty(void)
-    {
-        //empty :)
-    }
-    
-    /* Tag */
-    void ComponentInspector::DrawTagComponent(void)
-    {
-        char buffer[16];
-        memset(buffer, 0x00, sizeof(buffer));
-        strcpy(buffer, tagComponent->tag.c_str());
-
-        ImGui::Text("Tag");
-        if (ImGui::InputText(" ", buffer, sizeof(buffer)))
-        {
-            tagComponent->tag = std::string(buffer);
-        }
-
-        ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
-    }
-    
-    /* Camera */
-    void ComponentInspector::DrawCameraComponent(void)
-    {
-        ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_DefaultOpen;
-        bool open = ImGui::TreeNodeEx("Camera Component" , flags);
- 
-        /* Draw Component */
-        if (open)
-        {
-            ImGui::Spacing(); ImGui::Spacing();
-            DrawTableTextButton("Camera Type", "Othographic");
-            
-            /* Convert AR to text */
-            std::ostringstream ss;
-            ss << cameraComponent->aspectRatio;
-            std::string AR(ss.str());
-            
-            DrawTableTextButton("Aspect Ratio", AR);
-            DrawTableFloat("Zoom Level", "Z", cameraComponent->zoomLevel);
-            DrawTableFloat("Moove Speed", "S", cameraComponent->mooveSpeed, true);
-            
-            ImGui::TreePop();
-        }
-        
-        ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
-    }
-    
-    void ComponentInspector::DrawTransformComponent(void)
-    {
-        ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_DefaultOpen;
-        bool open = ImGui::TreeNodeEx("Transform Component" , flags);
- 
-        /* Draw Component */
-        if (open)
-        {
-            ImGui::Spacing(); ImGui::Spacing();
-            DrawTableVec2("Position", transformComponent->position);
-            DrawTableVec2("Scale", transformComponent->size);
-            float angleDeg = glm::degrees(transformComponent->rotationRadians);
-            DrawTableFloat("Rotation", "R", angleDeg);
-            transformComponent->rotationRadians = glm::radians(angleDeg);
-            
-            ImGui::TreePop();
-        }
-        
-        ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
-    }
-    
-    void ComponentInspector::DrawSpriteComponent(void)
-    {
-        //TODO
-        ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_DefaultOpen;
-        bool open = ImGui::TreeNodeEx("Sprite Component" , flags);
- 
-        /* Draw Component */
-        if (open)
-        {
-            ImGui::Spacing(); ImGui::Spacing();
-            ImGui::TextDisabled("TODO");
-            ImGui::TreePop();
-        }
-        
-        ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
-    }
-    
-    void ComponentInspector::DrawBehaviorComponent(void)
-    {
-        //TODO
-        ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_DefaultOpen;
-        bool open = ImGui::TreeNodeEx("Behavior Component" , flags);
- 
-        /* Draw Component */
-        if (open)
-        {
-            ImGui::Spacing(); ImGui::Spacing();
-            ImGui::TextDisabled("TODO");
-            ImGui::TreePop();
-        }
-        
-        ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
-    }
-    
-    
-    /* Change Context */
-    template<>
-    void ComponentInspector::ChangeContext<TagComponent>(TagComponent* component)
-    {
-        tagComponent = component;
-        DrawComponentFunc = [&]() { this->DrawTagComponent(); };
-        hasTagComponent = true;
-    }
-    
-    template<>
-    void ComponentInspector::ChangeContext<OrthoCameraComponent>(OrthoCameraComponent* component)
-    {
-        cameraComponent = component;
-        DrawComponentFunc = [&]() { this->DrawCameraComponent(); };
-        hasCameraComponent = true;
-    }
-    
-    template<>
-    void ComponentInspector::ChangeContext<TransformComponent>(TransformComponent* component)
-    {
-        transformComponent = component;
-        DrawComponentFunc = [&]() { this->DrawTransformComponent(); };
-        hasTransformComponent = true;
-    }
-    
-    template<>
-    void ComponentInspector::ChangeContext<SpriteComponent>(SpriteComponent* component)
-    {
-        spriteComponent = component;
-        DrawComponentFunc = [&]() { this->DrawSpriteComponent(); };
-        hasSpriteComponent = true;
-    }
-    
-    template<>
-    void ComponentInspector::ChangeContext<BehaviorComponent>(BehaviorComponent* component)
-    {
-        behaviorComponent = component;
-        DrawComponentFunc = [&]() { this->DrawBehaviorComponent(); };
-        hasBehaviorComponent = true;
     }
     
 }

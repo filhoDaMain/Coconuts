@@ -34,7 +34,7 @@ namespace Panels
     {
         m_GameLayerPtr = gameLayer;
         m_ComponentInspectorPtr = componentInspector;
-        
+        m_CurrentSelectedEntityPtr = new Coconuts::Entity();
         return true;
     }
     
@@ -47,10 +47,20 @@ namespace Panels
         
         ImGui::Begin("Scene Overview");
         for (Entity thisEntity : sceneEntities)
-        {
-            // List all Tag Component
-            //DrawNode(thisEntity);
-            DrawNodeOnComponentInspector(thisEntity);
+        {            
+            /* Draw all entities */
+            if (DrawNode(thisEntity))
+            {
+                /**
+                 * thisEntity is currently selected.
+                 * Update Component Inspector panel context to draw its
+                 * components.
+                 */ 
+                /* Update current Entity Ptr */
+                *m_CurrentSelectedEntityPtr = thisEntity;
+                m_ComponentInspectorPtr->ChangeContext(m_CurrentSelectedEntityPtr);
+            }
+
             ImGui::Spacing();
         }
         ImGui::End();
@@ -69,67 +79,7 @@ namespace Panels
         sceneEntities = last;
     }
     
-    void SceneOverview::DrawNode(Entity& entity)
-    {
-        std::string name = entity.GetComponent<TagComponent>().tag;
-        
-        if (ImGui::TreeNode(name.c_str()))
-        {
-            ImGui::TextDisabled("Entity ID: %llu", entity.GetId());
-            
-            /* Camera? */
-            if (entity.HasComponent<OrthoCameraComponent>())
-            {
-                ImGui::Text("Component:");
-                ImGui::SameLine();
-                if (ImGui::SmallButton("Orthographic Camera"))
-                {
-                    m_ComponentInspectorPtr->ChangeContext(
-                        &(entity.GetComponent<OrthoCameraComponent>()));
-                }
-            }
-            
-            /* Transform? */
-            if (entity.HasComponent<TransformComponent>())
-            {
-                ImGui::Text("Component:");
-                ImGui::SameLine();
-                if (ImGui::SmallButton("Transform"))
-                {
-                    m_ComponentInspectorPtr->ChangeContext(
-                        &(entity.GetComponent<TransformComponent>()));
-                }
-            }
-            
-            /* Sprite? */
-            if (entity.HasComponent<SpriteComponent>())
-            {
-                ImGui::Text("Component:");
-                ImGui::SameLine();
-                if (ImGui::SmallButton("Sprite"))
-                {
-                    m_ComponentInspectorPtr->ChangeContext(
-                        &(entity.GetComponent<SpriteComponent>()));
-                }
-            }
-            
-            /* Behavior? */
-            if (entity.HasComponent<BehaviorComponent>())
-            {
-                ImGui::Text("Component:");
-                ImGui::SameLine();
-                if (ImGui::SmallButton("Behavior"))
-                {
-                    m_ComponentInspectorPtr->ChangeContext(
-                        &(entity.GetComponent<BehaviorComponent>()));
-                }
-            }
-            
-            ImGui::TreePop();
-        }
-    }
-    
-    void SceneOverview::DrawNodeOnComponentInspector(Entity& entity)
+    bool SceneOverview::DrawNode(Entity& entity)
     {
         std::string tag = entity.GetComponent<TagComponent>().tag;
         	
@@ -148,49 +98,32 @@ namespace Panels
         {
             context_id = entity.GetId();
         }
-        
-        /* Query All Components */
-        if (entity.HasComponent<OrthoCameraComponent>())
-        {
-            hasCameraComponent = true;
-        }
-        
-        if (entity.HasComponent<TransformComponent>())
-        {
-            hasTransformComponent = true;
-        }
-        
-        if (entity.HasComponent<SpriteComponent>())
-        {
-            hasSpriteComponent = true;
-        }
-        
-        if (entity.HasComponent<BehaviorComponent>())
-        {
-            hasBehaviorComponent = true;
-        }
-        
+                
         /* Draw simple components */
         if (open)
         {
             ImGui::TextDisabled("ID: %llu", entity.GetId());
             
-            if (hasCameraComponent)
+            /* Camera */
+            if (entity.HasComponent<OrthoCameraComponent>())
             {
                 ImGui::Text("Camera");
             }
             
-            if (hasTransformComponent)
+            /* Transform */
+            if (entity.HasComponent<TransformComponent>())
             {
                 ImGui::Text("Transform");
             }
             
-            if (hasSpriteComponent)
+            /* Sprite */
+            if (entity.HasComponent<SpriteComponent>())
             {
                 ImGui::Text("Sprite");
             }
             
-            if (hasBehaviorComponent)
+            /* Behavior */
+            if (entity.HasComponent<BehaviorComponent>())
             {
                 ImGui::Text("Behavior");
             }
@@ -200,44 +133,13 @@ namespace Panels
         
         /**
          * This entity is currently selected.
-         * Draw its components on Component Inspector Panel.
-         * 
          */
         if (flags & ImGuiTreeNodeFlags_Selected)
         {   
-            m_ComponentInspectorPtr->ChangeContext(
-                    &(entity.GetComponent<TagComponent>()));
-            
-            if (hasCameraComponent)
-            {
-                m_ComponentInspectorPtr->ChangeContext(
-                    &(entity.GetComponent<OrthoCameraComponent>()));
-            }
-            
-            if (hasTransformComponent)
-            {
-                m_ComponentInspectorPtr->ChangeContext(
-                    &(entity.GetComponent<TransformComponent>()));
-            }
-            
-            if (hasSpriteComponent)
-            {
-                m_ComponentInspectorPtr->ChangeContext(
-                    &(entity.GetComponent<SpriteComponent>()));
-            }
-            
-            if (hasBehaviorComponent)
-            {
-                m_ComponentInspectorPtr->ChangeContext(
-                    &(entity.GetComponent<BehaviorComponent>()));
-            }
+            return true;
         }
         
-        //if (ImGui::TreeNode((void*)entity.GetId(), flags, tag.c_str()))
-        //{
-        //    
-        //    ImGui::TreePop();
-        //}
+        return false;
     }
     
 }

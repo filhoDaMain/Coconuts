@@ -36,13 +36,15 @@ namespace Panels
         bool Init();
         
         void Draw();
-        void DrawAll();
+        void ChangeContext(Coconuts::Entity*& ptr) { m_Context = ptr; hasValidContext = true;}
         
-        template <typename C>
-        void ChangeContext(C* component);
+        //template <typename C>
+        //void ChangeContext(C* component);
+        
+        
         
     private:
-        // Component Specific Drawing functions
+        /* Component Specific Drawing functions */
         void DrawEmpty(void);
         void DrawTagComponent(void);
         void DrawCameraComponent(void);
@@ -50,24 +52,14 @@ namespace Panels
         void DrawSpriteComponent(void);
         void DrawBehaviorComponent(void);
         
-        // Context
-        std::function<void(void)> DrawComponentFunc;
+        /* Helper Functions */
+        static void DrawTableVec2(const std::string& label, glm::vec2& values, float colWidth = 100.0f);
+        static void DrawTableFloat(const std::string& label, const std::string& param, float& values, bool positive = false, float colWidth = 100.0f);
+        static void DrawTableTextButton(const std::string& label, const std::string& text, float colWidth = 100.0f);
         
-        // Component references
-        TagComponent*           tagComponent;
-        bool                    hasTagComponent = false;
-        
-        OrthoCameraComponent*   cameraComponent;
-        bool                    hasCameraComponent = false;
-        
-        TransformComponent*     transformComponent;
-        bool                    hasTransformComponent = false;
-        
-        SpriteComponent*        spriteComponent;
-        bool                    hasSpriteComponent = false;
-        
-        BehaviorComponent*      behaviorComponent;
-        bool                    hasBehaviorComponent = false;
+        /* Context */
+        Coconuts::Entity* m_Context;
+        bool hasValidContext = false;
         
     };
     

@@ -34,8 +34,7 @@ namespace Panels
         
     private:
         void GetLastSceneUpdate();
-        void DrawNode(Entity& entity);
-        void DrawNodeOnComponentInspector(Entity& entity);
+        bool DrawNode(Entity& entity);
         
         /* Pointer to the GameLayer */
         GameLayer* m_GameLayerPtr;
@@ -44,6 +43,9 @@ namespace Panels
         ComponentInspector* m_ComponentInspectorPtr;
         
         std::vector<Entity> sceneEntities;
+        
+        /* To change Component Inspector's context */
+        Coconuts::Entity* m_CurrentSelectedEntityPtr;
     };
 }
 }

@@ -9,6 +9,7 @@ add_subdirectory(layer_system)
 add_subdirectory(cameras)
 add_subdirectory(graphics)
 add_subdirectory(ecs)
+add_subdirectory(asset_manager)
 
 
 # Platform Specific files

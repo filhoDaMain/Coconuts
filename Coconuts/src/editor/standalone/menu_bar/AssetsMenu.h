@@ -16,8 +16,6 @@
 #ifndef ASSETSMENU_H
 #define ASSETSMENU_H
 
-#include <coconuts/AssetManager.h>
-
 namespace Coconuts {
 namespace MenuBar
 {

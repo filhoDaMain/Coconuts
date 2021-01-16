@@ -16,7 +16,6 @@
 
 #include "AssetsMenu.h"
 #include <coconuts/editor.h>
-#include <coconuts/Logger.h>
 
 namespace Coconuts {
 namespace MenuBar

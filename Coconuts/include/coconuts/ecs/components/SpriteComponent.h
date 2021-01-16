@@ -19,6 +19,8 @@
 #include <coconuts/graphics/Sprite.h>
 #include <glm/glm.hpp>
 #include <memory>
+#include <string>
+#include <coconuts/AssetManager.h>
 
 namespace Coconuts
 {
@@ -26,15 +28,20 @@ namespace Coconuts
     struct SpriteComponent
     {
         //data
-        std::shared_ptr<Sprite> sprite = nullptr;
+        std::string             spriteLogicalName;
         glm::vec4               tintColor;
         float                   tilingFactor;
+        std::shared_ptr<Sprite> sprite = nullptr;
         
-        SpriteComponent() = default;
-        SpriteComponent(const std::shared_ptr<Sprite>& spr,
+        SpriteComponent() = default;        
+        SpriteComponent(const std::string& spriteName,
                         const glm::vec4& color = glm::vec4(1.0f),
                         float factor = 1.0f)
-        : sprite(spr), tintColor(color), tilingFactor(factor) {}
+        : spriteLogicalName(spriteName), tintColor(color), tilingFactor(factor)
+        {
+            /* Assign Sprite */
+            sprite = AssetManager::GetSprite(spriteLogicalName);
+        }
     };
     
 }

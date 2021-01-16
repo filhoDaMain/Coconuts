@@ -19,6 +19,7 @@
 #include "GameLayer.h"
 #include <coconuts/ECS.h>
 #include <coconuts/Logger.h>
+#include <coconuts/AssetManager.h>
 
 // Debug Behavior
 #include <coconuts/Polling.h>
@@ -74,15 +75,18 @@ namespace Coconuts
         /* Add SpriteComponent */
         /* 1) Init Spritesheet Texture */
         const std::string path = GAMELAYER_SPRITESHEET_PATH;
-        std::shared_ptr<Texture2D> m_SpritesheetTexture2D;
-        m_SpritesheetTexture2D.reset( Texture2D::Create(path) );
+        AssetManager::ImportTexture2D("SpriteSheet", path);
         
         /* 2) Create Sprite from the spritesheet */
-        std::shared_ptr<Sprite> m_TreeSprite;
-        m_TreeSprite.reset( Sprite::Create(m_SpritesheetTexture2D, {2, 1}, {128, 128}, {1, 2}) );
+        AssetManager::SpriteSelector selector;
+        selector.coords = {2, 1};
+        selector.cellSize = {128, 128};
+        selector.spriteSize = {1, 2};
+        AssetManager::CreateSprite("TreeSprite", "SpriteSheet", selector);
         
         /* 3) Assign the sprite to the Entity's SpriteComponent */
-        m_Entity.AddComponent<SpriteComponent>(m_TreeSprite);
+        m_Entity.AddComponent<SpriteComponent>("TreeSprite");
+        
         
 
         class TreeBehavior : public Behavior

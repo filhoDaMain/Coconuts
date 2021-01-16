@@ -16,8 +16,6 @@
 #ifndef COMPONENTINSPECTOR_H
 #define COMPONENTINSPECTOR_H
 
-#include <functional>
-
 // ECS Components
 #include <coconuts/ecs/components/TagComponent.h>
 #include <coconuts/ecs/components/OrthoCameraComponent.h>
@@ -36,12 +34,7 @@ namespace Panels
         bool Init();
         
         void Draw();
-        void ChangeContext(Coconuts::Entity*& ptr) { m_Context = ptr; hasValidContext = true;}
-        
-        //template <typename C>
-        //void ChangeContext(C* component);
-        
-        
+        void ChangeContext(Coconuts::Entity*& ptr) { m_Context = ptr; hasValidContext = true;}        
         
     private:
         /* Component Specific Drawing functions */

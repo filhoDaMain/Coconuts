@@ -120,6 +120,9 @@ namespace Coconuts
             /* Entity Menu */
             m_EntityMenu.Draw();
             
+            /* Assets Menu */
+            m_AssetsMenu.Draw();
+            
             ImGui::EndMainMenuBar();
         }
         

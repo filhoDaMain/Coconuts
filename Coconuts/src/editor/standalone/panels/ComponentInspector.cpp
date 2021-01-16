@@ -18,6 +18,7 @@
 #include <coconuts/editor.h>
 #include <string.h>
 #include <sstream>
+#include <coconuts/Logger.h>
 
 namespace Coconuts {
 namespace Panels
@@ -35,7 +36,7 @@ namespace Panels
         
         /* Draw all Components */
         if (hasValidContext)
-        {   
+        {
             /* Tag */
             if (m_Context->HasComponent<TagComponent>())
             {
@@ -45,32 +46,45 @@ namespace Panels
             /* Camera */
             if (m_Context->HasComponent<OrthoCameraComponent>())
             {
+                hasCameraComponent = true;
                 DrawCameraComponent();
             }
             
             /* Transform */
             if (m_Context->HasComponent<TransformComponent>())
             {
+                hasTransformComponent = true;
                 DrawTransformComponent();
             }
             
             /* Sprite */
             if (m_Context->HasComponent<SpriteComponent>())
             {
+                hasSpriteComponent = true;
                 DrawSpriteComponent();
             }
             
             /* Behavior */
             if (m_Context->HasComponent<BehaviorComponent>())
             {
+                hasBehaviorComponent = true;
                 DrawBehaviorComponent();
             }
+            
+            /* Add Component */
+            DrawButtonAddComponent();
         }
         
         else
         {
             DrawEmpty();
         }
+        
+        /* Reset all flags */
+        hasCameraComponent      = false;
+        hasTransformComponent   = false;
+        hasSpriteComponent      = false;
+        hasBehaviorComponent    = false;
         
         ImGui::End();
     }
@@ -191,6 +205,67 @@ namespace Panels
             ImGui::Spacing(); ImGui::Spacing();
             ImGui::TextDisabled("TODO");
             ImGui::TreePop();
+        }
+        
+        ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
+    }
+    
+    
+    /* ************************************************************************* */
+    /* Add Component Button */
+    void ComponentInspector::DrawButtonAddComponent()
+    {
+        if (ImGui::Button("Add Component"))
+        {
+            ImGui::OpenPopup("AddComponentPopUp");
+        }
+        
+        /**
+         * Pop Up
+         * -> Display only the components that context entity does not have.
+         */
+        if (ImGui::BeginPopup("AddComponentPopUp"))
+        {
+            /* Transform */
+            if (!hasTransformComponent)
+            {
+                if (ImGui::MenuItem("Transform"))
+                {
+                    m_Context->AddComponent<TransformComponent>();
+                    ImGui::CloseCurrentPopup();
+                    
+                    hasTransformComponent = true;
+                    LOG_TRACE("Transform added to {}", m_Context->GetId());
+                }
+            }
+            
+            /* Sprite */
+            if (!hasSpriteComponent)
+            {
+                if (ImGui::MenuItem("Sprite"))
+                {
+                    m_Context->AddComponent<SpriteComponent>();
+                    ImGui::CloseCurrentPopup();
+                    
+                    hasSpriteComponent = true;
+                    LOG_TRACE("Sprite added to {}", m_Context->GetId());
+                }
+            }
+            
+            /* Behavior */
+            if (!hasBehaviorComponent)
+            {
+                if (ImGui::MenuItem("Behavior"))
+                {
+                    m_Context->AddComponent<BehaviorComponent>();
+                    ImGui::CloseCurrentPopup();
+                    
+                    hasBehaviorComponent = true;
+                    LOG_TRACE("Behavior added to {}", m_Context->GetId());
+                }
+            }
+            
+            ImGui::EndPopup();
         }
         
         ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();

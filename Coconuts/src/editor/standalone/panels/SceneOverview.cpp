@@ -82,12 +82,7 @@ namespace Panels
     bool SceneOverview::DrawNode(Entity& entity)
     {
         std::string tag = entity.GetComponent<TagComponent>().tag;
-        	
         static uint64_t context_id = 0;
-        bool hasCameraComponent = false;
-        bool hasTransformComponent = false;
-        bool hasSpriteComponent = false;
-        bool hasBehaviorComponent = false;
         
         ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_OpenOnArrow;
         flags |= context_id == entity.GetId() ? ImGuiTreeNodeFlags_Selected : 0;

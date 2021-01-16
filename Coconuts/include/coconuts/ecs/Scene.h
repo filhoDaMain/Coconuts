@@ -39,7 +39,7 @@ namespace Coconuts
         void OnChangeViewport(float x, float y);
         
         entityx::Entity CreateEntity();
-        void DestroyEntity(uint64_t id);
+        bool DestroyEntity(uint64_t id);
         size_t GetNumberOfEntities() const { return m_EntityManager.entities.size(); }
         std::vector<Entity> GetAllEntities();
         

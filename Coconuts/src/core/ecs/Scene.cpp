@@ -144,13 +144,15 @@ namespace Coconuts
         return all;
     }
         
-    void Scene::DestroyEntity(uint64_t id)
+    bool Scene::DestroyEntity(uint64_t id)
     {
         /* Create an Entityx ID based on raw id number */
         entityx::Entity::Id entityID(id);
         
         /* Destroy Entity */
         m_EntityManager.entities.destroy(entityID);
+        
+        return true;
     }
     
     bool Scene::HaltAllEvents(bool state)

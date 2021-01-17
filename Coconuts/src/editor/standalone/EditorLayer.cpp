@@ -157,7 +157,7 @@ namespace Coconuts
         m_ComponentInspectorPanel.Draw();
         
         //DEBUG:
-        ImGui::ShowDemoWindow();
+        //ImGui::ShowDemoWindow();
         
         // ---------------------------------------------------------------------------
         // DOCK SPACE END

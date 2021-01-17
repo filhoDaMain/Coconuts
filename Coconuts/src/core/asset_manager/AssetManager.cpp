@@ -41,10 +41,9 @@ namespace Coconuts
         
         /* Update Keys List */
         m_KeysList_Textures2D = std::vector<std::string>();  /* free */
-        m_KeysList_Textures2D.resize(m_HashTable_Textures2D.size());
         for (auto bucket : m_HashTable_Textures2D)
         {
-            m_KeysList_Textures2D.push_back(bucket.first);
+            m_KeysList_Textures2D.emplace_back(bucket.first);
         }
         
         return true;
@@ -82,10 +81,9 @@ namespace Coconuts
         
         /* Update Keys List */
         m_KeysList_Sprites = std::vector<std::string>();  /* free */
-        m_KeysList_Sprites.resize(m_HashTable_Sprites.size());
         for (auto bucket : m_HashTable_Sprites)
         {
-            m_KeysList_Sprites.push_back(bucket.first);
+            m_KeysList_Sprites.emplace_back(bucket.first);
         }
         
         return true;

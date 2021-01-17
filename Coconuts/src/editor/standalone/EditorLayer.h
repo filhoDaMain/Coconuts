@@ -31,6 +31,7 @@
 #include "panels/Statistics.h"
 #include "panels/SceneOverview.h"
 #include "panels/ComponentInspector.h"
+#include "panels/Assets.h"
 
 /* PopUps */
 #include "popups/ImportTexture2DPopUp.h"
@@ -61,6 +62,7 @@ namespace Coconuts
         Panels::Statistics              m_StatisticsPanel;
         Panels::SceneOverview           m_SceneOverviewPanel;
         Panels::ComponentInspector      m_ComponentInspectorPanel;
+        Panels::Assets                  m_AssetsPanel;
         
         /* PopUps */
         PopUps::ImportTexture2DPopUp    m_ImportTexture2dPopUp;

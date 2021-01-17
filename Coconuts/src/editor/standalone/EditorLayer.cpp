@@ -150,11 +150,14 @@ namespace Coconuts
         /* Scene Overview Panel */
         m_SceneOverviewPanel.Draw();
         
+        /* Assets Panel */
+        m_AssetsPanel.Draw();
+        
         /* Component Inspector */
         m_ComponentInspectorPanel.Draw();
         
         //DEBUG:
-        ImGui::ShowDemoWindow();
+        //ImGui::ShowDemoWindow();
         
         // ---------------------------------------------------------------------------
         // DOCK SPACE END
@@ -170,6 +173,7 @@ namespace Coconuts
         m_ViewportPanel.Init(m_GameLayerPtr);
         m_ComponentInspectorPanel.Init();
         m_SceneOverviewPanel.Init(m_GameLayerPtr, &m_ComponentInspectorPanel);
+        m_AssetsPanel.Init();
         
         m_ImportTexture2dPopUp.Init();
     }

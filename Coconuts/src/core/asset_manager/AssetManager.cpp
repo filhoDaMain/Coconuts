@@ -23,6 +23,11 @@ namespace Coconuts
     std::unordered_map<std::string, std::shared_ptr<Texture2D>> AssetManager::m_HashTable_Textures2D;
     std::unordered_map<std::string, std::shared_ptr<Sprite>>    AssetManager::m_HashTable_Sprites;
     
+    /* Static Keys Lists Definitions */
+    std::vector<std::string> AssetManager::m_KeysList_Textures2D;
+    std::vector<std::string> AssetManager::m_KeysList_Sprites;
+    
+    
     
     //static
     bool AssetManager::ImportTexture2D(const std::string& logicalName, const std::string& path)
@@ -33,6 +38,14 @@ namespace Coconuts
         
         /* Store */
         m_HashTable_Textures2D[logicalName] = texture2D;
+        
+        /* Update Keys List */
+        m_KeysList_Textures2D = std::vector<std::string>();  /* free */
+        m_KeysList_Textures2D.resize(m_HashTable_Textures2D.size());
+        for (auto bucket : m_HashTable_Textures2D)
+        {
+            m_KeysList_Textures2D.push_back(bucket.first);
+        }
         
         return true;
     }
@@ -51,6 +64,7 @@ namespace Coconuts
     }
     
     
+    
     //static
     bool AssetManager::CreateSprite(const std::string& logicalName,
                                     const std::string& spriteSheetLogicalName,
@@ -65,6 +79,14 @@ namespace Coconuts
         
         /* Store */
         m_HashTable_Sprites[logicalName] = sprite;
+        
+        /* Update Keys List */
+        m_KeysList_Sprites = std::vector<std::string>();  /* free */
+        m_KeysList_Sprites.resize(m_HashTable_Sprites.size());
+        for (auto bucket : m_HashTable_Sprites)
+        {
+            m_KeysList_Sprites.push_back(bucket.first);
+        }
         
         return true;
     }

@@ -11,6 +11,7 @@ target_include_directories(ccneditor_standalone PRIVATE "${PROJECT_SOURCE_DIR}/i
 
 add_subdirectory(menu_bar)
 add_subdirectory(panels)
+add_subdirectory(popups)
 
 # Coconuts + Editor + vendor Lib Linkage
 target_link_libraries(ccneditor_standalone  "${PROJECT_SOURCE_DIR}/lib/libccncore.a"

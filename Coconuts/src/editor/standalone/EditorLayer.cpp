@@ -129,9 +129,14 @@ namespace Coconuts
             ImGui::EndMainMenuBar();
         }
         
+        
+        
+        /*  P O P   U P S  */
+        
         if (showPopUp_ImportTexture2D)
         {
-            
+            /* Import Texture 2D (Triggered from AssetsMenu) */
+            m_ImportTexture2dPopUp.Draw(&showPopUp_ImportTexture2D);
         }
         
         /*  P A N E L S  */
@@ -149,7 +154,7 @@ namespace Coconuts
         m_ComponentInspectorPanel.Draw();
         
         //DEBUG:
-        //ImGui::ShowDemoWindow();
+        ImGui::ShowDemoWindow();
         
         // ---------------------------------------------------------------------------
         // DOCK SPACE END
@@ -166,6 +171,7 @@ namespace Coconuts
         m_ComponentInspectorPanel.Init();
         m_SceneOverviewPanel.Init(m_GameLayerPtr, &m_ComponentInspectorPanel);
         
+        m_ImportTexture2dPopUp.Init();
     }
     
 }

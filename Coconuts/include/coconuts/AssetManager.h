@@ -19,6 +19,7 @@
 #include <string>
 #include <memory>
 #include <unordered_map>
+#include <vector>
 #include <coconuts/graphics/Texture.h>
 #include <coconuts/graphics/Sprite.h>
 #include <glm/glm.hpp>
@@ -39,17 +40,22 @@ namespace Coconuts
     public:
         static bool ImportTexture2D(const std::string& logicalName, const std::string& path);
         static std::shared_ptr<Texture2D> GetTexture2D(const std::string& logicalName);
+        static std::vector<std::string>& GetAllTexture2DLogicalNames() { return m_KeysList_Textures2D; }
         
         static bool CreateSprite(const std::string& logicalName,
                                  const std::string& spriteSheetLogicalName,
                                  const SpriteSelector& selector);
-        
         static std::shared_ptr<Sprite> GetSprite(const std::string& logicalName);
+        static std::vector<std::string>& GetAllSpriteLogicalNames() { return m_KeysList_Sprites; }
         
     private:
         /* HASH TABLES */
         static std::unordered_map<std::string, std::shared_ptr<Texture2D>>  m_HashTable_Textures2D;
         static std::unordered_map<std::string, std::shared_ptr<Sprite>>     m_HashTable_Sprites;
+        
+        /* Keys Lists */
+        static std::vector<std::string> m_KeysList_Textures2D;
+        static std::vector<std::string> m_KeysList_Sprites;
     };
     
 }

@@ -16,6 +16,8 @@
 #ifndef ASSETS_H
 #define ASSETS_H
 
+#include "AssetInspector.h"
+
 namespace Coconuts {
 namespace Panels
 {
@@ -24,13 +26,16 @@ namespace Panels
     {
     public:
         Assets() = default;
-        bool Init() { return true; }
+        bool Init(AssetInspector* assetInspector);
         
         void Draw();
         
     private:
         void DrawTextures2DTree();
         void DrawSpritesTree();
+        
+        /* Pointer to the Asset Inspector Panel to change context */
+        AssetInspector* m_AssetInspectorPtr;
     };
     
 }

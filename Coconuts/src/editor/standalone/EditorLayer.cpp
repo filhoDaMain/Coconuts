@@ -156,6 +156,9 @@ namespace Coconuts
         /* Component Inspector */
         m_ComponentInspectorPanel.Draw();
         
+        /* Asset Inspector */
+        m_AssetInspectorPanel.Draw();
+        
         //DEBUG:
         //ImGui::ShowDemoWindow();
         
@@ -173,7 +176,8 @@ namespace Coconuts
         m_ViewportPanel.Init(m_GameLayerPtr);
         m_ComponentInspectorPanel.Init();
         m_SceneOverviewPanel.Init(m_GameLayerPtr, &m_ComponentInspectorPanel);
-        m_AssetsPanel.Init();
+        m_AssetInspectorPanel.Init();
+        m_AssetsPanel.Init(&m_AssetInspectorPanel);
         
         m_ImportTexture2dPopUp.Init();
     }

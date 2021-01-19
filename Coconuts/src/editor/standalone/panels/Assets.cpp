@@ -25,6 +25,12 @@ namespace Coconuts {
 namespace Panels
 {
     
+    bool Assets::Init(AssetInspector* assetInspector)
+    {
+        m_AssetInspectorPtr = assetInspector;
+        return true;
+    }
+    
     void Assets::Draw()
     {
         ImGui::Begin("Assets");
@@ -74,7 +80,7 @@ namespace Panels
                  */
                 if (inner_flags & ImGuiTreeNodeFlags_Selected)
                 {
-                    //change component inspector context to display its data
+                    m_AssetInspectorPtr->ChangeContext2Texture2D(name);
                 }
             }
             

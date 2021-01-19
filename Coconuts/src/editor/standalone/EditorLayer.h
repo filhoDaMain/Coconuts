@@ -32,6 +32,7 @@
 #include "panels/SceneOverview.h"
 #include "panels/ComponentInspector.h"
 #include "panels/Assets.h"
+#include "panels/AssetInspector.h"
 
 /* PopUps */
 #include "popups/ImportTexture2DPopUp.h"
@@ -63,6 +64,7 @@ namespace Coconuts
         Panels::SceneOverview           m_SceneOverviewPanel;
         Panels::ComponentInspector      m_ComponentInspectorPanel;
         Panels::Assets                  m_AssetsPanel;
+        Panels::AssetInspector          m_AssetInspectorPanel;
         
         /* PopUps */
         PopUps::ImportTexture2DPopUp    m_ImportTexture2dPopUp;

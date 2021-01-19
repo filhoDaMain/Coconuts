@@ -16,6 +16,9 @@
 
 #include "AssetInspector.h"
 #include <coconuts/editor.h>
+#include <coconuts/AssetManager.h>
+#include <coconuts/graphics/Texture.h>
+#include <coconuts/Logger.h>
 
 namespace Coconuts {
 namespace Panels
@@ -44,7 +47,10 @@ namespace Panels
     
     void AssetInspector::DrawTexture2DAsset()
     {
-        //TODO
+        //Early debug
+        
+        auto texture = AssetManager::GetTexture2D(m_LogicalNameTexture2D);
+        ImGui::Image((void *) *texture, ImVec2((texture->GetWidth()/8), (texture->GetHeight()/8)), ImVec2{0, 1}, ImVec2{1, 0});
     }
     
     void AssetInspector::DrawSpriteAsset()

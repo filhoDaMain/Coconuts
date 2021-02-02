@@ -20,8 +20,9 @@ namespace Coconuts
 {
     
     /* Static Hash Tables Definitions */
-    std::unordered_map<std::string, std::shared_ptr<Texture2D>> AssetManager::m_HashTable_Textures2D;
-    std::unordered_map<std::string, std::shared_ptr<Sprite>>    AssetManager::m_HashTable_Sprites;
+    std::unordered_map<std::string, std::shared_ptr<Texture2D>>     AssetManager::m_HashTable_Textures2D;
+    std::unordered_map<std::string, std::shared_ptr<Sprite>>        AssetManager::m_HashTable_Sprites;
+    std::unordered_map<std::string, AssetManager::SpriteSelector>   AssetManager::m_HashTable_SpriteSlectors;
     
     /* Static Keys Lists Definitions */
     std::vector<std::string> AssetManager::m_KeysList_Textures2D;
@@ -76,8 +77,11 @@ namespace Coconuts
         std::shared_ptr<Sprite> sprite;
         sprite.reset( Sprite::Create(texture2D, selector.coords, selector.cellSize, selector.spriteSize) );
         
-        /* Store */
+        /* Store Sprite */
         m_HashTable_Sprites[logicalName] = sprite;
+        
+        /* Store SpriteSelector */
+        m_HashTable_SpriteSlectors[logicalName] = selector;
         
         /* Update Keys List */
         m_KeysList_Sprites = std::vector<std::string>();  /* free */
@@ -100,6 +104,19 @@ namespace Coconuts
         }
         
         return nullptr;
+    }
+    
+    //static
+    std::tuple<bool, AssetManager::SpriteSelector> AssetManager::GetSpriteSelector(const std::string& logicalName)
+    {
+        auto found = m_HashTable_SpriteSlectors.find(logicalName);
+        
+        if (found != m_HashTable_SpriteSlectors.end())
+        {
+            return std::make_tuple(true, found->second);
+        }
+        
+        return std::make_tuple(false, found->second);
     }
     
 }

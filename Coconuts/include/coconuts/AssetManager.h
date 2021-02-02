@@ -23,6 +23,7 @@
 #include <coconuts/graphics/Texture.h>
 #include <coconuts/graphics/Sprite.h>
 #include <glm/glm.hpp>
+#include <tuple>
 
 namespace Coconuts
 {
@@ -47,11 +48,13 @@ namespace Coconuts
                                  const SpriteSelector& selector);
         static std::shared_ptr<Sprite> GetSprite(const std::string& logicalName);
         static std::vector<std::string>& GetAllSpriteLogicalNames() { return m_KeysList_Sprites; }
+        static std::tuple<bool, SpriteSelector> GetSpriteSelector(const std::string& logicalName);
         
     private:
         /* HASH TABLES */
         static std::unordered_map<std::string, std::shared_ptr<Texture2D>>  m_HashTable_Textures2D;
         static std::unordered_map<std::string, std::shared_ptr<Sprite>>     m_HashTable_Sprites;
+        static std::unordered_map<std::string, SpriteSelector>              m_HashTable_SpriteSlectors;
         
         /* Keys Lists */
         static std::vector<std::string> m_KeysList_Textures2D;

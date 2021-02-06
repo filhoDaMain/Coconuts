@@ -19,6 +19,7 @@
 #include <coconuts/AssetManager.h>
 #include <coconuts/graphics/Texture.h>
 #include <coconuts/Logger.h>
+#include <tuple>
 
 namespace Coconuts {
 namespace Panels
@@ -50,12 +51,31 @@ namespace Panels
         //Early debug
         
         auto texture = AssetManager::GetTexture2D(m_LogicalNameTexture2D);
-        ImGui::Image((void *) *texture, ImVec2((texture->GetWidth()/8), (texture->GetHeight()/8)), ImVec2{0, 1}, ImVec2{1, 0});
+        ImGui::Image((void *) *texture, ImVec2((texture->GetWidth()/6), (texture->GetHeight()/6)), ImVec2{0, 1}, ImVec2{1, 0});
     }
     
     void AssetInspector::DrawSpriteAsset()
     {
-        //TODO
+        auto sprite = AssetManager::GetSprite(m_LogicalNameSprite);
+        auto texture = sprite->GetTexture();
+        bool valid;
+        AssetManager::SpriteSelector selector;
+        std::tie(valid, selector) = AssetManager::GetSpriteSelector(m_LogicalNameSprite);
+        
+        if (!valid)
+        {
+            return; //impossible to coninue
+        }
+        
+        /* Crop texture image to display only sprite's region */
+        float uv0x = (float) (selector.coords.x) / texture->GetWidth();
+        float uv0y = (float) (selector.coords.y + selector.cellSize.y) / texture->GetHeight();
+        float uv1x = (float) (selector.coords.x + selector.cellSize.x) / texture->GetWidth();
+        float uv1y = (float) (selector.coords.y) / texture->GetHeight();
+        ImVec2 uv0 = ImVec2(uv0x, uv0y);
+        ImVec2 uv1 = ImVec2(uv1x, uv1y);
+        
+        ImGui::Image((void *) *texture, ImVec2(selector.cellSize.x/2, selector.cellSize.y/2), uv0, uv1);
     }
     
     

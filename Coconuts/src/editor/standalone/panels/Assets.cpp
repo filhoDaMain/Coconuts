@@ -54,7 +54,6 @@ namespace Panels
     void Assets::DrawTextures2DTree()
     {
         ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_SpanAvailWidth;
-        std::vector<std::string>& list = AssetManager::GetAllTexture2DLogicalNames();
         
         if (ImGui::TreeNodeEx("Textures 2D" , flags))
         {
@@ -92,7 +91,6 @@ namespace Panels
     void Assets::DrawSpritesTree()
     {
         ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_SpanAvailWidth;
-        std::vector<std::string>& list = AssetManager::GetAllSpriteLogicalNames();
         
         if (ImGui::TreeNodeEx("Sprites" , flags))
         {

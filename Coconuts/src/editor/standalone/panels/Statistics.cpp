@@ -25,8 +25,10 @@ namespace Panels
     {
         ImGui::Begin("Statistics");
         
-        ImGui::Text("Renderer statistics:");
-        ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();    
+        ImGui::Text("Renderer statistics");
+        ImGui::Spacing(); ImGui::Spacing();
+        ImGui::Text("Per Frame:");
+        ImGui::Spacing();
         ImGui::Text("%d Draw Calls", stats.drawCalls);
         ImGui::Spacing();
         ImGui::Text("%d Quads", stats.quadCount);

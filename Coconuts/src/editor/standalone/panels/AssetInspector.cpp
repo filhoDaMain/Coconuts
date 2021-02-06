@@ -51,7 +51,7 @@ namespace Panels
         //Early debug
         
         auto texture = AssetManager::GetTexture2D(m_LogicalNameTexture2D);
-        ImGui::Image((void *) *texture, ImVec2((texture->GetWidth()/6), (texture->GetHeight()/6)), ImVec2{0, 1}, ImVec2{1, 0});
+        ImGui::Image((void *) *texture, ImVec2((texture->GetWidth()/3), (texture->GetHeight()/3)), ImVec2{0, 1}, ImVec2{1, 0});
     }
     
     void AssetInspector::DrawSpriteAsset()

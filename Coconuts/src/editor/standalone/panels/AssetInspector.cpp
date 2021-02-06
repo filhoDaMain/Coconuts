@@ -20,6 +20,7 @@
 #include <coconuts/graphics/Texture.h>
 #include <coconuts/Logger.h>
 #include <tuple>
+#include <string.h>
 
 namespace Coconuts {
 namespace Panels
@@ -56,26 +57,79 @@ namespace Panels
     
     void AssetInspector::DrawSpriteAsset()
     {
+        ImGui::Text("Sprite");
+        
+        /* Sprite's name + Enable its edition */
+        char spriteNameTextBox[32];
+        memset(spriteNameTextBox, 0x00, sizeof(spriteNameTextBox));
+        strcpy(spriteNameTextBox, m_LogicalNameSprite.c_str());
+        ImGui::InputText(" ", spriteNameTextBox, sizeof(spriteNameTextBox));
+        
+        /* Get sprite's spritesheet texture image */
         auto sprite = AssetManager::GetSprite(m_LogicalNameSprite);
         auto texture = sprite->GetTexture();
         bool valid;
         AssetManager::SpriteSelector selector;
         std::tie(valid, selector) = AssetManager::GetSpriteSelector(m_LogicalNameSprite);
         
-        if (!valid)
+        /* Get Sprite's spritesheet name + Enable spritesheet switch */
+        //TODO Preselect texture returned from AssetManager
+        //TODO change texture to selected texture name from drop-down menu
+        
+        /* Display small sized texture */
+        if (texture != nullptr)
         {
-            return; //impossible to coninue
+            ImGui::Image((void *) *texture, ImVec2((texture->GetWidth()/7), (texture->GetHeight()/7)), ImVec2{0, 1}, ImVec2{1, 0});
         }
         
-        /* Crop texture image to display only sprite's region */
-        float uv0x = (float) (selector.coords.x) / texture->GetWidth();
-        float uv0y = (float) (selector.coords.y + selector.cellSize.y) / texture->GetHeight();
-        float uv1x = (float) (selector.coords.x + selector.cellSize.x) / texture->GetWidth();
-        float uv1y = (float) (selector.coords.y) / texture->GetHeight();
-        ImVec2 uv0 = ImVec2(uv0x, uv0y);
-        ImVec2 uv1 = ImVec2(uv1x, uv1y);
+        static AssetManager::SpriteSelector selectorEdit;
+        static bool saved = true;
+        if (saved)
+        {
+            selectorEdit = selector;
+        }
         
-        ImGui::Image((void *) *texture, ImVec2(selector.cellSize.x/2, selector.cellSize.y/2), uv0, uv1);
+        ImGui::Text("Coords X");
+        ImGui::DragFloat("##X", &selectorEdit.coords.x, 0.1f);
+        ImGui::Text("Coords Y");
+        ImGui::DragFloat("##Y", &selectorEdit.coords.y, 0.1f);
+        ImGui::Text("Cell Size X");
+        ImGui::DragFloat("##A", &selectorEdit.cellSize.x, 0.1f);
+        ImGui::Text("Cell Size Y");
+        ImGui::DragFloat("##B", &selectorEdit.cellSize.y, 0.1f);
+        ImGui::Text("Sprite Size X");
+        ImGui::DragFloat("##H", &selectorEdit.spriteSize.x, 0.1f);
+        ImGui::Text("Sprite Size Y");
+        ImGui::DragFloat("##V", &selectorEdit.spriteSize.y, 0.1f);
+
+        do
+        {
+            if (!valid)
+            {
+                break; //Impossible to display sprite. GOTO 'Save Button'.
+            }
+
+            /* Crop texture image to display only sprite's region */
+            float uv0x = (float) (selectorEdit.coords.x * selectorEdit.cellSize.x) / texture->GetWidth();
+            float uv0y = (float) (selectorEdit.coords.y * selectorEdit.cellSize.y + selectorEdit.cellSize.y) / texture->GetHeight();
+            float uv1x = (float) (selectorEdit.coords.x * selectorEdit.cellSize.x + selectorEdit.cellSize.x) / texture->GetWidth();
+            float uv1y = (float) (selectorEdit.coords.y * selectorEdit.cellSize.y) / texture->GetHeight();
+            ImVec2 uv0 = ImVec2(uv0x, uv0y);
+            ImVec2 uv1 = ImVec2(uv1x, uv1y);
+
+            /* Display sprite */
+            ImGui::Image((void *) *texture, ImVec2(selectorEdit.cellSize.x/2, selectorEdit.cellSize.y/2), uv0, uv1);
+            
+        } while(false);
+        
+        /* Save Edits ? */
+        saved = false;
+        if (ImGui::Button("Save"))
+        {
+            /* Create New Sprite */
+            
+        }
+        
     }
     
     

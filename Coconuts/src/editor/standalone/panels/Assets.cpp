@@ -28,6 +28,8 @@ namespace Panels
     bool Assets::Init(AssetInspector* assetInspector)
     {
         m_AssetInspectorPtr = assetInspector;
+        m_TexturesTreeSelected = false;
+        m_SpritesTreeSelected = false;
         return true;
     }
     
@@ -63,14 +65,15 @@ namespace Panels
                 static std::string context_str = "";
                 
                 ImGuiTreeNodeFlags inner_flags = ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Bullet;
-                inner_flags |=  context_str.compare(name) == 0 ? ImGuiTreeNodeFlags_Selected : 0;   
+                inner_flags |=  context_str.compare(name) == 0 && !m_SpritesTreeSelected ?
+                                ImGuiTreeNodeFlags_Selected : 0;   
                  
                 bool fakeopen = ImGui::TreeNodeEx(name.c_str() , inner_flags);
                 if (ImGui::IsItemClicked())
                 {
-                    static bool toggleSelected = false;
-                    toggleSelected = !toggleSelected;
-                    context_str = toggleSelected ? name : "";
+                    m_TexturesTreeSelected = !m_TexturesTreeSelected;   //toggle
+                    m_SpritesTreeSelected = false;
+                    context_str = m_TexturesTreeSelected ? name : "";
                 }
                 if (fakeopen) ImGui::TreePop();
 
@@ -100,14 +103,15 @@ namespace Panels
                 static std::string context_str = "";
                 
                 ImGuiTreeNodeFlags inner_flags = ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Bullet;
-                inner_flags |=  context_str.compare(name) == 0 ? ImGuiTreeNodeFlags_Selected : 0;   
+                inner_flags |=  context_str.compare(name) == 0 && !m_TexturesTreeSelected ?
+                                ImGuiTreeNodeFlags_Selected : 0;   
                  
                 bool fakeopen = ImGui::TreeNodeEx(name.c_str() , inner_flags);
                 if (ImGui::IsItemClicked())
                 {
-                    static bool toggleSelected = false;
-                    toggleSelected = !toggleSelected;
-                    context_str = toggleSelected ? name : "";
+                    m_SpritesTreeSelected = !m_SpritesTreeSelected; //toggle
+                    m_TexturesTreeSelected = false;
+                    context_str = m_SpritesTreeSelected ? name : "";
                 }
                 if (fakeopen) ImGui::TreePop();
 
@@ -116,7 +120,7 @@ namespace Panels
                  */
                 if (inner_flags & ImGuiTreeNodeFlags_Selected)
                 {
-                    //change component inspector context to display its data
+                    m_AssetInspectorPtr->ChangeContext2Sprite(name);
                 }
             }
             

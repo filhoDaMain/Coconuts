@@ -36,6 +36,9 @@ namespace Panels
         
         /* Pointer to the Asset Inspector Panel to change context */
         AssetInspector* m_AssetInspectorPtr;
+        
+        bool m_TexturesTreeSelected;
+        bool m_SpritesTreeSelected;
     };
     
 }

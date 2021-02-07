@@ -31,6 +31,20 @@ namespace Coconuts
     
     
     
+    //static (non mandatory)
+    void AssetManager::Init()
+    {
+        m_HashTable_Textures2D.reserve(HashTableDefs::Textures2DHT::reserve);
+        m_HashTable_Textures2D.max_load_factor(HashTableDefs::Textures2DHT::max_load_factor);
+        
+        m_HashTable_Sprites.reserve(HashTableDefs::SpritesHT::reserve);
+        m_HashTable_Sprites.max_load_factor(HashTableDefs::SpritesHT::max_load_factor);
+        m_HashTable_SpriteSlectors.reserve(HashTableDefs::SpritesHT::reserve);
+        m_HashTable_SpriteSlectors.max_load_factor(HashTableDefs::SpritesHT::max_load_factor);
+    }
+    
+    
+    
     //static
     bool AssetManager::ImportTexture2D(const std::string& logicalName, const std::string& path)
     {

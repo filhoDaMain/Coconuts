@@ -52,7 +52,24 @@ namespace Coconuts
             uint32_t                    keysListIndex;
         };
         
+        struct HashTableDefs
+        {
+            struct Textures2DHT
+            {
+                static constexpr uint16_t   reserve = 32;   // reserved buckets
+                static constexpr float      max_load_factor = 2.0f;
+            };
+            
+            struct SpritesHT
+            {
+                static constexpr uint16_t   reserve = 128;  // reserved buckets
+                static constexpr float      max_load_factor = 2.0f;
+            };
+        };
+        
     public:
+        static void Init(); //non mandatory
+        
         static bool ImportTexture2D(const std::string& logicalName, const std::string& path);
         static std::shared_ptr<Texture2D> GetTexture2D(const std::string& logicalName);
         static std::vector<std::string>& GetAllTexture2DLogicalNames() { return m_KeysList_Textures2D; }

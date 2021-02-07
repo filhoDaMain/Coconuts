@@ -41,11 +41,7 @@ namespace Coconuts
         m_HashTable_Textures2D[logicalName] = texture2D;
         
         /* Update Keys List */
-        m_KeysList_Textures2D = std::vector<std::string>();  /* free */
-        for (auto bucket : m_HashTable_Textures2D)
-        {
-            m_KeysList_Textures2D.emplace_back(bucket.first);
-        }
+        m_KeysList_Textures2D.emplace_back(logicalName);
         
         return true;
     }
@@ -84,11 +80,7 @@ namespace Coconuts
         m_HashTable_SpriteSlectors[logicalName] = selector;
         
         /* Update Keys List */
-        m_KeysList_Sprites = std::vector<std::string>();  /* free */
-        for (auto bucket : m_HashTable_Sprites)
-        {
-            m_KeysList_Sprites.emplace_back(bucket.first);
-        }
+        m_KeysList_Sprites.emplace_back(logicalName);
         
         return true;
     }

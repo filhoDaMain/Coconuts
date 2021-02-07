@@ -72,9 +72,23 @@ namespace Panels
         AssetManager::SpriteSelector selector;
         std::tie(valid, selector) = AssetManager::GetSpriteSelector(m_LogicalNameSprite);
         
-        /* Get Sprite's spritesheet name + Enable spritesheet switch */
-        //TODO Preselect texture returned from AssetManager
-        //TODO change texture to selected texture name from drop-down menu
+        /* Get Sprite's spritesheet name + Enable spritesheet switch from Drop-down menu */        
+        auto spritesheetNames = AssetManager::GetAllTexture2DLogicalNames();
+        const char* items[spritesheetNames.size()];
+        
+        /* Populate items[] and find spritesheet texture index */
+        int selected_texture_index = 0;
+        int i = 0;
+        for (auto select : spritesheetNames)
+        {
+            items[i] = select.c_str();
+            if (m_LogicalNameSprite.compare(select) == 0) selected_texture_index = i;
+            i++;
+        }
+        
+        /* Drop-down */
+        ImGui::Text("Sprite sheet");
+        ImGui::Combo("Texture", &selected_texture_index, items, IM_ARRAYSIZE(items));
         
         /* Display small sized texture */
         if (texture != nullptr)

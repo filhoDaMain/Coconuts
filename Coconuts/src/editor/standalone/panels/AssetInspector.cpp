@@ -57,6 +57,10 @@ namespace Panels
     
     void AssetInspector::DrawSpriteAsset()
     {
+        
+        //TODO Debug code. Work in progress.
+        
+        
         ImGui::Text("Sprite");
         
         /* Sprite's name + Enable its edition */
@@ -82,7 +86,9 @@ namespace Panels
         for (auto select : spritesheetNames)
         {
             items[i] = select.c_str();
+#if 0   //wrong - needs re-work
             if (m_LogicalNameSprite.compare(select) == 0) selected_texture_index = i;
+#endif
             i++;
         }
         

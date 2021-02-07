@@ -38,6 +38,8 @@ namespace Coconuts
         LOG_TRACE("Pre-call ImportTexture2D():");
         LOG_TRACE("  m_HashTable_Textures2D.size    = {}", m_HashTable_Textures2D.size());
         LOG_TRACE("  m_HashTable_Textures2D.buckets = {}", m_HashTable_Textures2D.bucket_count());
+        LOG_TRACE("  m_HashTable_Textures2D.load    = {}", m_HashTable_Textures2D.load_factor());
+        LOG_TRACE("  m_HashTable_Textures2D.maxload = {}", m_HashTable_Textures2D.max_load_factor());
 #endif
         
         /* Create Texture2D from image path */
@@ -55,6 +57,8 @@ namespace Coconuts
         LOG_TRACE("Post-call ImportTexture2D():");
         LOG_TRACE("  m_HashTable_Textures2D.size    = {}", m_HashTable_Textures2D.size());
         LOG_TRACE("  m_HashTable_Textures2D.buckets = {}", m_HashTable_Textures2D.bucket_count());
+        LOG_TRACE("  m_HashTable_Textures2D.load    = {}", m_HashTable_Textures2D.load_factor());
+        LOG_TRACE("  m_HashTable_Textures2D.maxload = {}", m_HashTable_Textures2D.max_load_factor());
 #endif
         
         return true;
@@ -99,6 +103,8 @@ namespace Coconuts
         LOG_TRACE("Pre-call CreateSprite():");
         LOG_TRACE("  m_HashTable_Sprites.size       = {}", m_HashTable_Sprites.size());
         LOG_TRACE("  m_HashTable_Sprites.buckets    = {}", m_HashTable_Sprites.bucket_count());
+        LOG_TRACE("  m_HashTable_Sprites.load       = {}", m_HashTable_Sprites.load_factor());
+        LOG_TRACE("  m_HashTable_Sprites.maxload    = {}", m_HashTable_Sprites.max_load_factor());
 #endif
         
         /* Get Texture2D from spritesheet logical name */
@@ -122,6 +128,8 @@ namespace Coconuts
         LOG_TRACE("Post-call CreateSprite():");
         LOG_TRACE("  m_HashTable_Sprites.size       = {}", m_HashTable_Sprites.size());
         LOG_TRACE("  m_HashTable_Sprites.buckets    = {}", m_HashTable_Sprites.bucket_count());
+        LOG_TRACE("  m_HashTable_Sprites.load       = {}", m_HashTable_Sprites.load_factor());
+        LOG_TRACE("  m_HashTable_Sprites.maxload    = {}", m_HashTable_Sprites.max_load_factor());
 #endif
         
         return true;

@@ -15,6 +15,7 @@
  */
 
 #include <coconuts/AssetManager.h>
+#include <coconuts/Logger.h>
 
 namespace Coconuts
 {
@@ -33,6 +34,12 @@ namespace Coconuts
     //static
     bool AssetManager::ImportTexture2D(const std::string& logicalName, const std::string& path)
     {
+#if LOG_PROFILE_HASHTABLES
+        LOG_TRACE("Pre-call ImportTexture2D():");
+        LOG_TRACE("  m_HashTable_Textures2D.size    = {}", m_HashTable_Textures2D.size());
+        LOG_TRACE("  m_HashTable_Textures2D.buckets = {}", m_HashTable_Textures2D.bucket_count());
+#endif
+        
         /* Create Texture2D from image path */
         std::shared_ptr<Texture2D> texture2D;
         texture2D.reset( Texture2D::Create(path) );
@@ -43,6 +50,12 @@ namespace Coconuts
         
         /* Update Keys List */
         m_KeysList_Textures2D.emplace_back(logicalName);
+        
+#if LOG_PROFILE_HASHTABLES
+        LOG_TRACE("Post-call ImportTexture2D():");
+        LOG_TRACE("  m_HashTable_Textures2D.size    = {}", m_HashTable_Textures2D.size());
+        LOG_TRACE("  m_HashTable_Textures2D.buckets = {}", m_HashTable_Textures2D.bucket_count());
+#endif
         
         return true;
     }
@@ -82,6 +95,12 @@ namespace Coconuts
                                     const std::string& spriteSheetLogicalName,
                                     const SpriteSelector& selector)
     {
+#if LOG_PROFILE_HASHTABLES
+        LOG_TRACE("Pre-call CreateSprite():");
+        LOG_TRACE("  m_HashTable_Sprites.size       = {}", m_HashTable_Sprites.size());
+        LOG_TRACE("  m_HashTable_Sprites.buckets    = {}", m_HashTable_Sprites.bucket_count());
+#endif
+        
         /* Get Texture2D from spritesheet logical name */
         std::shared_ptr<Texture2D> texture2D = AssetManager::GetTexture2D(spriteSheetLogicalName);
         
@@ -98,6 +117,12 @@ namespace Coconuts
         
         /* Store SpriteSelector */
         m_HashTable_SpriteSlectors[logicalName] = selector;
+        
+#if LOG_PROFILE_HASHTABLES
+        LOG_TRACE("Post-call CreateSprite():");
+        LOG_TRACE("  m_HashTable_Sprites.size       = {}", m_HashTable_Sprites.size());
+        LOG_TRACE("  m_HashTable_Sprites.buckets    = {}", m_HashTable_Sprites.bucket_count());
+#endif
         
         return true;
     }

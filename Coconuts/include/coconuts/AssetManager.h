@@ -25,6 +25,8 @@
 #include <glm/glm.hpp>
 #include <tuple>
 
+#define LOG_PROFILE_HASHTABLES   0
+
 namespace Coconuts
 {
     

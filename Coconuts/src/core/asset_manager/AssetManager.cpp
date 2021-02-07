@@ -20,8 +20,8 @@ namespace Coconuts
 {
     
     /* Static Hash Tables Definitions */
-    std::unordered_map<std::string, std::shared_ptr<Texture2D>>     AssetManager::m_HashTable_Textures2D;
-    std::unordered_map<std::string, std::shared_ptr<Sprite>>        AssetManager::m_HashTable_Sprites;
+    std::unordered_map<std::string, AssetManager::IndexedTexture2D> AssetManager::m_HashTable_Textures2D;
+    std::unordered_map<std::string, AssetManager::IndexedSprite>    AssetManager::m_HashTable_Sprites;
     std::unordered_map<std::string, AssetManager::SpriteSelector>   AssetManager::m_HashTable_SpriteSlectors;
     
     /* Static Keys Lists Definitions */
@@ -38,14 +38,11 @@ namespace Coconuts
         texture2D.reset( Texture2D::Create(path) );
         
         /* Store */
-        m_HashTable_Textures2D[logicalName] = texture2D;
+        IndexedTexture2D indexed = { texture2D, static_cast<uint32_t>(m_KeysList_Textures2D.size()) };
+        m_HashTable_Textures2D[logicalName] = indexed;
         
         /* Update Keys List */
-        m_KeysList_Textures2D = std::vector<std::string>();  /* free */
-        for (auto bucket : m_HashTable_Textures2D)
-        {
-            m_KeysList_Textures2D.emplace_back(bucket.first);
-        }
+        m_KeysList_Textures2D.emplace_back(logicalName);
         
         return true;
     }
@@ -57,10 +54,25 @@ namespace Coconuts
         
         if (found != m_HashTable_Textures2D.end())
         {
-            return found->second;
+            return found->second.texturePtr;
         }
         
         return nullptr;
+    }
+    
+    //static
+    bool AssetManager::DeleteTexture2D(const std::string& logicalName)
+    {
+        auto found = m_HashTable_Textures2D.find(logicalName);
+        
+        if (found != m_HashTable_Textures2D.end())
+        {
+            m_KeysList_Textures2D.erase(m_KeysList_Textures2D.begin() + found->second.keysListIndex);
+            m_HashTable_Textures2D.erase(logicalName);
+            return true;
+        }
+        
+        return false;
     }
     
     
@@ -78,17 +90,14 @@ namespace Coconuts
         sprite.reset( Sprite::Create(texture2D, selector.coords, selector.cellSize, selector.spriteSize) );
         
         /* Store Sprite */
-        m_HashTable_Sprites[logicalName] = sprite;
+        IndexedSprite indexed = { sprite, static_cast<uint32_t>(m_KeysList_Sprites.size()) };
+        m_HashTable_Sprites[logicalName] = indexed;
+        
+        /* Update Keys List */
+        m_KeysList_Sprites.emplace_back(logicalName);
         
         /* Store SpriteSelector */
         m_HashTable_SpriteSlectors[logicalName] = selector;
-        
-        /* Update Keys List */
-        m_KeysList_Sprites = std::vector<std::string>();  /* free */
-        for (auto bucket : m_HashTable_Sprites)
-        {
-            m_KeysList_Sprites.emplace_back(bucket.first);
-        }
         
         return true;
     }
@@ -100,7 +109,7 @@ namespace Coconuts
         
         if (found != m_HashTable_Sprites.end())
         {
-            return found->second;
+            return found->second.spritePtr;
         }
         
         return nullptr;
@@ -115,8 +124,24 @@ namespace Coconuts
         {
             return std::make_tuple(true, found->second);
         }
-        
+
         return std::make_tuple(false, found->second);
+    }
+    
+    //static
+    bool AssetManager::DeleteSprite(const std::string& logicalName)
+    {
+        auto found = m_HashTable_Sprites.find(logicalName);
+        
+        if (found != m_HashTable_Sprites.end())
+        {
+            m_KeysList_Sprites.erase(m_KeysList_Sprites.begin() + found->second.keysListIndex);
+            m_HashTable_Sprites.erase(logicalName);
+            m_HashTable_SpriteSlectors.erase(logicalName);
+            return true;
+        }
+        
+        return false;
     }
     
 }

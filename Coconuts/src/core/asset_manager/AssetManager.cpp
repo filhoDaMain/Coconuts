@@ -60,6 +60,21 @@ namespace Coconuts
         return nullptr;
     }
     
+    //static
+    bool AssetManager::DeleteTexture2D(const std::string& logicalName)
+    {
+        auto found = m_HashTable_Textures2D.find(logicalName);
+        
+        if (found != m_HashTable_Textures2D.end())
+        {
+            m_KeysList_Textures2D.erase(m_KeysList_Textures2D.begin() + found->second.keysListIndex);
+            m_HashTable_Textures2D.erase(logicalName);
+            return true;
+        }
+        
+        return false;
+    }
+    
     
     
     //static
@@ -111,6 +126,22 @@ namespace Coconuts
         }
 
         return std::make_tuple(false, found->second);
+    }
+    
+    //static
+    bool AssetManager::DeleteSprite(const std::string& logicalName)
+    {
+        auto found = m_HashTable_Sprites.find(logicalName);
+        
+        if (found != m_HashTable_Sprites.end())
+        {
+            m_KeysList_Sprites.erase(m_KeysList_Sprites.begin() + found->second.keysListIndex);
+            m_HashTable_Sprites.erase(logicalName);
+            m_HashTable_SpriteSlectors.erase(logicalName);
+            return true;
+        }
+        
+        return false;
     }
     
 }

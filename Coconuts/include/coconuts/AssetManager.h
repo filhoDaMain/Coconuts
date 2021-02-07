@@ -38,6 +38,18 @@ namespace Coconuts
             glm::vec2 spriteSize = glm::vec2(1.0f); //by default
         };
         
+        struct IndexedTexture2D
+        {
+            std::shared_ptr<Texture2D>  texturePtr;
+            uint32_t                    keysListIndex;
+        };
+        
+        struct IndexedSprite
+        {
+            std::shared_ptr<Sprite>     spritePtr;
+            uint32_t                    keysListIndex;
+        };
+        
     public:
         static bool ImportTexture2D(const std::string& logicalName, const std::string& path);
         static std::shared_ptr<Texture2D> GetTexture2D(const std::string& logicalName);
@@ -52,9 +64,9 @@ namespace Coconuts
         
     private:
         /* HASH TABLES */
-        static std::unordered_map<std::string, std::shared_ptr<Texture2D>>  m_HashTable_Textures2D;
-        static std::unordered_map<std::string, std::shared_ptr<Sprite>>     m_HashTable_Sprites;
-        static std::unordered_map<std::string, SpriteSelector>              m_HashTable_SpriteSlectors;
+        static std::unordered_map<std::string, IndexedTexture2D>    m_HashTable_Textures2D;
+        static std::unordered_map<std::string, IndexedSprite>       m_HashTable_Sprites;
+        static std::unordered_map<std::string, SpriteSelector>      m_HashTable_SpriteSlectors;
         
         /* Keys Lists */
         static std::vector<std::string> m_KeysList_Textures2D;

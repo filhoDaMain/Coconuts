@@ -15,6 +15,7 @@
  */
 
 #include <coconuts/AssetManager.h>
+#include <coconuts/Logger.h>
 
 namespace Coconuts
 {
@@ -30,9 +31,31 @@ namespace Coconuts
     
     
     
+    //static (non mandatory)
+    void AssetManager::Init()
+    {
+        m_HashTable_Textures2D.reserve(HashTableDefs::Textures2DHT::reserve);
+        m_HashTable_Textures2D.max_load_factor(HashTableDefs::Textures2DHT::max_load_factor);
+        
+        m_HashTable_Sprites.reserve(HashTableDefs::SpritesHT::reserve);
+        m_HashTable_Sprites.max_load_factor(HashTableDefs::SpritesHT::max_load_factor);
+        m_HashTable_SpriteSlectors.reserve(HashTableDefs::SpritesHT::reserve);
+        m_HashTable_SpriteSlectors.max_load_factor(HashTableDefs::SpritesHT::max_load_factor);
+    }
+    
+    
+    
     //static
     bool AssetManager::ImportTexture2D(const std::string& logicalName, const std::string& path)
     {
+#if LOG_PROFILE_HASHTABLES
+        LOG_TRACE("Pre-call ImportTexture2D():");
+        LOG_TRACE("  m_HashTable_Textures2D.size    = {}", m_HashTable_Textures2D.size());
+        LOG_TRACE("  m_HashTable_Textures2D.buckets = {}", m_HashTable_Textures2D.bucket_count());
+        LOG_TRACE("  m_HashTable_Textures2D.load    = {}", m_HashTable_Textures2D.load_factor());
+        LOG_TRACE("  m_HashTable_Textures2D.maxload = {}", m_HashTable_Textures2D.max_load_factor());
+#endif
+        
         /* Create Texture2D from image path */
         std::shared_ptr<Texture2D> texture2D;
         texture2D.reset( Texture2D::Create(path) );
@@ -43,6 +66,14 @@ namespace Coconuts
         
         /* Update Keys List */
         m_KeysList_Textures2D.emplace_back(logicalName);
+        
+#if LOG_PROFILE_HASHTABLES
+        LOG_TRACE("Post-call ImportTexture2D():");
+        LOG_TRACE("  m_HashTable_Textures2D.size    = {}", m_HashTable_Textures2D.size());
+        LOG_TRACE("  m_HashTable_Textures2D.buckets = {}", m_HashTable_Textures2D.bucket_count());
+        LOG_TRACE("  m_HashTable_Textures2D.load    = {}", m_HashTable_Textures2D.load_factor());
+        LOG_TRACE("  m_HashTable_Textures2D.maxload = {}", m_HashTable_Textures2D.max_load_factor());
+#endif
         
         return true;
     }
@@ -82,6 +113,14 @@ namespace Coconuts
                                     const std::string& spriteSheetLogicalName,
                                     const SpriteSelector& selector)
     {
+#if LOG_PROFILE_HASHTABLES
+        LOG_TRACE("Pre-call CreateSprite():");
+        LOG_TRACE("  m_HashTable_Sprites.size       = {}", m_HashTable_Sprites.size());
+        LOG_TRACE("  m_HashTable_Sprites.buckets    = {}", m_HashTable_Sprites.bucket_count());
+        LOG_TRACE("  m_HashTable_Sprites.load       = {}", m_HashTable_Sprites.load_factor());
+        LOG_TRACE("  m_HashTable_Sprites.maxload    = {}", m_HashTable_Sprites.max_load_factor());
+#endif
+        
         /* Get Texture2D from spritesheet logical name */
         std::shared_ptr<Texture2D> texture2D = AssetManager::GetTexture2D(spriteSheetLogicalName);
         
@@ -98,6 +137,14 @@ namespace Coconuts
         
         /* Store SpriteSelector */
         m_HashTable_SpriteSlectors[logicalName] = selector;
+        
+#if LOG_PROFILE_HASHTABLES
+        LOG_TRACE("Post-call CreateSprite():");
+        LOG_TRACE("  m_HashTable_Sprites.size       = {}", m_HashTable_Sprites.size());
+        LOG_TRACE("  m_HashTable_Sprites.buckets    = {}", m_HashTable_Sprites.bucket_count());
+        LOG_TRACE("  m_HashTable_Sprites.load       = {}", m_HashTable_Sprites.load_factor());
+        LOG_TRACE("  m_HashTable_Sprites.maxload    = {}", m_HashTable_Sprites.max_load_factor());
+#endif
         
         return true;
     }

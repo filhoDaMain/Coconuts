@@ -129,7 +129,12 @@ namespace Coconuts
         sprite.reset( Sprite::Create(texture2D, selector.coords, selector.cellSize, selector.spriteSize) );
         
         /* Store Sprite */
-        IndexedSprite indexed = { sprite, static_cast<uint32_t>(m_KeysList_Sprites.size()) };
+        IndexedSprite indexed =
+        {
+            sprite,
+            static_cast<uint32_t>(m_KeysList_Sprites.size()),
+            spriteSheetLogicalName
+        };
         m_HashTable_Sprites[logicalName] = indexed;
         
         /* Update Keys List */
@@ -160,6 +165,19 @@ namespace Coconuts
         }
         
         return nullptr;
+    }
+    
+    //static
+    std::tuple<bool, std::string> AssetManager::GetSpriteSheetName(const std::string& logicalName)
+    {
+        auto found = m_HashTable_Sprites.find(logicalName);
+        
+        if (found != m_HashTable_Sprites.end())
+        {
+            return std::make_tuple(true, found->second.spriteSheetName);
+        }
+        
+        return std::make_tuple(false, "");
     }
     
     //static

@@ -50,6 +50,7 @@ namespace Coconuts
         {
             std::shared_ptr<Sprite>     spritePtr;
             uint32_t                    keysListIndex;
+            std::string                 spriteSheetName;
         };
         
         struct HashTableDefs
@@ -79,6 +80,7 @@ namespace Coconuts
                                  const std::string& spriteSheetLogicalName,
                                  const SpriteSelector& selector);
         static std::shared_ptr<Sprite> GetSprite(const std::string& logicalName);
+        static std::tuple<bool, std::string> GetSpriteSheetName(const std::string& logicalName);
         static std::vector<std::string>& GetAllSpriteLogicalNames() { return m_KeysList_Sprites; }
         static std::tuple<bool, SpriteSelector> GetSpriteSelector(const std::string& logicalName);
         static bool DeleteSprite(const std::string& logicalName);

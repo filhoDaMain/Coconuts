@@ -73,8 +73,11 @@ namespace Coconuts
         float rotationRadians = 0;
         m_Entity.AddComponent<TransformComponent>(position, size, rotationRadians);
        
+        
         /* Add SpriteComponent */
-        /* 1) Init Spritesheet Texture */
+        /* 1) Init Spritesheet Textures */
+        const std::string pathTiles = GAMELAYER_SPRITESHEET_PATH;
+        AssetManager::ImportTexture2D("Tiles_Spritesheet", pathTiles);
         const std::string pathAnimals = GAMELAYER_SPRITESHEET_ANIMALS_PATH;
         AssetManager::ImportTexture2D("Animals_Spritesheet", pathAnimals);
         
@@ -136,6 +139,9 @@ namespace Coconuts
         };
         
         m_Entity.AddComponent<BehaviorComponent>().AddBehavior<TreeBehavior>(m_Entity);
+        
+        
+
     }
 
     void GameLayer::OnDetach()

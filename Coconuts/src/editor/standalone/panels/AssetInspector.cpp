@@ -63,6 +63,36 @@ namespace Panels
         
         ImGui::Text("Sprite");
         
+        
+        static std::string origSpriteName = m_LogicalNameSprite;
+        std::string origSpriteSheetName;
+        
+        char editSpriteName[32];
+        
+        bool found;
+        std::tie(found, origSpriteSheetName) = AssetManager::GetSpriteSheetName(m_LogicalNameSprite);
+        
+        auto sheets = AssetManager::GetAllTexture2DLogicalNames();
+        std::vector<char*> sheetsArray;
+        sheetsArray.reserve(sheets.size());
+
+        int seletected_sheet_index = 0;
+        int i;
+        for (i = 0; i < sheets.size(); i++)
+        {
+            sheetsArray.push_back(const_cast<char*>(sheets[i].c_str()));
+
+            if (origSpriteSheetName.compare(sheetsArray[i]) == 0)
+            {
+                seletected_sheet_index = i;
+            }   
+        }
+                
+        /* Drop-down */
+        ImGui::Text("Sprite sheet");
+        ImGui::Combo("Texture", &seletected_sheet_index, &sheetsArray[0], sheetsArray.size());
+        
+#if 0
         /* Sprite's name + Enable its edition */
         char spriteNameTextBox[32];
         memset(spriteNameTextBox, 0x00, sizeof(spriteNameTextBox));
@@ -149,7 +179,7 @@ namespace Panels
             /* Create New Sprite */
             
         }
-        
+#endif
     }
     
     

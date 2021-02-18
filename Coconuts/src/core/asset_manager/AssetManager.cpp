@@ -155,6 +155,34 @@ namespace Coconuts
     }
     
     //static
+    bool AssetManager::UpdateSprite(const std::string& logicalName,
+                                    const std::string& spriteSheetLogicalName,
+                                    const SpriteSelector& selector)
+    {
+        auto found = m_HashTable_Sprites.find(logicalName);
+        
+        if (found != m_HashTable_Sprites.end())
+        {
+            /* Get Texture2D from spritesheet logical name */
+            std::shared_ptr<Texture2D> texture2D = AssetManager::GetTexture2D(spriteSheetLogicalName);
+            
+            found->second.spritePtr->UpdateData(texture2D, selector.coords, selector.cellSize, selector.spriteSize);
+            found->second.spriteSheetName = spriteSheetLogicalName;
+            
+            /* Update SpriteSelector */
+            auto found2 = m_HashTable_SpriteSlectors.find(logicalName);
+            
+            if (found2 != m_HashTable_SpriteSlectors.end())
+            {
+                found2->second = selector;
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    //static
     std::shared_ptr<Sprite> AssetManager::GetSprite(const std::string& logicalName)
     {
         auto found = m_HashTable_Sprites.find(logicalName);

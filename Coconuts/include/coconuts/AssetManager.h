@@ -79,6 +79,9 @@ namespace Coconuts
         static bool CreateSprite(const std::string& logicalName,
                                  const std::string& spriteSheetLogicalName,
                                  const SpriteSelector& selector);
+        static bool UpdateSprite(const std::string& logicalName,
+                                 const std::string& spriteSheetLogicalName,
+                                 const SpriteSelector& selector);
         static std::shared_ptr<Sprite> GetSprite(const std::string& logicalName);
         static std::tuple<bool, std::string> GetSpriteSheetName(const std::string& logicalName);
         static std::vector<std::string>& GetAllSpriteLogicalNames() { return m_KeysList_Sprites; }

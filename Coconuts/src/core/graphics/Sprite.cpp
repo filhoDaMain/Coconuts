@@ -45,4 +45,22 @@ namespace Coconuts
         return new Sprite(spriteSheet, min, max);
     }
     
+    void Sprite::UpdateData(const std::shared_ptr<Texture2D>& spriteSheet,
+                              const glm::vec2& coords,
+                              const glm::vec2& cellSize,
+                              const glm::vec2& spriteSize)
+    {
+        glm::vec2 min = { (coords.x * cellSize.x) / spriteSheet->GetWidth(),
+                          (coords.y * cellSize.y) / spriteSheet->GetHeight() };
+        
+        glm::vec2 max = { ((coords.x + spriteSize.x) * cellSize.x) / spriteSheet->GetWidth(),
+                          ((coords.y + spriteSize.y) * cellSize.y) / spriteSheet->GetHeight() };
+        
+        m_Texture = spriteSheet;
+        m_TexCoords[0] = {min.x, min.y};
+        m_TexCoords[1] = {max.x, min.y};
+        m_TexCoords[2] = {max.x, max.y};
+        m_TexCoords[3] = {min.x, max.y};
+    }
+    
 }

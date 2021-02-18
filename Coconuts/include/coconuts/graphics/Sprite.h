@@ -36,6 +36,11 @@ namespace Coconuts
                               const glm::vec2& cellSize,
                               const glm::vec2& spriteSize = glm::vec2(1.0f));
         
+        void UpdateData(const std::shared_ptr<Texture2D>& spriteSheet,
+                        const glm::vec2& coords,
+                        const glm::vec2& cellSize,
+                        const glm::vec2& spriteSize);
+        
         const std::shared_ptr<Texture2D>& GetTexture() const { return m_Texture; }
         const glm::vec2* GetTextureCoords() const { return m_TexCoords; }
         

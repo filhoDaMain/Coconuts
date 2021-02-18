@@ -60,10 +60,9 @@ namespace Panels
         
         //TODO Debug code. Work in progress.
         
-        
         ImGui::Text("Sprite");
         
-        
+        static bool saved = true;
         static std::string origSpriteName = m_LogicalNameSprite;
         std::string origSpriteSheetName;
         
@@ -76,67 +75,36 @@ namespace Panels
         std::vector<char*> sheetsArray;
         sheetsArray.reserve(sheets.size());
 
-        int seletected_sheet_index = 0;
+        static int seletected_sheet_index = 0;
         int i;
         for (i = 0; i < sheets.size(); i++)
         {
             sheetsArray.push_back(const_cast<char*>(sheets[i].c_str()));
-
-            if (origSpriteSheetName.compare(sheetsArray[i]) == 0)
+            
+            if (saved && origSpriteSheetName.compare(sheetsArray[i]) == 0)
             {
                 seletected_sheet_index = i;
             }   
         }
-                
-        /* Drop-down */
+        
+        /* Drop-down - Choose spritesheet */
         ImGui::Text("Sprite sheet");
         ImGui::Combo("Texture", &seletected_sheet_index, &sheetsArray[0], sheetsArray.size());
         
-#if 0
-        /* Sprite's name + Enable its edition */
-        char spriteNameTextBox[32];
-        memset(spriteNameTextBox, 0x00, sizeof(spriteNameTextBox));
-        strcpy(spriteNameTextBox, m_LogicalNameSprite.c_str());
-        ImGui::InputText(" ", spriteNameTextBox, sizeof(spriteNameTextBox));
+        /* Draw spritesheet texture preview */
+        auto texture = AssetManager::GetTexture2D(sheets[seletected_sheet_index]);
+        ImGui::Image((void *) *texture, ImVec2((texture->GetWidth()/6), (texture->GetHeight()/6)), ImVec2{0, 1}, ImVec2{1, 0});
         
-        /* Get sprite's spritesheet texture image */
-        auto sprite = AssetManager::GetSprite(m_LogicalNameSprite);
-        auto texture = sprite->GetTexture();
-        bool valid;
-        AssetManager::SpriteSelector selector;
-        std::tie(valid, selector) = AssetManager::GetSpriteSelector(m_LogicalNameSprite);
-        
-        /* Get Sprite's spritesheet name + Enable spritesheet switch from Drop-down menu */        
-        auto spritesheetNames = AssetManager::GetAllTexture2DLogicalNames();
-        const char* items[spritesheetNames.size()];
-        
-        /* Populate items[] and find spritesheet texture index */
-        int selected_texture_index = 0;
-        int i = 0;
-        for (auto select : spritesheetNames)
-        {
-            items[i] = select.c_str();
-#if 0   //wrong - needs re-work
-            if (m_LogicalNameSprite.compare(select) == 0) selected_texture_index = i;
-#endif
-            i++;
-        }
-        
-        /* Drop-down */
-        ImGui::Text("Sprite sheet");
-        ImGui::Combo("Texture", &selected_texture_index, items, IM_ARRAYSIZE(items));
-        
-        /* Display small sized texture */
-        if (texture != nullptr)
-        {
-            ImGui::Image((void *) *texture, ImVec2((texture->GetWidth()/7), (texture->GetHeight()/7)), ImVec2{0, 1}, ImVec2{1, 0});
-        }
-        
+        /* Get SpriteSelector and enable changes */
         static AssetManager::SpriteSelector selectorEdit;
-        static bool saved = true;
+        bool valid;
         if (saved)
         {
-            selectorEdit = selector;
+            std::tie(valid, selectorEdit) = AssetManager::GetSpriteSelector(m_LogicalNameSprite);
+            if (!valid)
+            {
+                return;
+            }
         }
         
         ImGui::Text("Coords X");
@@ -151,35 +119,25 @@ namespace Panels
         ImGui::DragFloat("##H", &selectorEdit.spriteSize.x, 0.1f);
         ImGui::Text("Sprite Size Y");
         ImGui::DragFloat("##V", &selectorEdit.spriteSize.y, 0.1f);
-
-        do
-        {
-            if (!valid)
-            {
-                break; //Impossible to display sprite. GOTO 'Save Button'.
-            }
-
-            /* Crop texture image to display only sprite's region */
-            float uv0x = (float) (selectorEdit.coords.x * selectorEdit.cellSize.x) / texture->GetWidth();
-            float uv0y = (float) (selectorEdit.coords.y * selectorEdit.cellSize.y + selectorEdit.cellSize.y) / texture->GetHeight();
-            float uv1x = (float) (selectorEdit.coords.x * selectorEdit.cellSize.x + selectorEdit.cellSize.x) / texture->GetWidth();
-            float uv1y = (float) (selectorEdit.coords.y * selectorEdit.cellSize.y) / texture->GetHeight();
-            ImVec2 uv0 = ImVec2(uv0x, uv0y);
-            ImVec2 uv1 = ImVec2(uv1x, uv1y);
-
-            /* Display sprite */
-            ImGui::Image((void *) *texture, ImVec2(selectorEdit.cellSize.x/2, selectorEdit.cellSize.y/2), uv0, uv1);
-            
-        } while(false);
         
-        /* Save Edits ? */
+        /* Crop texture image to display only sprite's region */
+        float uv0x = (float) (selectorEdit.coords.x * selectorEdit.cellSize.x) / texture->GetWidth();
+        float uv0y = (float) (selectorEdit.coords.y * selectorEdit.cellSize.y + selectorEdit.cellSize.y * selectorEdit.spriteSize.y) / texture->GetHeight();
+        float uv1x = (float) (selectorEdit.coords.x * selectorEdit.cellSize.x + selectorEdit.cellSize.x * selectorEdit.spriteSize.x) / texture->GetWidth();
+        float uv1y = (float) (selectorEdit.coords.y * selectorEdit.cellSize.y) / texture->GetHeight();
+        ImVec2 uv0 = ImVec2(uv0x, uv0y);
+        ImVec2 uv1 = ImVec2(uv1x, uv1y);
+        
+        /* Display sprite */
+        ImGui::Image((void *) *texture, ImVec2(selectorEdit.cellSize.x/2, selectorEdit.cellSize.y/2), uv0, uv1);
+        
+        /* Save */
         saved = false;
         if (ImGui::Button("Save"))
         {
-            /* Create New Sprite */
-            
+            AssetManager::UpdateSprite(m_LogicalNameSprite, sheets[seletected_sheet_index], selectorEdit);
+            saved = true;
         }
-#endif
     }
     
     

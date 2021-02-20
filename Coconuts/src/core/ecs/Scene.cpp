@@ -80,15 +80,16 @@ namespace Coconuts
             (entityx::Entity thisEntityxEntity, TransformComponent& thisTransformComponent, SpriteComponent& thisSpriteComponent)
             {
                 /* Prevent against non-initialized Sprite Component */
-                if (thisSpriteComponent.sprite == nullptr)
+                if (thisSpriteComponent.sprite.expired())
                 {
+                    LOG_ERROR("Uninitialized sprite component");
                     return;
                 }
                 
                 Renderer2D::DrawRotatedQuad(thisTransformComponent.position,
                                             thisTransformComponent.size,
                                             thisTransformComponent.rotationRadians,
-                                            thisSpriteComponent.sprite,
+                                            thisSpriteComponent.sprite.lock(),
                                             thisSpriteComponent.tilingFactor,
                                             thisSpriteComponent.tintColor);
             });

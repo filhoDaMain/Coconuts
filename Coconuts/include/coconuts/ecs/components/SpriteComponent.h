@@ -31,7 +31,7 @@ namespace Coconuts
         std::string             spriteLogicalName;
         glm::vec4               tintColor;
         float                   tilingFactor;
-        std::shared_ptr<Sprite> sprite = nullptr;
+        std::weak_ptr<Sprite>   sprite;
         
         SpriteComponent() = default;        
         SpriteComponent(const std::string& spriteName,

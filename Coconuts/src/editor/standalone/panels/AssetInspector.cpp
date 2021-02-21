@@ -56,18 +56,28 @@ namespace Panels
     }
     
     void AssetInspector::DrawSpriteAsset()
-    {
-        
-        //TODO Debug code. Work in progress.
-        
+    {        
         ImGui::Text("Sprite");
-        
+                
         static bool saved = true;
-        static std::string origSpriteName = m_LogicalNameSprite;
         std::string origSpriteSheetName;
         
-        char editSpriteName[32];
+        static char editSpriteName[32];
+        if (saved)
+        {
+            /* Begin with original sprite name */
+            strcpy(editSpriteName, m_LogicalNameSprite.c_str());
+        }
         
+        /* Edit Sprite name */
+        ImGui::Text("Sprite Name");
+        if (ImGui::InputText(" ", editSpriteName, sizeof(editSpriteName)))
+        {
+            //do nothing
+        }
+        
+        
+        /* Get sprite sheet name */
         bool found;
         std::tie(found, origSpriteSheetName) = AssetManager::GetSpriteSheetName(m_LogicalNameSprite);
         
@@ -83,7 +93,7 @@ namespace Panels
             
             if (saved && origSpriteSheetName.compare(sheetsArray[i]) == 0)
             {
-                seletected_sheet_index = i;
+                seletected_sheet_index = i; // begin with original sprite sheet
             }   
         }
         
@@ -135,7 +145,21 @@ namespace Panels
         saved = false;
         if (ImGui::Button("Save"))
         {
-            AssetManager::UpdateSprite(m_LogicalNameSprite, sheets[seletected_sheet_index], selectorEdit);
+            /* Back to string */
+            std::string editSpriteName2String = editSpriteName;
+            
+            /* If sprite name changed, delete old and create new */
+            if (editSpriteName2String.compare(m_LogicalNameSprite) != 0)
+            {
+                AssetManager::DeleteSprite(m_LogicalNameSprite);
+                AssetManager::CreateSprite(editSpriteName2String, sheets[seletected_sheet_index], selectorEdit);
+                m_LogicalNameSprite = editSpriteName2String;
+            }
+            else
+            {
+                AssetManager::UpdateSprite(m_LogicalNameSprite, sheets[seletected_sheet_index], selectorEdit);
+            }
+            
             saved = true;
         }
     }

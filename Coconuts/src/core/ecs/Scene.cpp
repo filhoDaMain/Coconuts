@@ -82,7 +82,7 @@ namespace Coconuts
                 /* Prevent against non-initialized Sprite Component */
                 if (thisSpriteComponent.sprite.expired())
                 {
-                    LOG_ERROR("Uninitialized sprite component");
+                    LOG_ERROR("Sprite Component has undefined Sprite (Entity {})", thisEntityxEntity.id().id());
                     return;
                 }
                 

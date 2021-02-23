@@ -18,6 +18,7 @@
 #include <coconuts/editor.h>
 #include <string.h>
 #include <sstream>
+#include <coconuts/AssetManager.h>
 #include <coconuts/Logger.h>
 
 namespace Coconuts {
@@ -175,6 +176,9 @@ namespace Panels
     {
         SpriteComponent& spriteComponent = m_Context->GetComponent<SpriteComponent>();
         
+        static bool saved = true;
+        static bool undefined_sprite = false;
+        
         //TODO
         ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_DefaultOpen;
         bool open = ImGui::TreeNodeEx("Sprite Component" , flags);
@@ -183,7 +187,67 @@ namespace Panels
         if (open)
         {
             ImGui::Spacing(); ImGui::Spacing();
-            ImGui::TextDisabled("TODO");
+            //ImGui::TextDisabled("TODO");
+            
+            auto sprites = AssetManager::GetAllSpriteLogicalNames();
+            std::vector<char*> spritesArray;
+            spritesArray.reserve(sprites.size());
+            
+            static int seletected_sprite_index = 0;
+            int i;
+            for (i = 0; i < sprites.size(); i++)
+            {
+                spritesArray.push_back(const_cast<char*>(sprites[i].c_str()));
+                
+                if (saved && spriteComponent.spriteLogicalName.compare(spritesArray[i]) == 0)
+                {
+                    seletected_sprite_index = i;    // begin with selected sprite
+                }
+            }
+            
+            /**
+             * Display "Undefined" if sprite pointer is not correctly
+             * pointing to any valid sprite asset.
+             */
+            if (spriteComponent.sprite.expired())
+            {
+                
+                spritesArray.push_back(const_cast<char*>("Undefined"));
+                
+                if (!undefined_sprite)
+                {
+                    seletected_sprite_index = spritesArray.size() - 1;
+                    undefined_sprite = true;
+                }
+                
+            }
+            
+            /* Display Dropdown with available / selected sprite asset */
+            ImGui::Text("Asset");
+            ImGui::Combo("Sprite", &seletected_sprite_index, &spritesArray[0], spritesArray.size());
+            
+            /* Save */
+            saved = false;
+            if (ImGui::Button("Save"))
+            {
+                /* Change Sprite to selected */
+                std::string name2string = spritesArray[seletected_sprite_index];
+                
+                /* Only switch sprite to a valid sprite name asset */
+                if (name2string.compare("Undefined") != 0)
+                {
+                    //TODO
+                    
+                    // Update spriteComponent with user data:
+                    // Update spriteComponent.spriteLogicalName with 'name2string'
+                    // Update spriteComponent.tintColor
+                    // Update spriteComponent.tilingFactor
+                    // Update spriteComponent.sprite with GetSprite() for 'name2string'  
+                }
+                
+                saved = true;
+            }
+            
             ImGui::TreePop();
         }
         

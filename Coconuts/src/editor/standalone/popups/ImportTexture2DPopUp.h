@@ -13,27 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#include "Statistics.h"
-#include <coconuts/editor.h>
+#ifndef IMPORTTEXTURE2DPOPUP_H
+#define IMPORTTEXTURE2DPOPUP_H
 
 namespace Coconuts {
-namespace Panels
+namespace PopUps
 {
     
-    void Statistics::Draw(Renderer2DStatistics& stats)
+    class ImportTexture2DPopUp
     {
-        ImGui::Begin("Statistics");
+    public:
+        ImportTexture2DPopUp() = default;
+        bool Init() { return true; }
+        void Draw(bool* show);
         
-        ImGui::Text("Renderer statistics");
-        ImGui::Spacing(); ImGui::Spacing();
-        ImGui::Text("Per Frame:");
-        ImGui::Spacing();
-        ImGui::Text("%d Draw Calls", stats.drawCalls);
-        ImGui::Spacing();
-        ImGui::Text("%d Quads", stats.quadCount);
-        ImGui::End();
-    }
+    private:
+    };
     
 }
 }
+
+#endif /* IMPORTTEXTURE2DPOPUP_H */
+

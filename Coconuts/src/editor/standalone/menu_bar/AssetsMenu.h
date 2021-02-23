@@ -13,27 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#include "Statistics.h"
-#include <coconuts/editor.h>
+#ifndef ASSETSMENU_H
+#define ASSETSMENU_H
 
 namespace Coconuts {
-namespace Panels
+namespace MenuBar
 {
     
-    void Statistics::Draw(Renderer2DStatistics& stats)
+    class AssetsMenu
     {
-        ImGui::Begin("Statistics");
+    public:
+        AssetsMenu() = default;
+        void Draw(bool* showPopUp_ImportTexture2D);
         
-        ImGui::Text("Renderer statistics");
-        ImGui::Spacing(); ImGui::Spacing();
-        ImGui::Text("Per Frame:");
-        ImGui::Spacing();
-        ImGui::Text("%d Draw Calls", stats.drawCalls);
-        ImGui::Spacing();
-        ImGui::Text("%d Quads", stats.quadCount);
-        ImGui::End();
-    }
+    private:
+    };
     
 }
 }
+
+#endif /* ASSETSMENU_H */
+

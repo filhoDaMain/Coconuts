@@ -17,6 +17,7 @@
 #define OPENGLTEXTURE_H
 
 #include <coconuts/graphics/Texture.h>
+#include <coconuts/types.h>
 #include <glad/glad.h>
 #include <string>
 
@@ -40,9 +41,13 @@ namespace Coconuts
         virtual bool operator == (const Texture& other) const override
         {
             return m_RendererID == ((OpenGLTexture2D&)other).m_RendererID;
-        };
-
+        }
         
+        virtual explicit operator void*() const override
+        {
+            return INT2VOIDP(m_RendererID);
+        }
+                
     private:
         uint32_t m_Width, m_Height;
         std::string m_Path;

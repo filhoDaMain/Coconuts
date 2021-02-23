@@ -109,6 +109,9 @@ namespace Coconuts
         }
 #endif
         
+        /* PopUps triggering flags */
+        static bool showPopUp_ImportTexture2D = false;
+        
         
         /*  M E N U   B A R  */
         
@@ -120,9 +123,21 @@ namespace Coconuts
             /* Entity Menu */
             m_EntityMenu.Draw();
             
+            /* Assets Menu */
+            m_AssetsMenu.Draw(&showPopUp_ImportTexture2D);
+            
             ImGui::EndMainMenuBar();
         }
         
+        
+        
+        /*  P O P   U P S  */
+        
+        if (showPopUp_ImportTexture2D)
+        {
+            /* Import Texture 2D (Triggered from AssetsMenu) */
+            m_ImportTexture2dPopUp.Draw(&showPopUp_ImportTexture2D);
+        }
         
         /*  P A N E L S  */
         
@@ -135,8 +150,14 @@ namespace Coconuts
         /* Scene Overview Panel */
         m_SceneOverviewPanel.Draw();
         
+        /* Assets Panel */
+        m_AssetsPanel.Draw();
+        
         /* Component Inspector */
         m_ComponentInspectorPanel.Draw();
+        
+        /* Asset Inspector */
+        m_AssetInspectorPanel.Draw();
         
         //DEBUG:
         //ImGui::ShowDemoWindow();
@@ -155,7 +176,10 @@ namespace Coconuts
         m_ViewportPanel.Init(m_GameLayerPtr);
         m_ComponentInspectorPanel.Init();
         m_SceneOverviewPanel.Init(m_GameLayerPtr, &m_ComponentInspectorPanel);
+        m_AssetInspectorPanel.Init();
+        m_AssetsPanel.Init(&m_AssetInspectorPanel);
         
+        m_ImportTexture2dPopUp.Init();
     }
     
 }

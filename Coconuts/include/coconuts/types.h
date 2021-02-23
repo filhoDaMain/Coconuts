@@ -22,5 +22,7 @@
 
 #define BIND_EVENT_FUNCTION(fn)     std::bind(&fn, this, std::placeholders::_1)
 
+#define INT2VOIDP(i) (void*)(uintptr_t)(i)
+
 #endif /* TYPES_H */
 

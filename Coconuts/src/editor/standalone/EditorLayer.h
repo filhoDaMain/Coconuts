@@ -24,12 +24,18 @@
 /* Menu Bar */
 #include "menu_bar/FileMenu.h"
 #include "menu_bar/EntityMenu.h"
+#include "menu_bar/AssetsMenu.h"
 
 /* Panels */
 #include "panels/Viewport.h"
 #include "panels/Statistics.h"
 #include "panels/SceneOverview.h"
 #include "panels/ComponentInspector.h"
+#include "panels/Assets.h"
+#include "panels/AssetInspector.h"
+
+/* PopUps */
+#include "popups/ImportTexture2DPopUp.h"
 
 namespace Coconuts
 {
@@ -48,14 +54,20 @@ namespace Coconuts
         GameLayer* m_GameLayerPtr;
         
         /* Menu Bar menus */
-        MenuBar::FileMenu           m_FileMenu;
-        MenuBar::EntityMenu         m_EntityMenu;
+        MenuBar::FileMenu               m_FileMenu;
+        MenuBar::EntityMenu             m_EntityMenu;
+        MenuBar::AssetsMenu             m_AssetsMenu;
         
         /* Panels */
-        Panels::Viewport            m_ViewportPanel;
-        Panels::Statistics          m_StatisticsPanel;
-        Panels::SceneOverview       m_SceneOverviewPanel;
-        Panels::ComponentInspector  m_ComponentInspectorPanel;
+        Panels::Viewport                m_ViewportPanel;
+        Panels::Statistics              m_StatisticsPanel;
+        Panels::SceneOverview           m_SceneOverviewPanel;
+        Panels::ComponentInspector      m_ComponentInspectorPanel;
+        Panels::Assets                  m_AssetsPanel;
+        Panels::AssetInspector          m_AssetInspectorPanel;
+        
+        /* PopUps */
+        PopUps::ImportTexture2DPopUp    m_ImportTexture2dPopUp;
     };
     
 }

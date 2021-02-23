@@ -26,6 +26,7 @@
 #include <coconuts/Keyboard.h>
 
 #define GAMELAYER_SPRITESHEET_PATH  "../../Demo/examples/tiles2d/assets/textures/RPGpack_sheet_2X.png";
+#define GAMELAYER_SPRITESHEET_ANIMALS_PATH  "../../Demo/examples/batch2d/assets/textures/square_nodetailsOutline.png";
 
 namespace Coconuts
 {
@@ -64,28 +65,31 @@ namespace Coconuts
         m_ActiveScene = std::make_shared<Scene>();
         
         /* Create an entity on Scene */
-        m_Entity = Entity(m_ActiveScene.get(), "Tree");
+        m_Entity = Entity(m_ActiveScene.get(), "Sebastiao");
         
         /* Add TransformComponent */
         glm::vec2 position = {0.0f, 0.0f};
-        glm::vec2 size = {0.5f, 1.0f};
+        glm::vec2 size = {1.0f, 1.0f};
         float rotationRadians = 0;
         m_Entity.AddComponent<TransformComponent>(position, size, rotationRadians);
        
+        
         /* Add SpriteComponent */
-        /* 1) Init Spritesheet Texture */
-        const std::string path = GAMELAYER_SPRITESHEET_PATH;
-        AssetManager::ImportTexture2D("SpriteSheet", path);
+        /* 1) Init Spritesheet Textures */
+        const std::string pathTiles = GAMELAYER_SPRITESHEET_PATH;
+        AssetManager::ImportTexture2D("Tiles_Spritesheet", pathTiles);
+        const std::string pathAnimals = GAMELAYER_SPRITESHEET_ANIMALS_PATH;
+        AssetManager::ImportTexture2D("Animals_Spritesheet", pathAnimals);
         
         /* 2) Create Sprite from the spritesheet */
         AssetManager::SpriteSelector selector;
-        selector.coords = {2, 1};
-        selector.cellSize = {128, 128};
-        selector.spriteSize = {1, 2};
-        AssetManager::CreateSprite("TreeSprite", "SpriteSheet", selector);
+        selector.coords = {4, 4};   // 0,0 is bottom left corner cell
+        selector.cellSize = {136, 136};
+        selector.spriteSize = {1, 1};
+        AssetManager::CreateSprite("Cow", "Animals_Spritesheet", selector);
         
         /* 3) Assign the sprite to the Entity's SpriteComponent */
-        m_Entity.AddComponent<SpriteComponent>("TreeSprite");
+        m_Entity.AddComponent<SpriteComponent>("Cow");
         
         
 
@@ -135,6 +139,9 @@ namespace Coconuts
         };
         
         m_Entity.AddComponent<BehaviorComponent>().AddBehavior<TreeBehavior>(m_Entity);
+        
+        
+
     }
 
     void GameLayer::OnDetach()

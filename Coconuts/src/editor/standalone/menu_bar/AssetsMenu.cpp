@@ -14,25 +14,24 @@
  * limitations under the License.
  */
 
-#include "Statistics.h"
+#include "AssetsMenu.h"
 #include <coconuts/editor.h>
 
 namespace Coconuts {
-namespace Panels
+namespace MenuBar
 {
     
-    void Statistics::Draw(Renderer2DStatistics& stats)
+    void AssetsMenu::Draw(bool* showPopUp_ImportTexture2D)
     {
-        ImGui::Begin("Statistics");
-        
-        ImGui::Text("Renderer statistics");
-        ImGui::Spacing(); ImGui::Spacing();
-        ImGui::Text("Per Frame:");
-        ImGui::Spacing();
-        ImGui::Text("%d Draw Calls", stats.drawCalls);
-        ImGui::Spacing();
-        ImGui::Text("%d Quads", stats.quadCount);
-        ImGui::End();
+        if (ImGui::BeginMenu("Assets"))
+        {
+            if (ImGui::MenuItem("Import Texture2D", "", false, true))
+            {
+                *showPopUp_ImportTexture2D = true;
+            }
+            
+            ImGui::EndMenu();
+        }
     }
     
 }

@@ -15,6 +15,7 @@
  */
 
 #include "ComponentInspector.h"
+#include "glm/gtc/type_ptr.hpp"
 #include <coconuts/editor.h>
 #include <string.h>
 #include <sstream>
@@ -187,7 +188,6 @@ namespace Panels
         if (open)
         {
             ImGui::Spacing(); ImGui::Spacing();
-            //ImGui::TextDisabled("TODO");
             
             auto sprites = AssetManager::GetAllSpriteLogicalNames();
             std::vector<char*> spritesArray;
@@ -226,7 +226,7 @@ namespace Panels
             ImGui::Text("Asset");
             ImGui::Combo("Sprite", &seletected_sprite_index, &spritesArray[0], spritesArray.size());
             
-            /* Save */
+            /* Save sprite asset switch */
             saved = false;
             if (ImGui::Button("Save"))
             {
@@ -236,17 +236,22 @@ namespace Panels
                 /* Only switch sprite to a valid sprite name asset */
                 if (name2string.compare("Undefined") != 0)
                 {
-                    //TODO
-                    
-                    // Update spriteComponent with user data:
-                    // Update spriteComponent.spriteLogicalName with 'name2string'
-                    // Update spriteComponent.tintColor
-                    // Update spriteComponent.tilingFactor
-                    // Update spriteComponent.sprite with GetSprite() for 'name2string'  
+                    spriteComponent.spriteLogicalName = name2string;
+                    spriteComponent.sprite = AssetManager::GetSprite(name2string); 
                 }
                 
                 saved = true;
             }
+            
+            ImGui::Spacing(); ImGui::Spacing(); 
+            
+            /* Tint Color */
+            ImGui::Text("Tint Color");
+            ImGui::ColorEdit4("Color", glm::value_ptr(spriteComponent.tintColor));
+            
+            /* Tiling Factor */
+            // Not suitable for sprites - re-think tilingFactor for Texture2D usecase only!
+            //DrawTableFloat("Tiling Factor", "T", spriteComponent.tilingFactor);
             
             ImGui::TreePop();
         }

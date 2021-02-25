@@ -42,36 +42,58 @@ namespace Panels
             /* Tag */
             if (m_Context->HasComponent<TagComponent>())
             {
+                ImGui::Separator();
+                ImGui::Spacing(); ImGui::Spacing();
                 DrawTagComponent();
+                ImGui::Spacing(); ImGui::Spacing();ImGui::Spacing();
+                ImGui::Separator();
             }
             
             /* Camera */
             if (m_Context->HasComponent<OrthoCameraComponent>())
             {
                 hasCameraComponent = true;
+                
+                ImGui::Spacing(); ImGui::Spacing();
                 DrawCameraComponent();
+                ImGui::Spacing(); ImGui::Spacing();ImGui::Spacing();
+                ImGui::Separator();
             }
             
             /* Transform */
             if (m_Context->HasComponent<TransformComponent>())
             {
                 hasTransformComponent = true;
+                
+                ImGui::Spacing(); ImGui::Spacing();
                 DrawTransformComponent();
+                ImGui::Spacing(); ImGui::Spacing();ImGui::Spacing();
+                ImGui::Separator();
             }
             
             /* Sprite */
             if (m_Context->HasComponent<SpriteComponent>())
             {
                 hasSpriteComponent = true;
+                
+                ImGui::Spacing(); ImGui::Spacing();
                 DrawSpriteComponent();
+                ImGui::Spacing(); ImGui::Spacing();ImGui::Spacing();
+                ImGui::Separator();
             }
             
             /* Behavior */
             if (m_Context->HasComponent<BehaviorComponent>())
             {
                 hasBehaviorComponent = true;
+                
+                ImGui::Spacing(); ImGui::Spacing();
                 DrawBehaviorComponent();
+                ImGui::Spacing(); ImGui::Spacing();ImGui::Spacing();
+                ImGui::Separator();
             }
+            
+            ImGui::Spacing(); ImGui::Spacing();
             
             /* Add Component */
             DrawButtonAddComponent();
@@ -115,8 +137,6 @@ namespace Panels
         {
             tagComponent.tag = std::string(buffer);
         }
-
-        ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
     }
     
     /* Camera */
@@ -144,8 +164,6 @@ namespace Panels
             
             ImGui::TreePop();
         }
-        
-        ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
     }
     
     /* Transform */
@@ -168,8 +186,6 @@ namespace Panels
             
             ImGui::TreePop();
         }
-        
-        ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
     }
     
     /* Sprite */
@@ -255,8 +271,6 @@ namespace Panels
             
             ImGui::TreePop();
         }
-        
-        ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
     }
     
     /* Behavior */
@@ -275,8 +289,6 @@ namespace Panels
             ImGui::TextDisabled("TODO");
             ImGui::TreePop();
         }
-        
-        ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
     }
     
     
@@ -336,8 +348,6 @@ namespace Panels
             
             ImGui::EndPopup();
         }
-        
-        ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
     }
     
     

@@ -19,6 +19,7 @@
 #include <string.h>
 #include <sstream>
 #include <coconuts/Logger.h>
+#include "../ed_utils.h"
 
 namespace Coconuts {
 namespace Panels
@@ -129,16 +130,16 @@ namespace Panels
         if (open)
         {
             ImGui::Spacing(); ImGui::Spacing();
-            DrawTableTextButton("Camera Type", "Othographic");
+            utils::DrawTableTextButton("Camera Type", "Othographic");
             
             /* Convert AR to text */
             std::ostringstream ss;
             ss << cameraComponent.aspectRatio;
             std::string AR(ss.str());
             
-            DrawTableTextButton("Aspect Ratio", AR);
-            DrawTableFloat("Zoom Level", "Z", cameraComponent.zoomLevel);
-            DrawTableFloat("Moove Speed", "S", cameraComponent.mooveSpeed, true);
+            utils::DrawTableTextButton("Aspect Ratio", AR);
+            utils::DrawTableFloat("Zoom Level", "Z", cameraComponent.zoomLevel);
+            utils::DrawTableFloat("Moove Speed", "S", cameraComponent.mooveSpeed, true);
             
             ImGui::TreePop();
         }
@@ -158,10 +159,10 @@ namespace Panels
         if (open)
         {
             ImGui::Spacing(); ImGui::Spacing();
-            DrawTableVec2("Position", transformComponent.position);
-            DrawTableVec2("Scale", transformComponent.size);
+            utils::DrawTableVec2("Position", transformComponent.position);
+            utils::DrawTableVec2("Scale", transformComponent.size);
             float angleDeg = glm::degrees(transformComponent.rotationRadians);
-            DrawTableFloat("Rotation", "R", angleDeg);
+            utils::DrawTableFloat("Rotation", "R", angleDeg);
             transformComponent.rotationRadians = glm::radians(angleDeg);
             
             ImGui::TreePop();
@@ -269,112 +270,6 @@ namespace Panels
         }
         
         ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
-    }
-    
-    
-    /* ************************************************************************* */
-    /* Helper functions */
-    
-    //static
-    void ComponentInspector::DrawTableVec2(const std::string& label, glm::vec2& values, float colWidth)
-    {
-        ImGui::PushID(label.c_str());
-        
-        ImGui::Columns(2);
-        ImGui::SetColumnWidth(0, colWidth);
-        
-        // Col 0
-        ImGui::Text("%s", label.c_str());
-        
-        // Col 1
-        ImGui::NextColumn();
-        
-        ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{2, 4});
-        
-        if (ImGui::Button("X"))
-        {
-            values.x = 0.0f;
-        }    
-        ImGui::SameLine();
-        ImGui::DragFloat("##X", &values.x, 0.1f);
-
-        if (ImGui::Button("Y"))
-        {
-            values.y = 0.0f;
-        }    
-        ImGui::SameLine();
-        ImGui::DragFloat("##Y", &values.y, 0.1f);
-        
-        ImGui::PopStyleVar(1);
-        ImGui::Columns(1);
-        
-        ImGui::PopID();
-        ImGui::Spacing(); ImGui::Spacing(); 
-    }
-    
-    //static
-    void ComponentInspector::DrawTableFloat(const std::string& label, const std::string& param, float& values, bool positive, float colWidth)
-    {
-        ImGui::PushID(label.c_str());
-        
-        ImGui::Columns(2);
-        ImGui::SetColumnWidth(0, colWidth);
-        
-        // Col 0
-        ImGui::Text("%s", label.c_str());
-        
-        // Col 1
-        ImGui::NextColumn();
-        
-        ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{2, 4});
-        
-        if (ImGui::Button(param.c_str()))
-        {
-            values = 0.0f;
-        }    
-        ImGui::SameLine();
-        if (positive)
-        {
-            ImGui::DragFloat("##X", &values, 0.1f, 0, 100);
-        }
-        else
-        {
-            ImGui::DragFloat("##X", &values, 0.1f);
-        }
-        
-        ImGui::PopStyleVar(1);
-        ImGui::Columns(1);
-        
-        ImGui::PopID();
-        ImGui::Spacing(); ImGui::Spacing();
-    }
-    
-    //static
-    void ComponentInspector::DrawTableTextButton(const std::string& label, const std::string& text, float colWidth)
-    {
-        ImGui::PushID(label.c_str());
-        
-        ImGui::Columns(2);
-        ImGui::SetColumnWidth(0, colWidth);
-        
-        // Col 0
-        ImGui::Text("%s", label.c_str());
-        
-        // Col 1
-        ImGui::NextColumn();
-        
-        ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{2, 4});
-        
-        if (ImGui::Button(text.c_str()))
-        {
-            
-        }
-        
-        ImGui::PopStyleVar(1);
-        ImGui::Columns(1);
-        
-        ImGui::PopID();
-        ImGui::Spacing(); ImGui::Spacing();
     }
     
 }

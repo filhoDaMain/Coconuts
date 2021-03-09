@@ -18,6 +18,8 @@
 
 #include <glm/glm.hpp>
 #include <string>
+#include <coconuts/graphics/Texture.h>
+#include <coconuts/AssetManager.h>
 
 namespace Coconuts{
 namespace utils
@@ -25,6 +27,8 @@ namespace utils
     void DrawTableVec2(const std::string& label, glm::vec2& values, float colWidth = 100.0f);
     void DrawTableFloat(const std::string& label, const std::string& param, float& values, bool positive = false, float colWidth = 100.0f);
     void DrawTableTextButton(const std::string& label, const std::string& text, float colWidth = 100.0f);
+    void DrawTableImage(const std::string& label, Texture2D& texture, float colWidth = 100.0f);
+    void DrawTableImage(const std::string& label, Texture2D& spriteSheet, AssetManager::SpriteSelector& selector, float colWidth = 100.0f);
 }    
 }
 

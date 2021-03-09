@@ -47,12 +47,7 @@ namespace Panels
         
         /* Add Component Button */
         void DrawButtonAddComponent(void);
-        
-        /* Helper Functions */
-        static void DrawTableVec2(const std::string& label, glm::vec2& values, float colWidth = 100.0f);
-        static void DrawTableFloat(const std::string& label, const std::string& param, float& values, bool positive = false, float colWidth = 100.0f);
-        static void DrawTableTextButton(const std::string& label, const std::string& text, float colWidth = 100.0f);
-        
+         
         /* Context */
         Coconuts::Entity* m_Context;
         bool hasValidContext = false;

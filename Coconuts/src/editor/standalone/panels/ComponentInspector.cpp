@@ -240,15 +240,49 @@ namespace Panels
             }
             
             /* Display Dropdown with available / selected sprite asset */
-            ImGui::Text("Asset");
-            ImGui::Combo("Sprite", &seletected_sprite_index, &spritesArray[0], spritesArray.size());
+            ImGui::Text("Sprite Asset");
+            ImGui::Combo("", &seletected_sprite_index, &spritesArray[0], spritesArray.size());
+            
+            /* Cast selected sprite name to a string */
+            std::string name2string = spritesArray[seletected_sprite_index];
+            
+            /* Get sprite's spritesheet texture and sprite selector to preview it */
+            bool undefined = true;
+            if (name2string.compare("Undefined") != 0)
+            {
+               do
+               {
+                   std::string spriteSheetName;
+                   bool valid;
+                   std::tie(valid, spriteSheetName) = AssetManager::GetSpriteSheetName(name2string);
+                   if (!valid) break;
+                   auto texture = AssetManager::GetTexture2D(spriteSheetName);
+                   
+                   AssetManager::SpriteSelector selector;
+                   std::tie(valid, selector) = AssetManager::GetSpriteSelector(name2string);
+                   if (!valid) break;
+                   
+                   if (texture != nullptr)
+                   {
+                       ImGui::Spacing(); ImGui::Spacing();
+                       
+                       /* Preview selected sprite */
+                       utils::DrawTableImage("\nSprite\nPreview", *texture, selector);
+                       undefined = false;
+                   }
+               } while(false);
+            }
+            
+            if (undefined)
+            {
+                //Show default "Missing Sprite" as preview
+            }
             
             /* Save sprite asset switch */
             saved = false;
             if (ImGui::Button("Save"))
-            {
-                /* Change Sprite to selected */
-                std::string name2string = spritesArray[seletected_sprite_index];
+            {   
+                /* Update to newly selected sprite from drop-down list */
                 
                 /* Only switch sprite to a valid sprite name asset */
                 if (name2string.compare("Undefined") != 0)

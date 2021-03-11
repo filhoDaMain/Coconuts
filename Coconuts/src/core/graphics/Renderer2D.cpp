@@ -16,12 +16,18 @@
 
 #include <coconuts/graphics/Renderer2D.h>
 #include <coconuts/graphics/LowLevelAPI.h>
-
 #include "glm/ext/matrix_transform.hpp"
+#include <string>
+
+const std::string __PROJ_BASEDIR    = COCONUTS_BUILDTREE_ROOTDIR;
+const std::string __ASSET_REL_PATH  = "/include/coconuts/graphics/Warning_MissingSprite.png";
+const std::string MISSING_SPRITE_TEXTURE_PATH = __PROJ_BASEDIR + __ASSET_REL_PATH;
 
 namespace Coconuts
 {    
     
+    /* Static definitions */
+    std::unique_ptr<Texture2D> Renderer2D::s_WarningMissingSpriteTexture;
     static Renderer2DStorage* s_Data;
     
     void Renderer2D::Init()
@@ -95,6 +101,9 @@ namespace Coconuts
         
         s_Data->shader->SetSamplers2D("u_Textures", samplers, s_Data->batchRenderState.maxTextureSlots);
         s_Data->shader->Unbind();
+        
+        /* Init default texture triggered by a missing sprite warning */
+        s_WarningMissingSpriteTexture.reset( Texture2D::Create(MISSING_SPRITE_TEXTURE_PATH) );
     }
     
     void Renderer2D::Shutdown()

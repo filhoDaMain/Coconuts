@@ -21,6 +21,7 @@
 #include <sstream>
 #include <coconuts/AssetManager.h>
 #include <coconuts/Logger.h>
+#include <coconuts/graphics/defs.h>
 #include "../ed_utils.h"
 
 namespace Coconuts {
@@ -214,7 +215,7 @@ namespace Panels
             int i;
             for (i = 0; i < sprites.size(); i++)
             {
-                spritesArray.push_back(const_cast<char*>(sprites[i].c_str()));
+                spritesArray.emplace_back(const_cast<char*>(sprites[i].c_str()));
                 
                 if (saved && spriteComponent.spriteLogicalName.compare(spritesArray[i]) == 0)
                 {
@@ -229,7 +230,7 @@ namespace Panels
             if (spriteComponent.sprite.expired())
             {
                 
-                spritesArray.push_back(const_cast<char*>("Undefined"));
+                spritesArray.emplace_back(const_cast<char*>("Undefined"));
                 
                 if (!undefined_sprite)
                 {
@@ -275,7 +276,8 @@ namespace Panels
             
             if (undefined)
             {
-                //Show default "Missing Sprite" as preview
+                /* Show default "Missing Sprite" as preview */
+                utils::DrawTableImage("\nSprite\nPreview", defs::DefaultMissingSpriteTexture());
             }
             
             /* Save sprite asset switch */

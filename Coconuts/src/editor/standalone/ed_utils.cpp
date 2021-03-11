@@ -119,7 +119,10 @@ namespace Coconuts
         ImGui::Spacing(); ImGui::Spacing();
     }
     
-    void utils::DrawTableImage(const std::string& label, Texture2D& texture, float colWidth)
+    void utils::DrawTableImage(const std::string& label,
+                               Texture2D& texture,
+                               uint8_t divider,
+                               float colWidth)
     {
         ImGui::PushID(label.c_str());
         
@@ -134,7 +137,7 @@ namespace Coconuts
         
         ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{2, 4});
         
-        ImGui::Image((void *) texture, ImVec2((texture.GetWidth()/6), (texture.GetHeight()/6)), ImVec2{0, 1}, ImVec2{1, 0});
+        ImGui::Image((void *) texture, ImVec2((texture.GetWidth()/divider), (texture.GetHeight()/divider)), ImVec2{0, 1}, ImVec2{1, 0});
         
         ImGui::PopStyleVar(1);
         ImGui::Columns(1);
@@ -143,7 +146,11 @@ namespace Coconuts
         ImGui::Spacing(); ImGui::Spacing();
     }
     
-    void utils::DrawTableImage(const std::string& label, Texture2D& spriteSheet, AssetManager::SpriteSelector& selector, float colWidth)
+    void utils::DrawTableImage(const std::string& label,
+                               Texture2D& spriteSheet,
+                               AssetManager::SpriteSelector& selector,
+                               uint8_t divider,
+                               float colWidth)
     {
         /* Crop texture image to display only sprite's region */
         float uv0x = (float) (selector.coords.x * selector.cellSize.x) / spriteSheet.GetWidth();
@@ -168,7 +175,7 @@ namespace Coconuts
         
         ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{2, 4});
         
-        ImGui::Image((void *) spriteSheet, ImVec2(selector.cellSize.x/2, selector.cellSize.y/2), uv0, uv1);
+        ImGui::Image((void *) spriteSheet, ImVec2(selector.cellSize.x/divider, selector.cellSize.y/divider), uv0, uv1);
         
         ImGui::PopStyleVar(1);
         ImGui::Columns(1);

@@ -121,9 +121,12 @@ namespace Coconuts
     
     void utils::DrawTableImage(const std::string& label,
                                Texture2D& texture,
+                               const glm::vec4& tintColor,
                                uint8_t divider,
                                float colWidth)
     {
+        ImVec4 tint = ImVec4(tintColor.r, tintColor.g, tintColor.b, tintColor.a);
+        
         ImGui::PushID(label.c_str());
         
         ImGui::Columns(2);
@@ -137,7 +140,7 @@ namespace Coconuts
         
         ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{2, 4});
         
-        ImGui::Image((void *) texture, ImVec2((texture.GetWidth()/divider), (texture.GetHeight()/divider)), ImVec2{0, 1}, ImVec2{1, 0});
+        ImGui::Image((void *) texture, ImVec2((texture.GetWidth()/divider), (texture.GetHeight()/divider)), ImVec2{0, 1}, ImVec2{1, 0}, tint);
         
         ImGui::PopStyleVar(1);
         ImGui::Columns(1);
@@ -149,6 +152,7 @@ namespace Coconuts
     void utils::DrawTableImage(const std::string& label,
                                Texture2D& spriteSheet,
                                AssetManager::SpriteSelector& selector,
+                               const glm::vec4& tintColor,
                                uint8_t divider,
                                float colWidth)
     {
@@ -159,6 +163,7 @@ namespace Coconuts
         float uv1y = (float) (selector.coords.y * selector.cellSize.y) / spriteSheet.GetHeight();
         ImVec2 uv0 = ImVec2(uv0x, uv0y);
         ImVec2 uv1 = ImVec2(uv1x, uv1y);
+        ImVec4 tint = ImVec4(tintColor.r, tintColor.g, tintColor.b, tintColor.a);
         
         //TODO - Manage to re-use next lines from previous function
         
@@ -175,7 +180,7 @@ namespace Coconuts
         
         ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{2, 4});
         
-        ImGui::Image((void *) spriteSheet, ImVec2(selector.cellSize.x/divider, selector.cellSize.y/divider), uv0, uv1);
+        ImGui::Image((void *) spriteSheet, ImVec2(selector.cellSize.x/divider, selector.cellSize.y/divider), uv0, uv1, tint);
         
         ImGui::PopStyleVar(1);
         ImGui::Columns(1);

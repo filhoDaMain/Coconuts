@@ -197,6 +197,7 @@ namespace Panels
         
         static bool saved = true;
         static bool undefined_sprite = false;
+        static glm::vec4 tint = glm::vec4(1.0f);
         
         //TODO
         ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_DefaultOpen;
@@ -242,7 +243,7 @@ namespace Panels
             
             /* Display Dropdown with available / selected sprite asset */
             ImGui::Text("Sprite Asset");
-            ImGui::Combo("", &seletected_sprite_index, &spritesArray[0], spritesArray.size());
+            ImGui::Combo("Sprite", &seletected_sprite_index, &spritesArray[0], spritesArray.size());
             
             /* Cast selected sprite name to a string */
             std::string name2string = spritesArray[seletected_sprite_index];
@@ -268,7 +269,7 @@ namespace Panels
                        ImGui::Spacing(); ImGui::Spacing();
                        
                        /* Preview selected sprite */
-                       utils::DrawTableImage("\nSprite\nPreview", *texture, selector);
+                       utils::DrawTableImage("\nSprite\nPreview", *texture, selector, tint);
                        undefined = false;
                    }
                } while(false);
@@ -276,13 +277,23 @@ namespace Panels
             
             if (undefined)
             {
+                ImGui::Spacing(); ImGui::Spacing();
+                
                 /* Show default "Missing Sprite" as preview */
                 utils::DrawTableImage("\nSprite\nPreview", defs::DefaultMissingSpriteTexture());
             }
             
+            ImGui::Spacing(); ImGui::Spacing(); 
+            
+            /* Tint Color */
+            ImGui::Text("Tint Color");
+            ImGui::ColorEdit4("Color", glm::value_ptr(tint));
+            
+            ImGui::Spacing(); ImGui::Spacing(); 
+            
             /* Save sprite asset switch */
             saved = false;
-            if (ImGui::Button("Save"))
+            if (ImGui::Button("Apply"))
             {   
                 /* Update to newly selected sprite from drop-down list */
                 
@@ -293,14 +304,11 @@ namespace Panels
                     spriteComponent.sprite = AssetManager::GetSprite(name2string); 
                 }
                 
+                /* Update selected tint color */
+                spriteComponent.tintColor = tint;
+                
                 saved = true;
             }
-            
-            ImGui::Spacing(); ImGui::Spacing(); 
-            
-            /* Tint Color */
-            ImGui::Text("Tint Color");
-            ImGui::ColorEdit4("Color", glm::value_ptr(spriteComponent.tintColor));
             
             /* Tiling Factor */
             // Not suitable for sprites - re-think tilingFactor for Texture2D usecase only!

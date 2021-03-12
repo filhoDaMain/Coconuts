@@ -220,7 +220,7 @@ namespace Panels
                 
                 if (saved && spriteComponent.spriteLogicalName.compare(spritesArray[i]) == 0)
                 {
-                    seletected_sprite_index = i;    // begin with selected sprite
+                    seletected_sprite_index = i;    // 1st option to display
                 }
             }
             
@@ -235,7 +235,7 @@ namespace Panels
                 
                 if (!undefined_sprite)
                 {
-                    seletected_sprite_index = spritesArray.size() - 1;
+                    seletected_sprite_index = spritesArray.size() - 1;  // 1st option to display
                     undefined_sprite = true;
                 }
                 
@@ -250,7 +250,7 @@ namespace Panels
             
             /* Get sprite's spritesheet texture and sprite selector to preview it */
             bool undefined = true;
-            if (name2string.compare("Undefined") != 0)
+            if (name2string.compare("Undefined") != 0)  // not hovering over "Undefined"
             {
                do
                {
@@ -301,18 +301,18 @@ namespace Panels
                 if (name2string.compare("Undefined") != 0)
                 {
                     spriteComponent.spriteLogicalName = name2string;
-                    spriteComponent.sprite = AssetManager::GetSprite(name2string); 
+                    spriteComponent.sprite = AssetManager::GetSprite(name2string);
+                    
+                    /* Update selected tint color */
+                    spriteComponent.tintColor = tint;
+                    undefined_sprite = false;
                 }
-                
-                /* Update selected tint color */
-                spriteComponent.tintColor = tint;
                 
                 saved = true;
             }
             
             /* Tiling Factor */
             // Not suitable for sprites - re-think tilingFactor for Texture2D usecase only!
-            //DrawTableFloat("Tiling Factor", "T", spriteComponent.tilingFactor);
             
             ImGui::TreePop();
         }

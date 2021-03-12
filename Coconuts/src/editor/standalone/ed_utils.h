@@ -27,8 +27,8 @@ namespace utils
     void DrawTableVec2(const std::string& label, glm::vec2& values, float colWidth = 100.0f);
     void DrawTableFloat(const std::string& label, const std::string& param, float& values, bool positive = false, float colWidth = 100.0f);
     void DrawTableTextButton(const std::string& label, const std::string& text, float colWidth = 100.0f);
-    void DrawTableImage(const std::string& label, Texture2D& texture, uint8_t divider = 2, float colWidth = 100.0f);
-    void DrawTableImage(const std::string& label, Texture2D& spriteSheet, AssetManager::SpriteSelector& selector, uint8_t divider = 2, float colWidth = 100.0f);
+    void DrawTableImage(const std::string& label, Texture2D& texture, const glm::vec4& tintColor = glm::vec4(1.0f), uint8_t divider = 2, float colWidth = 100.0f);
+    void DrawTableImage(const std::string& label, Texture2D& spriteSheet, AssetManager::SpriteSelector& selector, const glm::vec4& tintColor = glm::vec4(1.0f), uint8_t divider = 2, float colWidth = 100.0f);
 }    
 }
 

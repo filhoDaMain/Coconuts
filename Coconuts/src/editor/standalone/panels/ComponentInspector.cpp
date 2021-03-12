@@ -15,10 +15,13 @@
  */
 
 #include "ComponentInspector.h"
+#include "glm/gtc/type_ptr.hpp"
 #include <coconuts/editor.h>
 #include <string.h>
 #include <sstream>
+#include <coconuts/AssetManager.h>
 #include <coconuts/Logger.h>
+#include <coconuts/graphics/defs.h>
 #include "../ed_utils.h"
 
 namespace Coconuts {
@@ -41,36 +44,58 @@ namespace Panels
             /* Tag */
             if (m_Context->HasComponent<TagComponent>())
             {
+                ImGui::Separator();
+                ImGui::Spacing(); ImGui::Spacing();
                 DrawTagComponent();
+                ImGui::Spacing(); ImGui::Spacing();ImGui::Spacing();
+                ImGui::Separator();
             }
             
             /* Camera */
             if (m_Context->HasComponent<OrthoCameraComponent>())
             {
                 hasCameraComponent = true;
+                
+                ImGui::Spacing(); ImGui::Spacing();
                 DrawCameraComponent();
+                ImGui::Spacing(); ImGui::Spacing();ImGui::Spacing();
+                ImGui::Separator();
             }
             
             /* Transform */
             if (m_Context->HasComponent<TransformComponent>())
             {
                 hasTransformComponent = true;
+                
+                ImGui::Spacing(); ImGui::Spacing();
                 DrawTransformComponent();
+                ImGui::Spacing(); ImGui::Spacing();ImGui::Spacing();
+                ImGui::Separator();
             }
             
             /* Sprite */
             if (m_Context->HasComponent<SpriteComponent>())
             {
                 hasSpriteComponent = true;
+                
+                ImGui::Spacing(); ImGui::Spacing();
                 DrawSpriteComponent();
+                ImGui::Spacing(); ImGui::Spacing();ImGui::Spacing();
+                ImGui::Separator();
             }
             
             /* Behavior */
             if (m_Context->HasComponent<BehaviorComponent>())
             {
                 hasBehaviorComponent = true;
+                
+                ImGui::Spacing(); ImGui::Spacing();
                 DrawBehaviorComponent();
+                ImGui::Spacing(); ImGui::Spacing();ImGui::Spacing();
+                ImGui::Separator();
             }
+            
+            ImGui::Spacing(); ImGui::Spacing();
             
             /* Add Component */
             DrawButtonAddComponent();
@@ -114,8 +139,6 @@ namespace Panels
         {
             tagComponent.tag = std::string(buffer);
         }
-
-        ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
     }
     
     /* Camera */
@@ -143,8 +166,6 @@ namespace Panels
             
             ImGui::TreePop();
         }
-        
-        ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
     }
     
     /* Transform */
@@ -167,14 +188,16 @@ namespace Panels
             
             ImGui::TreePop();
         }
-        
-        ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
     }
     
     /* Sprite */
     void ComponentInspector::DrawSpriteComponent(void)
     {
         SpriteComponent& spriteComponent = m_Context->GetComponent<SpriteComponent>();
+        
+        static bool saved = true;
+        static bool undefined_sprite = false;
+        static glm::vec4 tint = glm::vec4(1.0f);
         
         //TODO
         ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_DefaultOpen;
@@ -184,11 +207,115 @@ namespace Panels
         if (open)
         {
             ImGui::Spacing(); ImGui::Spacing();
-            ImGui::TextDisabled("TODO");
+            
+            auto sprites = AssetManager::GetAllSpriteLogicalNames();
+            std::vector<char*> spritesArray;
+            spritesArray.reserve(sprites.size());
+            
+            static int seletected_sprite_index = 0;
+            int i;
+            for (i = 0; i < sprites.size(); i++)
+            {
+                spritesArray.emplace_back(const_cast<char*>(sprites[i].c_str()));
+                
+                if (saved && spriteComponent.spriteLogicalName.compare(spritesArray[i]) == 0)
+                {
+                    seletected_sprite_index = i;    // 1st option to display
+                }
+            }
+            
+            /**
+             * Display "Undefined" if sprite pointer is not correctly
+             * pointing to any valid sprite asset.
+             */
+            if (spriteComponent.sprite.expired())
+            {
+                
+                spritesArray.emplace_back(const_cast<char*>("Undefined"));
+                
+                if (!undefined_sprite)
+                {
+                    seletected_sprite_index = spritesArray.size() - 1;  // 1st option to display
+                    undefined_sprite = true;
+                }
+                
+            }
+            
+            /* Display Dropdown with available / selected sprite asset */
+            ImGui::Text("Sprite Asset");
+            ImGui::Combo("Sprite", &seletected_sprite_index, &spritesArray[0], spritesArray.size());
+            
+            /* Cast selected sprite name to a string */
+            std::string name2string = spritesArray[seletected_sprite_index];
+            
+            /* Get sprite's spritesheet texture and sprite selector to preview it */
+            bool undefined = true;
+            if (name2string.compare("Undefined") != 0)  // not hovering over "Undefined"
+            {
+               do
+               {
+                   std::string spriteSheetName;
+                   bool valid;
+                   std::tie(valid, spriteSheetName) = AssetManager::GetSpriteSheetName(name2string);
+                   if (!valid) break;
+                   auto texture = AssetManager::GetTexture2D(spriteSheetName);
+                   
+                   AssetManager::SpriteSelector selector;
+                   std::tie(valid, selector) = AssetManager::GetSpriteSelector(name2string);
+                   if (!valid) break;
+                   
+                   if (texture != nullptr)
+                   {
+                       ImGui::Spacing(); ImGui::Spacing();
+                       
+                       /* Preview selected sprite */
+                       utils::DrawTableImage("\nSprite\nPreview", *texture, selector, tint);
+                       undefined = false;
+                   }
+               } while(false);
+            }
+            
+            if (undefined)
+            {
+                ImGui::Spacing(); ImGui::Spacing();
+                
+                /* Show default "Missing Sprite" as preview */
+                utils::DrawTableImage("\nSprite\nPreview", defs::DefaultMissingSpriteTexture());
+            }
+            
+            ImGui::Spacing(); ImGui::Spacing(); 
+            
+            /* Tint Color */
+            ImGui::Text("Tint Color");
+            ImGui::ColorEdit4("Color", glm::value_ptr(tint));
+            
+            ImGui::Spacing(); ImGui::Spacing(); 
+            
+            /* Save sprite asset switch */
+            saved = false;
+            if (ImGui::Button("Apply"))
+            {   
+                /* Update to newly selected sprite from drop-down list */
+                
+                /* Only switch sprite to a valid sprite name asset */
+                if (name2string.compare("Undefined") != 0)
+                {
+                    spriteComponent.spriteLogicalName = name2string;
+                    spriteComponent.sprite = AssetManager::GetSprite(name2string);
+                    
+                    /* Update selected tint color */
+                    spriteComponent.tintColor = tint;
+                    undefined_sprite = false;
+                }
+                
+                saved = true;
+            }
+            
+            /* Tiling Factor */
+            // Not suitable for sprites - re-think tilingFactor for Texture2D usecase only!
+            
             ImGui::TreePop();
         }
-        
-        ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
     }
     
     /* Behavior */
@@ -207,8 +334,6 @@ namespace Panels
             ImGui::TextDisabled("TODO");
             ImGui::TreePop();
         }
-        
-        ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
     }
     
     
@@ -268,8 +393,6 @@ namespace Panels
             
             ImGui::EndPopup();
         }
-        
-        ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
     }
     
 }

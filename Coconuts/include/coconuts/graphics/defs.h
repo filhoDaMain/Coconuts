@@ -21,11 +21,17 @@
 #include <coconuts/graphics/Renderer2D.h>
 
 namespace Coconuts {
-namespace defs {
+namespace defs
+{
     
-    Texture2D& DefaultMissingSpriteTexture()
+    inline Texture2D& DefaultMissingSpriteTexture()
     {
         return *(Renderer2D::GetDefaultMissingSpriteTexture());
+    }
+    
+    inline std::shared_ptr<Texture2D> DefaultMissingSpriteTexturePtr()
+    {
+        return Renderer2D::GetDefaultMissingSpriteTexture();
     }
     
 }

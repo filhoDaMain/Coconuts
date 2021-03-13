@@ -18,6 +18,7 @@
 #include <coconuts/ecs/Entity.h>
 #include <coconuts/Renderer.h>
 #include <coconuts/Logger.h>
+#include <coconuts/graphics/defs.h>
 
 // Components
 #include <coconuts/ecs/components/TagComponent.h>
@@ -79,9 +80,19 @@ namespace Coconuts
             m_EntityManager.entities.each<TransformComponent, SpriteComponent>([]
             (entityx::Entity thisEntityxEntity, TransformComponent& thisTransformComponent, SpriteComponent& thisSpriteComponent)
             {
-                /* Prevent against non-initialized Sprite Component */
+                /**
+                 * Protect against non-initialized Sprite.
+                 * Draw a default texture.
+                 */
                 if (thisSpriteComponent.sprite.expired())
                 {
+                    Renderer2D::DrawRotatedQuad(thisTransformComponent.position,        // Entity's position
+                                                glm::vec2(1.0f),                        // default size
+                                                0.0f,                                   // default rotation
+                                                defs::DefaultMissingSpriteTexturePtr(), // default texture
+                                                1.0f,                                   // default tiling
+                                                glm::vec4(1.0f)                         // default tint
+                                                );
                     LOG_ERROR("Sprite Component has undefined Sprite (Entity {})", thisEntityxEntity.id().id());
                     return;
                 }

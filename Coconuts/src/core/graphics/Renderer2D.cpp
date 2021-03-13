@@ -27,7 +27,7 @@ namespace Coconuts
 {    
     
     /* Static definitions */
-    std::unique_ptr<Texture2D> Renderer2D::s_WarningMissingSpriteTexture;
+    std::shared_ptr<Texture2D> Renderer2D::s_WarningMissingSpriteTexture;
     static Renderer2DStorage* s_Data;
     
     void Renderer2D::Init()

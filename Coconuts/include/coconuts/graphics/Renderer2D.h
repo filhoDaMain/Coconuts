@@ -159,13 +159,13 @@ namespace Coconuts
                              const glm::vec4& tintColor = glm::vec4(1.0f));
         
         
-        static std::unique_ptr<Texture2D>& GetDefaultMissingSpriteTexture() { return s_WarningMissingSpriteTexture; }
+        static std::shared_ptr<Texture2D> GetDefaultMissingSpriteTexture() { return s_WarningMissingSpriteTexture; }
         
     private:
         static void FlushAndReset();
         
     private:
-        static std::unique_ptr<Texture2D> s_WarningMissingSpriteTexture;
+        static std::shared_ptr<Texture2D> s_WarningMissingSpriteTexture;
     };
     
 }

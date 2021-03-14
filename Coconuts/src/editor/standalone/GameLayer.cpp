@@ -25,8 +25,8 @@
 #include <coconuts/Polling.h>
 #include <coconuts/Keyboard.h>
 
-#define GAMELAYER_SPRITESHEET_PATH  "../../Demo/examples/tiles2d/assets/textures/RPGpack_sheet_2X.png";
-#define GAMELAYER_SPRITESHEET_ANIMALS_PATH  "../../Demo/examples/batch2d/assets/textures/square_nodetailsOutline.png";
+#define GAMELAYER_SPRITESHEET_PATH  "../../Demo/assets/rpg/RPGpack_sheet_2X.png";
+#define GAMELAYER_SPRITESHEET_ANIMALS_PATH  "../../Demo/assets/animals/square_nodetailsOutline.png";
 
 namespace Coconuts
 {

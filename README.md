@@ -25,7 +25,7 @@ make
 ```
 
 The toolchain generates both static libraries and a Standalone Editor application by default.\
-Coconuts-based applications are required to link with the [generated libraries](#lib).
+Coconuts-based applications are required to link with the [generated libraries](#lib).\
 Standalone Editor application is a Game Editor [executable](#bin).
 
 ## Folder organization

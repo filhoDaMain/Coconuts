@@ -1,9 +1,11 @@
 # Coconuts
 
-This is mostly a personal project to introduce myself to Game Engines architecture and design.\
+This is mostly a personal project to introduce myself to Game Engines architecture and design.
+
 You are welcome to contribute :)
 
-Please include every License files in derivative work.\
+Please include every License files in derivative work.
+
 
 
 ### Clone

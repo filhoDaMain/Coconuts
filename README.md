@@ -40,7 +40,7 @@ This is the default location for the generated Standalone Editor application bin
 
 #### build/
 An empty directory.\
-You can use it to perform a CMake out-of-source [build](#coconuts-libraries-and-standalone-editor-application)
+You can use it to perform a CMake out-of-source [build](#coconuts-libraries-and-standalone-editor-application).
 
 #### include/
 Contains all necessary header files, including third party, that every application requires when linking with Coconuts libraries.
@@ -63,11 +63,11 @@ Source code for Coconuts Game Engine Library (ccncore static library).
 
 - **editor/**\
 Source code for both the editor library (**library/**) and Standalone Editor application (**standalone/**).\
-Any application that requires a custom Editor Layer for its GUI implementation can link with the ccneditor library (found in ./lib/).
+Any application that requires a custom Editor Layer for its GUI implementation can link with the ccneditor library found in ./lib/ .\
 Standalone Editor application also links with ccneditor in order to create its GUI.
 
 #### vendor/
-Contains all third party source code and their Licenses.\
+Contains all third party source code and their Licenses.
 
 
 ### Demo

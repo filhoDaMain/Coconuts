@@ -17,6 +17,7 @@ git clone --recurse-submodules git@github.com:filhoDaMain/Coconuts.git
 ## How to build
 ### Coconuts libraries and Standalone Editor application
 
+CMake out-of-source build:
 ```
 cd ./Coconuts/build/
 cmake ..
@@ -24,8 +25,8 @@ make
 ```
 
 The toolchain generates both static libraries and a Standalone Editor application by default.\
-Coconuts-based applications are required to link with the [generated libraries](#lib/).
-Standalone Editor application is a Game Editor [executable](#bin/).
+Coconuts-based applications are required to link with the [generated libraries](#lib).
+Standalone Editor application is a Game Editor [executable](#bin).
 
 ## Folder organization
 ### Coconuts

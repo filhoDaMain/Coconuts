@@ -1,36 +1,45 @@
 # Coconuts
-A didactic project to introduce myself to Game Engines architecture
+
+This is mostly a personal project to introduce myself to Game Engines architecture and design.\
+You are welcome to contribute :)
+
+Please include every License files in derivative work.\
 
 
-# Include all submodules
-Coconuts depends on third party libraries that are cloned into ./Coconuts/vendor/ directory.
+### Clone
+Coconuts depends on third party libraries that are cloned into ./Coconuts/vendor/ directory.\
 To clone everything at once do
 
 ```
 git clone --recurse-submodules git@github.com:filhoDaMain/Coconuts.git
 ```
 
-# How to build
-## Coconuts libraries and Standalone Editor application
+## How to build
+### Coconuts libraries and Standalone Editor application
+
 ```
 cd ./Coconuts/build/
 cmake ..
 make
 ```
 
-# Folder organization
-## Coconuts
+The toolchain generates both static libraries and a Standalone Editor application by default.\
+Coconuts-based applications are required to link with the [generated libraries](#lib/).
+Standalone Editor application is a Game Editor [executable](#bin/).
+
+## Folder organization
+### Coconuts
 This is the Coconuts project itself. It cointains both the source code for static libraries and standalone editor application.
 
-### bin/
+#### bin/
 An empty directory.\
 This is the default location for the generated Standalone Editor application binary.
 
-### build/
+#### build/
 An empty directory.\
 You can use it to perform a CMake out-of-source [build](#coconuts-libraries-and-standalone-editor-application)
 
-### include/
+#### include/
 Contains all necessary header files, including third party, that every application requires when linking with Coconuts libraries.
 
 - **coconuts/**\
@@ -39,11 +48,11 @@ Coconuts header files and its License. Applications should only directly **#incl
 - **vendor/**\
 Thirdy party header files and their Licenses.
 
-### lib/
+#### lib/
 An empty directory.\
 This is the default location for the generated static libraries. Applications linking with Coconuts should look for its libraries here by default.
 
-### src/
+#### src/
 Contains all source code for Coconuts **ccncore** and **ccneditor** libraries and **Standalone Editor application**.
 
 - **core/**\
@@ -54,9 +63,9 @@ Source code for both the editor library (**library/**) and Standalone Editor app
 Any application that requires a custom Editor Layer for its GUI implementation can link with the ccneditor library (found in ./lib/).
 Standalone Editor application also links with ccneditor in order to create its GUI.
 
-### vendor/
-Contains all third party source code and their Licenses.
+#### vendor/
+Contains all third party source code and their Licenses.\
 
 
-## Demo
+### Demo
 A demonstration project, mostly assets.

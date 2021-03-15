@@ -92,7 +92,7 @@ namespace Coconuts
         /* HASH TABLES */
         static std::unordered_map<std::string, IndexedTexture2D>    m_HashTable_Textures2D;
         static std::unordered_map<std::string, IndexedSprite>       m_HashTable_Sprites;
-        static std::unordered_map<std::string, SpriteSelector>      m_HashTable_SpriteSlectors;
+        static std::unordered_map<std::string, SpriteSelector>      m_HashTable_SpriteSelectors;
         
         /* Keys Lists */
         static std::vector<std::string> m_KeysList_Textures2D;

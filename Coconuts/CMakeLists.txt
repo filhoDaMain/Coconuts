@@ -13,7 +13,7 @@ set(DEFAULT_SHADER_SRCDIR "${PROJECT_SOURCE_DIR}/include/coconuts/graphics/shade
 set(BUILD_BYPRODUCTS_DIR "${CMAKE_BINARY_DIR}/build_byproducts")
 
 # Create build artifacts directory
-file(MAKE_DIRECTORY "${BUILD_PRODUCTS_DIR}")
+file(MAKE_DIRECTORY "${BUILD_BYPRODUCTS_DIR}")
 
 
 # Vendor

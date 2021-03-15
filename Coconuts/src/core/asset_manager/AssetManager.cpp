@@ -23,7 +23,7 @@ namespace Coconuts
     /* Static Hash Tables Definitions */
     std::unordered_map<std::string, AssetManager::IndexedTexture2D> AssetManager::m_HashTable_Textures2D;
     std::unordered_map<std::string, AssetManager::IndexedSprite>    AssetManager::m_HashTable_Sprites;
-    std::unordered_map<std::string, AssetManager::SpriteSelector>   AssetManager::m_HashTable_SpriteSlectors;
+    std::unordered_map<std::string, AssetManager::SpriteSelector>   AssetManager::m_HashTable_SpriteSelectors;
     
     /* Static Keys Lists Definitions */
     std::vector<std::string> AssetManager::m_KeysList_Textures2D;
@@ -39,8 +39,8 @@ namespace Coconuts
         
         m_HashTable_Sprites.reserve(HashTableDefs::SpritesHT::reserve);
         m_HashTable_Sprites.max_load_factor(HashTableDefs::SpritesHT::max_load_factor);
-        m_HashTable_SpriteSlectors.reserve(HashTableDefs::SpritesHT::reserve);
-        m_HashTable_SpriteSlectors.max_load_factor(HashTableDefs::SpritesHT::max_load_factor);
+        m_HashTable_SpriteSelectors.reserve(HashTableDefs::SpritesHT::reserve);
+        m_HashTable_SpriteSelectors.max_load_factor(HashTableDefs::SpritesHT::max_load_factor);
     }
     
     
@@ -141,7 +141,7 @@ namespace Coconuts
         m_KeysList_Sprites.emplace_back(logicalName);
         
         /* Store SpriteSelector */
-        m_HashTable_SpriteSlectors[logicalName] = selector;
+        m_HashTable_SpriteSelectors[logicalName] = selector;
         
 #if LOG_PROFILE_HASHTABLES
         LOG_TRACE("Post-call CreateSprite():");
@@ -170,9 +170,9 @@ namespace Coconuts
             found->second.spriteSheetName = spriteSheetLogicalName;
             
             /* Update SpriteSelector */
-            auto found2 = m_HashTable_SpriteSlectors.find(logicalName);
+            auto found2 = m_HashTable_SpriteSelectors.find(logicalName);
             
-            if (found2 != m_HashTable_SpriteSlectors.end())
+            if (found2 != m_HashTable_SpriteSelectors.end())
             {
                 found2->second = selector;
                 return true;
@@ -211,9 +211,9 @@ namespace Coconuts
     //static
     std::tuple<bool, AssetManager::SpriteSelector> AssetManager::GetSpriteSelector(const std::string& logicalName)
     {
-        auto found = m_HashTable_SpriteSlectors.find(logicalName);
+        auto found = m_HashTable_SpriteSelectors.find(logicalName);
         
-        if (found != m_HashTable_SpriteSlectors.end())
+        if (found != m_HashTable_SpriteSelectors.end())
         {
             return std::make_tuple(true, found->second);
         }
@@ -230,7 +230,7 @@ namespace Coconuts
         {
             m_KeysList_Sprites.erase(m_KeysList_Sprites.begin() + found->second.keysListIndex);
             m_HashTable_Sprites.erase(logicalName);
-            m_HashTable_SpriteSlectors.erase(logicalName);
+            m_HashTable_SpriteSelectors.erase(logicalName);
             return true;
         }
         

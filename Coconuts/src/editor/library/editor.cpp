@@ -28,6 +28,35 @@ using namespace Coconuts::Editor;
 #include <imgui/backends/imgui_impl_opengl3.h>
 #include <imgui/backends/imgui_impl_glfw.h>
 
+/* Font Names */
+//-----------------------------
+#define LATO    "Lato"
+
+/* Font Types */
+//-----------------------------
+#define REGULAR "-Regular.ttf"
+#define LIGHT   "-Light.ttf"
+
+
+/* *************** CUSTOM FONT *************** */
+/* Font */
+const std::string __GUI_FONT        = LATO;
+
+/* Type */
+const std::string __GUI_FONT_TYPE   = REGULAR;
+
+/* Size */
+constexpr float GUI_FONT_SIZE       = 16.0f;
+/* ******************************************* */
+
+
+/* Set Font path */
+const std::string __PROJ_BASEDIR    = COCONUTS_BUILDTREE_ROOTDIR;
+const std::string __FONT_DIRECTORY_REL_PATH = "/src/editor/library/fonts/";
+const std::string __FONT_DIRECTORY = __PROJ_BASEDIR + __FONT_DIRECTORY_REL_PATH;
+const std::string GUI_FONT_PATH = __FONT_DIRECTORY + __GUI_FONT + "/" + __GUI_FONT + __GUI_FONT_TYPE;
+
+
 GUILayer::GUILayer()    : Layer("GUILayer")
 {
 }
@@ -53,6 +82,9 @@ void GUILayer::OnAttach()
     //io.ConfigViewportsNoAutoMerge = true;
     //io.ConfigViewportsNoTaskBarIcon = true;
 
+    /* Set Font and size */
+    io.FontDefault = io.Fonts->AddFontFromFileTTF(GUI_FONT_PATH.c_str(), GUI_FONT_SIZE);
+    
     // Setup Dear ImGui style
     ImGui::StyleColorsDark();
     //ImGui::StyleColorsClassic();

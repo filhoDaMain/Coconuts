@@ -51,6 +51,9 @@ namespace Coconuts
         virtual void OnPostAttach() override;
         
     private:
+        void SetDarkThemeColors();
+        
+    private:
         GameLayer* m_GameLayerPtr;
         
         /* Menu Bar menus */

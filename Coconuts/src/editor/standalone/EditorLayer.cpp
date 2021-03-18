@@ -115,7 +115,7 @@ namespace Coconuts
         
         /*  M E N U   B A R  */
         
-        if (ImGui::BeginMainMenuBar())
+        if (ImGui::BeginMenuBar())
         {
             /* File Menu */
             m_FileMenu.Draw();
@@ -126,7 +126,7 @@ namespace Coconuts
             /* Assets Menu */
             m_AssetsMenu.Draw(&showPopUp_ImportTexture2D);
             
-            ImGui::EndMainMenuBar();
+            ImGui::EndMenuBar();
         }
         
         
@@ -188,82 +188,80 @@ namespace Coconuts
         LOG_TRACE("Using Dark Theme for Editor GUI");
         
         //TODO
-#if 0
         ImVec4* colors = ImGui::GetStyle().Colors;
         
         /* Window */
-        colors[ImGuiCol_WindowBg]               = ImVec4{r, g, b, a};
-        colors[ImGuiCol_ChildBg]                =
-        colors[ImGuiCol_NavWindowingHighlight]  = 
-        colors[ImGuiCol_NavWindowingDimBg]      =
-        colors[ImGuiCol_ModalWindowDimBg]       =
+        colors[ImGuiCol_WindowBg]               = ImVec4{0.102f, 0.105f, 0.109f, 1.0f}; // Panel background
+        //colors[ImGuiCol_ChildBg]                =
+        //colors[ImGuiCol_NavWindowingHighlight]  = 
+        //colors[ImGuiCol_NavWindowingDimBg]      =
+        //colors[ImGuiCol_ModalWindowDimBg]       =
         
         /* Menu Bar */
-        colors[ImGuiCol_MenuBarBg]              =
+        colors[ImGuiCol_MenuBarBg]              = ImVec4{0.081f, 0.083f, 0.086f, 1.0f}; 
                 
         /* Header */
-        colors[ImGuiCol_Header]                 =
-        colors[ImGuiCol_HeaderHovered]          =
-        colors[ImGuiCol_HeaderActive]           =
+        //colors[ImGuiCol_Header]                 =
+        //colors[ImGuiCol_HeaderHovered]          =
+        //colors[ImGuiCol_HeaderActive]           =
         
         /* Title */
-        colors[ImGuiCol_TitleBg]                =
-        colors[ImGuiCol_TitleBgActive]          =
-        colors[ImGuiCol_TitleBgCollapsed]       =
+        colors[ImGuiCol_TitleBg]                = ImVec4{0.177f, 0.183f, 0.189f, 1.0f};
+        //colors[ImGuiCol_TitleBgActive]          =
+        //colors[ImGuiCol_TitleBgCollapsed]       =
                 
         /* Text */        
-        colors[ImGuiCol_Text]                   =
-        colors[ImGuiCol_TextDisabled]           =       
-        colors[ImGuiCol_TextSelectedBg]         =
+        //colors[ImGuiCol_Text]                   =
+        //colors[ImGuiCol_TextDisabled]           =       
+        //colors[ImGuiCol_TextSelectedBg]         =
         
         /* Button */
-        colors[ImGuiCol_Button]                 =
-        colors[ImGuiCol_ButtonHovered]          =
-        colors[ImGuiCol_ButtonActive]           =
+        //colors[ImGuiCol_Button]                 =
+        //colors[ImGuiCol_ButtonHovered]          =
+        //colors[ImGuiCol_ButtonActive]           =
                 
         /* Frame (checkbox, radio button, plot, slider, text input) */
-        colors[ImGuiCol_FrameBg]                =
-        colors[ImGuiCol_FrameBgHovered]         =
-        colors[ImGuiCol_FrameBgActive]          =
+        //colors[ImGuiCol_FrameBg]                =
+        //colors[ImGuiCol_FrameBgHovered]         =
+        //colors[ImGuiCol_FrameBgActive]          =
         
         /* Tab */
-        colors[ImGuiCol_Tab]                    =
-        colors[ImGuiCol_TabHovered]             =
-        colors[ImGuiCol_TabActive]              =
-        colors[ImGuiCol_TabUnfocused]           =
-        colors[ImGuiCol_TabUnfocusedActive]     =
+        //colors[ImGuiCol_Tab]                    =
+        //colors[ImGuiCol_TabHovered]             =
+        //colors[ImGuiCol_TabActive]              =
+        //colors[ImGuiCol_TabUnfocused]           =
+        //colors[ImGuiCol_TabUnfocusedActive]     =
         
         /* Misc */
-        colors[ImGuiCol_PopupBg]                =
-        colors[ImGuiCol_Border]                 =
-        colors[ImGuiCol_BorderShadow]           =
-        colors[ImGuiCol_ScrollbarBg]            =
-        colors[ImGuiCol_ScrollbarGrab]          =
-        colors[ImGuiCol_ScrollbarGrabHovered]   =
-        colors[ImGuiCol_ScrollbarGrabActive]    =
-        colors[ImGuiCol_CheckMark]              =
-        colors[ImGuiCol_SliderGrab]             =
-        colors[ImGuiCol_SliderGrabActive]       =
-        colors[ImGuiCol_Separator]              =
-        colors[ImGuiCol_SeparatorHovered]       =
-        colors[ImGuiCol_SeparatorActive]        =
-        colors[ImGuiCol_ResizeGrip]             =
-        colors[ImGuiCol_ResizeGripHovered]      =
-        colors[ImGuiCol_ResizeGripActive]       =
-        colors[ImGuiCol_DockingPreview]         =
-        colors[ImGuiCol_DockingEmptyBg]         =
-        colors[ImGuiCol_PlotLines]              =
-        colors[ImGuiCol_PlotLinesHovered]       =
-        colors[ImGuiCol_PlotHistogram]          =
-        colors[ImGuiCol_PlotHistogramHovered]   =
-        colors[ImGuiCol_TableHeaderBg]          =
-        colors[ImGuiCol_TableBorderStrong]      =
-        colors[ImGuiCol_TableBorderLight]       =
-        colors[ImGuiCol_TableRowBg]             =
-        colors[ImGuiCol_TableRowBgAlt]          =
-        colors[ImGuiCol_DragDropTarget]         =
-        colors[ImGuiCol_NavHighlight]           =
-#endif
+        //colors[ImGuiCol_PopupBg]                =
+        //colors[ImGuiCol_Border]                 =
+        //colors[ImGuiCol_BorderShadow]           =
+        //colors[ImGuiCol_ScrollbarBg]            =
+        //colors[ImGuiCol_ScrollbarGrab]          =
+        //colors[ImGuiCol_ScrollbarGrabHovered]   =
+        //colors[ImGuiCol_ScrollbarGrabActive]    =
+        //colors[ImGuiCol_CheckMark]              =
+        //colors[ImGuiCol_SliderGrab]             =
+        //colors[ImGuiCol_SliderGrabActive]       =
+        //colors[ImGuiCol_Separator]              =
+        //colors[ImGuiCol_SeparatorHovered]       =
+        //colors[ImGuiCol_SeparatorActive]        =
+        //colors[ImGuiCol_ResizeGrip]             =
+        //colors[ImGuiCol_ResizeGripHovered]      =
+        //colors[ImGuiCol_ResizeGripActive]       =
+        //colors[ImGuiCol_DockingPreview]         =
+        //colors[ImGuiCol_DockingEmptyBg]         =
+        //colors[ImGuiCol_PlotLines]              =
+        //colors[ImGuiCol_PlotLinesHovered]       =
+        //colors[ImGuiCol_PlotHistogram]          =
+        //colors[ImGuiCol_PlotHistogramHovered]   =
+        //colors[ImGuiCol_TableHeaderBg]          =
+        //colors[ImGuiCol_TableBorderStrong]      =
+        //colors[ImGuiCol_TableBorderLight]       =
+        //colors[ImGuiCol_TableRowBg]             =
+        //colors[ImGuiCol_TableRowBgAlt]          =
+        //colors[ImGuiCol_DragDropTarget]         =
+        //colors[ImGuiCol_NavHighlight]           =
     }
     
 }

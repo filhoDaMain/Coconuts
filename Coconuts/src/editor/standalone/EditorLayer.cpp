@@ -187,6 +187,8 @@ namespace Coconuts
     {
         LOG_TRACE("Using Dark Theme for Editor GUI");
         
+        ImVec4 MAGENTA = {1.0f, 0.f, 1.0f, 1.0f};
+        
         //TODO
         ImVec4* colors = ImGui::GetStyle().Colors;
         
@@ -201,19 +203,19 @@ namespace Coconuts
         colors[ImGuiCol_MenuBarBg]              = ImVec4{0.081f, 0.083f, 0.086f, 1.0f}; 
                 
         /* Header */
-        //colors[ImGuiCol_Header]                 =
-        //colors[ImGuiCol_HeaderHovered]          =
-        //colors[ImGuiCol_HeaderActive]           =
+        colors[ImGuiCol_Header]                 = ImVec4{0.195f, 0.203f, 0.206f, 1.0f}; // Selected
+        colors[ImGuiCol_HeaderHovered]          = ImVec4{0.235f, 0.239f, 0.240f, 1.0f}; // Hover
+        colors[ImGuiCol_HeaderActive]           = ImVec4{0.297f, 0.297f, 0.297f, 1.0f}; // Click
         
         /* Title */
-        colors[ImGuiCol_TitleBg]                = ImVec4{0.177f, 0.183f, 0.189f, 1.0f};
-        //colors[ImGuiCol_TitleBgActive]          =
-        //colors[ImGuiCol_TitleBgCollapsed]       =
+        colors[ImGuiCol_TitleBg]                = ImVec4{0.130f, 0.137f, 0.143f, 1.0f}; // Normal
+        colors[ImGuiCol_TitleBgActive]          = ImVec4{0.168f, 0.171f, 0.171f, 1.0f}; // Selected
+        colors[ImGuiCol_TitleBgCollapsed]       = ImVec4{0.235f, 0.239f, 0.240f, 1.0f};
                 
         /* Text */        
-        //colors[ImGuiCol_Text]                   =
-        //colors[ImGuiCol_TextDisabled]           =       
-        //colors[ImGuiCol_TextSelectedBg]         =
+        colors[ImGuiCol_Text]                   = ImVec4{0.914f, 0.917f, 0.920f, 1.0f};
+        colors[ImGuiCol_TextDisabled]           = ImVec4{0.347f, 0.351f, 0.354f, 1.0f};
+        colors[ImGuiCol_TextSelectedBg]         = ImVec4{0.914f, 0.917f, 0.920f, 1.0f};
         
         /* Button */
         //colors[ImGuiCol_Button]                 =
@@ -226,11 +228,12 @@ namespace Coconuts
         //colors[ImGuiCol_FrameBgActive]          =
         
         /* Tab */
-        //colors[ImGuiCol_Tab]                    =
-        //colors[ImGuiCol_TabHovered]             =
-        //colors[ImGuiCol_TabActive]              =
-        //colors[ImGuiCol_TabUnfocused]           =
-        //colors[ImGuiCol_TabUnfocusedActive]     =
+        colors[ImGuiCol_TabUnfocusedActive]     = ImVec4{0.175f, 0.188f, 0.194f, 1.0f}; // Normal background
+        colors[ImGuiCol_TabUnfocused]           = ImVec4{0.175f, 0.188f, 0.194f, 1.0f}; // Normal background
+        colors[ImGuiCol_Tab]                    = ImVec4{0.233f, 0.241f, 0.251f, 1.0f}; // Not selected, Panel Selected
+        colors[ImGuiCol_TabActive]              = ImVec4{0.341f, 0.396f, 0.457f, 1.0f}; // Selected
+        colors[ImGuiCol_TabHovered]             = ImVec4{0.447f, 0.524f, 0.611f, 1.0f}; // Hovered
+        
         
         /* Misc */
         //colors[ImGuiCol_PopupBg]                =

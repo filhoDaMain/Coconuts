@@ -187,17 +187,22 @@ namespace Coconuts
     {
         LOG_TRACE("Using Dark Theme for Editor GUI");
         
+        ImVec4 BLACK = {1.0f, 1.0f, 1.0f, 1.0f};
         ImVec4 MAGENTA = {1.0f, 0.f, 1.0f, 1.0f};
+        
         
         //TODO
         ImVec4* colors = ImGui::GetStyle().Colors;
         
+        /* Init background */
+        colors[ImGuiCol_DockingEmptyBg]         = BLACK;
+        
         /* Window */
         colors[ImGuiCol_WindowBg]               = ImVec4{0.102f, 0.105f, 0.109f, 1.0f}; // Panel background
-        //colors[ImGuiCol_ChildBg]                =
-        //colors[ImGuiCol_NavWindowingHighlight]  = 
-        //colors[ImGuiCol_NavWindowingDimBg]      =
-        //colors[ImGuiCol_ModalWindowDimBg]       =
+        colors[ImGuiCol_ChildBg]                = ImVec4{0.102f, 0.105f, 0.109f, 1.0f}; // Panel background
+        colors[ImGuiCol_NavWindowingHighlight]  = ImVec4{0.102f, 0.105f, 0.109f, 1.0f}; // Panel background
+        colors[ImGuiCol_NavWindowingDimBg]      = ImVec4{0.102f, 0.105f, 0.109f, 1.0f}; // Panel background
+        colors[ImGuiCol_ModalWindowDimBg]       = ImVec4{0.102f, 0.105f, 0.109f, 1.0f}; // Panel background
         
         /* Menu Bar */
         colors[ImGuiCol_MenuBarBg]              = ImVec4{0.081f, 0.083f, 0.086f, 1.0f}; 
@@ -209,8 +214,8 @@ namespace Coconuts
         
         /* Title */
         colors[ImGuiCol_TitleBg]                = ImVec4{0.130f, 0.137f, 0.143f, 1.0f}; // Normal
-        colors[ImGuiCol_TitleBgActive]          = ImVec4{0.168f, 0.171f, 0.171f, 1.0f}; // Selected
-        colors[ImGuiCol_TitleBgCollapsed]       = ImVec4{0.235f, 0.239f, 0.240f, 1.0f};
+        colors[ImGuiCol_TitleBgActive]          = ImVec4{0.182f, 0.189f, 0.189f, 1.0f}; // Selected
+        colors[ImGuiCol_TitleBgCollapsed]       = MAGENTA;//ImVec4{0.235f, 0.239f, 0.240f, 1.0f};
                 
         /* Text */        
         colors[ImGuiCol_Text]                   = ImVec4{0.914f, 0.917f, 0.920f, 1.0f};
@@ -218,14 +223,14 @@ namespace Coconuts
         colors[ImGuiCol_TextSelectedBg]         = ImVec4{0.914f, 0.917f, 0.920f, 1.0f};
         
         /* Button */
-        //colors[ImGuiCol_Button]                 =
-        //colors[ImGuiCol_ButtonHovered]          =
-        //colors[ImGuiCol_ButtonActive]           =
+        colors[ImGuiCol_Button]                 = ImVec4{0.195f, 0.203f, 0.206f, 1.0f}; // Normal
+        colors[ImGuiCol_ButtonHovered]          = ImVec4{0.235f, 0.239f, 0.240f, 1.0f}; // Hover
+        colors[ImGuiCol_ButtonActive]           = ImVec4{0.175f, 0.188f, 0.194f, 1.0f}; // Click
                 
         /* Frame (checkbox, radio button, plot, slider, text input) */
-        //colors[ImGuiCol_FrameBg]                =
-        //colors[ImGuiCol_FrameBgHovered]         =
-        //colors[ImGuiCol_FrameBgActive]          =
+        colors[ImGuiCol_FrameBg]                = ImVec4{0.195f, 0.203f, 0.206f, 1.0f}; // Normal
+        colors[ImGuiCol_FrameBgHovered]         = ImVec4{0.235f, 0.239f, 0.240f, 1.0f}; // Hover
+        colors[ImGuiCol_FrameBgActive]          = ImVec4{0.175f, 0.188f, 0.194f, 1.0f}; // Click
         
         /* Tab */
         colors[ImGuiCol_TabUnfocusedActive]     = ImVec4{0.175f, 0.188f, 0.194f, 1.0f}; // Normal background
@@ -233,27 +238,31 @@ namespace Coconuts
         colors[ImGuiCol_Tab]                    = ImVec4{0.233f, 0.241f, 0.251f, 1.0f}; // Not selected, Panel Selected
         colors[ImGuiCol_TabActive]              = ImVec4{0.341f, 0.396f, 0.457f, 1.0f}; // Selected
         colors[ImGuiCol_TabHovered]             = ImVec4{0.447f, 0.524f, 0.611f, 1.0f}; // Hovered
+         
+        /* Pop Up */
+        colors[ImGuiCol_PopupBg]                = ImVec4{0.166f, 0.172f, 0.177f, 1.0f}; // Background
+        colors[ImGuiCol_Border]                 = ImVec4{0.297f, 0.297f, 0.297f, 1.0f}; // Border
+        colors[ImGuiCol_BorderShadow]           = ImVec4{0.297f, 0.297f, 0.297f, 1.0f}; // Border
         
+        /* Scrollbar */
+        colors[ImGuiCol_ScrollbarBg]            = ImVec4{0.235f, 0.239f, 0.240f, 1.0f}; // Background
+        colors[ImGuiCol_ScrollbarGrab]          = ImVec4{0.102f, 0.105f, 0.109f, 1.0f}; // Scrollbar
+        colors[ImGuiCol_ScrollbarGrabHovered]   = ImVec4{0.102f, 0.105f, 0.109f, 1.0f}; // Scrollbar
+        colors[ImGuiCol_ScrollbarGrabActive]    = ImVec4{0.102f, 0.105f, 0.109f, 1.0f}; // Scrollbar
+        
+        /* Separator */
+        colors[ImGuiCol_Separator]              = ImVec4{0.347f, 0.351f, 0.354f, 1.0f};
+        colors[ImGuiCol_SeparatorHovered]       = ImVec4{0.347f, 0.351f, 0.354f, 1.0f};
+        colors[ImGuiCol_SeparatorActive]        = ImVec4{0.347f, 0.351f, 0.354f, 1.0f};
         
         /* Misc */
-        //colors[ImGuiCol_PopupBg]                =
-        //colors[ImGuiCol_Border]                 =
-        //colors[ImGuiCol_BorderShadow]           =
-        //colors[ImGuiCol_ScrollbarBg]            =
-        //colors[ImGuiCol_ScrollbarGrab]          =
-        //colors[ImGuiCol_ScrollbarGrabHovered]   =
-        //colors[ImGuiCol_ScrollbarGrabActive]    =
         //colors[ImGuiCol_CheckMark]              =
         //colors[ImGuiCol_SliderGrab]             =
         //colors[ImGuiCol_SliderGrabActive]       =
-        //colors[ImGuiCol_Separator]              =
-        //colors[ImGuiCol_SeparatorHovered]       =
-        //colors[ImGuiCol_SeparatorActive]        =
         //colors[ImGuiCol_ResizeGrip]             =
         //colors[ImGuiCol_ResizeGripHovered]      =
         //colors[ImGuiCol_ResizeGripActive]       =
         //colors[ImGuiCol_DockingPreview]         =
-        //colors[ImGuiCol_DockingEmptyBg]         =
         //colors[ImGuiCol_PlotLines]              =
         //colors[ImGuiCol_PlotLinesHovered]       =
         //colors[ImGuiCol_PlotHistogram]          =

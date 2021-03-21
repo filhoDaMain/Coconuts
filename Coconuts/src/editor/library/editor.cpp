@@ -28,6 +28,7 @@ using namespace Coconuts::Editor;
 #include <imgui/backends/imgui_impl_opengl3.h>
 #include <imgui/backends/imgui_impl_glfw.h>
 
+
 GUILayer::GUILayer()    : Layer("GUILayer")
 {
 }
@@ -52,7 +53,7 @@ void GUILayer::OnAttach()
     io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
     //io.ConfigViewportsNoAutoMerge = true;
     //io.ConfigViewportsNoTaskBarIcon = true;
-
+    
     // Setup Dear ImGui style
     ImGui::StyleColorsDark();
     //ImGui::StyleColorsClassic();
@@ -143,4 +144,10 @@ void GUILayer::End()
         ImGui::RenderPlatformWindowsDefault();
         glfwMakeContextCurrent(backup_current_context);
     }
+}
+
+void GUILayer::SetDefaultFontTTF(const std::string& pathToFileTTF, float size)
+{
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    io.FontDefault = io.Fonts->AddFontFromFileTTF(pathToFileTTF.c_str(), size);
 }

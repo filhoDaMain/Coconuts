@@ -38,7 +38,7 @@ namespace Panels
         ImGui::Begin("Assets");
         ImGui::Spacing();ImGui::Spacing();
         
-        ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "Asset Manager - Logical References:");
+        ImGui::Text("Imported Assets");
         ImGui::Spacing();ImGui::Spacing();ImGui::Spacing();ImGui::Spacing();
         
         DrawTextures2DTree();

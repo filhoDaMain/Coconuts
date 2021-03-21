@@ -38,6 +38,8 @@ namespace Coconuts
             void Begin();
             void End();
             
+            void SetDefaultFontTTF(const std::string& pathToFileTTF, float size = 16.0f);
+            
         private:
             double m_Time = 0.0f;
             

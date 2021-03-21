@@ -171,7 +171,9 @@ namespace Coconuts
     {
         LOG_TRACE("Editor Layer OnPostAttach()");
         
-        SetDarkThemeColors();
+        /* Set Style */
+        SetCustomGUIStyle();
+        
         m_FileMenu.Init(m_GameLayerPtr);
         m_EntityMenu.Init(m_GameLayerPtr);
         
@@ -184,17 +186,22 @@ namespace Coconuts
         m_ImportTexture2dPopUp.Init();
     }
     
+    void EditorLayer::SetCustomGUIStyle()
+    {
+        /* Set Font and font size */
+        SetDefaultFontTTF(Fonts::Lato::Regular.c_str(), 16.0f);
+        
+        /* Set custom dark theme */
+        SetDarkThemeColors();
+    }
+    
     void EditorLayer::SetDarkThemeColors()
     {
         LOG_TRACE("Using Dark Theme for Editor GUI");
          
+        ImVec4* colors = ImGui::GetStyle().Colors;
         ImVec4 BLACK = {1.0f, 1.0f, 1.0f, 1.0f};
         ImVec4 MAGENTA = {1.0f, 0.f, 1.0f, 1.0f};
-        
-        SetDefaultFontTTF(Fonts::Lato::Regular.c_str());
-        
-        //TODO
-        ImVec4* colors = ImGui::GetStyle().Colors;
         
         /* Init background */
         colors[ImGuiCol_DockingEmptyBg]         = BLACK;

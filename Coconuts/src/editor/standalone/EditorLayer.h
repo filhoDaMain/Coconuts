@@ -51,6 +51,7 @@ namespace Coconuts
         virtual void OnPostAttach() override;
         
     private:
+        void SetCustomGUIStyle();
         void SetDarkThemeColors();
         
     private:

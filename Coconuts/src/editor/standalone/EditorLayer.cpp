@@ -227,9 +227,9 @@ namespace Coconuts
         colors[ImGuiCol_TitleBgCollapsed]       = MAGENTA;//ImVec4{0.235f, 0.239f, 0.240f, 1.0f};
                 
         /* Text */        
-        colors[ImGuiCol_Text]                   = ImVec4{0.914f, 0.917f, 0.920f, 1.0f};
-        colors[ImGuiCol_TextDisabled]           = ImVec4{0.347f, 0.351f, 0.354f, 1.0f};
-        colors[ImGuiCol_TextSelectedBg]         = ImVec4{0.914f, 0.917f, 0.920f, 1.0f};
+        colors[ImGuiCol_Text]                   = ImVec4{0.914f, 0.917f, 0.920f, 1.0f}; // Normal
+        colors[ImGuiCol_TextDisabled]           = ImVec4{0.347f, 0.351f, 0.354f, 1.0f}; // Disabled text
+        colors[ImGuiCol_TextSelectedBg]         = ImVec4{0.347f, 0.351f, 0.354f, 1.0f}; // Selected background
         
         /* Button */
         colors[ImGuiCol_Button]                 = ImVec4{0.195f, 0.203f, 0.206f, 1.0f}; // Normal

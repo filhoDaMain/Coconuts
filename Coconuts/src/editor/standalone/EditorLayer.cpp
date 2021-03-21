@@ -15,6 +15,7 @@
  */
 
 #include "EditorLayer.h"
+#include "fonts/Fonts.h"
 #include <cstdint>
 
 #define INT2VOIDP(i) (void*)(uintptr_t)(i)
@@ -186,10 +187,11 @@ namespace Coconuts
     void EditorLayer::SetDarkThemeColors()
     {
         LOG_TRACE("Using Dark Theme for Editor GUI");
-        
+         
         ImVec4 BLACK = {1.0f, 1.0f, 1.0f, 1.0f};
         ImVec4 MAGENTA = {1.0f, 0.f, 1.0f, 1.0f};
         
+        SetDefaultFontTTF(Fonts::Lato::Regular.c_str());
         
         //TODO
         ImVec4* colors = ImGui::GetStyle().Colors;

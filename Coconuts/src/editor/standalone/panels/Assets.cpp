@@ -38,7 +38,7 @@ namespace Panels
         ImGui::Begin("Assets");
         ImGui::Spacing();ImGui::Spacing();
         
-        ImGui::Text("Imported Assets");
+        ImGui::Text("Asset Manager");
         ImGui::Spacing();ImGui::Spacing();ImGui::Spacing();ImGui::Spacing();
         
         DrawTextures2DTree();

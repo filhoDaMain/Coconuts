@@ -16,3 +16,6 @@
 [submodule "Coconuts/vendor/entityx"]
 	path = Coconuts/vendor/entityx
 	url = https://github.com/alecthomas/entityx
+[submodule "Coconuts/vendor/nativefiledialog/nativefiledialog"]
+	path = Coconuts/vendor/nativefiledialog/nativefiledialog
+	url = https://github.com/mlabbe/nativefiledialog

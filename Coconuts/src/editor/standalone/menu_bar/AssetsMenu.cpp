@@ -27,7 +27,7 @@ namespace MenuBar
         {
             if (ImGui::MenuItem("Import Texture2D", "", false, true))
             {
-                *showPopUp_ImportTexture2D = true;
+                *showPopUp_ImportTexture2D = true;  // triggers a PopUp handled by EditorLayer
             }
             
             ImGui::EndMenu();

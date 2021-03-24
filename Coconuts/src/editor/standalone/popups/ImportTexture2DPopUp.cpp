@@ -40,7 +40,7 @@ namespace PopUps
             static char logicalNameBuffer[32] = "SingleWordName";
             
             /* Image Path */
-            ImGui::Text("Select an image to import from filesystem");
+            ImGui::Text("Select an image from filesystem");
             ImGui::Spacing();ImGui::Spacing();ImGui::Spacing();
             if (ImGui::InputText("", pathBuffer, sizeof(pathBuffer)))
             {
@@ -95,9 +95,15 @@ namespace PopUps
                 {
                     std::string path = std::string(pathBuffer);
                     std::string name = std::string(logicalNameBuffer);
-                    AssetManager::ImportTexture2D(name, path);
                     
-                    LOG_TRACE("Imported file {} into AssetManager as '{}'", path, name);
+                    if ( AssetManager::ImportTexture2D(name, path) )
+                    {
+                        LOG_TRACE("Imported file {} into AssetManager as '{}' Texture2D", path, name);
+                    }
+                    else
+                    {
+                        LOG_WARN("Failed to import file {} into AssetManager");
+                    }
                     
                     /* Clear buffers for next usage */
                     strcpy(pathBuffer, "/absolute/path/to/image.png");
@@ -106,8 +112,10 @@ namespace PopUps
                     ImGui::CloseCurrentPopup();
                     *show = false;
                 }
-                
-                LOG_WARN("Path to file or Logical Name not defined yet!");
+                else
+                {
+                    LOG_WARN("Path to file or Logical Name not defined yet!");
+                }
             }
             ImGui::SetItemDefaultFocus();
             

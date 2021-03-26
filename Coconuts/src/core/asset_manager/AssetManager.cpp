@@ -129,6 +129,10 @@ namespace Coconuts
         
         /* Get Texture2D from spritesheet logical name */
         std::shared_ptr<Texture2D> texture2D = AssetManager::GetTexture2D(spriteSheetLogicalName);
+        if (texture2D == nullptr)
+        {
+            return false;   // Failed. Stop here.
+        }
         
         /* Create Sprite from spritesheet and SpriteSelector */
         std::shared_ptr<Sprite> sprite;

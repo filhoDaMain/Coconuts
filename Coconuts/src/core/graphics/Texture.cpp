@@ -31,7 +31,13 @@ namespace Coconuts
         {
             case RendererAPI::API::OpenGL:
             {
-                return new OpenGLTexture2D(width, height, data, size);
+                Texture2D* ptr = new OpenGLTexture2D(width, height, data, size);
+                if (ptr->IsValid() == false)
+                {
+                    delete ptr; // free
+                    return nullptr;
+                }
+                return ptr; // ok
                 
                 break;
             }
@@ -52,7 +58,13 @@ namespace Coconuts
         {
             case RendererAPI::API::OpenGL:
             {
-                return new OpenGLTexture2D(path);
+                Texture2D* ptr = new OpenGLTexture2D(path);
+                if (ptr->IsValid() == false)
+                {
+                    delete ptr; // free
+                    return nullptr;
+                }
+                return ptr; // ok
                 
                 break;
             }

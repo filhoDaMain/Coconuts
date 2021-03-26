@@ -45,6 +45,9 @@ namespace Coconuts
     public:
         static Texture2D* Create(uint32_t width, uint32_t height, void* data, uint32_t size);
         static Texture2D* Create(const std::string& path);
+        
+    protected:
+        virtual bool IsValid() = 0;
     };
     
 }

@@ -47,12 +47,16 @@ namespace Coconuts
         {
             return INT2VOIDP(m_RendererID);
         }
+        
+    private:
+        virtual bool IsValid() override { return validity; }
                 
     private:
         uint32_t m_Width, m_Height;
         std::string m_Path;
         uint32_t m_RendererID;
         GLenum m_InternalFormat, m_DataFormat;
+        bool validity;
     };
     
 }

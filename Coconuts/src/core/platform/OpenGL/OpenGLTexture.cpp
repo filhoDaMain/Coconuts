@@ -21,7 +21,7 @@
 namespace Coconuts
 {
     OpenGLTexture2D::OpenGLTexture2D(uint32_t width, uint32_t height, void* data, uint32_t size)
-        : m_Width(width), m_Height(height)
+        : m_Width(width), m_Height(height), validity(false)
     {
         GLenum internalFormat = GL_RGBA8;
         GLenum dataFormat = GL_RGBA;
@@ -48,10 +48,13 @@ namespace Coconuts
         
         /* Unbind Texture */
         glBindTexture(GL_TEXTURE_2D, 0);
+        
+        /* All good */
+        validity = true;
     }
     
     OpenGLTexture2D::OpenGLTexture2D(const std::string& path)
-        :   m_Path(path)
+        :   m_Path(path), validity(false)
     {
         int width, height, channels;
         
@@ -115,6 +118,9 @@ namespace Coconuts
         {
             stbi_image_free(data);
         }
+        
+        /* All good */
+        validity = true;
     }
     
     OpenGLTexture2D::~OpenGLTexture2D()

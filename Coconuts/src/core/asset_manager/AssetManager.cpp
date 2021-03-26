@@ -57,8 +57,14 @@ namespace Coconuts
 #endif
         
         /* Create Texture2D from image path */
+        Texture2D* rawPtr = Texture2D::Create(path);
+        if (rawPtr == nullptr)
+        {
+            return false;   // Failed. Stop here.
+        }
+         
         std::shared_ptr<Texture2D> texture2D;
-        texture2D.reset( Texture2D::Create(path) );
+        texture2D.reset(rawPtr);
         
         /* Store */
         IndexedTexture2D indexed = { texture2D, static_cast<uint32_t>(m_KeysList_Textures2D.size()) };

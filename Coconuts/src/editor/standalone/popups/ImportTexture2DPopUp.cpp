@@ -102,7 +102,7 @@ namespace PopUps
                     }
                     else
                     {
-                        LOG_WARN("Failed to import file {} into AssetManager");
+                        LOG_WARN("Failed to import. File {} does not exist!", path);
                     }
                     
                     /* Clear buffers for next usage */

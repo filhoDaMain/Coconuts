@@ -3,6 +3,25 @@ project(COCONUTS VERSION 0.1 LANGUAGES CXX)
 
 set (CMAKE_CXX_STANDARD 11)
 
+# Look for hard dependencies
+# For GNU-Linux build xorg-dev has to be installed
+if(UNIX AND NOT APPLE)
+    find_package(X11)
+    if(${X11_FOUND})
+        message(status "Found X11")
+    else()
+        string(ASCII 27 Esc)
+        set(ColorReset "${Esc}[m")
+        set(BoldRed     "${Esc}[1;31m")
+        set(BoldGreen   "${Esc}[1;32m")
+        set(BoldYellow  "${Esc}[1;33m")
+
+        # stop build
+        message(FATAL_ERROR "${BoldRed}\nDEPENDENCY NOT FOUND!\n* X11 'xorg-dev' package not found\n${BoldYellow}HINT: Install 'xorg-dev' and comeback later to build Coconuts\n${ColorReset}debian: sudo apt-get install -y xorg-dev")
+        
+    endif()
+endif()
+
 # Create macro for Build Tree root directory
 add_definitions(-DCOCONUTS_BUILDTREE_ROOTDIR="${PROJECT_SOURCE_DIR}")
 

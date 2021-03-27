@@ -22,7 +22,7 @@ git clone --recurse-submodules git@github.com:filhoDaMain/Coconuts.git
 
 | Platform      | Dependencies |
 | ------------- | ---------- |
-| Gnu/Linux      | *xorg-dev* package       |
+| GNU/Linux      | *xorg-dev* package       |
 | OSX macOS   | (no external deps)        |
 
 

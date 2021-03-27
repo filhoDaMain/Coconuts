@@ -17,7 +17,16 @@ git clone --recurse-submodules git@github.com:filhoDaMain/Coconuts.git
 ```
 
 ## How to build
-### Coconuts libraries and Standalone Editor application
+
+#### Dependencies
+
+| Platform      | Dependencies |
+| ------------- | ---------- |
+| Gnu/Linux      | *xorg-dev* package       |
+| OSX macOS   | (no external deps)        |
+
+
+### Build libraries and Standalone Editor application
 
 CMake out-of-source build:
 ```

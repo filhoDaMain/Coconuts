@@ -44,7 +44,7 @@ if(APPLE)
 elseif(UNIX AND NOT APPLE)
     find_package(OpenGL REQUIRED)
     target_link_libraries(ccneditor_standalone OpenGL::GL)
-    target_link_libraries(ccneditor_standalone "-ldl" "-pthread")
+    target_link_libraries(ccneditor_standalone "-ldl" "-lpthread" "-lGL")
 endif()
 
 # AFTER COMPILATION INFO

@@ -21,7 +21,9 @@ if (APPLE)
     add_subdirectory(platform/OpenGL)
 elseif(UNIX AND NOT APPLE)
     message(STATUS "GNU Platform detected")
+    message(STATUS "Using OpenGL Graphics API")
     add_subdirectory(platform/GNU)
+    add_subdirectory(platform/OpenGL)
 endif()
 
 target_include_directories(ccncore PRIVATE "${PROJECT_SOURCE_DIR}/include"

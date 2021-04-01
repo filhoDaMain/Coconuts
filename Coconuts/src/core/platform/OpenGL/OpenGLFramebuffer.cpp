@@ -105,7 +105,7 @@ namespace Coconuts
         {
             LOG_CRITICAL("Framebuffer is incomplete!");
             /* Unbind Framebuffer */
-            glBindFramebuffer(GL_TEXTURE_2D, 0);
+            glBindFramebuffer(GL_FRAMEBUFFER, 0);
             exit(1);
         }
         

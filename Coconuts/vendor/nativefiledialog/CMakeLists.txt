@@ -27,7 +27,10 @@ if (APPLE)
 # GNU:
 elseif(UNIX AND NOT APPLE)
     add_library(nfd nativefiledialog/src/nfd_common.c
-                    nativefiledialog/src/nfd_gtk.c)
+                    nativefiledialog/src/nfd_zenity.c)
+
+    # Disable warnings currently being triggered here
+    target_compile_options(nfd PRIVATE "-w")
 endif()
 
 # Includes

@@ -24,8 +24,9 @@ namespace Coconuts
     
     enum TargetPlatform
     {
-        Platform_None = 0,
-        Platform_MacOS = 1
+        Platform_None   = 0,
+        Platform_MacOS  = 1,
+        Platform_GNU    = 2
     };
     
     class OpenGLGraphicsContext : public GraphicsContext

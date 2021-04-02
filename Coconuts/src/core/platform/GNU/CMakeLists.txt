@@ -1,3 +1,4 @@
-# CORE LIBRARY
+# CORE LIBRARY - Platform / GNU
 
-message(FATAL_ERROR "GNU Platform specific still not supported!")
+add_subdirectory(window_system)
+add_subdirectory(polling)

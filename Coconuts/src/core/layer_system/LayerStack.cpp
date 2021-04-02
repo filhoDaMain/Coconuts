@@ -16,6 +16,7 @@
 
 #include <coconuts/Layer.h>
 #include <coconuts/layer_system/LayerStack.h>
+#include <algorithm>
 
 namespace Coconuts
 {

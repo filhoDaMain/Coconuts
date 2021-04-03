@@ -21,13 +21,19 @@ namespace Coconuts {
 namespace MenuBar
 {
     
-    void AssetsMenu::Draw(bool* showPopUp_ImportTexture2D)
+    void AssetsMenu::Draw(bool* showPopUp_ImportTexture2D,
+                          bool* showPopUp_CreateSprite)
     {
         if (ImGui::BeginMenu("Assets"))
         {
             if (ImGui::MenuItem("Import Texture2D", "", false, true))
             {
                 *showPopUp_ImportTexture2D = true;  // triggers a PopUp handled by EditorLayer
+            }
+            
+            if (ImGui::MenuItem("New Sprite", "", false, true))
+            {
+                *showPopUp_CreateSprite = true;  // triggers a PopUp handled by EditorLayer
             }
             
             ImGui::EndMenu();

@@ -13,19 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef ASSETSMENU_H
-#define ASSETSMENU_H
+#ifndef CREATESPRITEPOPUP_H
+#define CREATESPRITEPOPUP_H
 
 namespace Coconuts {
-namespace MenuBar
+namespace PopUps
 {
     
-    class AssetsMenu
+    class CreateSpritePopUp
     {
     public:
-        AssetsMenu() = default;
-        void Draw(bool* showPopUp_ImportTexture2D,
-                  bool* showPopUp_CreateSprite);
+        CreateSpritePopUp() = default;
+        bool Init() { return true; }
+        void Draw(bool* show);
         
     private:
     };
@@ -33,5 +33,5 @@ namespace MenuBar
 }
 }
 
-#endif /* ASSETSMENU_H */
+#endif /* CREATESPRITEPOPUP_H */
 

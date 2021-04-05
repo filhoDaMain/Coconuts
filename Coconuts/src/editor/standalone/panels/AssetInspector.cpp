@@ -29,6 +29,7 @@ namespace Panels
     bool AssetInspector::Init()
     {
         DrawContextFunc = [&](void) { this->DrawEmpty(); };
+        spriteSaved = true;
         return true;
     }
     
@@ -58,12 +59,10 @@ namespace Panels
     void AssetInspector::DrawSpriteAsset()
     {        
         ImGui::Text("Sprite");
-                
-        static bool saved = true;
         std::string origSpriteSheetName;
         
         static char editSpriteName[32];
-        if (saved)
+        if (spriteSaved)
         {
             /* Begin with original sprite name */
             strcpy(editSpriteName, m_LogicalNameSprite.c_str());
@@ -91,7 +90,7 @@ namespace Panels
         {
             sheetsArray.push_back(const_cast<char*>(sheets[i].c_str()));
             
-            if (saved && origSpriteSheetName.compare(sheetsArray[i]) == 0)
+            if (spriteSaved && origSpriteSheetName.compare(sheetsArray[i]) == 0)
             {
                 seletected_sheet_index = i; // begin with original sprite sheet
             }   
@@ -108,7 +107,7 @@ namespace Panels
         /* Get SpriteSelector and enable changes */
         static AssetManager::SpriteSelector selectorEdit;
         bool valid;
-        if (saved)
+        if (spriteSaved)
         {
             std::tie(valid, selectorEdit) = AssetManager::GetSpriteSelector(m_LogicalNameSprite);
             if (!valid)
@@ -142,7 +141,7 @@ namespace Panels
         ImGui::Image((void *) *texture, ImVec2(selectorEdit.cellSize.x/2, selectorEdit.cellSize.y/2), uv0, uv1);
         
         /* Save */
-        saved = false;
+        spriteSaved = false;
         if (ImGui::Button("Save"))
         {
             /* Back to string */
@@ -160,7 +159,7 @@ namespace Panels
                 AssetManager::UpdateSprite(m_LogicalNameSprite, sheets[seletected_sheet_index], selectorEdit);
             }
             
-            saved = true;
+            spriteSaved = true;
         }
     }
     
@@ -177,6 +176,7 @@ namespace Panels
     {
         DrawContextFunc = [&](void) { this->DrawSpriteAsset(); };
         m_LogicalNameSprite = name;
+        spriteSaved = true; // fetch original sprite data
     }
     
 }

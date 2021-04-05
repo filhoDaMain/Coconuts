@@ -167,6 +167,7 @@ namespace Panels
     /* Change Context - Texture2D */
     void AssetInspector::ChangeContext2Texture2D(std::string& name)
     {
+        LOG_TRACE("AssetInspector - Change context to Texture2D");
         DrawContextFunc = [&](void) { this->DrawTexture2DAsset(); };
         m_LogicalNameTexture2D = name;
     }
@@ -174,6 +175,7 @@ namespace Panels
     /* Change Context - Sprite */
     void AssetInspector::ChangeContext2Sprite(std::string& name)
     {
+        LOG_TRACE("AssetInspector - Change context to Sprite");
         DrawContextFunc = [&](void) { this->DrawSpriteAsset(); };
         m_LogicalNameSprite = name;
         spriteSaved = true; // fetch original sprite data

@@ -18,6 +18,11 @@
 #include <coconuts/editor.h>
 #include <coconuts/AssetManager.h>
 #include <coconuts/Logger.h>
+#include <coconuts/graphics/Texture.h>
+#include <glm/glm.hpp>
+#include "../ed_utils.h"
+#include <string.h>
+#include <sstream>
 
 namespace Coconuts {
 namespace PopUps
@@ -33,6 +38,42 @@ namespace PopUps
 
         if (ImGui::BeginPopupModal("AssetManager:  Create New Sprite", NULL, ImGuiWindowFlags_AlwaysAutoResize))
         {
+            static char logicalNameBuffer[32] = "SingleWordName";
+            
+            auto sheets = AssetManager::GetAllTexture2DLogicalNames();
+            std::vector<char*> sheetsArray;
+            sheetsArray.reserve(sheets.size());
+
+            static int seletected_sheet_index = 0;
+            int i;
+            for (i = 0; i < sheets.size(); i++)
+            {
+                sheetsArray.push_back(const_cast<char*>(sheets[i].c_str())); 
+            }
+
+            /* Drop-down - Choose spritesheet */
+            ImGui::Text("Create sprite from sprite sheet Texture2D asset");
+            ImGui::Spacing();ImGui::Spacing();ImGui::Spacing();
+            ImGui::Combo("Texture2D", &seletected_sheet_index, &sheetsArray[0], sheetsArray.size());
+            
+            /* Draw sprite sheet preview */
+            std::string texture2DStr = sheetsArray[seletected_sheet_index];
+            auto texture = AssetManager::GetTexture2D(texture2DStr);
+            ImGui::Image((void *) *texture, ImVec2((texture->GetWidth()/8), (texture->GetHeight()/8)), ImVec2{0, 1}, ImVec2{1, 0});
+            
+            
+            ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
+            ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
+            
+            ImGui::Text("Give Sprite a logical name");
+            ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
+            if (ImGui::InputText("Sprite Name", logicalNameBuffer, sizeof(logicalNameBuffer)))
+            {
+                //
+            }
+            
+            ImGui::Separator();
+            
 #if 0
             static char pathBuffer[200] = "/absolute/path/to/image.png";
             static char logicalNameBuffer[32] = "SingleWordName";
@@ -85,11 +126,33 @@ namespace PopUps
             ImGui::Separator();
 #endif
             
-            /* Import into AssetManager */
+            /* Create Sprite in AssetManager */
             if (ImGui::Button("Create", ImVec2(120, 0)))
             {
-                ImGui::CloseCurrentPopup();
-                *show = false;
+                if ((strcmp(logicalNameBuffer, "SingleWordName") != 0))
+                {
+                    //texture2DStr is Texture2D name as string
+                    std::string spriteNameStr = std::string(logicalNameBuffer);
+                    
+                    /* Using a default selector that takes the whole sprite sheet */
+                    AssetManager::SpriteSelector selector;
+                    selector.cellSize = glm::vec2(1.0f);
+                    selector.coords = glm::vec2(1.0f);
+                    selector.spriteSize = glm::vec2(1.0f);
+                    AssetManager::CreateSprite(spriteNameStr, texture2DStr, selector);
+                    
+                    /* Clear buffer for next usage */
+                    strcpy(logicalNameBuffer, "SingleWordName");
+                    
+                    ImGui::CloseCurrentPopup();
+                    *show = false;
+                }
+                else
+                {
+                    LOG_WARN("Sprite Name not defined yet!");
+                }
+                
+
 #if 0
                 if ( (strcmp(pathBuffer, "/absolute/path/to/image.png") != 0) && 
                      (strcmp(logicalNameBuffer, "SingleWordName") != 0) )
@@ -129,6 +192,9 @@ namespace PopUps
                 strcpy(pathBuffer, "/absolute/path/to/image.png");
                 strcpy(logicalNameBuffer, "SingleWordName");
 #endif
+                /* Clear buffers for next usage */
+                strcpy(logicalNameBuffer, "SingleWordName");
+                
                 ImGui::CloseCurrentPopup();
                 *show = false;
             }

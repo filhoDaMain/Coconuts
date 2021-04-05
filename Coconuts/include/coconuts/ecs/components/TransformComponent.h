@@ -28,7 +28,9 @@ namespace Coconuts
         glm::vec2   size;
         float       rotationRadians;
         
-        TransformComponent() = default;
+        TransformComponent()
+        : position(glm::vec2(0.0f)), size(glm::vec2(1.0f)), rotationRadians(0.0f) {}
+        
         TransformComponent(const glm::vec2& pos, const glm::vec2& sz = glm::vec2(1.0f), float rotationInRadians = 0.0f)
         : position(pos), size(sz), rotationRadians(rotationInRadians) {}
     };

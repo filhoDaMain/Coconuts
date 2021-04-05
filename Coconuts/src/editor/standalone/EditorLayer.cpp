@@ -112,6 +112,7 @@ namespace Coconuts
         
         /* PopUps triggering flags */
         static bool showPopUp_ImportTexture2D = false;
+        static bool showPopUp_CreateSprite = false;
         
         
         /*  M E N U   B A R  */
@@ -125,7 +126,7 @@ namespace Coconuts
             m_EntityMenu.Draw();
             
             /* Assets Menu */
-            m_AssetsMenu.Draw(&showPopUp_ImportTexture2D);
+            m_AssetsMenu.Draw(&showPopUp_ImportTexture2D, &showPopUp_CreateSprite);
             
             ImGui::EndMenuBar();
         }
@@ -138,6 +139,12 @@ namespace Coconuts
         {
             /* Import Texture 2D (Triggered from AssetsMenu) */
             m_ImportTexture2dPopUp.Draw(&showPopUp_ImportTexture2D);
+        }
+        
+        if (showPopUp_CreateSprite)
+        {
+            /* Create Sprite (Triggered from AssetsMenu) */
+            m_CreateSpritePopUp.Draw(&showPopUp_CreateSprite);
         }
         
         /*  P A N E L S  */
@@ -184,6 +191,7 @@ namespace Coconuts
         m_AssetsPanel.Init(&m_AssetInspectorPanel);
         
         m_ImportTexture2dPopUp.Init();
+        m_CreateSpritePopUp.Init();
     }
     
     void EditorLayer::SetCustomGUIStyle()

@@ -63,24 +63,26 @@ namespace Panels
             for (auto name : AssetManager::GetAllTexture2DLogicalNames())
             {
                 static std::string context_str = "";
+                static bool click = false;
                 
-                ImGuiTreeNodeFlags inner_flags = ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Bullet;
-                inner_flags |=  context_str.compare(name) == 0 && !m_SpritesTreeSelected ?
-                                ImGuiTreeNodeFlags_Selected : 0;   
+                ImGuiTreeNodeFlags inner_flags = ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Bullet;  
                  
+                inner_flags |=  context_str.compare(name) == 0 && m_TexturesTreeSelected ? ImGuiTreeNodeFlags_Selected : 0; 
                 bool fakeopen = ImGui::TreeNodeEx(name.c_str() , inner_flags);
+                click = false;
                 if (ImGui::IsItemClicked())
                 {
-                    m_TexturesTreeSelected = !m_TexturesTreeSelected;   //toggle
+                    m_TexturesTreeSelected = true;
                     m_SpritesTreeSelected = false;
-                    context_str = m_TexturesTreeSelected ? name : "";
+                    context_str = name;
+                    click = true;
                 }
                 if (fakeopen) ImGui::TreePop();
 
                 /**
                  * This Texture2D Logical Name is currently selected.
                  */
-                if (inner_flags & ImGuiTreeNodeFlags_Selected)
+                if (click)
                 {
                     m_AssetInspectorPtr->ChangeContext2Texture2D(name);
                 }
@@ -101,24 +103,26 @@ namespace Panels
             for (auto name : AssetManager::GetAllSpriteLogicalNames())
             {
                 static std::string context_str = "";
+                static bool click = false;
                 
                 ImGuiTreeNodeFlags inner_flags = ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Bullet;
-                inner_flags |=  context_str.compare(name) == 0 && !m_TexturesTreeSelected ?
-                                ImGuiTreeNodeFlags_Selected : 0;   
+                inner_flags |=  context_str.compare(name) == 0 && m_SpritesTreeSelected ? ImGuiTreeNodeFlags_Selected : 0;   
                  
                 bool fakeopen = ImGui::TreeNodeEx(name.c_str() , inner_flags);
+                click = false;
                 if (ImGui::IsItemClicked())
                 {
-                    m_SpritesTreeSelected = !m_SpritesTreeSelected; //toggle
+                    m_SpritesTreeSelected = true;
                     m_TexturesTreeSelected = false;
-                    context_str = m_SpritesTreeSelected ? name : "";
+                    context_str = name;
+                    click = true;
                 }
                 if (fakeopen) ImGui::TreePop();
 
                 /**
                  * This Sprite Logical Name is currently selected.
                  */
-                if (inner_flags & ImGuiTreeNodeFlags_Selected)
+                if (click)
                 {
                     m_AssetInspectorPtr->ChangeContext2Sprite(name);
                 }

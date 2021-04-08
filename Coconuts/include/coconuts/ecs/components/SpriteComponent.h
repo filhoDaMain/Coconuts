@@ -33,7 +33,12 @@ namespace Coconuts
         float                   tilingFactor;
         std::weak_ptr<Sprite>   sprite;
         
-        SpriteComponent() = default;        
+        SpriteComponent()
+        : spriteLogicalName("###unknown"), tintColor(glm::vec4(1.0f)), tilingFactor(1.0f)
+        {
+            // do nothing
+        }
+        
         SpriteComponent(const std::string& spriteName,
                         const glm::vec4& color = glm::vec4(1.0f),
                         float factor = 1.0f)

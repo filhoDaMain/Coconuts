@@ -34,7 +34,7 @@ namespace Panels
         bool Init();
         
         void Draw();
-        void ChangeContext(Coconuts::Entity*& ptr) { m_Context = ptr; hasValidContext = true;}        
+        void ChangeContext(Coconuts::Entity*& ptr);
         
     private:
         /* Component Specific Drawing functions */
@@ -57,6 +57,9 @@ namespace Panels
         bool hasTransformComponent  = false;
         bool hasSpriteComponent     = false;
         bool hasBehaviorComponent   = false;
+        
+        /* Aux state flags */
+        bool isSpriteComponentSaved;
         
     };
     

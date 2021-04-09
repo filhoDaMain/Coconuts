@@ -56,9 +56,14 @@ namespace Panels
                  * Update Component Inspector panel context to draw its
                  * components.
                  */ 
-                /* Update current Entity Ptr */
-                *m_CurrentSelectedEntityPtr = thisEntity;
-                m_ComponentInspectorPtr->ChangeContext(m_CurrentSelectedEntityPtr);
+                
+                /* Avoid spawn of unnecessary context-changes */
+                if (m_CurrentSelectedEntityPtr->GetId() != thisEntity.GetId())
+                {
+                    *m_CurrentSelectedEntityPtr = thisEntity;
+                    m_ComponentInspectorPtr->ChangeContext(m_CurrentSelectedEntityPtr);
+                }
+                
             }
 
             ImGui::Spacing();

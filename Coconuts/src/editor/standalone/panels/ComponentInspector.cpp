@@ -30,6 +30,7 @@ namespace Panels
      
     bool ComponentInspector::Init()
     {
+        isSpriteComponentSaved = true;
         return true;
     }
     
@@ -195,9 +196,8 @@ namespace Panels
     {
         SpriteComponent& spriteComponent = m_Context->GetComponent<SpriteComponent>();
         
-        static bool saved = true;
         static bool undefined_sprite = false;
-        static glm::vec4 tint = glm::vec4(1.0f);
+        static glm::vec4 tint;
         
         //TODO
         ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_DefaultOpen;
@@ -218,7 +218,7 @@ namespace Panels
             {
                 spritesArray.emplace_back(const_cast<char*>(sprites[i].c_str()));
                 
-                if (saved && spriteComponent.spriteLogicalName.compare(spritesArray[i]) == 0)
+                if (isSpriteComponentSaved && spriteComponent.spriteLogicalName.compare(spritesArray[i]) == 0)
                 {
                     seletected_sprite_index = i;    // 1st option to display
                 }
@@ -286,13 +286,18 @@ namespace Panels
             ImGui::Spacing(); ImGui::Spacing(); 
             
             /* Tint Color */
+            /* First time, get original tint color from spritecomponent */
+            if (isSpriteComponentSaved)
+            {
+                tint = spriteComponent.tintColor;
+            }
             ImGui::Text("Tint Color");
             ImGui::ColorEdit4("Color", glm::value_ptr(tint));
             
             ImGui::Spacing(); ImGui::Spacing(); 
             
             /* Save sprite asset switch */
-            saved = false;
+            isSpriteComponentSaved = false;
             if (ImGui::Button("Apply"))
             {   
                 /* Update to newly selected sprite from drop-down list */
@@ -308,7 +313,7 @@ namespace Panels
                     undefined_sprite = false;
                 }
                 
-                saved = true;
+                isSpriteComponentSaved = true;
             }
             
             /* Tiling Factor */
@@ -393,6 +398,14 @@ namespace Panels
             
             ImGui::EndPopup();
         }
+    }
+    
+    void ComponentInspector::ChangeContext(Coconuts::Entity*& ptr)
+    {
+        LOG_TRACE("ComponentInspector - Change context to Entity {}", ptr->GetId());
+        m_Context = ptr;
+        hasValidContext = true;
+        isSpriteComponentSaved = true;  // fetch original spritecomponent data
     }
     
 }

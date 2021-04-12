@@ -51,8 +51,6 @@ namespace Panels
     
     void AssetInspector::DrawTexture2DAsset()
     {
-        ImGui::Text("Texture2D");
-        
         static char editTexture2DName[32];
         if (isTexture2DSaved)
         {
@@ -88,10 +86,10 @@ namespace Panels
             /* If Texture2D name changed, delete old and create new */
             if (editTexture2DName2String.compare(m_LogicalNameTexture2D) != 0)
             {
-                //TODO - requires AssetManager::GetFilePath(texture2Dname)
-                //AssetManager::DeleteTexture2D(m_LogicalNameTexture2D);
-                //AssetManager::ImportTexture2D(editTexture2DName2String, AssetManager::GetFilePath(m_LogicalNameTexture2D)
-                //m_LogicalNameTexture2D = editTexture2DName2String;
+                //TODO
+                // Create Texture2D:
+                //  requires new AssetManager function:  StoreTexture2D(name, Texture2D*)
+                // Delete Old Texture2D
             }
         }
         
@@ -99,15 +97,13 @@ namespace Panels
         size = {70.0f, 24.0f};
         if (ImGui::Button("Delete", size))
         {
-            //TODO - requires handling missing texture2d for existing sprites
-            //AssetManager::DeleteTexture2D(m_LogicalNameTexture2D);
-            //DrawContextFunc = [&](void) { this->DrawEmpty(); };
+            AssetManager::DeleteTexture2D(m_LogicalNameTexture2D);
+            DrawContextFunc = [&](void) { this->DrawEmpty(); };
         }
     }
     
     void AssetInspector::DrawSpriteAsset()
-    {        
-        ImGui::Text("Sprite");
+    {
         std::string origSpriteSheetName;
         
         static char editSpriteName[32];

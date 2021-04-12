@@ -29,7 +29,7 @@ namespace Panels
     bool AssetInspector::Init()
     {
         DrawContextFunc = [&](void) { this->DrawEmpty(); };
-        spriteSaved = true;
+        isSpriteSaved = true;
         return true;
     }
     
@@ -62,7 +62,7 @@ namespace Panels
         std::string origSpriteSheetName;
         
         static char editSpriteName[32];
-        if (spriteSaved)
+        if (isSpriteSaved)
         {
             /* Begin with original sprite name */
             strcpy(editSpriteName, m_LogicalNameSprite.c_str());
@@ -90,7 +90,7 @@ namespace Panels
         {
             sheetsArray.push_back(const_cast<char*>(sheets[i].c_str()));
             
-            if (spriteSaved && origSpriteSheetName.compare(sheetsArray[i]) == 0)
+            if (isSpriteSaved && origSpriteSheetName.compare(sheetsArray[i]) == 0)
             {
                 seletected_sheet_index = i; // begin with original sprite sheet
             }   
@@ -107,7 +107,7 @@ namespace Panels
         /* Get SpriteSelector and enable changes */
         static AssetManager::SpriteSelector selectorEdit;
         bool valid;
-        if (spriteSaved)
+        if (isSpriteSaved)
         {
             std::tie(valid, selectorEdit) = AssetManager::GetSpriteSelector(m_LogicalNameSprite);
             if (!valid)
@@ -147,7 +147,7 @@ namespace Panels
         
         /* Save */
         ImVec2 size = {100.0f, 24.0f};
-        spriteSaved = false;
+        isSpriteSaved = false;
         if (ImGui::Button("Save", size))
         {
             /* Back to string */
@@ -165,7 +165,7 @@ namespace Panels
                 AssetManager::UpdateSprite(m_LogicalNameSprite, sheets[seletected_sheet_index], selectorEdit);
             }
             
-            spriteSaved = true;
+            isSpriteSaved = true;
         }
         
         ImGui::SameLine();
@@ -192,7 +192,7 @@ namespace Panels
         LOG_TRACE("AssetInspector - Change context to Sprite");
         DrawContextFunc = [&](void) { this->DrawSpriteAsset(); };
         m_LogicalNameSprite = name;
-        spriteSaved = true; // fetch original sprite data
+        isSpriteSaved = true; // fetch original sprite data
     }
     
 }

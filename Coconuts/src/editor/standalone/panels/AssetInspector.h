@@ -46,7 +46,7 @@ namespace Panels
         std::string m_LogicalNameTexture2D;
         std::string m_LogicalNameSprite;
         
-        bool spriteSaved;
+        bool isSpriteSaved;
         
     };
     

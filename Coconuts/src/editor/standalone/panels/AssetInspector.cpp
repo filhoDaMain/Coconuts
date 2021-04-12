@@ -140,9 +140,15 @@ namespace Panels
         /* Display sprite */
         ImGui::Image((void *) *texture, ImVec2(selectorEdit.cellSize.x/2, selectorEdit.cellSize.y/2), uv0, uv1);
         
+        ImGui::Spacing(); ImGui::Spacing();
+        ImGui::Spacing(); ImGui::Spacing();
+        /* Save / Delete Buttons */
+        // -----------------------------------------------------------------------
+        
         /* Save */
+        ImVec2 size = {100.0f, 24.0f};
         spriteSaved = false;
-        if (ImGui::Button("Save"))
+        if (ImGui::Button("Save", size))
         {
             /* Back to string */
             std::string editSpriteName2String = editSpriteName;
@@ -160,6 +166,14 @@ namespace Panels
             }
             
             spriteSaved = true;
+        }
+        
+        ImGui::SameLine();
+        size = {70.0f, 24.0f};
+        if (ImGui::Button("Delete", size))
+        {
+            AssetManager::DeleteSprite(m_LogicalNameSprite);
+            DrawContextFunc = [&](void) { this->DrawEmpty(); };
         }
     }
     

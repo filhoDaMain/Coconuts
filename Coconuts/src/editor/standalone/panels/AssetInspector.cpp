@@ -29,6 +29,7 @@ namespace Panels
     bool AssetInspector::Init()
     {
         DrawContextFunc = [&](void) { this->DrawEmpty(); };
+        isTexture2DSaved = true;
         isSpriteSaved = true;
         return true;
     }
@@ -50,10 +51,58 @@ namespace Panels
     
     void AssetInspector::DrawTexture2DAsset()
     {
-        //Early debug
+        ImGui::Text("Texture2D");
         
+        static char editTexture2DName[32];
+        if (isTexture2DSaved)
+        {
+            /* Begin with original Texture2D name */
+            strcpy(editTexture2DName, m_LogicalNameTexture2D.c_str());
+        }
+        
+        /* Edit Texture2D name */
+        ImGui::Text("Texture2D Name");
+        if (ImGui::InputText(" ", editTexture2DName, sizeof(editTexture2DName)))
+        {
+            //do nothing
+        }
+        
+        /* Display Texture2D preview */
         auto texture = AssetManager::GetTexture2D(m_LogicalNameTexture2D);
         ImGui::Image((void *) *texture, ImVec2((texture->GetWidth()/3), (texture->GetHeight()/3)), ImVec2{0, 1}, ImVec2{1, 0});
+        
+        
+        ImGui::Spacing(); ImGui::Spacing();
+        ImGui::Spacing(); ImGui::Spacing();
+        /* Save / Delete Buttons */
+        // -----------------------------------------------------------------------
+        
+        /* Save */
+        ImVec2 size = {100.0f, 24.0f};
+        isTexture2DSaved = false;
+        if (ImGui::Button("Save", size))
+        {
+            /* Back to string */
+            std::string editTexture2DName2String = editTexture2DName;
+            
+            /* If Texture2D name changed, delete old and create new */
+            if (editTexture2DName2String.compare(m_LogicalNameTexture2D) != 0)
+            {
+                //TODO - requires AssetManager::GetFilePath(texture2Dname)
+                //AssetManager::DeleteTexture2D(m_LogicalNameTexture2D);
+                //AssetManager::ImportTexture2D(editTexture2DName2String, AssetManager::GetFilePath(m_LogicalNameTexture2D)
+                //m_LogicalNameTexture2D = editTexture2DName2String;
+            }
+        }
+        
+        ImGui::SameLine();
+        size = {70.0f, 24.0f};
+        if (ImGui::Button("Delete", size))
+        {
+            //TODO - requires handling missing texture2d for existing sprites
+            //AssetManager::DeleteTexture2D(m_LogicalNameTexture2D);
+            //DrawContextFunc = [&](void) { this->DrawEmpty(); };
+        }
     }
     
     void AssetInspector::DrawSpriteAsset()
@@ -140,6 +189,7 @@ namespace Panels
         /* Display sprite */
         ImGui::Image((void *) *texture, ImVec2(selectorEdit.cellSize.x/2, selectorEdit.cellSize.y/2), uv0, uv1);
         
+        
         ImGui::Spacing(); ImGui::Spacing();
         ImGui::Spacing(); ImGui::Spacing();
         /* Save / Delete Buttons */
@@ -184,6 +234,7 @@ namespace Panels
         LOG_TRACE("AssetInspector - Change context to Texture2D");
         DrawContextFunc = [&](void) { this->DrawTexture2DAsset(); };
         m_LogicalNameTexture2D = name;
+        isTexture2DSaved = true;    // fetch original Texture2D name
     }
     
     /* Change Context - Sprite */

@@ -74,6 +74,7 @@ namespace Coconuts
         static bool ImportTexture2D(const std::string& logicalName, const std::string& path);
         static std::shared_ptr<Texture2D> GetTexture2D(const std::string& logicalName);
         static std::vector<std::string>& GetAllTexture2DLogicalNames() { return m_KeysList_Textures2D; }
+        static bool StoreTexture2D(const std::string& logicalName, std::shared_ptr<Texture2D> texture2D);
         static bool DeleteTexture2D(const std::string& logicalName);
         
         static bool CreateSprite(const std::string& logicalName,

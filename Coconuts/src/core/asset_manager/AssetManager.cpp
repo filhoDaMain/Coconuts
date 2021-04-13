@@ -98,6 +98,35 @@ namespace Coconuts
     }
     
     //static
+    bool AssetManager::StoreTexture2D(const std::string& logicalName, std::shared_ptr<Texture2D> texture2D)
+    {
+#if LOG_PROFILE_HASHTABLES
+        LOG_TRACE("Pre-call StoreTexture2D():");
+        LOG_TRACE("  m_HashTable_Textures2D.size    = {}", m_HashTable_Textures2D.size());
+        LOG_TRACE("  m_HashTable_Textures2D.buckets = {}", m_HashTable_Textures2D.bucket_count());
+        LOG_TRACE("  m_HashTable_Textures2D.load    = {}", m_HashTable_Textures2D.load_factor());
+        LOG_TRACE("  m_HashTable_Textures2D.maxload = {}", m_HashTable_Textures2D.max_load_factor());
+#endif
+        
+        /* Store */
+        IndexedTexture2D indexed = { texture2D, static_cast<uint32_t>(m_KeysList_Textures2D.size()) };
+        m_HashTable_Textures2D[logicalName] = indexed;
+        
+        /* Update Keys List */
+        m_KeysList_Textures2D.emplace_back(logicalName);
+        
+#if LOG_PROFILE_HASHTABLES
+        LOG_TRACE("Post-call StoreTexture2D():");
+        LOG_TRACE("  m_HashTable_Textures2D.size    = {}", m_HashTable_Textures2D.size());
+        LOG_TRACE("  m_HashTable_Textures2D.buckets = {}", m_HashTable_Textures2D.bucket_count());
+        LOG_TRACE("  m_HashTable_Textures2D.load    = {}", m_HashTable_Textures2D.load_factor());
+        LOG_TRACE("  m_HashTable_Textures2D.maxload = {}", m_HashTable_Textures2D.max_load_factor());
+#endif
+        
+        return true;
+    }
+    
+    //static
     bool AssetManager::DeleteTexture2D(const std::string& logicalName)
     {
         auto found = m_HashTable_Textures2D.find(logicalName);

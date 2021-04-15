@@ -44,6 +44,8 @@ namespace Coconuts
         {
             std::shared_ptr<Texture2D>  texturePtr;
             uint32_t                    keysListIndex;
+            /* List of Sprites that reference this Texture2D */
+            std::unique_ptr<std::vector<std::string>>   spritesUsing;
         };
         
         struct IndexedSprite
@@ -51,6 +53,8 @@ namespace Coconuts
             std::shared_ptr<Sprite>     spritePtr;
             uint32_t                    keysListIndex;
             std::string                 spriteSheetName;
+            /* Index of referred Texture2D::spritesUsing vector pointing to this Sprite */
+            uint32_t                    referrerIndex;
         };
         
         struct HashTableDefs
@@ -90,6 +94,9 @@ namespace Coconuts
         static bool DeleteSprite(const std::string& logicalName);
         
     private:
+        static uint32_t ReferenceTexture2D(const std::string& texture2DName, const std::string& spriteName);
+        static bool EraseReferenceTexture2D(const std::string& texture2DName, uint32_t index);
+        
         /* HASH TABLES */
         static std::unordered_map<std::string, IndexedTexture2D>    m_HashTable_Textures2D;
         static std::unordered_map<std::string, IndexedSprite>       m_HashTable_Sprites;

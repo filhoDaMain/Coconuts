@@ -149,6 +149,7 @@ namespace Coconuts
             for (std::string spriteName : *(found->second.spritesUsing))
             {
                 LOG_TRACE("Also deleting referrer Sprite '{}'", spriteName);
+                DeleteSprite(spriteName);
             }
             
             /* Delete entry fom Keys vector */

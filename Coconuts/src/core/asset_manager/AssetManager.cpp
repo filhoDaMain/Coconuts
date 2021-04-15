@@ -149,9 +149,27 @@ namespace Coconuts
             for (std::string spriteName : *(found->second.spritesUsing))
             {
                 LOG_TRACE("Also deleting referrer Sprite '{}'", spriteName);
+                DeleteSprite(spriteName);
             }
             
+            /* Delete entry fom Keys vector */
             m_KeysList_Textures2D.erase(m_KeysList_Textures2D.begin() + found->second.keysListIndex);
+            
+            /* Update the keysListIndex of Texture2Ds whose keys have shifted positions */
+            for (uint32_t keyIndex = found->second.keysListIndex;
+                 keyIndex < m_KeysList_Textures2D.size();
+                 keyIndex++)
+            {
+                std::string nameOther = m_KeysList_Textures2D[keyIndex];
+                auto findOther = m_HashTable_Textures2D.find(nameOther);
+                
+                if (findOther != m_HashTable_Textures2D.end())
+                {
+                    findOther->second.keysListIndex = keyIndex;
+                }
+            } 
+            
+            /* Delete entry from hash table */
             m_HashTable_Textures2D.erase(logicalName);
             return true;
         }
@@ -334,7 +352,24 @@ namespace Coconuts
             LOG_TRACE("Erase hash table ref [{}]->[{}]", logicalName, found->second.spriteSheetName);
             EraseReferenceTexture2D(found->second.spriteSheetName, found->second.referrerIndex);
             
+            /* Delete entry from Keys vector */
             m_KeysList_Sprites.erase(m_KeysList_Sprites.begin() + found->second.keysListIndex);
+            
+            /* Update the keysListIndex of Sprites whose keys have shifted positions */
+            for (uint32_t keyIndex = found->second.keysListIndex;
+                 keyIndex < m_KeysList_Sprites.size();
+                 keyIndex++)
+            {
+                std::string nameOther = m_KeysList_Sprites[keyIndex];
+                auto findOther = m_HashTable_Sprites.find(nameOther);
+                
+                if (findOther != m_HashTable_Sprites.end())
+                {
+                    findOther->second.keysListIndex = keyIndex;
+                }
+            }
+            
+            /* Delete entries from hash tables */
             m_HashTable_Sprites.erase(logicalName);
             m_HashTable_SpriteSelectors.erase(logicalName);
             return true;

@@ -67,8 +67,13 @@ namespace Coconuts
         texture2D.reset(rawPtr);
         
         /* Store */
-        IndexedTexture2D indexed = { texture2D, static_cast<uint32_t>(m_KeysList_Textures2D.size()) };
-        m_HashTable_Textures2D[logicalName] = indexed;
+        IndexedTexture2D indexed =
+        {
+            texture2D,
+            static_cast<uint32_t>(m_KeysList_Textures2D.size()),
+            std::unique_ptr<std::vector<std::string>>(new std::vector<std::string>)
+        };
+        m_HashTable_Textures2D[logicalName] = std::move(indexed);
         
         /* Update Keys List */
         m_KeysList_Textures2D.emplace_back(logicalName);
@@ -109,8 +114,13 @@ namespace Coconuts
 #endif
         
         /* Store */
-        IndexedTexture2D indexed = { texture2D, static_cast<uint32_t>(m_KeysList_Textures2D.size()) };
-        m_HashTable_Textures2D[logicalName] = indexed;
+        IndexedTexture2D indexed =
+        {
+            texture2D,
+            static_cast<uint32_t>(m_KeysList_Textures2D.size()),
+            std::unique_ptr<std::vector<std::string>>(new std::vector<std::string>)
+        };
+        m_HashTable_Textures2D[logicalName] = std::move(indexed);
         
         /* Update Keys List */
         m_KeysList_Textures2D.emplace_back(logicalName);
@@ -133,8 +143,45 @@ namespace Coconuts
         
         if (found != m_HashTable_Textures2D.end())
         {
+            LOG_WARN("Delete Texture2D {}", logicalName);
+            
+            /* Loop through all referrers and delete them */
+            for (std::string spriteName : *(found->second.spritesUsing))
+            {
+                LOG_TRACE("Also deleting referrer Sprite '{}'", spriteName);
+            }
+            
             m_KeysList_Textures2D.erase(m_KeysList_Textures2D.begin() + found->second.keysListIndex);
             m_HashTable_Textures2D.erase(logicalName);
+            return true;
+        }
+        
+        return false;
+    }
+    
+    //private satic
+    uint32_t AssetManager::ReferenceTexture2D(const std::string& texture2DName, const std::string& spriteName)
+    {
+        auto found = m_HashTable_Textures2D.find(texture2DName);
+        
+        if (found != m_HashTable_Textures2D.end())
+        {
+            found->second.spritesUsing->emplace_back(spriteName);
+            return (found->second.spritesUsing->size() - 1);   // return index
+        }
+        
+        return -1;  //0xFFF...
+    }
+    
+    //private static
+    bool AssetManager::EraseReferenceTexture2D(const std::string& texture2DName, uint32_t index)
+    {
+        auto found = m_HashTable_Textures2D.find(texture2DName);
+        
+        if (found != m_HashTable_Textures2D.end())
+        {
+            auto iter = found->second.spritesUsing->begin();
+            found->second.spritesUsing->erase(iter + index);
             return true;
         }
         
@@ -167,12 +214,18 @@ namespace Coconuts
         std::shared_ptr<Sprite> sprite;
         sprite.reset( Sprite::Create(texture2D, selector.coords, selector.cellSize, selector.spriteSize) );
         
+        uint32_t referrerIndex = ReferenceTexture2D(spriteSheetLogicalName, logicalName);
+        
+        LOG_TRACE("Create Sprite '{}'", logicalName);
+        LOG_TRACE("Assign new hash table ref [{}]->[{}]", logicalName, spriteSheetLogicalName);
+        
         /* Store Sprite */
         IndexedSprite indexed =
         {
             sprite,
             static_cast<uint32_t>(m_KeysList_Sprites.size()),
-            spriteSheetLogicalName
+            spriteSheetLogicalName,
+            referrerIndex
         };
         m_HashTable_Sprites[logicalName] = indexed;
         
@@ -202,11 +255,19 @@ namespace Coconuts
         
         if (found != m_HashTable_Sprites.end())
         {
+            /* Erase old reference to Texture2D bucket */
+            LOG_TRACE("Erase hash table ref [{}]->[{}]", logicalName, found->second.spriteSheetName);
+            EraseReferenceTexture2D(found->second.spriteSheetName, found->second.referrerIndex);
+            
             /* Get Texture2D from spritesheet logical name */
             std::shared_ptr<Texture2D> texture2D = AssetManager::GetTexture2D(spriteSheetLogicalName);
             
             found->second.spritePtr->UpdateData(texture2D, selector.coords, selector.cellSize, selector.spriteSize);
             found->second.spriteSheetName = spriteSheetLogicalName;
+            
+            /* Assign new reference to a Texture2D bucket */
+            LOG_TRACE("Assign new hash table ref [{}]->[{}]", logicalName, spriteSheetLogicalName);
+            found->second.referrerIndex = ReferenceTexture2D(spriteSheetLogicalName, logicalName);
             
             /* Update SpriteSelector */
             auto found2 = m_HashTable_SpriteSelectors.find(logicalName);
@@ -267,6 +328,12 @@ namespace Coconuts
         
         if (found != m_HashTable_Sprites.end())
         {
+            LOG_WARN("Delete Sprite {}", logicalName);
+            
+            /* Erase reference to Texture2D bucket */
+            LOG_TRACE("Erase hash table ref [{}]->[{}]", logicalName, found->second.spriteSheetName);
+            EraseReferenceTexture2D(found->second.spriteSheetName, found->second.referrerIndex);
+            
             m_KeysList_Sprites.erase(m_KeysList_Sprites.begin() + found->second.keysListIndex);
             m_HashTable_Sprites.erase(logicalName);
             m_HashTable_SpriteSelectors.erase(logicalName);

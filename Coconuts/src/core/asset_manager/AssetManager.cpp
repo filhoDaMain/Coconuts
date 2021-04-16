@@ -86,6 +86,7 @@ namespace Coconuts
         LOG_TRACE("  m_HashTable_Textures2D.maxload = {}", m_HashTable_Textures2D.max_load_factor());
 #endif
         
+        LOG_DEBUG("Import Texture2D '{}' from file '{}'", logicalName, path);
         return true;
     }
     
@@ -133,6 +134,7 @@ namespace Coconuts
         LOG_TRACE("  m_HashTable_Textures2D.maxload = {}", m_HashTable_Textures2D.max_load_factor());
 #endif
         
+        LOG_DEBUG("Store Texture2D '{}'", logicalName);
         return true;
     }
     
@@ -234,7 +236,7 @@ namespace Coconuts
         
         uint32_t referrerIndex = ReferenceTexture2D(spriteSheetLogicalName, logicalName);
         
-        LOG_TRACE("Create Sprite '{}'", logicalName);
+        LOG_DEBUG("Create Sprite '{}'", logicalName);
         LOG_TRACE("Assign new hash table ref [{}]->[{}]", logicalName, spriteSheetLogicalName);
         
         /* Store Sprite */
@@ -273,6 +275,8 @@ namespace Coconuts
         
         if (found != m_HashTable_Sprites.end())
         {
+            LOG_DEBUG("Update Sprite {}", logicalName);
+            
             /* Erase old reference to Texture2D bucket */
             LOG_TRACE("Erase hash table ref [{}]->[{}]", logicalName, found->second.spriteSheetName);
             EraseReferenceTexture2D(found->second.spriteSheetName, found->second.referrerIndex);

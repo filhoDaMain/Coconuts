@@ -29,7 +29,8 @@ namespace Panels
     bool AssetInspector::Init()
     {
         DrawContextFunc = [&](void) { this->DrawEmpty(); };
-        spriteSaved = true;
+        isTexture2DSaved = true;
+        isSpriteSaved = true;
         return true;
     }
     
@@ -50,19 +51,64 @@ namespace Panels
     
     void AssetInspector::DrawTexture2DAsset()
     {
-        //Early debug
+        static char editTexture2DName[32];
+        if (isTexture2DSaved)
+        {
+            /* Begin with original Texture2D name */
+            strcpy(editTexture2DName, m_LogicalNameTexture2D.c_str());
+        }
         
+        /* Edit Texture2D name */
+        ImGui::Text("Texture2D Name");
+        if (ImGui::InputText(" ", editTexture2DName, sizeof(editTexture2DName)))
+        {
+            //do nothing
+        }
+        
+        /* Display Texture2D preview */
         auto texture = AssetManager::GetTexture2D(m_LogicalNameTexture2D);
         ImGui::Image((void *) *texture, ImVec2((texture->GetWidth()/3), (texture->GetHeight()/3)), ImVec2{0, 1}, ImVec2{1, 0});
+        
+        
+        ImGui::Spacing(); ImGui::Spacing();
+        ImGui::Spacing(); ImGui::Spacing();
+        /* Save / Delete Buttons */
+        // -----------------------------------------------------------------------
+        
+        /* Save */
+        ImVec2 size = {100.0f, 24.0f};
+        isTexture2DSaved = false;
+        if (ImGui::Button("Save", size))
+        {
+            /* Back to string */
+            std::string editTexture2DName2String = editTexture2DName;
+            
+            /* If Texture2D name changed, delete old and create new */
+            if (editTexture2DName2String.compare(m_LogicalNameTexture2D) != 0)
+            {
+                AssetManager::StoreTexture2D(editTexture2DName2String, texture);
+                AssetManager::DeleteTexture2D(m_LogicalNameTexture2D);
+                
+                /* Change context to newly created Texture2D */
+                this->ChangeContext2Texture2D(editTexture2DName2String);
+            }
+        }
+        
+        ImGui::SameLine();
+        size = {70.0f, 24.0f};
+        if (ImGui::Button("Delete", size))
+        {
+            AssetManager::DeleteTexture2D(m_LogicalNameTexture2D);
+            DrawContextFunc = [&](void) { this->DrawEmpty(); };
+        }
     }
     
     void AssetInspector::DrawSpriteAsset()
-    {        
-        ImGui::Text("Sprite");
+    {
         std::string origSpriteSheetName;
         
         static char editSpriteName[32];
-        if (spriteSaved)
+        if (isSpriteSaved)
         {
             /* Begin with original sprite name */
             strcpy(editSpriteName, m_LogicalNameSprite.c_str());
@@ -90,7 +136,7 @@ namespace Panels
         {
             sheetsArray.push_back(const_cast<char*>(sheets[i].c_str()));
             
-            if (spriteSaved && origSpriteSheetName.compare(sheetsArray[i]) == 0)
+            if (isSpriteSaved && origSpriteSheetName.compare(sheetsArray[i]) == 0)
             {
                 seletected_sheet_index = i; // begin with original sprite sheet
             }   
@@ -107,7 +153,7 @@ namespace Panels
         /* Get SpriteSelector and enable changes */
         static AssetManager::SpriteSelector selectorEdit;
         bool valid;
-        if (spriteSaved)
+        if (isSpriteSaved)
         {
             std::tie(valid, selectorEdit) = AssetManager::GetSpriteSelector(m_LogicalNameSprite);
             if (!valid)
@@ -140,9 +186,16 @@ namespace Panels
         /* Display sprite */
         ImGui::Image((void *) *texture, ImVec2(selectorEdit.cellSize.x/2, selectorEdit.cellSize.y/2), uv0, uv1);
         
+        
+        ImGui::Spacing(); ImGui::Spacing();
+        ImGui::Spacing(); ImGui::Spacing();
+        /* Save / Delete Buttons */
+        // -----------------------------------------------------------------------
+        
         /* Save */
-        spriteSaved = false;
-        if (ImGui::Button("Save"))
+        ImVec2 size = {100.0f, 24.0f};
+        isSpriteSaved = false;
+        if (ImGui::Button("Save", size))
         {
             /* Back to string */
             std::string editSpriteName2String = editSpriteName;
@@ -159,7 +212,15 @@ namespace Panels
                 AssetManager::UpdateSprite(m_LogicalNameSprite, sheets[seletected_sheet_index], selectorEdit);
             }
             
-            spriteSaved = true;
+            isSpriteSaved = true;
+        }
+        
+        ImGui::SameLine();
+        size = {70.0f, 24.0f};
+        if (ImGui::Button("Delete", size))
+        {
+            AssetManager::DeleteSprite(m_LogicalNameSprite);
+            DrawContextFunc = [&](void) { this->DrawEmpty(); };
         }
     }
     
@@ -170,6 +231,7 @@ namespace Panels
         LOG_TRACE("AssetInspector - Change context to Texture2D");
         DrawContextFunc = [&](void) { this->DrawTexture2DAsset(); };
         m_LogicalNameTexture2D = name;
+        isTexture2DSaved = true;    // fetch original Texture2D name
     }
     
     /* Change Context - Sprite */
@@ -178,7 +240,7 @@ namespace Panels
         LOG_TRACE("AssetInspector - Change context to Sprite");
         DrawContextFunc = [&](void) { this->DrawSpriteAsset(); };
         m_LogicalNameSprite = name;
-        spriteSaved = true; // fetch original sprite data
+        isSpriteSaved = true; // fetch original sprite data
     }
     
 }

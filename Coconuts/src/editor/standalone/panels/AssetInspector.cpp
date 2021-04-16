@@ -86,10 +86,11 @@ namespace Panels
             /* If Texture2D name changed, delete old and create new */
             if (editTexture2DName2String.compare(m_LogicalNameTexture2D) != 0)
             {
-                //TODO
-                // Create Texture2D:
-                //  requires new AssetManager function:  StoreTexture2D(name, Texture2D*)
-                // Delete Old Texture2D
+                AssetManager::StoreTexture2D(editTexture2DName2String, texture);
+                AssetManager::DeleteTexture2D(m_LogicalNameTexture2D);
+                
+                /* Change context to newly created Texture2D */
+                this->ChangeContext2Texture2D(editTexture2DName2String);
             }
         }
         

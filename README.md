@@ -8,10 +8,11 @@ This is mostly a personal project to introduce myself to Game Engines architectu
 
 It includes a Game Engine API generated as a static library (**ccncore**), a GUI Layer static library (**ccneditor**) and a standalone Game Editor Application (**ccneditor_standalone**).
 
-**The "MVP" development is still ongoing**. This means the overall project is still not expected to be fully functional as a Game Engine nor as as Game Level Editor.
+**The "MVP" development is still ongoing**.\
+**This means the overall project is still not expected to be fully functional as a Game Engine nor as as Game Level Editor.**
 
 
-Please include every License files in derivative work. You are also welcome to contribute! :)
+Please include every License files in derivative work. You are also welcome to contribute :)
 
 
 

@@ -1,10 +1,17 @@
 # Coconuts
 
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/44137701/115147789-a8864180-a054-11eb-8d61-84248982e6b0.png"/>
+</p>
+
 This is mostly a personal project to introduce myself to Game Engines architecture and design.
 
-You are welcome to contribute :)
+It includes a Game Engine API generated as a static library (**ccncore**), a GUI Layer static library (**ccneditor**) and a standalone Game Editor Application (**ccneditor_standalone**).
 
-Please include every License files in derivative work.
+**The "MVP" development is still ongoing**. This means the overall project is still not expected to be fully functional as a Game Engine nor as as Game Level Editor.
+
+
+Please include every License files in derivative work. You are also welcome to contribute! :)
 
 
 

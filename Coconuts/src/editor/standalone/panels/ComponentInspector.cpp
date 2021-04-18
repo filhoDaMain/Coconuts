@@ -199,7 +199,6 @@ namespace Panels
         static bool undefined_sprite = false;
         static glm::vec4 tint;
         
-        //TODO
         ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_DefaultOpen;
         bool open = ImGui::TreeNodeEx("Sprite Component" , flags);
  

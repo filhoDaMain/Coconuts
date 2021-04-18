@@ -83,13 +83,13 @@ namespace Coconuts
         
         /* 2) Create Sprite from the spritesheet */
         AssetManager::SpriteSelector selector;
-        selector.coords = {4, 4};   // 0,0 is bottom left corner cell
+        selector.coords = {1, 4};   // 0,0 is bottom left corner cell
         selector.cellSize = {136, 136};
         selector.spriteSize = {1, 1};
-        AssetManager::CreateSprite("Cow", "Animals_Spritesheet", selector);
+        AssetManager::CreateSprite("Pig", "Animals_Spritesheet", selector);
         
         /* 3) Assign the sprite to the Entity's SpriteComponent */
-        m_Entity.AddComponent<SpriteComponent>("Cow");
+        m_Entity.AddComponent<SpriteComponent>("Pig");
         
         
 

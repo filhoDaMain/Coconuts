@@ -18,6 +18,7 @@
 
 #include <coconuts/cameras/OrthographicCamera.h>
 #include <coconuts/cameras/CameraController.h>
+#include <glm/glm.hpp>
 
 namespace Coconuts
 {
@@ -29,13 +30,15 @@ namespace Coconuts
         float               zoomLevel;
         float               mooveSpeed;
         bool                halt;
+        glm::vec4           backgroundColor;
         OrthographicCamera  camera;
         
         OrthoCameraComponent() = default;
-        OrthoCameraComponent(float aR, float zoom)
+        OrthoCameraComponent(float aR, float zoom, const glm::vec4& bgColor = {0.0f, 0.0f, 0.0f, 1.0f})
         :   aspectRatio(aR),
             zoomLevel(zoom),
             halt(false),
+            backgroundColor(bgColor),
             camera(-aspectRatio * zoomLevel, aspectRatio * zoomLevel, -zoomLevel, zoomLevel)
         {}
     };

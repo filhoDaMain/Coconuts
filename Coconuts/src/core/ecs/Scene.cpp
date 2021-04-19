@@ -59,10 +59,6 @@ namespace Coconuts
         /* Rendering */
         /* ---------------------------------------------------------------------- */
         
-        /* Clear Screen */
-        Graphics::LowLevelAPI::SetClearColor({0.0f, 0.0f, 0.0f, 1});
-        Graphics::LowLevelAPI::Clear();
-        
         /* Reset all Rendering statistics for next draw call */
         Renderer2D::ResetStatistics();
         
@@ -72,7 +68,11 @@ namespace Coconuts
          *
          */
         m_EntityManager.entities.each<OrthoCameraComponent>([&](entityx::Entity thisEntityxEntity, OrthoCameraComponent& thisOrthoCameraComponent)
-        {            
+        {
+            /* Clear Screen */
+            Graphics::LowLevelAPI::SetClearColor(thisOrthoCameraComponent.backgroundColor);
+            Graphics::LowLevelAPI::Clear();
+        
             /* Begin Scene */
             Renderer2D::BeginScene(thisOrthoCameraComponent.camera);
             

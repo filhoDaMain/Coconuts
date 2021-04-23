@@ -165,6 +165,12 @@ namespace Panels
             utils::DrawTableFloat("Zoom Level", "Z", cameraComponent.zoomLevel);
             utils::DrawTableFloat("Moove Speed", "S", cameraComponent.mooveSpeed, true);
             
+            ImGui::Spacing(); ImGui::Spacing();
+            
+            /* Background Clear Color */
+            ImGui::Text("Background Color");
+            ImGui::ColorEdit4("Color", glm::value_ptr(cameraComponent.backgroundColor));
+            
             ImGui::TreePop();
         }
     }

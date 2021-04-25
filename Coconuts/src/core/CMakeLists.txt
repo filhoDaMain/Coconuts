@@ -26,13 +26,14 @@ elseif(UNIX AND NOT APPLE)
     add_subdirectory(platform/OpenGL)
 endif()
 
-target_include_directories(ccncore PRIVATE "${PROJECT_SOURCE_DIR}/include"
-                                        "${PROJECT_SOURCE_DIR}/vendor/spdlog/include"
-                                        "${PROJECT_SOURCE_DIR}/vendor/glfw/include"
-                                        "${PROJECT_SOURCE_DIR}/vendor/glad/include"
-                                        "${PROJECT_SOURCE_DIR}/vendor/glm"
-                                        "${PROJECT_SOURCE_DIR}/vendor/stb"
-                                        "${PROJECT_SOURCE_DIR}/vendor/entityx")
+target_include_directories(ccncore PRIVATE  "${PROJECT_SOURCE_DIR}/include"
+                                            "${PROJECT_SOURCE_DIR}/vendor/spdlog/include"
+                                            "${PROJECT_SOURCE_DIR}/vendor/glfw/include"
+                                            "${PROJECT_SOURCE_DIR}/vendor/glad/include"
+                                            "${PROJECT_SOURCE_DIR}/vendor/glm"
+                                            "${PROJECT_SOURCE_DIR}/vendor/stb"
+                                            "${PROJECT_SOURCE_DIR}/vendor/entityx"
+                                            "${PROJECT_SOURCE_DIR}/vendor/yaml-cpp/include")
 
 set_target_properties(ccncore PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/lib")
 
@@ -68,7 +69,13 @@ ADD_CUSTOM_COMMAND(TARGET ccncore POST_BUILD
                    COMMAND cp -f "${PROJECT_SOURCE_DIR}/vendor/entityx/entityx/help/*.h"
                                  "${PROJECT_SOURCE_DIR}/include/vendor/entityx/help/"
                    COMMAND cp -f "${PROJECT_SOURCE_DIR}/vendor/entityx/entityx/tags/*.h"
-                                 "${PROJECT_SOURCE_DIR}/include/vendor/entityx/tags/")
+                                 "${PROJECT_SOURCE_DIR}/include/vendor/entityx/tags/"
+
+                   # yaml-cpp
+                   COMMAND rm -rf "${PROJECT_SOURCE_DIR}/include/vendor/yaml-cpp/*"
+                   COMMAND ${CMAKE_COMMAND} -E copy_directory
+                       "${PROJECT_SOURCE_DIR}/vendor/yaml-cpp/include"
+                       "${PROJECT_SOURCE_DIR}/include/vendor")
 
 # LICENSES
 ADD_CUSTOM_COMMAND(TARGET ccncore POST_BUILD
@@ -104,4 +111,9 @@ ADD_CUSTOM_COMMAND(TARGET ccncore POST_BUILD
                    COMMAND ${CMAKE_COMMAND} -E make_directory "${PROJECT_SOURCE_DIR}/include/vendor/stb"
                    COMMAND ${CMAKE_COMMAND} -E copy
                        "${PROJECT_SOURCE_DIR}/vendor/stb/stb/LICENSE"
-                       "${PROJECT_SOURCE_DIR}/include/vendor/stb/")
+                       "${PROJECT_SOURCE_DIR}/include/vendor/stb/"
+
+                   # spdlog
+                   COMMAND ${CMAKE_COMMAND} -E copy
+                       "${PROJECT_SOURCE_DIR}/vendor/yaml-cpp/LICENSE"
+                       "${PROJECT_SOURCE_DIR}/include/vendor/yaml-cpp/")

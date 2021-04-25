@@ -19,3 +19,6 @@
 [submodule "Coconuts/vendor/nativefiledialog/nativefiledialog"]
 	path = Coconuts/vendor/nativefiledialog/nativefiledialog
 	url = https://github.com/mlabbe/nativefiledialog
+[submodule "Coconuts/vendor/yaml-cpp"]
+	path = Coconuts/vendor/yaml-cpp
+	url = https://github.com/jbeder/yaml-cpp

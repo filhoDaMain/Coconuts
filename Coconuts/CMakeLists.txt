@@ -56,6 +56,11 @@ set(ENTITYX_BUILD_TESTING false CACHE BOOL "Enable building of tests." FORCE)
 set(ENTITYX_BUILD_SHARED false CACHE BOOL "Build shared libraries?" FORCE)
 add_subdirectory(vendor/entityx/)
 set_target_properties(entityx PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/lib")
+
+#YAML-CPP
+set(YAML_CPP_BUILD_TOOLS false CACHE BOOL "Enable parse tools" FORCE)
+add_subdirectory(vendor/yaml-cpp/)
+set_target_properties(yaml-cpp PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/lib")
 # -------------------------------------------------------------------------------------------
 
 

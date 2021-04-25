@@ -28,6 +28,7 @@ target_link_libraries(ccneditor_standalone  "${PROJECT_SOURCE_DIR}/lib/libccncor
                                             "${PROJECT_SOURCE_DIR}/lib/libglfw3.a"
                                             "${PROJECT_SOURCE_DIR}/lib/libglad.a"
                                             "${PROJECT_SOURCE_DIR}/lib/libentityx.a"
+                                            "${PROJECT_SOURCE_DIR}/lib/libyaml-cpp.a"
                                             "${PROJECT_SOURCE_DIR}/lib/libnfd.a")
 
 # Output directory

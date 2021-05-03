@@ -29,6 +29,8 @@ namespace Coconuts
         Serializer(const std::shared_ptr<Scene> scene);
         ~Serializer() = default;
         
+        std::string Serialize();
+        
     private:
         std::shared_ptr<Scene> m_Scene;
     };

@@ -21,8 +21,22 @@ namespace Coconuts
 {
     
     Serializer::Serializer(const std::shared_ptr<Scene> scene)
+    : m_Scene(scene)
     {
+    }
+    
+    std::string Serializer::Serialize()
+    {
+        YAML::Emitter out;
+        out << YAML::BeginMap;
         
+        out << YAML::Key << "Key";
+        out << YAML::Value << "Value";
+        
+        out << YAML::EndMap;
+        
+        std::string serialized(out.c_str());
+        return serialized;
     }
     
 }

@@ -14,8 +14,13 @@
  * limitations under the License.
  */
 
-#include <coconuts/ecs/Serializer.h>
 #include <yaml-cpp/yaml.h>
+#include <coconuts/ecs/Serializer.h>
+#include <coconuts/ecs/components/OrthoCameraComponent.h>
+#include <coconuts/ecs/components/TagComponent.h>
+#include <coconuts/ecs/components/TransformComponent.h>
+#include <coconuts/ecs/components/SpriteComponent.h>
+#include <coconuts/ecs/components/BehaviorComponent.h>
 
 namespace Coconuts
 {
@@ -25,15 +30,124 @@ namespace Coconuts
     {
     }
     
+    static void SerializeComponent(YAML::Emitter& out, TagComponent& component)
+    {
+        out << YAML::Key << "TagComponent" << YAML::Value << YAML::BeginSeq;
+        out << YAML::BeginMap;
+        {
+            out << YAML::Key << "tag" << YAML::Value << component.tag;
+        }
+        out << YAML::EndMap;
+        out << YAML::EndSeq;
+    }
+    
+    static void SerializeComponent(YAML::Emitter& out, OrthoCameraComponent& component)
+    {
+        out << YAML::Key << "OrthoCameraComponent" << YAML::Value << YAML::BeginSeq;
+        out << YAML::BeginMap;
+        {
+            out << YAML::Key << "isActive" << YAML::LongBool << true;
+        }
+        out << YAML::EndMap;
+        out << YAML::EndSeq;
+    }
+    
+    static void SerializeComponent(YAML::Emitter& out, TransformComponent& component)
+    {
+        out << YAML::Key << "TransformComponent" << YAML::Value << YAML::BeginSeq;
+        out << YAML::BeginMap;
+        {
+            out << YAML::Key << "position" << YAML::BeginSeq << component.position.x << component.position.y << YAML::EndSeq;
+        }
+        out << YAML::EndMap;
+        out << YAML::BeginMap;
+        {
+            out << YAML::Key << "size" << YAML::BeginSeq << component.size.x << component.size.y << YAML::EndSeq;
+        }
+        out << YAML::EndMap;
+        out << YAML::BeginMap;
+        {
+            out << YAML::Key << "rotationRadians" << YAML::Value << component.rotationRadians;
+        }
+        out << YAML::EndMap;
+        out << YAML::EndSeq;
+    }
+    
+    static void SerializeComponent(YAML::Emitter& out, SpriteComponent& component)
+    {
+        
+    }
+    
+    static void SerializeComponent(YAML::Emitter& out, BehaviorComponent& component)
+    {
+        
+    }
+    
+    static void SerializeEntity(YAML::Emitter& out, Entity entity)
+    {
+        out << YAML::Key << "<Entity>";
+        out << YAML::BeginMap;
+        {
+            out << YAML::Key << "ID" << YAML::Hex << entity.GetId();
+            
+            //TagComponent
+            if (entity.HasComponent<TagComponent>())
+            {
+                SerializeComponent(out, entity.GetComponent<TagComponent>());
+            }
+            
+            //OrthoCameraComponent
+            if (entity.HasComponent<OrthoCameraComponent>())
+            {
+                SerializeComponent(out, entity.GetComponent<OrthoCameraComponent>());
+            }
+            
+            //TransformComponent
+            if (entity.HasComponent<TransformComponent>())
+            {
+                SerializeComponent(out, entity.GetComponent<TransformComponent>());
+            }
+            
+            //SpriteComponent
+            if (entity.HasComponent<SpriteComponent>())
+            {
+                SerializeComponent(out, entity.GetComponent<SpriteComponent>());
+            }
+            
+            //BehaviorComponent
+            if (entity.HasComponent<BehaviorComponent>())
+            {
+                SerializeComponent(out, entity.GetComponent<BehaviorComponent>());
+            }
+        }
+        out << YAML::EndMap;
+    }
+    
     std::string Serializer::Serialize()
     {
         YAML::Emitter out;
+        
         out << YAML::BeginMap;
-        
-        out << YAML::Key << "Key";
-        out << YAML::Value << "Value";
-        
+        {
+            out << YAML::Key << "<Scene>";
+            out << YAML::BeginMap;
+            {
+                out << YAML::Key << "ID" << YAML::Hex << 0x01;
+                out << YAML::Key << "Name" << YAML::Value << "Untitled";
+                
+                //Entities
+                std::vector<Entity> all = m_Scene->GetAllEntities();
+                for (Entity entity : all)
+                {
+                    out << YAML::Newline << YAML::Newline;
+                    SerializeEntity(out, entity);
+                }
+            }
+            out << YAML::EndMap;
+        }
         out << YAML::EndMap;
+        
+
         
         std::string serialized(out.c_str());
         return serialized;

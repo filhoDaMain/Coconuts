@@ -27,7 +27,7 @@ namespace Coconuts
     //static
     uint32_t LoadingRefs::StorePath(const std::string& relPath)
     {
-        uint32_t id = (m_Paths.size() - 1);
+        uint32_t id = m_Paths.size();
         m_Paths.emplace_back(relPath);
         
         LOG_TRACE("Loading Refs Stored: Path [ {} ];  ID [ {} ]", relPath, id);

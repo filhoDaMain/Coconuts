@@ -16,6 +16,7 @@
 
 #include <coconuts/AssetManager.h>
 #include <coconuts/Logger.h>
+#include "LoadingRefs.h"
 
 namespace Coconuts
 {
@@ -66,11 +67,18 @@ namespace Coconuts
         std::shared_ptr<Texture2D> texture2D;
         texture2D.reset(rawPtr);
         
+        /* Store Asset Path and get a unique ID */
+        uint32_t assetID = LoadingRefs::StorePath(path);
+        
+        /* Update Texture's ID */
+        texture2D->rawID = assetID;
+        
         /* Store */
         IndexedTexture2D indexed =
         {
             texture2D,
             static_cast<uint32_t>(m_KeysList_Textures2D.size()),
+            assetID,
             std::unique_ptr<std::vector<std::string>>(new std::vector<std::string>)
         };
         m_HashTable_Textures2D[logicalName] = std::move(indexed);
@@ -114,11 +122,15 @@ namespace Coconuts
         LOG_TRACE("  m_HashTable_Textures2D.maxload = {}", m_HashTable_Textures2D.max_load_factor());
 #endif
         
+        /* Get ID form Texture */
+        uint32_t assetID = texture2D->rawID;
+        
         /* Store */
         IndexedTexture2D indexed =
         {
             texture2D,
             static_cast<uint32_t>(m_KeysList_Textures2D.size()),
+            assetID,
             std::unique_ptr<std::vector<std::string>>(new std::vector<std::string>)
         };
         m_HashTable_Textures2D[logicalName] = std::move(indexed);
@@ -141,6 +153,10 @@ namespace Coconuts
     //static
     bool AssetManager::DeleteTexture2D(const std::string& logicalName)
     {
+        //TODO  Sould the texture asset ppath be also removed from LoadingRefs?
+        //      CAUTION: If StoreTexture2D is called after then it will use a deprecated assetID!
+        
+        
         auto found = m_HashTable_Textures2D.find(logicalName);
         
         if (found != m_HashTable_Textures2D.end())

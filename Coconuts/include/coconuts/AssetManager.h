@@ -44,6 +44,7 @@ namespace Coconuts
         {
             std::shared_ptr<Texture2D>  texturePtr;
             uint32_t                    keysListIndex;
+            uint32_t                    assetID;
             /* List of Sprites that reference this Texture2D */
             std::unique_ptr<std::vector<std::string>>   spritesUsing;
         };

@@ -37,7 +37,7 @@ namespace Coconuts
     //static
     std::string LoadingRefs::GetPath(uint32_t id)
     {
-        if (id > m_Paths.size())
+        if (id >= m_Paths.size())
         {
             return nullptr;
         }
@@ -49,6 +49,8 @@ namespace Coconuts
     bool LoadingRefs::RemovePath(uint32_t id)
     {
         m_Paths.erase(m_Paths.begin() + id);
+        
+        //CAUTION: All the remaining raw asset ID's > 'id' need to be updated!
         return true;
     }
     

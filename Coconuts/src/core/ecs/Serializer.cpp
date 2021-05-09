@@ -75,7 +75,25 @@ namespace Coconuts
     
     static void SerializeComponent(YAML::Emitter& out, SpriteComponent& component)
     {
-        
+        out << YAML::Key << "SpriteComponent" << YAML::Value << YAML::BeginSeq;
+        out << YAML::BeginMap;
+        {
+            out << YAML::Key << "spriteLogicalName" << YAML::Value << component.spriteLogicalName;
+        }
+        out << YAML::EndMap;
+        out << YAML::BeginMap;
+        {
+            out << YAML::Key << "tintColor" << YAML::BeginSeq;
+            {
+                out << component.tintColor.r;
+                out << component.tintColor.g;
+                out << component.tintColor.b;
+                out << component.tintColor.a;
+            }
+            out << YAML::EndSeq;
+        }
+        out << YAML::EndMap;
+        out << YAML::EndSeq;
     }
     
     static void SerializeComponent(YAML::Emitter& out, BehaviorComponent& component)

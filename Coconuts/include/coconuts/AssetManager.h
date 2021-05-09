@@ -30,6 +30,8 @@
 namespace Coconuts
 {
     
+    class AssetSerializer;
+    
     class AssetManager
     {
     public:
@@ -43,14 +45,18 @@ namespace Coconuts
         struct IndexedTexture2D
         {
             std::shared_ptr<Texture2D>  texturePtr;
+            std::string                 logicalName;    // same as key
             uint32_t                    keysListIndex;
+            uint32_t                    assetID;
             /* List of Sprites that reference this Texture2D */
-            std::unique_ptr<std::vector<std::string>>   spritesUsing;
+            std::shared_ptr<std::vector<std::string>>   spritesUsing;
         };
         
         struct IndexedSprite
         {
             std::shared_ptr<Sprite>     spritePtr;
+            std::string                 logicalName;    // same as key
+            SpriteSelector              spriteSelector; // human readable selection coordinates
             uint32_t                    keysListIndex;
             std::string                 spriteSheetName;
             /* Index of referred Texture2D::spritesUsing vector pointing to this Sprite */
@@ -75,6 +81,8 @@ namespace Coconuts
     public:
         static void Init(); //non mandatory
         
+        static std::string Serialize();
+        
         static bool ImportTexture2D(const std::string& logicalName, const std::string& path);
         static std::shared_ptr<Texture2D> GetTexture2D(const std::string& logicalName);
         static std::vector<std::string>& GetAllTexture2DLogicalNames() { return m_KeysList_Textures2D; }
@@ -97,10 +105,12 @@ namespace Coconuts
         static uint32_t ReferenceTexture2D(const std::string& texture2DName, const std::string& spriteName);
         static bool EraseReferenceTexture2D(const std::string& texture2DName, uint32_t index);
         
+        static IndexedTexture2D GetFullHTIndexedTexture2D(const std::string& name);
+        static IndexedSprite GetFullHTIndexedSprite(const std::string& name);
+        
         /* HASH TABLES */
         static std::unordered_map<std::string, IndexedTexture2D>    m_HashTable_Textures2D;
         static std::unordered_map<std::string, IndexedSprite>       m_HashTable_Sprites;
-        static std::unordered_map<std::string, SpriteSelector>      m_HashTable_SpriteSelectors;
         
         /* Keys Lists */
         static std::vector<std::string> m_KeysList_Textures2D;

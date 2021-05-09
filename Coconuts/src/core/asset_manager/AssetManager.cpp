@@ -16,6 +16,8 @@
 
 #include <coconuts/AssetManager.h>
 #include <coconuts/Logger.h>
+#include "LoadingRefs.h"
+#include "AssetSerializer.h"
 
 namespace Coconuts
 {
@@ -23,7 +25,6 @@ namespace Coconuts
     /* Static Hash Tables Definitions */
     std::unordered_map<std::string, AssetManager::IndexedTexture2D> AssetManager::m_HashTable_Textures2D;
     std::unordered_map<std::string, AssetManager::IndexedSprite>    AssetManager::m_HashTable_Sprites;
-    std::unordered_map<std::string, AssetManager::SpriteSelector>   AssetManager::m_HashTable_SpriteSelectors;
     
     /* Static Keys Lists Definitions */
     std::vector<std::string> AssetManager::m_KeysList_Textures2D;
@@ -39,10 +40,33 @@ namespace Coconuts
         
         m_HashTable_Sprites.reserve(HashTableDefs::SpritesHT::reserve);
         m_HashTable_Sprites.max_load_factor(HashTableDefs::SpritesHT::max_load_factor);
-        m_HashTable_SpriteSelectors.reserve(HashTableDefs::SpritesHT::reserve);
-        m_HashTable_SpriteSelectors.max_load_factor(HashTableDefs::SpritesHT::max_load_factor);
     }
     
+    
+    //static
+    std::string AssetManager::Serialize()
+    {
+        /* Create a vector of all Indexed Textures */
+        std::vector<IndexedTexture2D> allTextures2D;
+        for (auto name : GetAllTexture2DLogicalNames())
+        {
+            allTextures2D.emplace_back( GetFullHTIndexedTexture2D(name) );
+        }
+        
+        /* Create a vector of all Indexed Sprites */
+        std::vector<IndexedSprite> allSprites;
+        for (auto name : GetAllSpriteLogicalNames())
+        {
+            allSprites.emplace_back( GetFullHTIndexedSprite(name) );
+        }
+        
+        /* Create serializer and copy data into it */
+        AssetSerializer serializer(std::make_shared<std::vector<IndexedTexture2D>>(allTextures2D),
+                                   std::make_shared<std::vector<IndexedSprite>>(allSprites));
+        
+        /* Return serializer output */
+        return serializer.Serialize();
+    }
     
     
     //static
@@ -66,11 +90,19 @@ namespace Coconuts
         std::shared_ptr<Texture2D> texture2D;
         texture2D.reset(rawPtr);
         
+        /* Store Asset Path and get a unique ID */
+        uint32_t assetID = LoadingRefs::StorePath(path);
+        
+        /* Update Texture's ID */
+        texture2D->rawID = assetID;
+        
         /* Store */
         IndexedTexture2D indexed =
         {
             texture2D,
+            logicalName,
             static_cast<uint32_t>(m_KeysList_Textures2D.size()),
+            assetID,
             std::unique_ptr<std::vector<std::string>>(new std::vector<std::string>)
         };
         m_HashTable_Textures2D[logicalName] = std::move(indexed);
@@ -114,11 +146,16 @@ namespace Coconuts
         LOG_TRACE("  m_HashTable_Textures2D.maxload = {}", m_HashTable_Textures2D.max_load_factor());
 #endif
         
+        /* Get ID form Texture */
+        uint32_t assetID = texture2D->rawID;
+        
         /* Store */
         IndexedTexture2D indexed =
         {
             texture2D,
+            logicalName,
             static_cast<uint32_t>(m_KeysList_Textures2D.size()),
+            assetID,
             std::unique_ptr<std::vector<std::string>>(new std::vector<std::string>)
         };
         m_HashTable_Textures2D[logicalName] = std::move(indexed);
@@ -141,6 +178,10 @@ namespace Coconuts
     //static
     bool AssetManager::DeleteTexture2D(const std::string& logicalName)
     {
+        //TODO  Sould the texture asset ppath be also removed from LoadingRefs?
+        //      CAUTION: If StoreTexture2D is called after then it will use a deprecated assetID!
+        
+        
         auto found = m_HashTable_Textures2D.find(logicalName);
         
         if (found != m_HashTable_Textures2D.end())
@@ -243,17 +284,16 @@ namespace Coconuts
         IndexedSprite indexed =
         {
             sprite,
+            logicalName,
+            selector,
             static_cast<uint32_t>(m_KeysList_Sprites.size()),
             spriteSheetLogicalName,
-            referrerIndex
+            referrerIndex,
         };
         m_HashTable_Sprites[logicalName] = indexed;
         
         /* Update Keys List */
         m_KeysList_Sprites.emplace_back(logicalName);
-        
-        /* Store SpriteSelector */
-        m_HashTable_SpriteSelectors[logicalName] = selector;
         
 #if LOG_PROFILE_HASHTABLES
         LOG_TRACE("Post-call CreateSprite():");
@@ -285,20 +325,15 @@ namespace Coconuts
             std::shared_ptr<Texture2D> texture2D = AssetManager::GetTexture2D(spriteSheetLogicalName);
             
             found->second.spritePtr->UpdateData(texture2D, selector.coords, selector.cellSize, selector.spriteSize);
+            found->second.logicalName = logicalName;
+            found->second.spriteSelector = selector;
             found->second.spriteSheetName = spriteSheetLogicalName;
             
             /* Assign new reference to a Texture2D bucket */
             LOG_TRACE("Assign new hash table ref [{}]->[{}]", logicalName, spriteSheetLogicalName);
             found->second.referrerIndex = ReferenceTexture2D(spriteSheetLogicalName, logicalName);
             
-            /* Update SpriteSelector */
-            auto found2 = m_HashTable_SpriteSelectors.find(logicalName);
-            
-            if (found2 != m_HashTable_SpriteSelectors.end())
-            {
-                found2->second = selector;
-                return true;
-            }
+            return true;
         }
         
         return false;
@@ -333,14 +368,14 @@ namespace Coconuts
     //static
     std::tuple<bool, AssetManager::SpriteSelector> AssetManager::GetSpriteSelector(const std::string& logicalName)
     {
-        auto found = m_HashTable_SpriteSelectors.find(logicalName);
+        auto found = m_HashTable_Sprites.find(logicalName);
         
-        if (found != m_HashTable_SpriteSelectors.end())
+        if (found != m_HashTable_Sprites.end())
         {
-            return std::make_tuple(true, found->second);
+            return std::make_tuple(true, found->second.spriteSelector);
         }
-
-        return std::make_tuple(false, found->second);
+        
+        return std::make_tuple(false, found->second.spriteSelector);
     }
     
     //static
@@ -372,14 +407,38 @@ namespace Coconuts
                     findOther->second.keysListIndex = keyIndex;
                 }
             }
-            
-            /* Delete entries from hash tables */
-            m_HashTable_Sprites.erase(logicalName);
-            m_HashTable_SpriteSelectors.erase(logicalName);
             return true;
         }
         
         return false;
+    }
+    
+    //private static
+    AssetManager::IndexedTexture2D AssetManager::GetFullHTIndexedTexture2D(const std::string& name)
+    {
+        IndexedTexture2D copy;  //empty
+        
+        auto found = m_HashTable_Textures2D.find(name);
+        if (found != m_HashTable_Textures2D.end())
+        {
+            copy = found->second;
+        }
+        
+        return copy;
+    }
+    
+    //private static
+    AssetManager::IndexedSprite AssetManager::GetFullHTIndexedSprite(const std::string& name)
+    {
+        IndexedSprite copy; //empty
+        
+        auto found = m_HashTable_Sprites.find(name);
+        if (found != m_HashTable_Sprites.end())
+        {
+            copy = found->second;
+        }
+        
+        return copy;
     }
     
 }

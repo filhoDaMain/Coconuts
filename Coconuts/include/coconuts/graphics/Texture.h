@@ -22,6 +22,7 @@
 
 namespace Coconuts
 {
+    class AssetManager; //forward declared
     
     class Texture
     {
@@ -38,6 +39,10 @@ namespace Coconuts
         virtual bool operator == (const Texture& other) const = 0;
         
         virtual explicit operator void*() const = 0;
+        
+    private:
+        uint32_t rawID; /* Raw Asset ID (Handy for Serialization) */
+        friend AssetManager;
     };
     
     class Texture2D : public Texture

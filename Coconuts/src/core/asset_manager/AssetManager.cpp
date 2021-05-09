@@ -17,7 +17,7 @@
 #include <coconuts/AssetManager.h>
 #include <coconuts/Logger.h>
 #include "LoadingRefs.h"
-//#include "AssetSerializer.h"
+#include "AssetSerializer.h"
 
 namespace Coconuts
 {
@@ -46,7 +46,6 @@ namespace Coconuts
     //static
     std::string AssetManager::Serialize()
     {
-#if 0
         /* Create a vector of all Indexed Textures */
         std::vector<IndexedTexture2D> allTextures2D;
         for (auto name : GetAllTexture2DLogicalNames())
@@ -67,8 +66,6 @@ namespace Coconuts
         
         /* Return serializer output */
         return serializer.Serialize();
-#endif
-        return std::string("");
     }
     
     

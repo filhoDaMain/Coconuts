@@ -46,7 +46,7 @@ namespace Coconuts
         out << YAML::Key << "OrthoCameraComponent" << YAML::Value << YAML::BeginSeq;
         out << YAML::BeginMap;
         {
-            out << YAML::Key << "isActive" << YAML::LongBool << true;
+            out << YAML::Key << "isActive (hardcoded)" << YAML::LongBool << true;
         }
         out << YAML::EndMap;
         out << YAML::EndSeq;
@@ -57,12 +57,12 @@ namespace Coconuts
         out << YAML::Key << "TransformComponent" << YAML::Value << YAML::BeginSeq;
         out << YAML::BeginMap;
         {
-            out << YAML::Key << "position" << YAML::BeginSeq << component.position.x << component.position.y << YAML::EndSeq;
+            out << YAML::Key << "position" << YAML::Flow << YAML::BeginSeq << component.position.x << component.position.y << YAML::EndSeq;
         }
         out << YAML::EndMap;
         out << YAML::BeginMap;
         {
-            out << YAML::Key << "size" << YAML::BeginSeq << component.size.x << component.size.y << YAML::EndSeq;
+            out << YAML::Key << "size" << YAML::Flow << YAML::BeginSeq << component.size.x << component.size.y << YAML::EndSeq;
         }
         out << YAML::EndMap;
         out << YAML::BeginMap;
@@ -83,7 +83,7 @@ namespace Coconuts
         out << YAML::EndMap;
         out << YAML::BeginMap;
         {
-            out << YAML::Key << "tintColor" << YAML::BeginSeq;
+            out << YAML::Key << "tintColor" << YAML::Flow << YAML::BeginSeq;
             {
                 out << component.tintColor.r;
                 out << component.tintColor.g;
@@ -98,7 +98,7 @@ namespace Coconuts
     
     static void SerializeComponent(YAML::Emitter& out, BehaviorComponent& component)
     {
-        
+        //TODO
     }
     
     static void SerializeEntity(YAML::Emitter& out, Entity entity)
@@ -157,7 +157,6 @@ namespace Coconuts
                 std::vector<Entity> all = m_Scene->GetAllEntities();
                 for (Entity entity : all)
                 {
-                    out << YAML::Newline << YAML::Newline;
                     SerializeEntity(out, entity);
                 }
             }

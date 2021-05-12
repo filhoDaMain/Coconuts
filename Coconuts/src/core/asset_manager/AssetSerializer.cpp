@@ -67,7 +67,7 @@ namespace Coconuts
             
             out << YAML::BeginMap;
             {
-                out << YAML::Key << "coords" << YAML::BeginSeq;
+                out << YAML::Key << "coords" << YAML::Flow << YAML::BeginSeq;
                 out << htIndex.spriteSelector.coords.x;
                 out << htIndex.spriteSelector.coords.y;
                 out << YAML::EndSeq;
@@ -76,7 +76,7 @@ namespace Coconuts
             
             out << YAML::BeginMap;
             {
-                out << YAML::Key << "cellSize" << YAML::BeginSeq;
+                out << YAML::Key << "cellSize" << YAML::Flow << YAML::BeginSeq;
                 out << htIndex.spriteSelector.cellSize.x;
                 out << htIndex.spriteSelector.cellSize.y;
                 out << YAML::EndSeq;
@@ -85,7 +85,7 @@ namespace Coconuts
             
             out << YAML::BeginMap;
             {
-                out << YAML::Key << "spriteSize" << YAML::BeginSeq;
+                out << YAML::Key << "spriteSize" << YAML::Flow << YAML::BeginSeq;
                 out << htIndex.spriteSelector.spriteSize.x;
                 out << htIndex.spriteSelector.spriteSize.y;
                 out << YAML::EndSeq;

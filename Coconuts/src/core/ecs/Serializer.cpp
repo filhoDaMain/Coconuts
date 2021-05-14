@@ -32,57 +32,42 @@ namespace Coconuts
     
     static void SerializeComponent(YAML::Emitter& out, TagComponent& component)
     {
-        out << YAML::Key << "TagComponent" << YAML::Value << YAML::BeginSeq;
+        out << YAML::Key << "TagComponent";
         out << YAML::BeginMap;
         {
             out << YAML::Key << "tag" << YAML::Value << component.tag;
         }
         out << YAML::EndMap;
-        out << YAML::EndSeq;
     }
     
     static void SerializeComponent(YAML::Emitter& out, OrthoCameraComponent& component)
     {
-        out << YAML::Key << "OrthoCameraComponent" << YAML::Value << YAML::BeginSeq;
+        out << YAML::Key << "OrthoCameraComponent";
         out << YAML::BeginMap;
         {
             out << YAML::Key << "isActive (hardcoded)" << YAML::LongBool << true;
         }
         out << YAML::EndMap;
-        out << YAML::EndSeq;
     }
     
     static void SerializeComponent(YAML::Emitter& out, TransformComponent& component)
     {
-        out << YAML::Key << "TransformComponent" << YAML::Value << YAML::BeginSeq;
+        out << YAML::Key << "TransformComponent";
         out << YAML::BeginMap;
         {
             out << YAML::Key << "position" << YAML::Flow << YAML::BeginSeq << component.position.x << component.position.y << YAML::EndSeq;
-        }
-        out << YAML::EndMap;
-        out << YAML::BeginMap;
-        {
             out << YAML::Key << "size" << YAML::Flow << YAML::BeginSeq << component.size.x << component.size.y << YAML::EndSeq;
-        }
-        out << YAML::EndMap;
-        out << YAML::BeginMap;
-        {
             out << YAML::Key << "rotationRadians" << YAML::Value << component.rotationRadians;
         }
         out << YAML::EndMap;
-        out << YAML::EndSeq;
     }
     
     static void SerializeComponent(YAML::Emitter& out, SpriteComponent& component)
     {
-        out << YAML::Key << "SpriteComponent" << YAML::Value << YAML::BeginSeq;
+        out << YAML::Key << "SpriteComponent";
         out << YAML::BeginMap;
         {
             out << YAML::Key << "spriteLogicalName" << YAML::Value << component.spriteLogicalName;
-        }
-        out << YAML::EndMap;
-        out << YAML::BeginMap;
-        {
             out << YAML::Key << "tintColor" << YAML::Flow << YAML::BeginSeq;
             {
                 out << component.tintColor.r;
@@ -93,7 +78,6 @@ namespace Coconuts
             out << YAML::EndSeq;
         }
         out << YAML::EndMap;
-        out << YAML::EndSeq;
     }
     
     static void SerializeComponent(YAML::Emitter& out, BehaviorComponent& component)

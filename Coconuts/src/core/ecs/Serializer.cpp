@@ -103,6 +103,7 @@ namespace Coconuts
     
     static void SerializeEntity(YAML::Emitter& out, Entity entity)
     {
+        out << YAML::BeginMap;
         out << YAML::Key << "<Entity>";
         out << YAML::BeginMap;
         {
@@ -139,6 +140,7 @@ namespace Coconuts
             }
         }
         out << YAML::EndMap;
+        out << YAML::EndMap;
     }
     
     std::string Serializer::Serialize()
@@ -154,12 +156,14 @@ namespace Coconuts
                 out << YAML::Key << "Name" << YAML::Value << "Untitled";
                 
                 //Entities
+                out << YAML::Key << "Entities List" << YAML::Value << YAML::BeginSeq;
                 std::vector<Entity> all = m_Scene->GetAllEntities();
                 for (Entity entity : all)
                 {
                     SerializeEntity(out, entity);
                 }
             }
+            out << YAML::EndSeq;
             out << YAML::EndMap;
         }
         out << YAML::EndMap;

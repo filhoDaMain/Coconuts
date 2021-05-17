@@ -45,7 +45,18 @@ namespace Coconuts
         out << YAML::Key << "OrthoCameraComponent";
         out << YAML::BeginMap;
         {
-            out << YAML::Key << "isActive (hardcoded)" << YAML::LongBool << true;
+            out << YAML::Key << "aspectRatio" << YAML::Value << component.aspectRatio;
+            out << YAML::Key << "zoomLevel" << YAML::Value << component.zoomLevel;
+            out << YAML::Key << "mooveSpeed" << YAML::Value << component.mooveSpeed;
+            out << YAML::Key << "halt" << YAML::LongBool << component.halt;
+            out << YAML::Key << "backgroundColor" << YAML::Flow << YAML::BeginSeq;
+            {
+                out << component.backgroundColor.r;
+                out << component.backgroundColor.g;
+                out << component.backgroundColor.b;
+                out << component.backgroundColor.a;
+            }
+            out << YAML::EndSeq;
         }
         out << YAML::EndMap;
     }

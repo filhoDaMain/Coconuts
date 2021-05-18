@@ -48,11 +48,14 @@ namespace Coconuts
         bool HaltAllEvents(bool state = true);
         bool HaltEditorCameraNavigation(bool state = true);
         
+        bool DeleteDefaultSceneCamera();
+        
     private:
         entityx::EntityX m_EntityManager;
         
         bool m_HaltAllEvents = false;
         bool m_HaltEditorCameraNavigation = false;
+        uint64_t m_DefaultCameraID = 0;
         
         /**
          * When a new Entity is added or modified m_IsUpdated is set to true.
@@ -60,7 +63,7 @@ namespace Coconuts
          */
         bool m_IsUpdated = false;
 
-        void CreateSceneCamera();
+        void CreateDefaultSceneCamera();
     };
     
 }

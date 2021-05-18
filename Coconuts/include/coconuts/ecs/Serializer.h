@@ -26,7 +26,7 @@ namespace Coconuts
     class Serializer
     {
     public:
-        Serializer(const std::shared_ptr<Scene> scene);
+        Serializer(std::shared_ptr<Scene>& scene);
         ~Serializer() = default;
         
         std::string Serialize();

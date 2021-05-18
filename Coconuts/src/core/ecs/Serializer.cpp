@@ -16,16 +16,15 @@
 
 #include <yaml-cpp/yaml.h>
 #include <coconuts/ecs/Serializer.h>
-#include <coconuts/ecs/components/OrthoCameraComponent.h>
-#include <coconuts/ecs/components/TagComponent.h>
-#include <coconuts/ecs/components/TransformComponent.h>
-#include <coconuts/ecs/components/SpriteComponent.h>
-#include <coconuts/ecs/components/BehaviorComponent.h>
+#include <coconuts/Logger.h>
+#include <coconuts/ECS.h>
+#include <coconuts/AssetManager.h>
+#include <coconuts/cameras/OrthographicCamera.h>
 
 namespace Coconuts
 {
     
-    Serializer::Serializer(const std::shared_ptr<Scene> scene)
+    Serializer::Serializer(std::shared_ptr<Scene>& scene)
     : m_Scene(scene)
     {
     }
@@ -96,6 +95,11 @@ namespace Coconuts
         //TODO
     }
     
+    static void SerializeComponent(YAML::Emitter& out, EventHandlerComponent& component)
+    {
+        //TODO
+    }
+    
     static void SerializeEntity(YAML::Emitter& out, Entity entity)
     {
         out << YAML::BeginMap;
@@ -132,6 +136,12 @@ namespace Coconuts
             if (entity.HasComponent<BehaviorComponent>())
             {
                 SerializeComponent(out, entity.GetComponent<BehaviorComponent>());
+            }
+            
+            //EventHandlerComponent
+            if (entity.HasComponent<EventHandlerComponent>())
+            {
+                SerializeComponent(out, entity.GetComponent<EventHandlerComponent>());
             }
         }
         out << YAML::EndMap;

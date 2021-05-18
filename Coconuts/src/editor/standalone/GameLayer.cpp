@@ -20,6 +20,7 @@
 #include <coconuts/ECS.h>
 #include <coconuts/Logger.h>
 #include <coconuts/AssetManager.h>
+#include <coconuts/ecs/Serializer.h>
 
 // Debug Behavior
 #include <coconuts/Polling.h>
@@ -64,15 +65,8 @@ namespace Coconuts
         /* Create a Scene */
         m_ActiveScene = std::make_shared<Scene>();
         
-        /* Create an entity on Scene */
-        m_Entity = Entity(m_ActiveScene.get(), "Sebastiao");
         
-        /* Add TransformComponent */
-        glm::vec2 position = {0.0f, 0.0f};
-        glm::vec2 size = {1.0f, 1.0f};
-        float rotationRadians = 0;
-        m_Entity.AddComponent<TransformComponent>(position, size, rotationRadians);
-       
+        /* IMPORT ASSETS - AssetManager */
         
         /* Add SpriteComponent */
         /* 1) Init Spritesheet Textures */
@@ -88,11 +82,34 @@ namespace Coconuts
         selector.spriteSize = {1, 1};
         AssetManager::CreateSprite("Pig", "Animals_Spritesheet", selector);
         
+        /* New Sprite */
+        selector.coords = {1, 3};   // 0,0 is bottom left corner cell
+        selector.cellSize = {136, 136};
+        selector.spriteSize = {1, 1};
+        AssetManager::CreateSprite("Blabla", "Animals_Spritesheet", selector);
+        
+        /* New Sprite */
+        selector.coords = {1, 4};   // 0,0 is bottom left corner cell
+        selector.cellSize = {136, 136};
+        selector.spriteSize = {1, 1};
+        AssetManager::CreateSprite("Hello", "Tiles_Spritesheet", selector);
+        
+        
+        
+#if 0
+        /* Create an entity on Scene */
+        m_Entity = Entity(m_ActiveScene.get(), "Sebastiao");
+        
+        /* Add TransformComponent */
+        glm::vec2 position = {0.0f, 0.0f};
+        glm::vec2 size = {1.0f, 1.0f};
+        float rotationRadians = 0;
+        m_Entity.AddComponent<TransformComponent>(position, size, rotationRadians);
+        
+        
         /* 3) Assign the sprite to the Entity's SpriteComponent */
         m_Entity.AddComponent<SpriteComponent>("Pig");
         
-        
-
         class TreeBehavior : public Behavior
         {
         public:
@@ -139,8 +156,50 @@ namespace Coconuts
         };
         
         m_Entity.AddComponent<BehaviorComponent>().AddBehavior<TreeBehavior>(m_Entity);
+#endif
         
         
+        
+        
+        //LOG_CRITICAL("Serialized AssetManager\n\n{}", AssetManager::Serialize());
+        
+        
+        //Serializer serializer(m_ActiveScene);
+        //LOG_CRITICAL("Serialized Scene\n\n{}", serializer.Serialize());
+        
+        std::string configuration = R"(
+<Scene>:
+  ID: 0x1
+  Name: Untitled
+  Entities List:
+    - <Entity>:
+        ID: 0x100000000
+        TagComponent:
+          tag: Camera
+        OrthoCameraComponent:
+          aspectRatio: 1.77777779
+          zoomLevel: 1
+          mooveSpeed: 1
+          halt: false
+          backgroundColor: [0, 0, 0, 1]
+        TransformComponent:
+          position: [0, 0]
+          size: [1, 1]
+          rotationRadians: 0
+    - <Entity>:
+        ID: 0x100000001
+        TagComponent:
+          tag: Sebastiao
+        TransformComponent:
+          position: [0, 0]
+          size: [1, 1]
+          rotationRadians: 0
+        SpriteComponent:
+          spriteLogicalName: Pig
+          tintColor: [1, 1, 1, 1])";
+        
+        Serializer serializer(m_ActiveScene);
+        serializer.Deserialize(configuration);
 
     }
 

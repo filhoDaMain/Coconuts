@@ -25,6 +25,7 @@ namespace Coconuts
     {
     public:
         OrthographicCamera(float left, float right, float bottom, float top);
+        virtual ~OrthographicCamera() = default;
         
         inline const glm::vec3& GetPosition() const { return m_Position; }
         inline float GetRotation() const { return m_Rotation; }

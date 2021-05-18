@@ -33,7 +33,15 @@ namespace Coconuts
         glm::vec4           backgroundColor;
         OrthographicCamera  camera;
         
-        OrthoCameraComponent() = default;
+        OrthoCameraComponent()
+        :   aspectRatio(16.0f/9.0f),
+            zoomLevel(1.0f),
+            mooveSpeed(1.0f),
+            halt(false),
+            backgroundColor({0.0f, 0.0f, 0.0f, 1.0f}),
+            camera(-aspectRatio * zoomLevel, aspectRatio * zoomLevel, -zoomLevel, zoomLevel)
+        {}
+        
         OrthoCameraComponent(float aR, float zoom, const glm::vec4& bgColor = {0.0f, 0.0f, 0.0f, 1.0f})
         :   aspectRatio(aR),
             zoomLevel(zoom),

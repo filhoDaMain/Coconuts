@@ -143,7 +143,7 @@ namespace Coconuts
     
     Scene::Scene()
     {
-        CreateSceneCamera();
+        CreateDefaultSceneCamera();
     }
     
     Scene::~Scene()
@@ -203,12 +203,19 @@ namespace Coconuts
         return m_HaltEditorCameraNavigation;
     }
     
-    void Scene::CreateSceneCamera()
+    void Scene::CreateDefaultSceneCamera()
     {
         Entity camera(this, "Camera");
         camera.AddComponent<OrthoCameraComponent>((float)(16.0f/9.0f), 1.0f).mooveSpeed = 1.0f;
         camera.AddComponent<TransformComponent>().position = {0.0f, 0.0f};
         camera.AddComponent<BehaviorComponent>().AddBehavior<CameraNavSystem>(camera);
         camera.AddComponent<EventHandlerComponent>().AddHandler<CameraEventHandler>(camera);
+        m_DefaultCameraID = camera.GetId();
+    }
+    
+    bool Scene::DeleteDefaultSceneCamera()
+    {
+        DestroyEntity(m_DefaultCameraID);
+        return true;
     }
 }

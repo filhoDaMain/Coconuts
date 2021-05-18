@@ -20,11 +20,18 @@
 #include <coconuts/ecs/Scene.h>
 
 // Base components (possibly move them into a single header file)
-#include <coconuts/ecs/components/OrthoCameraComponent.h>
 #include <coconuts/ecs/components/TagComponent.h>
 #include <coconuts/ecs/components/TransformComponent.h>
 #include <coconuts/ecs/components/SpriteComponent.h>
+#include <coconuts/ecs/components/OrthoCameraComponent.h>
 #include <coconuts/ecs/components/BehaviorComponent.h>
+#include <coconuts/ecs/components/EventHandlerComponent.h>
+
+// Default Systems
+#include <coconuts/ecs/systems/CameraNavSystem.h>
+
+// Default Event Handlers
+#include <coconuts/ecs/event_handlers/CameraEventHandler.h>
 
 #endif /* ECS_H */
 

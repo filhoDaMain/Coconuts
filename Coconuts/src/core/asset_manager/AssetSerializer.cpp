@@ -35,12 +35,12 @@ namespace Coconuts
         /* Get Asset Path from its raw asset it */
         std::string path = LoadingRefs::GetPath(htIndex.assetID);
         
+        out << YAML::BeginMap;
         out << YAML::Key << "<Texture2D>";
         out << YAML::BeginMap;
         {
             out << YAML::Key << "logicalName" << YAML::Value << htIndex.logicalName;
             out << YAML::Key << "path" << YAML::Value << path;
-            out << YAML::Key << "assetID" << YAML::Hex << htIndex.assetID;
             
             out << YAML::Key << "spritesUsing" << YAML::Value << YAML::BeginSeq;
             {
@@ -52,10 +52,12 @@ namespace Coconuts
             out << YAML::EndSeq;
         }
         out << YAML::EndMap;
+        out << YAML::EndMap;
     }
     
     static void SerializeSprite(YAML::Emitter& out, const AssetManager::IndexedSprite& htIndex)
     {
+        out << YAML::BeginMap;
         out << YAML::Key << "<Sprite>";
         out << YAML::BeginMap;
         {
@@ -63,37 +65,32 @@ namespace Coconuts
             out << YAML::Key << "spriteSheetName" << YAML::Value << htIndex.spriteSheetName;
             out << YAML::Key << "referrerIndex" << YAML::Hex << htIndex.referrerIndex;
             
-            out << YAML::Key << "spriteSelector" << YAML::BeginSeq;
-            
-            out << YAML::BeginMap;
+            out << YAML::Key << "spriteSelector" << YAML::BeginMap;
             {
                 out << YAML::Key << "coords" << YAML::Flow << YAML::BeginSeq;
-                out << htIndex.spriteSelector.coords.x;
-                out << htIndex.spriteSelector.coords.y;
+                {
+                    out << htIndex.spriteSelector.coords.x;
+                    out << htIndex.spriteSelector.coords.y;
+                }
                 out << YAML::EndSeq;
-            }
-            out << YAML::EndMap;
-            
-            out << YAML::BeginMap;
-            {
+                
                 out << YAML::Key << "cellSize" << YAML::Flow << YAML::BeginSeq;
-                out << htIndex.spriteSelector.cellSize.x;
-                out << htIndex.spriteSelector.cellSize.y;
+                {
+                    out << htIndex.spriteSelector.cellSize.x;
+                    out << htIndex.spriteSelector.cellSize.y;
+                }
                 out << YAML::EndSeq;
-            }
-            out << YAML::EndMap;
-            
-            out << YAML::BeginMap;
-            {
+                
                 out << YAML::Key << "spriteSize" << YAML::Flow << YAML::BeginSeq;
-                out << htIndex.spriteSelector.spriteSize.x;
-                out << htIndex.spriteSelector.spriteSize.y;
+                {
+                    out << htIndex.spriteSelector.spriteSize.x;
+                    out << htIndex.spriteSelector.spriteSize.y;
+                }
                 out << YAML::EndSeq;
             }
             out << YAML::EndMap;
-            
-            out << YAML::EndSeq;
         }
+        out << YAML::EndMap;
         out << YAML::EndMap;
     }
     
@@ -107,17 +104,21 @@ namespace Coconuts
             out << YAML::Key << "<AssetManager>";
             out << YAML::BeginMap;
             {
-                /* Textures2D */
+                //Textures2D
+                out << YAML::Key << "Textures2D List" << YAML::Value << YAML::BeginSeq;
                 for (auto htTexture2D : *m_Textures2D)
                 {
                     SerializeTexture2D(out, htTexture2D);
                 }
+                out << YAML::EndSeq;
                 
                 /* Sprites */
+                out << YAML::Key << "Sprites List" << YAML::Value << YAML::BeginSeq;
                 for (auto htSprite : *m_Sprites)
                 {
                     SerializeSprite(out, htSprite);
                 }
+                out << YAML::EndSeq;
             }
             out << YAML::EndMap;
         }

@@ -68,6 +68,14 @@ namespace Coconuts
         return serializer.Serialize();
     }
     
+    //static
+    bool AssetManager::Deserialize(std::string& conf)
+    {
+        /* Deliver configuration to AssetSerializer and deserialize it */
+        AssetSerializer serializer;
+        return serializer.Deserialize(conf);
+    }
+    
     
     //static
     bool AssetManager::ImportTexture2D(const std::string& logicalName, const std::string& path)

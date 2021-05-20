@@ -16,8 +16,8 @@
 
 #include "AssetSerializer.h"
 #include "LoadingRefs.h"
-#include <coconuts/AssetManager.h>
 #include <yaml-cpp/yaml.h>
+#include <coconuts/Logger.h>
 
 namespace Coconuts
 {
@@ -126,6 +126,101 @@ namespace Coconuts
         
         std::string serialized(out.c_str());
         return serialized;
+    }
+    
+    
+    
+    static bool DeserializeTexture2D(YAML::Node& texture2d_node)
+    {
+        LOG_TRACE("Parsing <Texture2D> ...");
+        
+        std::string logicalName = texture2d_node["logicalName"].as<std::string>();
+        std::string path = texture2d_node["path"].as<std::string>();
+        
+        LOG_TRACE("  logicalName = {}", logicalName);
+        LOG_TRACE("  path = {}", path);
+        
+        /* Import Texture2D */
+        AssetManager::ImportTexture2D(logicalName, path);
+        
+        return true;
+    }
+    
+    static bool DeserializeSprite(YAML::Node& sprite_node)
+    {
+        LOG_TRACE("Parsing <Sprite> ...");
+        
+        std::string logicalName = sprite_node["logicalName"].as<std::string>();
+        std::string spriteSheetName = sprite_node["spriteSheetName"].as<std::string>();
+        
+        auto spriteselector_node = sprite_node["spriteSelector"];
+        
+        auto coords_node = spriteselector_node["coords"];
+        float coords_x = coords_node[0].as<float>();
+        float coords_y = coords_node[1].as<float>();
+        
+        auto cellsize_node = spriteselector_node["cellSize"];
+        float cellsize_x = cellsize_node[0].as<float>();
+        float cellsize_y = cellsize_node[1].as<float>();
+        
+        auto spritesize_node = spriteselector_node["spriteSize"];
+        float spritesize_x = spritesize_node[0].as<float>();
+        float spritesize_y = spritesize_node[1].as<float>();
+        
+        LOG_TRACE("  logicalName = {}", logicalName);
+        LOG_TRACE("  spriteSheetName = {}", spriteSheetName);
+        LOG_TRACE("  spriteSelector:");
+        LOG_TRACE("    coords = [ {}, {} ]", coords_x, coords_y);
+        LOG_TRACE("    cellSize = [ {}, {} ]", cellsize_x, cellsize_y);
+        LOG_TRACE("    spriteSize = [ {}, {} ]", spritesize_x, spritesize_y);
+        
+        /* Create Sprite */
+        AssetManager::SpriteSelector selector;
+        selector.coords = {coords_x, coords_y};
+        selector.cellSize = {cellsize_x, cellsize_y};
+        selector.spriteSize = {spritesize_x, spritesize_y};
+        AssetManager::CreateSprite(logicalName, spriteSheetName, selector);
+        
+        return true;
+    }
+    
+    bool AssetSerializer::Deserialize(std::string& conf)
+    {
+        YAML::Node root = YAML::Load(conf);
+        
+        auto assetmanager_node = root["<AssetManager>"];
+        if (assetmanager_node)
+        {
+            LOG_TRACE("Parsing <AssetManager> ...");
+            
+            auto textures2d_list = assetmanager_node["Textures2D List"];
+            if (textures2d_list)
+            {
+                for (auto texture2d : textures2d_list)
+                {
+                    auto texture2d_node = texture2d["<Texture2D>"];
+                    if (texture2d_node)
+                    {
+                        DeserializeTexture2D(texture2d_node);
+                    }
+                }
+            }
+            
+            auto sprites_list = assetmanager_node["Sprites List"];
+            if (sprites_list)
+            {
+                for (auto sprite : sprites_list)
+                {
+                    auto sprite_node = sprite["<Sprite>"];
+                    if (sprite_node)
+                    {
+                        DeserializeSprite(sprite_node);
+                    }
+                }
+            }
+        }
+        
+        return true;
     }
     
 }

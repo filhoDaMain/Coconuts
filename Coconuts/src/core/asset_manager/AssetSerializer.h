@@ -26,12 +26,14 @@ namespace Coconuts
     class AssetSerializer
     {
     public:
+        AssetSerializer() = default;
         AssetSerializer(std::shared_ptr<std::vector<AssetManager::IndexedTexture2D>> indexedTextures,
                         std::shared_ptr<std::vector<AssetManager::IndexedSprite>> indexedSprites);
         
         ~AssetSerializer() = default;
         
         std::string Serialize();
+        bool Deserialize(std::string& conf);
         
     private:
         std::shared_ptr<std::vector<AssetManager::IndexedTexture2D>> m_Textures2D;

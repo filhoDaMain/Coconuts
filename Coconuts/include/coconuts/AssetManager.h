@@ -82,6 +82,7 @@ namespace Coconuts
         static void Init(); //non mandatory
         
         static std::string Serialize();
+        static bool Deserialize(std::string& conf);
         
         static bool ImportTexture2D(const std::string& logicalName, const std::string& path);
         static std::shared_ptr<Texture2D> GetTexture2D(const std::string& logicalName);

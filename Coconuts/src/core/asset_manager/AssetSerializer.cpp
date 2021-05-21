@@ -22,6 +22,7 @@
 namespace Coconuts
 {
     
+    namespace {
     namespace Parser
     {
         namespace Root
@@ -51,6 +52,7 @@ namespace Coconuts
             }
         }
     }
+    } //namespace
     
     AssetSerializer::AssetSerializer(std::shared_ptr<std::vector<AssetManager::IndexedTexture2D>> indexedTextures,
                                      std::shared_ptr<std::vector<AssetManager::IndexedSprite>> indexedSprites)

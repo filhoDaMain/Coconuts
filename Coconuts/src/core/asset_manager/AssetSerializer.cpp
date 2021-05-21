@@ -22,6 +22,36 @@
 namespace Coconuts
 {
     
+    namespace Parser
+    {
+        namespace Root
+        {
+            constexpr auto ROOT_NODE_ASSETMANAGER = "<AssetManager>";
+            constexpr auto KEY_SEQ_NODE_TEXTURES2DLIST = "Textures2D List";
+            constexpr auto KEY_SEQ_NODE_SPRITESLIST = "Sprites List";
+            
+            namespace Texture2D
+            {
+                constexpr auto CLASS_NODE_TEXTURE2D = "<Texture2D>";
+                constexpr auto KEY_STR_LOGICALNAME = "logicalName";
+                constexpr auto KEY_STR_PATH = "path";
+                constexpr auto KEY_SEQ_UI32_SPRITESUSING = "spritesUsing";
+            }
+            
+            namespace Sprite
+            {
+                constexpr auto CLASS_NODE_SPRITE = "<Sprite>";
+                constexpr auto KEY_STR_LOGICALNAME = "logicalName";
+                constexpr auto KEY_STR_SPRITESHEETNAME = "spriteSheetName";
+                constexpr auto KEY_UI32_REFERRERINDEX = "referrerIndex";
+                constexpr auto NODE_SPRITESELECTOR = "spriteSelector";
+                constexpr auto KEY_SEQ_FLOAT_COORDS = "coords";
+                constexpr auto KEY_SEQ_FLOAT_CELLSIZE = "cellSize";
+                constexpr auto KEY_SEQ_FLOAT_SPRITESIZE = "spriteSize";
+            }
+        }
+    }
+    
     AssetSerializer::AssetSerializer(std::shared_ptr<std::vector<AssetManager::IndexedTexture2D>> indexedTextures,
                                      std::shared_ptr<std::vector<AssetManager::IndexedSprite>> indexedSprites)
     : m_Textures2D(indexedTextures), m_Sprites(indexedSprites)
@@ -32,17 +62,19 @@ namespace Coconuts
     
     static void SerializeTexture2D(YAML::Emitter& out, const AssetManager::IndexedTexture2D& htIndex)
     {
+        using namespace Parser::Root::Texture2D;
+        
         /* Get Asset Path from its raw asset it */
         std::string path = LoadingRefs::GetPath(htIndex.assetID);
         
         out << YAML::BeginMap;
-        out << YAML::Key << "<Texture2D>";
+        out << YAML::Key << CLASS_NODE_TEXTURE2D;
         out << YAML::BeginMap;
         {
-            out << YAML::Key << "logicalName" << YAML::Value << htIndex.logicalName;
-            out << YAML::Key << "path" << YAML::Value << path;
+            out << YAML::Key << KEY_STR_LOGICALNAME << YAML::Value << htIndex.logicalName;
+            out << YAML::Key << KEY_STR_PATH << YAML::Value << path;
             
-            out << YAML::Key << "spritesUsing" << YAML::Value << YAML::BeginSeq;
+            out << YAML::Key << KEY_SEQ_UI32_SPRITESUSING << YAML::Value << YAML::BeginSeq;
             {
                 for (auto name : *htIndex.spritesUsing)
                 {
@@ -57,31 +89,33 @@ namespace Coconuts
     
     static void SerializeSprite(YAML::Emitter& out, const AssetManager::IndexedSprite& htIndex)
     {
+        using namespace Parser::Root::Sprite;
+        
         out << YAML::BeginMap;
-        out << YAML::Key << "<Sprite>";
+        out << YAML::Key << CLASS_NODE_SPRITE;
         out << YAML::BeginMap;
         {
-            out << YAML::Key << "logicalName" << YAML::Value << htIndex.logicalName;
-            out << YAML::Key << "spriteSheetName" << YAML::Value << htIndex.spriteSheetName;
-            out << YAML::Key << "referrerIndex" << YAML::Hex << htIndex.referrerIndex;
+            out << YAML::Key << KEY_STR_LOGICALNAME << YAML::Value << htIndex.logicalName;
+            out << YAML::Key << KEY_STR_SPRITESHEETNAME << YAML::Value << htIndex.spriteSheetName;
+            out << YAML::Key << KEY_UI32_REFERRERINDEX << YAML::Hex << htIndex.referrerIndex;
             
-            out << YAML::Key << "spriteSelector" << YAML::BeginMap;
+            out << YAML::Key << NODE_SPRITESELECTOR << YAML::BeginMap;
             {
-                out << YAML::Key << "coords" << YAML::Flow << YAML::BeginSeq;
+                out << YAML::Key << KEY_SEQ_FLOAT_COORDS << YAML::Flow << YAML::BeginSeq;
                 {
                     out << htIndex.spriteSelector.coords.x;
                     out << htIndex.spriteSelector.coords.y;
                 }
                 out << YAML::EndSeq;
                 
-                out << YAML::Key << "cellSize" << YAML::Flow << YAML::BeginSeq;
+                out << YAML::Key << KEY_SEQ_FLOAT_CELLSIZE << YAML::Flow << YAML::BeginSeq;
                 {
                     out << htIndex.spriteSelector.cellSize.x;
                     out << htIndex.spriteSelector.cellSize.y;
                 }
                 out << YAML::EndSeq;
                 
-                out << YAML::Key << "spriteSize" << YAML::Flow << YAML::BeginSeq;
+                out << YAML::Key << KEY_SEQ_FLOAT_SPRITESIZE << YAML::Flow << YAML::BeginSeq;
                 {
                     out << htIndex.spriteSelector.spriteSize.x;
                     out << htIndex.spriteSelector.spriteSize.y;
@@ -97,15 +131,16 @@ namespace Coconuts
     
     std::string AssetSerializer::Serialize()
     {
+        using namespace Parser::Root;
         YAML::Emitter out;
         
         out << YAML::BeginMap;
         {
-            out << YAML::Key << "<AssetManager>";
+            out << YAML::Key << ROOT_NODE_ASSETMANAGER;
             out << YAML::BeginMap;
             {
                 //Textures2D
-                out << YAML::Key << "Textures2D List" << YAML::Value << YAML::BeginSeq;
+                out << YAML::Key << KEY_SEQ_NODE_TEXTURES2DLIST << YAML::Value << YAML::BeginSeq;
                 for (auto htTexture2D : *m_Textures2D)
                 {
                     SerializeTexture2D(out, htTexture2D);
@@ -113,7 +148,7 @@ namespace Coconuts
                 out << YAML::EndSeq;
                 
                 /* Sprites */
-                out << YAML::Key << "Sprites List" << YAML::Value << YAML::BeginSeq;
+                out << YAML::Key << KEY_SEQ_NODE_SPRITESLIST << YAML::Value << YAML::BeginSeq;
                 for (auto htSprite : *m_Sprites)
                 {
                     SerializeSprite(out, htSprite);
@@ -132,10 +167,12 @@ namespace Coconuts
     
     static bool DeserializeTexture2D(YAML::Node& texture2d_node)
     {
+        using namespace Parser::Root::Texture2D;
+        
         LOG_TRACE("Parsing <Texture2D> ...");
         
-        std::string logicalName = texture2d_node["logicalName"].as<std::string>();
-        std::string path = texture2d_node["path"].as<std::string>();
+        std::string logicalName = texture2d_node[KEY_STR_LOGICALNAME].as<std::string>();
+        std::string path = texture2d_node[KEY_STR_PATH].as<std::string>();
         
         LOG_TRACE("  logicalName = {}", logicalName);
         LOG_TRACE("  path = {}", path);
@@ -148,22 +185,24 @@ namespace Coconuts
     
     static bool DeserializeSprite(YAML::Node& sprite_node)
     {
+        using namespace Parser::Root::Sprite;
+        
         LOG_TRACE("Parsing <Sprite> ...");
         
-        std::string logicalName = sprite_node["logicalName"].as<std::string>();
-        std::string spriteSheetName = sprite_node["spriteSheetName"].as<std::string>();
+        std::string logicalName = sprite_node[KEY_STR_LOGICALNAME].as<std::string>();
+        std::string spriteSheetName = sprite_node[Parser::Root::Sprite::KEY_STR_SPRITESHEETNAME].as<std::string>();
         
-        auto spriteselector_node = sprite_node["spriteSelector"];
+        auto spriteselector_node = sprite_node[NODE_SPRITESELECTOR];
         
-        auto coords_node = spriteselector_node["coords"];
+        auto coords_node = spriteselector_node[KEY_SEQ_FLOAT_COORDS];
         float coords_x = coords_node[0].as<float>();
         float coords_y = coords_node[1].as<float>();
         
-        auto cellsize_node = spriteselector_node["cellSize"];
+        auto cellsize_node = spriteselector_node[KEY_SEQ_FLOAT_CELLSIZE];
         float cellsize_x = cellsize_node[0].as<float>();
         float cellsize_y = cellsize_node[1].as<float>();
         
-        auto spritesize_node = spriteselector_node["spriteSize"];
+        auto spritesize_node = spriteselector_node[KEY_SEQ_FLOAT_SPRITESIZE];
         float spritesize_x = spritesize_node[0].as<float>();
         float spritesize_y = spritesize_node[1].as<float>();
         
@@ -186,19 +225,22 @@ namespace Coconuts
     
     bool AssetSerializer::Deserialize(std::string& conf)
     {
+        using namespace Parser::Root;
+        
         YAML::Node root = YAML::Load(conf);
         
-        auto assetmanager_node = root["<AssetManager>"];
+        auto assetmanager_node = root[ROOT_NODE_ASSETMANAGER];
         if (assetmanager_node)
         {
             LOG_TRACE("Parsing <AssetManager> ...");
             
-            auto textures2d_list = assetmanager_node["Textures2D List"];
+            auto textures2d_list = assetmanager_node[KEY_SEQ_NODE_TEXTURES2DLIST];
             if (textures2d_list)
             {
                 for (auto texture2d : textures2d_list)
                 {
-                    auto texture2d_node = texture2d["<Texture2D>"];
+                    using namespace Parser::Root::Texture2D;
+                    auto texture2d_node = texture2d[CLASS_NODE_TEXTURE2D];
                     if (texture2d_node)
                     {
                         DeserializeTexture2D(texture2d_node);
@@ -206,12 +248,13 @@ namespace Coconuts
                 }
             }
             
-            auto sprites_list = assetmanager_node["Sprites List"];
+            auto sprites_list = assetmanager_node[KEY_SEQ_NODE_SPRITESLIST];
             if (sprites_list)
             {
                 for (auto sprite : sprites_list)
                 {
-                    auto sprite_node = sprite["<Sprite>"];
+                    using namespace Parser::Root::Sprite;
+                    auto sprite_node = sprite[CLASS_NODE_SPRITE];
                     if (sprite_node)
                     {
                         DeserializeSprite(sprite_node);

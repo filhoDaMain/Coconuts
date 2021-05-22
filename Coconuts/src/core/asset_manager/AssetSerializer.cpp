@@ -25,13 +25,13 @@ namespace Coconuts
     namespace {
     namespace Parser
     {
-        namespace Root
+        namespace ROOT
         {
             constexpr auto ROOT_NODE_ASSETMANAGER = "<AssetManager>";
             constexpr auto KEY_SEQ_NODE_TEXTURES2DLIST = "Textures2D List";
             constexpr auto KEY_SEQ_NODE_SPRITESLIST = "Sprites List";
             
-            namespace Texture2D
+            namespace TEXTURE2D
             {
                 constexpr auto CLASS_NODE_TEXTURE2D = "<Texture2D>";
                 constexpr auto KEY_STR_LOGICALNAME = "logicalName";
@@ -39,7 +39,7 @@ namespace Coconuts
                 constexpr auto KEY_SEQ_UI32_SPRITESUSING = "spritesUsing";
             }
             
-            namespace Sprite
+            namespace SPRITE
             {
                 constexpr auto CLASS_NODE_SPRITE = "<Sprite>";
                 constexpr auto KEY_STR_LOGICALNAME = "logicalName";
@@ -64,7 +64,7 @@ namespace Coconuts
     
     static void SerializeTexture2D(YAML::Emitter& out, const AssetManager::IndexedTexture2D& htIndex)
     {
-        using namespace Parser::Root::Texture2D;
+        using namespace Parser::ROOT::TEXTURE2D;
         
         /* Get Asset Path from its raw asset it */
         std::string path = LoadingRefs::GetPath(htIndex.assetID);
@@ -91,7 +91,7 @@ namespace Coconuts
     
     static void SerializeSprite(YAML::Emitter& out, const AssetManager::IndexedSprite& htIndex)
     {
-        using namespace Parser::Root::Sprite;
+        using namespace Parser::ROOT::SPRITE;
         
         out << YAML::BeginMap;
         out << YAML::Key << CLASS_NODE_SPRITE;
@@ -133,7 +133,7 @@ namespace Coconuts
     
     std::string AssetSerializer::Serialize()
     {
-        using namespace Parser::Root;
+        using namespace Parser::ROOT;
         YAML::Emitter out;
         
         out << YAML::BeginMap;
@@ -169,7 +169,7 @@ namespace Coconuts
     
     static bool DeserializeTexture2D(YAML::Node& texture2d_node)
     {
-        using namespace Parser::Root::Texture2D;
+        using namespace Parser::ROOT::TEXTURE2D;
         
         LOG_TRACE("Parsing <Texture2D> ...");
         
@@ -187,12 +187,12 @@ namespace Coconuts
     
     static bool DeserializeSprite(YAML::Node& sprite_node)
     {
-        using namespace Parser::Root::Sprite;
+        using namespace Parser::ROOT::SPRITE;
         
         LOG_TRACE("Parsing <Sprite> ...");
         
         std::string logicalName = sprite_node[KEY_STR_LOGICALNAME].as<std::string>();
-        std::string spriteSheetName = sprite_node[Parser::Root::Sprite::KEY_STR_SPRITESHEETNAME].as<std::string>();
+        std::string spriteSheetName = sprite_node[KEY_STR_SPRITESHEETNAME].as<std::string>();
         
         auto spriteselector_node = sprite_node[NODE_SPRITESELECTOR];
         
@@ -227,7 +227,7 @@ namespace Coconuts
     
     bool AssetSerializer::Deserialize(std::string& conf)
     {
-        using namespace Parser::Root;
+        using namespace Parser::ROOT;
         
         YAML::Node root = YAML::Load(conf);
         
@@ -241,7 +241,7 @@ namespace Coconuts
             {
                 for (auto texture2d : textures2d_list)
                 {
-                    using namespace Parser::Root::Texture2D;
+                    using namespace Parser::ROOT::TEXTURE2D;
                     auto texture2d_node = texture2d[CLASS_NODE_TEXTURE2D];
                     if (texture2d_node)
                     {
@@ -255,7 +255,7 @@ namespace Coconuts
             {
                 for (auto sprite : sprites_list)
                 {
-                    using namespace Parser::Root::Sprite;
+                    using namespace Parser::ROOT::SPRITE;
                     auto sprite_node = sprite[CLASS_NODE_SPRITE];
                     if (sprite_node)
                     {

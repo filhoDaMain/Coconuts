@@ -26,8 +26,6 @@
 #include <coconuts/Polling.h>
 #include <coconuts/Keyboard.h>
 
-#define GAMELAYER_SPRITESHEET_PATH  "../../Demo/assets/rpg/RPGpack_sheet_2X.png";
-#define GAMELAYER_SPRITESHEET_ANIMALS_PATH  "../../Demo/assets/animals/square_nodetailsOutline.png";
 
 namespace Coconuts
 {
@@ -61,113 +59,60 @@ namespace Coconuts
         spec.width = 1280.0f;
         spec.height = 696.0f;
         m_Framebuffer.reset( Framebuffer::Create(spec) );
+
         
-        /* Create a Scene */
-        m_ActiveScene = std::make_shared<Scene>();
-        
-        
-        /* IMPORT ASSETS - AssetManager */
-        
-        /* Add SpriteComponent */
-        /* 1) Init Spritesheet Textures */
-        const std::string pathTiles = GAMELAYER_SPRITESHEET_PATH;
-        AssetManager::ImportTexture2D("Tiles_Spritesheet", pathTiles);
-        const std::string pathAnimals = GAMELAYER_SPRITESHEET_ANIMALS_PATH;
-        AssetManager::ImportTexture2D("Animals_Spritesheet", pathAnimals);
-        
-        /* 2) Create Sprite from the spritesheet */
-        AssetManager::SpriteSelector selector;
-        selector.coords = {1, 4};   // 0,0 is bottom left corner cell
-        selector.cellSize = {136, 136};
-        selector.spriteSize = {1, 1};
-        AssetManager::CreateSprite("Pig", "Animals_Spritesheet", selector);
-        
-        /* New Sprite */
-        selector.coords = {1, 3};   // 0,0 is bottom left corner cell
-        selector.cellSize = {136, 136};
-        selector.spriteSize = {1, 1};
-        AssetManager::CreateSprite("Blabla", "Animals_Spritesheet", selector);
-        
-        /* New Sprite */
-        selector.coords = {1, 4};   // 0,0 is bottom left corner cell
-        selector.cellSize = {136, 136};
-        selector.spriteSize = {1, 1};
-        AssetManager::CreateSprite("Hello", "Tiles_Spritesheet", selector);
-        
-        
-        
-#if 0
-        /* Create an entity on Scene */
-        m_Entity = Entity(m_ActiveScene.get(), "Sebastiao");
-        
-        /* Add TransformComponent */
-        glm::vec2 position = {0.0f, 0.0f};
-        glm::vec2 size = {1.0f, 1.0f};
-        float rotationRadians = 0;
-        m_Entity.AddComponent<TransformComponent>(position, size, rotationRadians);
-        
-        
-        /* 3) Assign the sprite to the Entity's SpriteComponent */
-        m_Entity.AddComponent<SpriteComponent>("Pig");
-        
-        class TreeBehavior : public Behavior
+        /* Import Assets (example) */
         {
-        public:
-            void OnCreate()
-            {
-                
-            }
+            std::string assetmanager_yaml = R"(
+<AssetManager>:
+  Textures2D List:
+    - <Texture2D>:
+        logicalName: Tiles_Spritesheet
+        path: ../../Demo/assets/rpg/RPGpack_sheet_2X.png
+        spritesUsing:
+          - Tree
+    - <Texture2D>:
+        logicalName: Animals_Spritesheet
+        path: ../../Demo/assets/animals/square_nodetailsOutline.png
+        spritesUsing:
+          - Pig
+          - Chicken
+  Sprites List:
+    - <Sprite>:
+        logicalName: Pig
+        spriteSheetName: Animals_Spritesheet
+        referrerIndex: 0x0
+        spriteSelector:
+          coords: [1, 4]
+          cellSize: [136, 136]
+          spriteSize: [1, 1]
+    - <Sprite>:
+        logicalName: Chicken
+        spriteSheetName: Animals_Spritesheet
+        referrerIndex: 0x1
+        spriteSelector:
+          coords: [4, 3]
+          cellSize: [136, 136]
+          spriteSize: [1, 1]
+    - <Sprite>:
+        logicalName: Tree
+        spriteSheetName: Tiles_Spritesheet
+        referrerIndex: 0x0
+        spriteSelector:
+          coords: [0, 0]
+          cellSize: [140, 380]
+          spriteSize: [1, 1])";
             
-            void OnDestroy()
-            {
-                
-            }
+            AssetManager::Deserialize(assetmanager_yaml);
+        }
+        
             
-            void OnUpdate(Timestep ts)
-            {
-                auto& tr = GetComponent<TransformComponent>();
-                
-                if (Polling::IsKeyPressed(Keyboard::KEY_A))
-                {
-                    tr.position.x -= moveSpeed * ts.GetSeconds();
-                }
-                
-                if (Polling::IsKeyPressed(Keyboard::KEY_D))
-                {
-                    tr.position.x += moveSpeed * ts.GetSeconds();
-                }
-                
-                if (Polling::IsKeyPressed(Keyboard::KEY_W))
-                {
-                    tr.position.y += moveSpeed * ts.GetSeconds();
-                }
-                
-                if (Polling::IsKeyPressed(Keyboard::KEY_S))
-                {
-                    tr.position.y -= moveSpeed * ts.GetSeconds();
-                }
-                
-                //LOG_TRACE("Behavior OnUpdate() -> My ID:   {}", this->GetEntityId());
-                //LOG_TRACE("Behavior OnUpdate() -> My Tag:  {}", this->GetComponent<TagComponent>().tag);
-            }
+        /* Import Scene (example) */
+        {
+            /* Create a Scene */
+            m_ActiveScene = std::make_shared<Scene>();
             
-        private:
-            float moveSpeed = 1.0f;
-        };
-        
-        m_Entity.AddComponent<BehaviorComponent>().AddBehavior<TreeBehavior>(m_Entity);
-#endif
-        
-        
-        
-        
-        //LOG_CRITICAL("Serialized AssetManager\n\n{}", AssetManager::Serialize());
-        
-        
-        //Serializer serializer(m_ActiveScene);
-        //LOG_CRITICAL("Serialized Scene\n\n{}", serializer.Serialize());
-        
-        std::string configuration = R"(
+            std::string scene_yaml = R"(
 <Scene>:
   ID: 0x1
   Name: Untitled
@@ -197,10 +142,11 @@ namespace Coconuts
         SpriteComponent:
           spriteLogicalName: Pig
           tintColor: [1, 1, 1, 1])";
+            
+            Serializer serializer(m_ActiveScene);
+            serializer.Deserialize(scene_yaml);
+        }
         
-        Serializer serializer(m_ActiveScene);
-        serializer.Deserialize(configuration);
-
     }
 
     void GameLayer::OnDetach()

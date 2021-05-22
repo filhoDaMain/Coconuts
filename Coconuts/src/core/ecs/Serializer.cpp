@@ -24,6 +24,68 @@
 namespace Coconuts
 {
     
+    namespace {
+    namespace Parser
+    {
+        namespace ROOT
+        {
+            constexpr auto ROOT_NODE_SCENE = "<Scene>";
+            constexpr auto KEY_UI32_ID = "ID";
+            constexpr auto KEY_STR_NAME = "Name";
+            constexpr auto KEY_SEQ_NODE_ENTITIESLIST = "Entities List";
+            
+            namespace ENTITY
+            {
+                constexpr auto CLASS_NODE_ENTITY = "<Entity>";
+                constexpr auto KEY_UI32_ID = "ID";
+                
+                namespace TAGCOMPONENT
+                {
+                    constexpr auto CMP_NODE_TAGCOMPONENT = "TagComponent";
+                    constexpr auto KEY_STR_TAG = "tag";
+                }
+                
+                namespace ORTHOCAMERACOMPONENT
+                {
+                    constexpr auto CMP_NODE_ORTHOCAMERACOMPONENT = "OrthoCameraComponent";
+                    constexpr auto KEY_FLOAT_ASPECTRATIO = "aspectRatio";
+                    constexpr auto KEY_FLOAT_ZOOMLEVEL = "zoomLevel";
+                    constexpr auto KEY_FLOAT_MOOVESPEED = "mooveSpeed";
+                    constexpr auto KEY_BOOL_HALT = "halt";
+                    constexpr auto KEY_SEQ_FLOAT4_BGCOLOR = "backgroundColor";
+                }
+                
+                namespace TRANSFORMCOMPONENT
+                {
+                    constexpr auto CMP_NODE_TRANSFORMCOMPONENT = "TransformComponent";
+                    constexpr auto KEY_SEQ_FLOAT2_POSITION = "position";
+                    constexpr auto KEY_SEQ_FLOAT2_SIZE = "size";
+                    constexpr auto KEY_FLOAT_ROTATIONRADIANS = "rotationRadians";
+                }
+                
+                namespace SPRITECOMPONENT
+                {
+                    constexpr auto CMP_NODE_SPRITECOMPONENT = "SpriteComponent";
+                    constexpr auto KEY_STR_SPRITELOGICALNAME = "spriteLogicalName";
+                    constexpr auto KEY_SEQ_FLOAT4_TINTCOLOR = "tintColor";
+                }
+                
+                namespace BEHAVIORCOMPONENT
+                {
+                    constexpr auto CMP_NODE_BEHAVIORCOMPONENT = "BehaviorComponent";
+                    //TODO
+                }
+                
+                namespace EVENTHANDLERCOMPONENT
+                {
+                    constexpr auto CMP_NODE_EVENTHANDLERCOMPONENT = "EventHandlerComponent";
+                    //TODO
+                }
+            }
+        }
+    }
+    } //namespace
+    
     Serializer::Serializer(std::shared_ptr<Scene>& scene)
     : m_Scene(scene)
     {
@@ -31,24 +93,28 @@ namespace Coconuts
     
     static void SerializeComponent(YAML::Emitter& out, TagComponent& component)
     {
-        out << YAML::Key << "TagComponent";
+        using namespace Parser::ROOT::ENTITY::TAGCOMPONENT;
+        
+        out << YAML::Key << CMP_NODE_TAGCOMPONENT;
         out << YAML::BeginMap;
         {
-            out << YAML::Key << "tag" << YAML::Value << component.tag;
+            out << YAML::Key << KEY_STR_TAG << YAML::Value << component.tag;
         }
         out << YAML::EndMap;
     }
     
     static void SerializeComponent(YAML::Emitter& out, OrthoCameraComponent& component)
     {
-        out << YAML::Key << "OrthoCameraComponent";
+        using namespace Parser::ROOT::ENTITY::ORTHOCAMERACOMPONENT;
+        
+        out << YAML::Key << CMP_NODE_ORTHOCAMERACOMPONENT;
         out << YAML::BeginMap;
         {
-            out << YAML::Key << "aspectRatio" << YAML::Value << component.aspectRatio;
-            out << YAML::Key << "zoomLevel" << YAML::Value << component.zoomLevel;
-            out << YAML::Key << "mooveSpeed" << YAML::Value << component.mooveSpeed;
-            out << YAML::Key << "halt" << YAML::LongBool << component.halt;
-            out << YAML::Key << "backgroundColor" << YAML::Flow << YAML::BeginSeq;
+            out << YAML::Key << KEY_FLOAT_ASPECTRATIO << YAML::Value << component.aspectRatio;
+            out << YAML::Key << KEY_FLOAT_ZOOMLEVEL << YAML::Value << component.zoomLevel;
+            out << YAML::Key << KEY_FLOAT_MOOVESPEED << YAML::Value << component.mooveSpeed;
+            out << YAML::Key << KEY_BOOL_HALT << YAML::LongBool << component.halt;
+            out << YAML::Key << KEY_SEQ_FLOAT4_BGCOLOR << YAML::Flow << YAML::BeginSeq;
             {
                 out << component.backgroundColor.r;
                 out << component.backgroundColor.g;
@@ -62,23 +128,27 @@ namespace Coconuts
     
     static void SerializeComponent(YAML::Emitter& out, TransformComponent& component)
     {
-        out << YAML::Key << "TransformComponent";
+        using namespace Parser::ROOT::ENTITY::TRANSFORMCOMPONENT;
+        
+        out << YAML::Key << CMP_NODE_TRANSFORMCOMPONENT;
         out << YAML::BeginMap;
         {
-            out << YAML::Key << "position" << YAML::Flow << YAML::BeginSeq << component.position.x << component.position.y << YAML::EndSeq;
-            out << YAML::Key << "size" << YAML::Flow << YAML::BeginSeq << component.size.x << component.size.y << YAML::EndSeq;
-            out << YAML::Key << "rotationRadians" << YAML::Value << component.rotationRadians;
+            out << YAML::Key << KEY_SEQ_FLOAT2_POSITION << YAML::Flow << YAML::BeginSeq << component.position.x << component.position.y << YAML::EndSeq;
+            out << YAML::Key << KEY_SEQ_FLOAT2_SIZE << YAML::Flow << YAML::BeginSeq << component.size.x << component.size.y << YAML::EndSeq;
+            out << YAML::Key << KEY_FLOAT_ROTATIONRADIANS << YAML::Value << component.rotationRadians;
         }
         out << YAML::EndMap;
     }
     
     static void SerializeComponent(YAML::Emitter& out, SpriteComponent& component)
     {
-        out << YAML::Key << "SpriteComponent";
+        using namespace Parser::ROOT::ENTITY::SPRITECOMPONENT;
+        
+        out << YAML::Key << CMP_NODE_SPRITECOMPONENT;
         out << YAML::BeginMap;
         {
-            out << YAML::Key << "spriteLogicalName" << YAML::Value << component.spriteLogicalName;
-            out << YAML::Key << "tintColor" << YAML::Flow << YAML::BeginSeq;
+            out << YAML::Key << KEY_STR_SPRITELOGICALNAME << YAML::Value << component.spriteLogicalName;
+            out << YAML::Key << KEY_SEQ_FLOAT4_TINTCOLOR << YAML::Flow << YAML::BeginSeq;
             {
                 out << component.tintColor.r;
                 out << component.tintColor.g;
@@ -102,11 +172,13 @@ namespace Coconuts
     
     static void SerializeEntity(YAML::Emitter& out, Entity entity)
     {
+        using namespace Parser::ROOT::ENTITY;
+        
         out << YAML::BeginMap;
-        out << YAML::Key << "<Entity>";
+        out << YAML::Key << CLASS_NODE_ENTITY;
         out << YAML::BeginMap;
         {
-            out << YAML::Key << "ID" << YAML::Hex << entity.GetId();
+            out << YAML::Key << KEY_UI32_ID << YAML::Hex << entity.GetId();
             
             //TagComponent
             if (entity.HasComponent<TagComponent>())
@@ -150,25 +222,27 @@ namespace Coconuts
     
     std::string Serializer::Serialize()
     {
+        using namespace Parser::ROOT;
+        
         YAML::Emitter out;
         
         out << YAML::BeginMap;
         {
-            out << YAML::Key << "<Scene>";
+            out << YAML::Key << ROOT_NODE_SCENE;
             out << YAML::BeginMap;
             {
-                out << YAML::Key << "ID" << YAML::Hex << 0x01;
-                out << YAML::Key << "Name" << YAML::Value << "Untitled";
+                out << YAML::Key << KEY_UI32_ID << YAML::Hex << 0x01;
+                out << YAML::Key << KEY_STR_NAME << YAML::Value << "Untitled";
                 
                 //Entities
-                out << YAML::Key << "Entities List" << YAML::Value << YAML::BeginSeq;
+                out << YAML::Key << KEY_SEQ_NODE_ENTITIESLIST << YAML::Value << YAML::BeginSeq;
                 std::vector<Entity> all = m_Scene->GetAllEntities();
                 for (Entity entity : all)
                 {
                     SerializeEntity(out, entity);
                 }
+                out << YAML::EndSeq;
             }
-            out << YAML::EndSeq;
             out << YAML::EndMap;
         }
         out << YAML::EndMap;
@@ -182,7 +256,9 @@ namespace Coconuts
     
     static bool DeserializeComponent(YAML::Node& component_node, TagComponent& component)
     {
-        std::string tag = component_node["tag"].as<std::string>();
+        using namespace Parser::ROOT::ENTITY::TAGCOMPONENT;
+        
+        std::string tag = component_node[KEY_STR_TAG].as<std::string>();
         component.tag = tag;
         
         LOG_TRACE("* TagComponent");
@@ -193,12 +269,14 @@ namespace Coconuts
     
     static bool DeserializeComponent(YAML::Node& component_node, OrthoCameraComponent& component)
     {
-        float ar = component_node["aspectRatio"].as<float>();
-        float zoom = component_node["zoomLevel"].as<float>();
-        float mvspeed = component_node["mooveSpeed"].as<float>();
-        bool halt = component_node["halt"].as<bool>();
+        using namespace Parser::ROOT::ENTITY::ORTHOCAMERACOMPONENT;
         
-        auto bgcolor = component_node["backgroundColor"];
+        float ar = component_node[KEY_FLOAT_ASPECTRATIO].as<float>();
+        float zoom = component_node[KEY_FLOAT_ZOOMLEVEL].as<float>();
+        float mvspeed = component_node[KEY_FLOAT_MOOVESPEED].as<float>();
+        bool halt = component_node[KEY_BOOL_HALT].as<bool>();
+        
+        auto bgcolor = component_node[KEY_SEQ_FLOAT4_BGCOLOR];
         float color_r = bgcolor[0].as<float>();
         float color_g = bgcolor[1].as<float>();
         float color_b = bgcolor[2].as<float>();
@@ -227,15 +305,17 @@ namespace Coconuts
     
     static bool DeserializeComponent(YAML::Node& component_node, TransformComponent& component)
     {
-        auto position_node = component_node["position"];
+        using namespace Parser::ROOT::ENTITY::TRANSFORMCOMPONENT;
+        
+        auto position_node = component_node[KEY_SEQ_FLOAT2_POSITION];
         float pos_x = position_node[0].as<float>();
         float pos_y = position_node[1].as<float>();
         
-        auto size_node = component_node["size"];
+        auto size_node = component_node[KEY_SEQ_FLOAT2_SIZE];
         float size_x = size_node[0].as<float>();
         float size_y = size_node[1].as<float>();
         
-        float rotationRadians = component_node["rotationRadians"].as<float>();
+        float rotationRadians = component_node[KEY_FLOAT_ROTATIONRADIANS].as<float>();
         
         /* Update output */
         component.position.x = pos_x;
@@ -254,9 +334,11 @@ namespace Coconuts
     
     static bool DeserializeComponent(YAML::Node& component_node, SpriteComponent& component)
     {
-        std::string spriteLogicalName = component_node["spriteLogicalName"].as<std::string>();
+        using namespace Parser::ROOT::ENTITY::SPRITECOMPONENT;
         
-        auto tintcolor_node = component_node["tintColor"];
+        std::string spriteLogicalName = component_node[KEY_STR_SPRITELOGICALNAME].as<std::string>();
+        
+        auto tintcolor_node = component_node[KEY_SEQ_FLOAT4_TINTCOLOR];
         float color_r = tintcolor_node[0].as<float>();
         float color_g = tintcolor_node[1].as<float>();
         float color_b = tintcolor_node[2].as<float>();
@@ -298,13 +380,15 @@ namespace Coconuts
     
     static void DeserializeEntity(YAML::Node& entity_node, std::shared_ptr<Scene>& scene)
     {
+        using namespace Parser::ROOT;
+        
         LOG_TRACE("Parsing <Entity> ...");
         
-        uint64_t id = entity_node["ID"].as<uint64_t>(); //not used
+        uint64_t id = entity_node[ENTITY::KEY_UI32_ID].as<uint64_t>(); //not used
         TagComponent tagComponent;  //mandatory
         
         //TagComponent
-        auto tag_node = entity_node["TagComponent"];
+        auto tag_node = entity_node[ENTITY::TAGCOMPONENT::CMP_NODE_TAGCOMPONENT];
         if (tag_node)
         {
             DeserializeComponent(tag_node, tagComponent);
@@ -317,7 +401,7 @@ namespace Coconuts
         
         
         //OrthoCameraComponent
-        auto orthocamera_node = entity_node["OrthoCameraComponent"];
+        auto orthocamera_node = entity_node[ENTITY::ORTHOCAMERACOMPONENT::CMP_NODE_ORTHOCAMERACOMPONENT];
         if (orthocamera_node)
         {
             OrthoCameraComponent orthoCameraComponent;
@@ -336,7 +420,7 @@ namespace Coconuts
         }
         
         //TransformComponent
-        auto transform_node = entity_node["TransformComponent"];
+        auto transform_node = entity_node[ENTITY::TRANSFORMCOMPONENT::CMP_NODE_TRANSFORMCOMPONENT];
         if (transform_node)
         {
             TransformComponent transformComponent;
@@ -345,7 +429,7 @@ namespace Coconuts
         }
         
         //SpriteComponent
-        auto sprite_node = entity_node["SpriteComponent"];
+        auto sprite_node = entity_node[ENTITY::SPRITECOMPONENT::CMP_NODE_SPRITECOMPONENT];
         if (sprite_node)
         {
             SpriteComponent spriteComponent;
@@ -354,7 +438,7 @@ namespace Coconuts
         }
         
         //BehaviorComponent
-        auto behavior_node = entity_node["BehaviorComponent"];
+        auto behavior_node = entity_node[ENTITY::BEHAVIORCOMPONENT::CMP_NODE_BEHAVIORCOMPONENT];
         if (behavior_node)
         {
             BehaviorComponent behaviorComponent;
@@ -365,7 +449,7 @@ namespace Coconuts
         }
         
         //EventHandlerComponent
-        auto eventhandler_node = entity_node["EventHandlerComponent"];
+        auto eventhandler_node = entity_node[ENTITY::EVENTHANDLERCOMPONENT::CMP_NODE_EVENTHANDLERCOMPONENT];
         if (eventhandler_node)
         {
             EventHandlerComponent eventHandlerComponent;
@@ -378,24 +462,27 @@ namespace Coconuts
     
     bool Serializer::Deserialize(std::string& conf)
     {
+        using namespace Parser::ROOT;
+        
         YAML::Node root = YAML::Load(conf);
         
-        auto scene_node = root["<Scene>"];
+        auto scene_node = root[ROOT_NODE_SCENE];
         if (scene_node)
         {
-            uint32_t id = scene_node["ID"].as<uint32_t>();
-            std::string name = scene_node["Name"].as<std::string>();
+            uint32_t id = scene_node[KEY_UI32_ID].as<uint32_t>();
+            std::string name = scene_node[KEY_STR_NAME].as<std::string>();
             
             LOG_TRACE("Parsing <Scene> ...");
             LOG_TRACE("* ID: {}", id);
             LOG_TRACE("* Name: {}", name);
             
-            auto entities_list = scene_node["Entities List"];
+            auto entities_list = scene_node[Parser::ROOT::KEY_SEQ_NODE_ENTITIESLIST];
             if (entities_list)
             {
                 for (auto entity : entities_list)
                 {
-                    auto entity_node = entity["<Entity>"];
+                    using namespace Parser::ROOT::ENTITY;
+                    auto entity_node = entity[CLASS_NODE_ENTITY];
                     if (entity_node)
                     {
                         DeserializeEntity(entity_node, m_Scene);

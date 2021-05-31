@@ -23,6 +23,7 @@
 #include <coconuts/editor_gui/GUILayer.h>
 #include <coconuts/types.h>
 #include <coconuts/AssetManager.h>
+#include "AppManager.h"
 
 
 namespace Coconuts
@@ -31,6 +32,7 @@ namespace Coconuts
     Application* Application::s_Instance = nullptr;
     
     Application::Application(const std::string& appname)
+    : m_AppName(appname)
     {
         /* Assert that the Singleton Pattern is respected */
         if (s_Instance != nullptr)
@@ -217,4 +219,25 @@ namespace Coconuts
         overlay->OnAttach();
         overlay->OnPostAttach();
     }
+    
+    
+
+    //static
+    void AppManagerProxy::LoadRuntimeConfig()
+    {
+        std::string dummyMetadata = "dummy";
+        auto& app = Application::GetInstance();
+        std::string appName = app.GetApplicationName();
+        
+        /* Read file appName.meta file containg app's metadata */
+        //TODO
+        //Call LoadRuntimeConfig using metada
+        
+        if (!AppManager::LoadRuntimeConfig(dummyMetadata))
+        {
+            /* Deal with failure */
+            //TODO
+        }
+    }
+    
 }

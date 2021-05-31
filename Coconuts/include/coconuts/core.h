@@ -47,6 +47,7 @@ int main (void)
 {
     Coconuts::Logger::Init();
     auto app = Coconuts::CreateApplication();
+    Coconuts::AppManagerProxy::LoadRuntimeConfig();
     app->Run();
     delete app;
     

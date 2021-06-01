@@ -225,15 +225,14 @@ namespace Coconuts
     //static
     void AppManagerProxy::LoadRuntimeConfig()
     {
-        std::string dummyMetadata = "dummy";
+        std::string filepath = "dummy";
         auto& app = Application::GetInstance();
         std::string appName = app.GetApplicationName();
         
-        /* Read file appName.meta file containg app's metadata */
-        //TODO
-        //Call LoadRuntimeConfig using metada
+        /* Get filepath = appName.meta or appName.ccnproj */
+        /* Call LoadRuntimeConfig(filepath )*/
         
-        if (!AppManager::LoadRuntimeConfig(dummyMetadata))
+        if (!AppManager::LoadRuntimeConfig(filepath))
         {
             /* Deal with failure */
             //TODO

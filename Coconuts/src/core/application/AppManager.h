@@ -21,10 +21,17 @@
 namespace Coconuts
 {
     
+    enum class ConfigFileTypes
+    {
+        Unknown         = 0,
+        MetaText        = 1,
+        MetaBinary      = 2
+    };
+    
     class AppManager
     {
     public:
-        static bool LoadRuntimeConfig(const std::string& appName);
+        static bool LoadRuntimeConfig(const std::string& filepath);
     };
     
 }

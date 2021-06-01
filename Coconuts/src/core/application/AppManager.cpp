@@ -19,10 +19,44 @@
 namespace Coconuts
 {
     
+    ConfigFileTypes ParseFileExtension(const std::string& filepath)
+    {
+        std::string fileExt = filepath.substr(filepath.find_last_of(".") + 1);
+        
+        if (fileExt == "ccnproj")
+        {
+            return ConfigFileTypes::MetaText;
+        }
+        
+        else if (fileExt == "meta")
+        {
+            return ConfigFileTypes::MetaBinary;
+        }
+        
+        return ConfigFileTypes::Unknown;
+        
+    }
+    
     //static
-    bool AppManager::LoadRuntimeConfig(const std::string& appName)
+    bool AppManager::LoadRuntimeConfig(const std::string& filepath)
     {
         //TODO
+        
+        switch (ParseFileExtension(filepath))
+        {
+            case ConfigFileTypes::MetaText:
+                //TODO
+                break;
+                
+            case ConfigFileTypes::MetaBinary:
+                //TODO
+                break;
+                
+            default:
+                //TODO
+                break;
+        }
+        
         return true;
     }
     

@@ -71,6 +71,7 @@ namespace Coconuts
     {
     public:
         static void LoadRuntimeConfig();
+        static void LoadRuntimeConfig(std::string& filepath);
     };
     
     extern Application* CreateApplication();

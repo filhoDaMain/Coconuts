@@ -239,4 +239,16 @@ namespace Coconuts
         }
     }
     
+    //static
+    void AppManagerProxy::LoadRuntimeConfig(std::string& filepath)
+    {
+        /* Just handover */
+        if (!AppManager::LoadRuntimeConfig(filepath))
+        {
+            /* Deal with failure */
+            //TODO
+        }
+        
+    }
+    
 }

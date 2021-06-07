@@ -15,6 +15,9 @@
  */
 
 #include "AppManager.h"
+#include <coconuts/Logger.h>
+#include <fstream>
+#include <sstream>
 
 namespace Coconuts
 {
@@ -37,6 +40,19 @@ namespace Coconuts
         
     }
     
+    static bool LoadMetaYAML(const std::string& filepath)
+    {
+        std::ifstream file(filepath);
+        std::stringstream stream;
+        stream << file.rdbuf();
+        std::string yamlConf = stream.str();
+        
+        LOG_TRACE("Load Meta YAML");
+        LOG_TRACE("{}", yamlConf);
+        
+        return true;
+    }
+    
     //static
     bool AppManager::LoadRuntimeConfig(const std::string& filepath)
     {
@@ -45,7 +61,7 @@ namespace Coconuts
         switch (ParseFileExtension(filepath))
         {
             case ConfigFileTypes::MetaText:
-                //TODO
+                LoadMetaYAML(filepath);
                 break;
                 
             case ConfigFileTypes::MetaBinary:

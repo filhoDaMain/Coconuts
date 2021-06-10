@@ -113,35 +113,37 @@ namespace Coconuts
             m_ActiveScene = std::make_shared<Scene>();
             
             std::string scene_yaml = R"(
-<Scene>:
-  ID: 0x1
-  Name: Untitled
-  Entities List:
-    - <Entity>:
-        ID: 0x100000000
-        TagComponent:
-          tag: Camera
-        OrthoCameraComponent:
-          aspectRatio: 1.77777779
-          zoomLevel: 1
-          mooveSpeed: 1
-          halt: false
-          backgroundColor: [0, 0, 0, 1]
-        TransformComponent:
-          position: [0, 0]
-          size: [1, 1]
-          rotationRadians: 0
-    - <Entity>:
-        ID: 0x100000001
-        TagComponent:
-          tag: Sebastiao
-        TransformComponent:
-          position: [0, 0]
-          size: [1, 1]
-          rotationRadians: 0
-        SpriteComponent:
-          spriteLogicalName: Pig
-          tintColor: [1, 1, 1, 1])";
+<SceneManager>:
+  Scenes List:
+    - <Scene>:
+        ID: 0x1
+        Name: Untitled
+        Entities List:
+          - <Entity>:
+              ID: 0x200000000
+              TagComponent:
+                tag: Sebastiao
+              TransformComponent:
+                position: [0, 0]
+                size: [1, 1]
+                rotationRadians: 0
+              SpriteComponent:
+                spriteLogicalName: Pig
+                tintColor: [1, 1, 1, 1]
+          - <Entity>:
+              ID: 0x100000001
+              TagComponent:
+                tag: Camera
+              OrthoCameraComponent:
+                aspectRatio: 1.77777779
+                zoomLevel: 1
+                mooveSpeed: 1
+                halt: false
+                backgroundColor: [0, 0, 0, 1]
+              TransformComponent:
+                position: [0, 0]
+                size: [1, 1]
+                rotationRadians: 0)";
             
             Serializer serializer(m_ActiveScene);
             serializer.Deserialize(scene_yaml);

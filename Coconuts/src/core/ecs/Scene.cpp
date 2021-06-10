@@ -39,6 +39,12 @@ namespace Coconuts
     
     void Scene::OnUpdate(Timestep ts)
     {
+        if (!m_IsActive)
+        {
+            return;
+        }
+        
+        
         /* Systems */
         /* ---------------------------------------------------------------------- */
         
@@ -141,9 +147,10 @@ namespace Coconuts
         });
     }
     
-    Scene::Scene(uint16_t id, std::string& name)
+    Scene::Scene(uint16_t id, std::string& name, bool isActive)
     :   m_ID(id),
         m_Name(name),
+        m_IsActive(isActive),
         m_HaltAllEvents(false),
         m_HaltEditorCameraNavigation(false),
         m_DefaultCameraID(0),

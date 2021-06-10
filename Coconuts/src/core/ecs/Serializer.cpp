@@ -489,32 +489,59 @@ namespace Coconuts
         }
     }
     
+    static bool DeserializeScene(YAML::Node& scene_node, std::shared_ptr<Scene>& scene)
+    {
+        //TODO multiple scene instantiation
+        /* HARDCODED: using same instantiated scene pointer! */
+        
+        using namespace Parser::ROOT::SCENE;
+        
+        uint32_t id = scene_node[KEY_UI32_ID].as<uint32_t>();
+        std::string name = scene_node[KEY_STR_NAME].as<std::string>();
+        
+        LOG_TRACE("Parsing <Scene> ...");
+        LOG_TRACE("* ID: {}", id);
+        LOG_TRACE("* Name: {}", name);
+        
+        auto entities_list = scene_node[Parser::ROOT::SCENE::KEY_SEQ_NODE_ENTITIESLIST];
+        if (entities_list)
+        {
+            for (auto entity : entities_list)
+            {
+                using namespace Parser::ROOT::SCENE::ENTITY;
+                auto entity_node = entity[CLASS_NODE_ENTITY];
+                if (entity_node)
+                {
+                    DeserializeEntity(entity_node, scene /* //TODO - HARDCODED! */);
+                }
+            }
+        }
+        
+        return true;
+    }
+    
     bool Serializer::Deserialize(std::string& conf)
     {
-        using namespace Parser::ROOT::SCENE;
+        using namespace Parser::ROOT;
         
         YAML::Node root = YAML::Load(conf);
         
-        auto scene_node = root[CLASS_NODE_SCENE];
-        if (scene_node)
+        auto scenemanager_node = root[ROOT_NODE_SCENEMANAGER];
+        if (scenemanager_node)
         {
-            uint32_t id = scene_node[KEY_UI32_ID].as<uint32_t>();
-            std::string name = scene_node[KEY_STR_NAME].as<std::string>();
+            LOG_TRACE("Parsing <SceneManager> ...");
             
-            LOG_TRACE("Parsing <Scene> ...");
-            LOG_TRACE("* ID: {}", id);
-            LOG_TRACE("* Name: {}", name);
-            
-            auto entities_list = scene_node[Parser::ROOT::SCENE::KEY_SEQ_NODE_ENTITIESLIST];
-            if (entities_list)
+            auto scenes_list = scenemanager_node[KEY_SEQ_NODE_SCENESLIST];
+            if (scenes_list)
             {
-                for (auto entity : entities_list)
+                for (auto scene : scenes_list)
                 {
-                    using namespace Parser::ROOT::SCENE::ENTITY;
-                    auto entity_node = entity[CLASS_NODE_ENTITY];
-                    if (entity_node)
+                    using namespace Parser::ROOT::SCENE;
+                    auto scene_node = scene[CLASS_NODE_SCENE];
+                    if (scene_node)
                     {
-                        DeserializeEntity(entity_node, m_Scene);
+                        //TODO multiple scene instantiation - Using same scene ptr now!
+                        DeserializeScene(scene_node, m_Scene /* //TODO - HARDCODED */);
                     }
                 }
             }

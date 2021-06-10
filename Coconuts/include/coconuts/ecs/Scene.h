@@ -30,7 +30,7 @@ namespace Coconuts
     class Scene
     {
     public:
-        Scene();
+        Scene(uint16_t id, std::string& name);
         ~Scene();
         
         void OnUpdate(Timestep ts);
@@ -50,9 +50,12 @@ namespace Coconuts
         
         bool DeleteDefaultSceneCamera();
         
-    private:
-        entityx::EntityX m_EntityManager;
+        uint16_t GetID() const { return m_ID; }
+        std::string GetName() const { return m_Name; }
         
+    private:        
+        uint16_t m_ID;
+        std::string m_Name;
         bool m_HaltAllEvents = false;
         bool m_HaltEditorCameraNavigation = false;
         uint64_t m_DefaultCameraID = 0;
@@ -62,7 +65,10 @@ namespace Coconuts
          * It's only reset to false when GetAllEntities() is called.
          */
         bool m_IsUpdated = false;
-
+        
+        entityx::EntityX m_EntityManager;   /* Scene's entities */
+        
+    private:
         void CreateDefaultSceneCamera();
     };
     

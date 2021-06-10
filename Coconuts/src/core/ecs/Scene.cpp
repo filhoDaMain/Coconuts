@@ -141,13 +141,20 @@ namespace Coconuts
         });
     }
     
-    Scene::Scene()
+    Scene::Scene(uint16_t id, std::string& name)
+    :   m_ID(id),
+        m_Name(name),
+        m_HaltAllEvents(false),
+        m_HaltEditorCameraNavigation(false),
+        m_DefaultCameraID(0),
+        m_IsUpdated(false)
     {
         CreateDefaultSceneCamera();
     }
     
     Scene::~Scene()
-    {    
+    {
+        LOG_WARN("Scene destroyed by request ({}, {})", m_ID, m_Name);
     }
     
     entityx::Entity Scene::CreateEntity()

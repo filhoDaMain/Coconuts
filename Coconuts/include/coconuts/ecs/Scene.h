@@ -30,7 +30,7 @@ namespace Coconuts
     class Scene
     {
     public:
-        Scene(uint16_t id, std::string& name, bool isActive = false);
+        Scene(uint16_t id, const std::string& name, bool isActive = false);
         ~Scene();
         
         void OnUpdate(Timestep ts);

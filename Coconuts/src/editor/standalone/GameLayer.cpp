@@ -110,7 +110,8 @@ namespace Coconuts
         /* Import Scene (example) */
         {
             /* Create a Scene */
-            m_ActiveScene = std::make_shared<Scene>();
+            std::string name("Untitiled");
+            m_ActiveScene = std::make_shared<Scene>(0, name);
             
             std::string scene_yaml = R"(
 <SceneManager>:

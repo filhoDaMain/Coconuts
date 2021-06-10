@@ -147,7 +147,7 @@ namespace Coconuts
         });
     }
     
-    Scene::Scene(uint16_t id, std::string& name, bool isActive)
+    Scene::Scene(uint16_t id, const std::string& name, bool isActive)
     :   m_ID(id),
         m_Name(name),
         m_IsActive(isActive),

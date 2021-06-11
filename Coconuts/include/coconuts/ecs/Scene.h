@@ -52,6 +52,7 @@ namespace Coconuts
         
         uint16_t GetID() const { return m_ID; }
         std::string GetName() const { return m_Name; }
+        bool IsActive() const { return m_IsActive; }
         
     private:        
         uint16_t m_ID;

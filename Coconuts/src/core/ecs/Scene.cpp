@@ -156,6 +156,7 @@ namespace Coconuts
         m_DefaultCameraID(0),
         m_IsUpdated(false)
     {
+        LOG_INFO("Create New Scene ({}, {}, {})", m_Name, m_ID, m_IsActive ? "true" : "false");
         CreateDefaultSceneCamera();
     }
     

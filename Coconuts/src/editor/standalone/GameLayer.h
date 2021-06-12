@@ -34,9 +34,6 @@ namespace Coconuts
              */
             std::shared_ptr<Framebuffer> m_Framebuffer;
             
-            /* Active Scene */
-            std::shared_ptr<Scene> m_ActiveScene;
-            
             /* Entity handlers */
             Entity m_Entity;
 
@@ -66,8 +63,8 @@ namespace Coconuts
             /* Change on viewport notification */
             void ChangeViewport(float x, float y);
             
-            bool IsActiveSceneUpdated() { return m_ActiveScene->IsUpdated(); }
-            std::vector<Entity> GetActiveSceneEntities() const { return m_ActiveScene->GetAllEntities(); }
+            bool IsActiveSceneUpdated();
+            std::vector<Entity> GetActiveSceneEntities() const;
             
             /* Create New Empty Entity on current active Scene */
             bool NewEntity();

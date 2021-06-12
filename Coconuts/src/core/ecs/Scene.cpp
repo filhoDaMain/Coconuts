@@ -39,6 +39,12 @@ namespace Coconuts
     
     void Scene::OnUpdate(Timestep ts)
     {
+        if (!m_IsActive)
+        {
+            return;
+        }
+        
+        
         /* Systems */
         /* ---------------------------------------------------------------------- */
         
@@ -141,13 +147,22 @@ namespace Coconuts
         });
     }
     
-    Scene::Scene()
+    Scene::Scene(uint16_t id, const std::string& name, bool isActive)
+    :   m_ID(id),
+        m_Name(name),
+        m_IsActive(isActive),
+        m_HaltAllEvents(false),
+        m_HaltEditorCameraNavigation(false),
+        m_DefaultCameraID(0),
+        m_IsUpdated(false)
     {
+        LOG_INFO("Create New Scene ({}, {}, {})", m_Name, m_ID, m_IsActive ? "true" : "false");
         CreateDefaultSceneCamera();
     }
     
     Scene::~Scene()
-    {    
+    {
+        LOG_WARN("Scene destroyed by request ({}, {})", m_Name, m_ID);
     }
     
     entityx::Entity Scene::CreateEntity()

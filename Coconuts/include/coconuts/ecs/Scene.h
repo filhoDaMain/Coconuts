@@ -30,7 +30,7 @@ namespace Coconuts
     class Scene
     {
     public:
-        Scene();
+        Scene(uint16_t id, const std::string& name, bool isActive = false);
         ~Scene();
         
         void OnUpdate(Timestep ts);
@@ -44,25 +44,33 @@ namespace Coconuts
         std::vector<Entity> GetAllEntities();
         
         bool SetUpdateFlag(bool update = true) { m_IsUpdated = update; return m_IsUpdated;}
+        bool SetActiveFlag(bool flag) { m_IsActive = flag; return m_IsActive; }
         bool IsUpdated() { return m_IsUpdated; }
         bool HaltAllEvents(bool state = true);
         bool HaltEditorCameraNavigation(bool state = true);
-        
         bool DeleteDefaultSceneCamera();
         
-    private:
-        entityx::EntityX m_EntityManager;
+        uint16_t GetID() const { return m_ID; }
+        std::string GetName() const { return m_Name; }
+        bool IsActive() const { return m_IsActive; }
         
-        bool m_HaltAllEvents = false;
-        bool m_HaltEditorCameraNavigation = false;
-        uint64_t m_DefaultCameraID = 0;
+    private:        
+        uint16_t m_ID;
+        std::string m_Name;
+        bool m_IsActive;
+        bool m_HaltAllEvents;
+        bool m_HaltEditorCameraNavigation;
+        uint64_t m_DefaultCameraID;
         
         /**
          * When a new Entity is added or modified m_IsUpdated is set to true.
          * It's only reset to false when GetAllEntities() is called.
          */
-        bool m_IsUpdated = false;
-
+        bool m_IsUpdated;
+        
+        entityx::EntityX m_EntityManager;   /* Scene's entities */
+        
+    private:
         void CreateDefaultSceneCamera();
     };
     

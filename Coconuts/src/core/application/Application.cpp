@@ -23,6 +23,7 @@
 #include <coconuts/editor_gui/GUILayer.h>
 #include <coconuts/types.h>
 #include <coconuts/AssetManager.h>
+#include <coconuts/SceneManager.h>
 #include "AppManager.h"
 
 
@@ -84,6 +85,9 @@ namespace Coconuts
         
         /* Pre-alloc AssetManager hash tables */
         AssetManager::Init();
+        
+        /* Init SceneManager's singleton */
+        p_SceneManager = std::unique_ptr<SceneManager>(new SceneManager());
     }
     
     Application::~Application()

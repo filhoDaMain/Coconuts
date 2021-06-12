@@ -20,6 +20,7 @@
 #include <coconuts/ECS.h>
 #include <coconuts/Logger.h>
 #include <coconuts/AssetManager.h>
+#include <coconuts/SceneManager.h>
 #include <coconuts/ecs/Serializer.h>
 
 // Debug Behavior
@@ -35,7 +36,7 @@ namespace Coconuts
         /* Bind Framebuffer */
         m_Framebuffer->Bind();
 
-        m_ActiveScene->OnUpdate(ts);
+        SceneManager::GetInstance().GetActiveScene()->OnUpdate(ts);
 
         /* Unbind Framebuffer */
         m_Framebuffer->Unbind();
@@ -43,7 +44,7 @@ namespace Coconuts
 
     void GameLayer::OnEvent(Event& event)
     {
-        m_ActiveScene->OnEvent(event);
+        SceneManager::GetInstance().GetActiveScene()->OnEvent(event);
     }
     
     GameLayer::GameLayer()
@@ -53,6 +54,9 @@ namespace Coconuts
     void GameLayer::OnAttach()
     {   
         LOG_TRACE("Game Layer OnAttach()");
+        
+        /* Create Scene */
+        SceneManager::GetInstance().NewScene("Example", true);
         
         /* Create Framebuffer */
         FramebufferSpecification spec;
@@ -108,10 +112,7 @@ namespace Coconuts
         
             
         /* Import Scene (example) */
-        {
-            /* Create a Scene */
-            m_ActiveScene = std::make_shared<Scene>();
-            
+        {   
             std::string scene_yaml = R"(
 <SceneManager>:
   Scenes List:
@@ -145,7 +146,8 @@ namespace Coconuts
                 size: [1, 1]
                 rotationRadians: 0)";
             
-            Serializer serializer(m_ActiveScene);
+            std::shared_ptr<Scene> activeScene = SceneManager::GetInstance().GetActiveScene();
+            Serializer serializer(activeScene);
             serializer.Deserialize(scene_yaml);
         }
         
@@ -158,26 +160,36 @@ namespace Coconuts
     
     bool GameLayer::HaltEvents(bool state)
     {
-        m_ActiveScene->HaltEditorCameraNavigation(state);
-        m_ActiveScene->HaltAllEvents(state);
+        SceneManager::GetInstance().GetActiveScene()->HaltEditorCameraNavigation(state);
+        SceneManager::GetInstance().GetActiveScene()->HaltAllEvents(state);
         return state;
     }
     
     void GameLayer::ChangeViewport(float x, float y)
     {
-        m_ActiveScene->OnChangeViewport(x, y);
+        SceneManager::GetInstance().GetActiveScene()->OnChangeViewport(x, y);
+    }
+    
+    bool GameLayer::IsActiveSceneUpdated()
+    {
+        return SceneManager::GetInstance().GetActiveScene()->IsUpdated();
+    }
+    
+    std::vector<Entity> GameLayer::GetActiveSceneEntities() const
+    {
+        return SceneManager::GetInstance().GetActiveScene()->GetAllEntities();
     }
     
     bool GameLayer::NewEntity()
     {
         /* Create on active scene */
-        Entity empty(m_ActiveScene.get());
+        Entity empty(SceneManager::GetInstance().GetActiveScene().get());
         return true;
     }
     
     bool GameLayer::DestroyEntity(uint64_t id)
     {
-        return m_ActiveScene->DestroyEntity(id);
+        return SceneManager::GetInstance().GetActiveScene()->DestroyEntity(id);
     }
     
 }

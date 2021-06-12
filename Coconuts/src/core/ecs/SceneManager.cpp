@@ -15,20 +15,54 @@
  */
 
 #include <coconuts/SceneManager.h>
+#include <coconuts/Logger.h>
 
 namespace Coconuts
 {
     
-    /* Static definitions */
-    std::vector<std::shared_ptr<Scene>> SceneManager::m_ScenesBuffer;
-    uint16_t SceneManager::m_ActiveSceneID = 0xFFFF;
+    /* Singleton */
+    SceneManager* SceneManager::s_Instance = nullptr;
     
+    SceneManager::SceneManager()
+    :   m_ActiveSceneID(0x0000)
+    {
+        if (s_Instance != nullptr)
+        {
+            LOG_ERROR("SceneManager must be a singleton!");
+            return;
+        }
+        
+        /* Singleton created */
+        s_Instance = this;
+        
+        LOG_INFO("Singleton instance of SceneManager created");
+        
+        /* Create dafault Scene and set it to active state */
+        s_Instance->NewScene("Default", true);
+    }
+    
+    SceneManager::~SceneManager()
+    {
+        LOG_WARN("Destroy SceneManager");
+    }
     
     //static
+    SceneManager& SceneManager::GetInstance()
+    {
+        if (s_Instance == nullptr)
+        {
+            LOG_WARN("First time SceneManager not initialized!");
+            SceneManager(); // updates s_Instance
+        }
+        
+        return *s_Instance;
+    }
+    
+    
     uint16_t SceneManager::NewScene(const std::string& name, bool isActive)
     {
         uint16_t newID = m_ScenesBuffer.size();
-        bool active = m_ActiveSceneID == 0xFFFF ? isActive : false;
+        bool active = m_ActiveSceneID == 0x0000 ? isActive : false;
         m_ScenesBuffer.push_back(std::make_shared<Scene>(newID, name, active));
         
         if (active)
@@ -39,7 +73,6 @@ namespace Coconuts
         return newID;
     }
     
-    //static
     std::shared_ptr<Scene> SceneManager::GetScene(uint16_t id)
     {
         if (m_ScenesBuffer.size() <= id)
@@ -50,7 +83,6 @@ namespace Coconuts
         return m_ScenesBuffer[id];
     }
     
-    //static
     bool SceneManager::DeleteScene(uint16_t id)
     {
         if (m_ScenesBuffer.size() <= id)
@@ -59,10 +91,10 @@ namespace Coconuts
         }
         
         m_ScenesBuffer.erase(m_ScenesBuffer.begin() + id);
+        LOG_WARN("Deleted Scene {}", id);
         return true;
     }
     
-    //static
     bool SceneManager::SetActiveScene(uint16_t id)
     {
         if (m_ScenesBuffer.size() <= id)
@@ -70,25 +102,17 @@ namespace Coconuts
             return false;
         }
         
-        /* Deactivate current active Scene, if any */
-        if (m_ActiveSceneID != 0xFFFF)
-        {
-            m_ScenesBuffer[m_ActiveSceneID]->SetActiveFlag(false);
-        }
+        /* Deactivate current active Scene */
+        m_ScenesBuffer[m_ActiveSceneID]->SetActiveFlag(false);
         
+        LOG_TRACE("Active Scene switched from {} to {}", m_ActiveSceneID, id);
         m_ScenesBuffer[id]->SetActiveFlag(true);
         m_ActiveSceneID = id;
         return true;
     }
     
-    //static
     std::shared_ptr<Scene> SceneManager::GetActiveScene()
-    {
-        if (m_ActiveSceneID == 0xFFFF)
-        {
-            return nullptr;
-        }
-        
+    {        
         return m_ScenesBuffer[m_ActiveSceneID];
     }
     

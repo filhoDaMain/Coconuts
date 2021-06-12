@@ -162,7 +162,7 @@ namespace Coconuts
     
     Scene::~Scene()
     {
-        LOG_WARN("Scene destroyed by request ({}, {})", m_ID, m_Name);
+        LOG_WARN("Scene destroyed by request ({}, {})", m_Name, m_ID);
     }
     
     entityx::Entity Scene::CreateEntity()

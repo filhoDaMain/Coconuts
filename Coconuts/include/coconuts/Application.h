@@ -26,6 +26,8 @@
 
 namespace Coconuts
 {
+    class SceneManager; // forward declared
+    
     /**
      * Singleton
      */
@@ -51,6 +53,7 @@ namespace Coconuts
         /* Single instance */
         static Application* s_Instance;
         
+        std::unique_ptr<SceneManager> p_SceneManager;
         bool m_isRunning = false;
         bool m_isMainWindMinimized = false;
         

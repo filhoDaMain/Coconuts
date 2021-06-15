@@ -31,6 +31,7 @@ namespace Coconuts
         static SceneManager& GetInstance();
         
         uint16_t NewScene(const std::string& name, bool isActive = false);
+        bool NewScene(uint16_t hardcoded_id, const std::string& name, bool hardcoded_activeState);
         std::shared_ptr<Scene> GetScene(uint16_t id);
         bool DeleteScene(uint16_t id);
         

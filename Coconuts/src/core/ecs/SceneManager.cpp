@@ -70,7 +70,28 @@ namespace Coconuts
             m_ActiveSceneID = newID;
         }
         
+        LOG_TRACE("ScenesBuffer size {}", m_ScenesBuffer.size());
         return newID;
+    }
+    
+    bool SceneManager::NewScene(uint16_t hardcoded_id,
+                                const std::string& name,
+                                bool hardcoded_activeState)
+    {        
+        if (hardcoded_id >= m_ScenesBuffer.size())
+        {
+            m_ScenesBuffer.resize(hardcoded_id + 1);
+        }
+        
+        m_ScenesBuffer[hardcoded_id] = std::make_shared<Scene>(hardcoded_id, name, hardcoded_activeState);
+        
+        if (hardcoded_activeState)
+        {
+            m_ActiveSceneID = hardcoded_id;
+        }
+        
+        LOG_TRACE("ScenesBuffer size {}", m_ScenesBuffer.size());
+        return true;
     }
     
     std::shared_ptr<Scene> SceneManager::GetScene(uint16_t id)

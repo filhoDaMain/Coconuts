@@ -38,6 +38,8 @@ namespace Coconuts
         bool SetActiveScene(uint16_t id);
         std::shared_ptr<Scene> GetActiveScene();
         
+        inline uint16_t GetBufferSize() const { return m_ScenesBuffer.size(); }
+        
     private:
         /* Singleton */
         static SceneManager* s_Instance;

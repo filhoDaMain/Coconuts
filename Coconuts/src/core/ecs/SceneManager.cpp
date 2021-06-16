@@ -38,7 +38,7 @@ namespace Coconuts
         LOG_INFO("Singleton instance of SceneManager created");
         
         /* Create dafault Scene and set it to active state */
-        s_Instance->NewScene("Default", true);
+        s_Instance->NewScene("_Default_", true);
     }
     
     SceneManager::~SceneManager()
@@ -67,6 +67,12 @@ namespace Coconuts
         
         if (active)
         {
+            /* Deactivate last active Scene if any */
+            if (m_ActiveSceneID != newID)
+            {
+                m_ScenesBuffer[m_ActiveSceneID]->SetActiveFlag(false);
+            }
+            
             m_ActiveSceneID = newID;
         }
         
@@ -87,6 +93,12 @@ namespace Coconuts
         
         if (hardcoded_activeState)
         {
+            /* Deactivate last active Scene if any */
+            if (m_ActiveSceneID != hardcoded_id)
+            {
+                m_ScenesBuffer[m_ActiveSceneID]->SetActiveFlag(false);
+            }
+            
             m_ActiveSceneID = hardcoded_id;
         }
         

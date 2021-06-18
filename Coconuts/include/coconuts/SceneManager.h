@@ -30,12 +30,19 @@ namespace Coconuts
         ~SceneManager();
         static SceneManager& GetInstance();
         
-        uint16_t NewScene(const std::string& name, bool isActive = false);
-        std::shared_ptr<Scene> GetScene(uint16_t id);
+        std::shared_ptr<Scene> NewScene(const std::string& name, bool isActive = false);
+        std::shared_ptr<Scene> NewScene(uint16_t hardcoded_id, const std::string& name, bool hardcoded_activeState);
         bool DeleteScene(uint16_t id);
         
+        std::shared_ptr<Scene> GetScene(uint16_t id);
         bool SetActiveScene(uint16_t id);
         std::shared_ptr<Scene> GetActiveScene();
+        
+        inline uint16_t GetBufferSize() const { return m_ScenesBuffer.size(); }
+        
+    private:
+        uint16_t NewSceneImpl(const std::string& name, bool isActive = false);
+        bool NewSceneImpl(uint16_t hardcoded_id, const std::string& name, bool hardcoded_activeState);
         
     private:
         /* Singleton */

@@ -200,6 +200,14 @@ namespace Coconuts
         return true;
     }
     
+    bool Scene::SetActiveFlag(bool flag)
+    {
+        m_IsActive = flag;
+        LOG_DEBUG("Changed Scene active state: ID {} -> {}", m_ID, flag);
+        
+        return m_IsActive;
+    }
+    
     bool Scene::HaltAllEvents(bool state)
     {
         m_HaltAllEvents = state;

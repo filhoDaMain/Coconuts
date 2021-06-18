@@ -44,7 +44,7 @@ namespace Coconuts
         std::vector<Entity> GetAllEntities();
         
         bool SetUpdateFlag(bool update = true) { m_IsUpdated = update; return m_IsUpdated;}
-        bool SetActiveFlag(bool flag) { m_IsActive = flag; return m_IsActive; }
+        bool SetActiveFlag(bool flag);
         bool IsUpdated() { return m_IsUpdated; }
         bool HaltAllEvents(bool state = true);
         bool HaltEditorCameraNavigation(bool state = true);

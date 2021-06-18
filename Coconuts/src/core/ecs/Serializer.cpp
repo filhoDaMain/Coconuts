@@ -20,6 +20,7 @@
 #include <coconuts/ECS.h>
 #include <coconuts/AssetManager.h>
 #include <coconuts/cameras/OrthographicCamera.h>
+#include <coconuts/SceneManager.h>
 
 namespace Coconuts
 {
@@ -37,6 +38,7 @@ namespace Coconuts
                 constexpr auto CLASS_NODE_SCENE = "<Scene>";
                 constexpr auto KEY_UI32_ID = "ID";
                 constexpr auto KEY_STR_NAME = "Name";
+                constexpr auto KEY_BOOL_ISACTIVE = "isActive";
                 constexpr auto KEY_SEQ_NODE_ENTITIESLIST = "Entities List";
 
                 namespace ENTITY
@@ -92,10 +94,6 @@ namespace Coconuts
     }
     } //namespace
     
-    Serializer::Serializer(std::shared_ptr<Scene>& scene)
-    : m_Scene(scene)
-    {
-    }
     
     static void SerializeComponent(YAML::Emitter& out, TagComponent& component)
     {
@@ -234,8 +232,9 @@ namespace Coconuts
         out << YAML::Key << CLASS_NODE_SCENE;
         out << YAML::BeginMap;
         {
-            out << YAML::Key << KEY_UI32_ID << YAML::Hex << 0x01;
-            out << YAML::Key << KEY_STR_NAME << YAML::Value << "Untitled";
+            out << YAML::Key << KEY_UI32_ID << YAML::Hex << scene->GetID();
+            out << YAML::Key << KEY_STR_NAME << YAML::Value << scene->GetName();
+            out << YAML::Key << KEY_BOOL_ISACTIVE << YAML::LongBool << scene->IsActive(); 
             
             //Entities
             out << YAML::Key << KEY_SEQ_NODE_ENTITIESLIST << YAML::Value << YAML::BeginSeq;
@@ -264,11 +263,15 @@ namespace Coconuts
                 //Scene
                 using namespace Parser::ROOT::SCENE;
                 out << YAML::Key << KEY_SEQ_NODE_SCENESLIST << YAML::Value << YAML::BeginSeq;
-                uint16_t k;
-                for (k = 0; k < 1 /* //TODO - Hardcoded */; k++)
+                uint16_t id;
+                uint16_t nrOfScenes = SceneManager::GetInstance().GetBufferSize();
+                for (id = 0; id < nrOfScenes; id++)
                 {
-                    //TODO - Multiple Scene instantiation
-                    SerializeScene(out, m_Scene);
+                    auto scenePtr = SceneManager::GetInstance().GetScene(id);
+                    if (scenePtr)
+                    {
+                        SerializeScene(out, scenePtr);
+                    }
                 }
                 out << YAML::EndSeq;
             }
@@ -489,19 +492,26 @@ namespace Coconuts
         }
     }
     
-    static bool DeserializeScene(YAML::Node& scene_node, std::shared_ptr<Scene>& scene)
-    {
-        //TODO multiple scene instantiation
-        /* HARDCODED: using same instantiated scene pointer! */
-        
+    static bool DeserializeScene(YAML::Node& scene_node)
+    {        
         using namespace Parser::ROOT::SCENE;
         
         uint32_t id = scene_node[KEY_UI32_ID].as<uint32_t>();
         std::string name = scene_node[KEY_STR_NAME].as<std::string>();
+        bool isActive = scene_node[KEY_BOOL_ISACTIVE].as<bool>();
         
         LOG_TRACE("Parsing <Scene> ...");
         LOG_TRACE("* ID: {}", id);
         LOG_TRACE("* Name: {}", name);
+        LOG_TRACE("* isActive: {}", isActive);
+        
+        /* Create Scene */
+        auto scenePtr = SceneManager::GetInstance().NewScene(id, name, isActive);
+        if (!scenePtr)
+        {
+            LOG_CRITICAL("Failed to create Scene! ({}, {}, {})", name, id, isActive);
+            return false;
+        }
         
         auto entities_list = scene_node[Parser::ROOT::SCENE::KEY_SEQ_NODE_ENTITIESLIST];
         if (entities_list)
@@ -512,7 +522,7 @@ namespace Coconuts
                 auto entity_node = entity[CLASS_NODE_ENTITY];
                 if (entity_node)
                 {
-                    DeserializeEntity(entity_node, scene /* //TODO - HARDCODED! */);
+                    DeserializeEntity(entity_node, scenePtr);
                 }
             }
         }
@@ -540,8 +550,7 @@ namespace Coconuts
                     auto scene_node = scene[CLASS_NODE_SCENE];
                     if (scene_node)
                     {
-                        //TODO multiple scene instantiation - Using same scene ptr now!
-                        DeserializeScene(scene_node, m_Scene /* //TODO - HARDCODED */);
+                        DeserializeScene(scene_node);
                     }
                 }
             }

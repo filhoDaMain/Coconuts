@@ -38,7 +38,7 @@ namespace Coconuts
         LOG_INFO("Singleton instance of SceneManager created");
         
         /* Create dafault Scene and set it to active state */
-        s_Instance->NewScene("Default", true);
+        s_Instance->NewScene("_Default_", true);
     }
     
     SceneManager::~SceneManager()
@@ -58,8 +58,8 @@ namespace Coconuts
         return *s_Instance;
     }
     
-    
-    uint16_t SceneManager::NewScene(const std::string& name, bool isActive)
+    //private
+    uint16_t SceneManager::NewSceneImpl(const std::string& name, bool isActive)
     {
         uint16_t newID = m_ScenesBuffer.size();
         bool active = m_ActiveSceneID == 0x0000 ? isActive : false;
@@ -67,10 +67,59 @@ namespace Coconuts
         
         if (active)
         {
+            /* Deactivate last active Scene if any */
+            if (m_ActiveSceneID != newID)
+            {
+                m_ScenesBuffer[m_ActiveSceneID]->SetActiveFlag(false);
+            }
+            
             m_ActiveSceneID = newID;
         }
         
+        LOG_TRACE("ScenesBuffer size {}", m_ScenesBuffer.size());
         return newID;
+    }
+    
+    std::shared_ptr<Scene> SceneManager::NewScene(const std::string& name, bool isActive)
+    {
+        uint16_t id = NewSceneImpl(name, isActive);
+        return (id != 0x0000) ? GetScene(id) : nullptr;
+    }
+    
+    
+    //private
+    bool SceneManager::NewSceneImpl(uint16_t hardcoded_id,
+                                    const std::string& name,
+                                    bool hardcoded_activeState)
+    {        
+        if (hardcoded_id >= m_ScenesBuffer.size())
+        {
+            m_ScenesBuffer.resize(hardcoded_id + 1);
+        }
+        
+        m_ScenesBuffer[hardcoded_id] = std::make_shared<Scene>(hardcoded_id, name, hardcoded_activeState);
+        
+        if (hardcoded_activeState)
+        {
+            /* Deactivate last active Scene if any */
+            if (m_ActiveSceneID != hardcoded_id)
+            {
+                m_ScenesBuffer[m_ActiveSceneID]->SetActiveFlag(false);
+            }
+            
+            m_ActiveSceneID = hardcoded_id;
+        }
+        
+        LOG_TRACE("ScenesBuffer size {}", m_ScenesBuffer.size());
+        return true;
+    }
+    
+    std::shared_ptr<Scene> SceneManager::NewScene(uint16_t hardcoded_id,
+                                                  const std::string& name,
+                                                  bool hardcoded_activeState)
+    {
+        bool retVal = NewSceneImpl(hardcoded_id, name, hardcoded_activeState);
+        return retVal ? GetScene(hardcoded_id) : nullptr;
     }
     
     std::shared_ptr<Scene> SceneManager::GetScene(uint16_t id)

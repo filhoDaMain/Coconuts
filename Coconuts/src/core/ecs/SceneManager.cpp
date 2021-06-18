@@ -58,8 +58,8 @@ namespace Coconuts
         return *s_Instance;
     }
     
-    
-    uint16_t SceneManager::NewScene(const std::string& name, bool isActive)
+    //private
+    uint16_t SceneManager::NewSceneImpl(const std::string& name, bool isActive)
     {
         uint16_t newID = m_ScenesBuffer.size();
         bool active = m_ActiveSceneID == 0x0000 ? isActive : false;
@@ -80,9 +80,17 @@ namespace Coconuts
         return newID;
     }
     
-    bool SceneManager::NewScene(uint16_t hardcoded_id,
-                                const std::string& name,
-                                bool hardcoded_activeState)
+    std::shared_ptr<Scene> SceneManager::NewScene(const std::string& name, bool isActive)
+    {
+        uint16_t id = NewSceneImpl(name, isActive);
+        return (id != 0x0000) ? GetScene(id) : nullptr;
+    }
+    
+    
+    //private
+    bool SceneManager::NewSceneImpl(uint16_t hardcoded_id,
+                                    const std::string& name,
+                                    bool hardcoded_activeState)
     {        
         if (hardcoded_id >= m_ScenesBuffer.size())
         {
@@ -104,6 +112,14 @@ namespace Coconuts
         
         LOG_TRACE("ScenesBuffer size {}", m_ScenesBuffer.size());
         return true;
+    }
+    
+    std::shared_ptr<Scene> SceneManager::NewScene(uint16_t hardcoded_id,
+                                                  const std::string& name,
+                                                  bool hardcoded_activeState)
+    {
+        bool retVal = NewSceneImpl(hardcoded_id, name, hardcoded_activeState);
+        return retVal ? GetScene(hardcoded_id) : nullptr;
     }
     
     std::shared_ptr<Scene> SceneManager::GetScene(uint16_t id)

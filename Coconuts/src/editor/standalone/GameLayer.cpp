@@ -55,9 +55,6 @@ namespace Coconuts
     {   
         LOG_TRACE("Game Layer OnAttach()");
         
-        /* Create Scene */
-        SceneManager::GetInstance().NewScene("Example", true);
-        
         /* Create Framebuffer */
         FramebufferSpecification spec;
         spec.width = 1280.0f;
@@ -111,17 +108,37 @@ namespace Coconuts
         }
         
             
-        /* Import Scene (example) */
+        /* Import Scene(s) (example) */
         {   
             std::string scene_yaml = R"(
 <SceneManager>:
   Scenes List:
     - <Scene>:
-        ID: 0x1
-        Name: Untitled
+        ID: 0x0
+        Name: _Default_
+        isActive: false
         Entities List:
           - <Entity>:
-              ID: 0x200000000
+              ID: 0x100000000
+              TagComponent:
+                tag: Camera
+              OrthoCameraComponent:
+                aspectRatio: 1.77777779
+                zoomLevel: 1
+                mooveSpeed: 1
+                halt: false
+                backgroundColor: [0, 0, 0, 1]
+              TransformComponent:
+                position: [0, 0]
+                size: [1, 1]
+                rotationRadians: 0
+    - <Scene>:
+        ID: 0x1
+        Name: Example
+        isActive: true
+        Entities List:
+          - <Entity>:
+              ID: 0x100000001
               TagComponent:
                 tag: Sebastiao
               TransformComponent:
@@ -132,7 +149,7 @@ namespace Coconuts
                 spriteLogicalName: Pig
                 tintColor: [1, 1, 1, 1]
           - <Entity>:
-              ID: 0x100000001
+              ID: 0x100000002
               TagComponent:
                 tag: Camera
               OrthoCameraComponent:
@@ -146,8 +163,7 @@ namespace Coconuts
                 size: [1, 1]
                 rotationRadians: 0)";
             
-            std::shared_ptr<Scene> activeScene = SceneManager::GetInstance().GetActiveScene();
-            Serializer serializer(activeScene);
+            Serializer serializer;
             serializer.Deserialize(scene_yaml);
         }
         

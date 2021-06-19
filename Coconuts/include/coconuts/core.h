@@ -32,6 +32,11 @@ int main (void)
 {
     Coconuts::Logger::Init();
     auto app = Coconuts::CreateApplication();
+    
+#if 1   //TODO remove this once open project dialog is complete
+    Coconuts::AppManagerProxy::LoadRuntimeConfig(); // Loads an example
+#endif
+    
     app->Run();
     delete app;
     
@@ -47,6 +52,7 @@ int main (void)
 {
     Coconuts::Logger::Init();
     auto app = Coconuts::CreateApplication();
+    Coconuts::AppManagerProxy::LoadRuntimeConfig(); //TODO (meta binary)
     app->Run();
     delete app;
     

@@ -24,6 +24,7 @@
 #include <coconuts/types.h>
 #include <coconuts/AssetManager.h>
 #include <coconuts/SceneManager.h>
+#include "AppManager.h"
 
 
 namespace Coconuts
@@ -32,6 +33,7 @@ namespace Coconuts
     Application* Application::s_Instance = nullptr;
     
     Application::Application(const std::string& appname)
+    : m_AppName(appname)
     {
         /* Assert that the Singleton Pattern is respected */
         if (s_Instance != nullptr)
@@ -221,4 +223,46 @@ namespace Coconuts
         overlay->OnAttach();
         overlay->OnPostAttach();
     }
+    
+    
+    //static
+    void AppManagerProxy::LoadRuntimeConfig()
+    {
+        //TODO - These relative paths should be updated to absolute paths!
+        std::string filepath_ccnproj = "./";
+        std::string filepath_meta = "./";
+        std::string appName = Application::GetInstance().GetApplicationName();
+        
+        filepath_meta += appName + "." + Parser::FILE_EXTENSIONS::METABINARY_FILE_EXT;
+        filepath_ccnproj += appName + "." + Parser::FILE_EXTENSIONS::YAML_PROJECT_FILE_EXT;
+        
+        /**
+         * Try to load meta binary first.
+         * If it fails, try to load from yaml configuration file.
+         */
+        if (!AppManager::LoadRuntimeConfig(filepath_meta))
+        {
+            LOG_ERROR("Meta binary file failed to load!");
+            LOG_DEBUG("Trying to load YAML configuration file instead...");
+            
+            if (!AppManager::LoadRuntimeConfig(filepath_ccnproj))
+            {
+                LOG_CRITICAL("Failed to initialize application with user defined configuration!");
+                return;
+            }
+        }
+    }
+    
+    //static
+    void AppManagerProxy::LoadRuntimeConfig(std::string& filepath)
+    {
+        /* Just handover */
+        if (!AppManager::LoadRuntimeConfig(filepath))
+        {
+            LOG_CRITICAL("Failed to initialize application with user defined configuration!");
+            return;
+        }
+        
+    }
+    
 }

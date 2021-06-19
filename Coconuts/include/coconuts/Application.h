@@ -49,7 +49,11 @@ namespace Coconuts
         void PushLayer(Layer* layer);
         void PushOverlay(Layer* overlay);
         
+        std::string GetApplicationName() { return m_AppName; }
+        
     private:
+        std::string m_AppName;
+        
         /* Single instance */
         static Application* s_Instance;
         
@@ -63,6 +67,14 @@ namespace Coconuts
         LayerStack m_LayerStack;
         
         float m_LastFrameTime = 0.0f;
+    };
+    
+    
+    class AppManagerProxy
+    {
+    public:
+        static void LoadRuntimeConfig();
+        static void LoadRuntimeConfig(std::string& filepath);
     };
     
     extern Application* CreateApplication();

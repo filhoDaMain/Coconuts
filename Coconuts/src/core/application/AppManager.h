@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Andre Temprilho
+ * Copyright 2021 Andre Temprilho
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,20 +13,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#ifndef APPMANAGER_H
+#define APPMANAGER_H
 
-#include "MainApp.h"
+#include <string>
 
 namespace Coconuts
 {
     
-    MainApp::MainApp()
-    : Application("Coconuts_Editor")
+    namespace {
+    namespace Parser
     {
-        m_GameLayerPtr      = new GameLayer();
-        m_EditorLayerPtr    = new EditorLayer(m_GameLayerPtr);
-        
-        PushLayer(m_GameLayerPtr);          // In-Game graphics
-        PushOverlay(m_EditorLayerPtr);      // Editor UI graphics
+        namespace FILE_EXTENSIONS
+        {
+            constexpr auto YAML_PROJECT_FILE_EXT = "ccnproj";
+            constexpr auto METABINARY_FILE_EXT = "meta";
+        }
     }
+    } //namespace
+    
+    enum class ConfigFileTypes
+    {
+        Unknown         = 0,
+        MetaText        = 1,
+        MetaBinary      = 2
+    };
+    
+    class AppManager
+    {
+    public:
+        static bool LoadRuntimeConfig(const std::string& filepath);
+    };
     
 }
+
+#endif /* APPMANAGER_H */
+

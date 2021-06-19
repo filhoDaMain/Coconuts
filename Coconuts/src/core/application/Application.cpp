@@ -225,21 +225,31 @@ namespace Coconuts
     }
     
     
-
     //static
     void AppManagerProxy::LoadRuntimeConfig()
     {
-        std::string filepath = "dummy";
-        auto& app = Application::GetInstance();
-        std::string appName = app.GetApplicationName();
+        //TODO - These relative paths should be updated to absolute paths!
+        std::string filepath_ccnproj = "./";
+        std::string filepath_meta = "./";
+        std::string appName = Application::GetInstance().GetApplicationName();
         
-        /* Get filepath = appName.meta or appName.ccnproj */
-        /* Call LoadRuntimeConfig(filepath )*/
+        filepath_meta += appName + "." + Parser::FILE_EXTENSIONS::METABINARY_FILE_EXT;
+        filepath_ccnproj += appName + "." + Parser::FILE_EXTENSIONS::YAML_PROJECT_FILE_EXT;
         
-        if (!AppManager::LoadRuntimeConfig(filepath))
+        /**
+         * Try to load meta binary first.
+         * If it fails, try to load from yaml configuration file.
+         */
+        if (!AppManager::LoadRuntimeConfig(filepath_meta))
         {
-            /* Deal with failure */
-            //TODO
+            LOG_ERROR("Meta binary file failed to load!");
+            LOG_DEBUG("Trying to load YAML configuration file instead...");
+            
+            if (!AppManager::LoadRuntimeConfig(filepath_ccnproj))
+            {
+                LOG_CRITICAL("Failed to initialize application with user defined configuration!");
+                return;
+            }
         }
     }
     
@@ -249,8 +259,8 @@ namespace Coconuts
         /* Just handover */
         if (!AppManager::LoadRuntimeConfig(filepath))
         {
-            /* Deal with failure */
-            //TODO
+            LOG_CRITICAL("Failed to initialize application with user defined configuration!");
+            return;
         }
         
     }

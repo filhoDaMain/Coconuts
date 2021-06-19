@@ -20,7 +20,7 @@ namespace Coconuts
 {
     
     MainApp::MainApp()
-    : Application("Coconuts Editor")
+    : Application("Coconuts_Editor")
     {
         m_GameLayerPtr      = new GameLayer();
         m_EditorLayerPtr    = new EditorLayer(m_GameLayerPtr);

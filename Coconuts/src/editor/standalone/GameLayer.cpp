@@ -19,7 +19,6 @@
 #include "GameLayer.h"
 #include <coconuts/ECS.h>
 #include <coconuts/Logger.h>
-#include <coconuts/AssetManager.h>
 #include <coconuts/SceneManager.h>
 #include <coconuts/ecs/Serializer.h>
 
@@ -60,113 +59,6 @@ namespace Coconuts
         spec.width = 1280.0f;
         spec.height = 696.0f;
         m_Framebuffer.reset( Framebuffer::Create(spec) );
-
-        
-        /* Import Assets (example) */
-        {
-            std::string assetmanager_yaml = R"(
-<AssetManager>:
-  Textures2D List:
-    - <Texture2D>:
-        logicalName: Tiles_Spritesheet
-        path: ../../Demo/assets/rpg/RPGpack_sheet_2X.png
-        spritesUsing:
-          - Tree
-    - <Texture2D>:
-        logicalName: Animals_Spritesheet
-        path: ../../Demo/assets/animals/square_nodetailsOutline.png
-        spritesUsing:
-          - Pig
-          - Chicken
-  Sprites List:
-    - <Sprite>:
-        logicalName: Pig
-        spriteSheetName: Animals_Spritesheet
-        referrerIndex: 0x0
-        spriteSelector:
-          coords: [1, 4]
-          cellSize: [136, 136]
-          spriteSize: [1, 1]
-    - <Sprite>:
-        logicalName: Chicken
-        spriteSheetName: Animals_Spritesheet
-        referrerIndex: 0x1
-        spriteSelector:
-          coords: [4, 3]
-          cellSize: [136, 136]
-          spriteSize: [1, 1]
-    - <Sprite>:
-        logicalName: Tree
-        spriteSheetName: Tiles_Spritesheet
-        referrerIndex: 0x0
-        spriteSelector:
-          coords: [0, 0]
-          cellSize: [140, 380]
-          spriteSize: [1, 1])";
-            
-            AssetManager::Deserialize(assetmanager_yaml);
-        }
-        
-            
-        /* Import Scene(s) (example) */
-        {   
-            std::string scene_yaml = R"(
-<SceneManager>:
-  Scenes List:
-    - <Scene>:
-        ID: 0x0
-        Name: _Default_
-        isActive: false
-        Entities List:
-          - <Entity>:
-              ID: 0x100000000
-              TagComponent:
-                tag: Camera
-              OrthoCameraComponent:
-                aspectRatio: 1.77777779
-                zoomLevel: 1
-                mooveSpeed: 1
-                halt: false
-                backgroundColor: [0, 0, 0, 1]
-              TransformComponent:
-                position: [0, 0]
-                size: [1, 1]
-                rotationRadians: 0
-    - <Scene>:
-        ID: 0x1
-        Name: Example
-        isActive: true
-        Entities List:
-          - <Entity>:
-              ID: 0x100000001
-              TagComponent:
-                tag: Sebastiao
-              TransformComponent:
-                position: [0, 0]
-                size: [1, 1]
-                rotationRadians: 0
-              SpriteComponent:
-                spriteLogicalName: Pig
-                tintColor: [1, 1, 1, 1]
-          - <Entity>:
-              ID: 0x100000002
-              TagComponent:
-                tag: Camera
-              OrthoCameraComponent:
-                aspectRatio: 1.77777779
-                zoomLevel: 1
-                mooveSpeed: 1
-                halt: false
-                backgroundColor: [0, 0, 0, 1]
-              TransformComponent:
-                position: [0, 0]
-                size: [1, 1]
-                rotationRadians: 0)";
-            
-            Serializer serializer;
-            serializer.Deserialize(scene_yaml);
-        }
-        
     }
 
     void GameLayer::OnDetach()

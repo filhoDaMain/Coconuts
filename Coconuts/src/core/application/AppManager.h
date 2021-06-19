@@ -21,6 +21,17 @@
 namespace Coconuts
 {
     
+    namespace {
+    namespace Parser
+    {
+        namespace FILE_EXTENSIONS
+        {
+            constexpr auto YAML_PROJECT_FILE_EXT = "ccnproj";
+            constexpr auto METABINARY_FILE_EXT = "meta";
+        }
+    }
+    } //namespace
+    
     enum class ConfigFileTypes
     {
         Unknown         = 0,

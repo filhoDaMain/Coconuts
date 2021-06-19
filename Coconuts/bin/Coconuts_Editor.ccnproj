@@ -1,0 +1,80 @@
+# This is an example of a Coconuts project configuration file.
+#
+# Coconuts is an Open Source Game Engine project Licensed under the
+#  Apache License, Version 2.0 (Copyright 2021).
+#
+# Please refer to https://github.com/filhoDaMain/Coconuts for up-to-date
+#  information about Licensing, Copyright, Authorship and Acknowledgements.
+#
+
+<AssetManager>:
+  Textures2D List:
+    - <Texture2D>:
+        logicalName: Tiles_Spritesheet
+        path: ../../Demo/assets/rpg/RPGpack_sheet_2X.png
+        spritesUsing:
+          - Tree
+    - <Texture2D>:
+        logicalName: Animals_Spritesheet
+        path: ../../Demo/assets/animals/square_nodetailsOutline.png
+        spritesUsing:
+          - Pig
+          - Chicken
+  Sprites List:
+    - <Sprite>:
+        logicalName: Pig
+        spriteSheetName: Animals_Spritesheet
+        referrerIndex: 0x0
+        spriteSelector:
+          coords: [1, 4]
+          cellSize: [136, 136]
+          spriteSize: [1, 1]
+    - <Sprite>:
+        logicalName: Chicken
+        spriteSheetName: Animals_Spritesheet
+        referrerIndex: 0x1
+        spriteSelector:
+          coords: [4, 3]
+          cellSize: [136, 136]
+          spriteSize: [1, 1]
+    - <Sprite>:
+        logicalName: Tree
+        spriteSheetName: Tiles_Spritesheet
+        referrerIndex: 0x0
+        spriteSelector:
+          coords: [0, 0]
+          cellSize: [140, 380]
+          spriteSize: [1, 1]
+
+<SceneManager>:
+  Scenes List:
+    - <Scene>:
+        ID: 0x0
+        Name: Example
+        isActive: true
+        Entities List:
+          - <Entity>:
+              ID: 0x100000001
+              TagComponent:
+                tag: Sebastiao
+              TransformComponent:
+                position: [0, 0]
+                size: [1, 1]
+                rotationRadians: 0
+              SpriteComponent:
+                spriteLogicalName: Pig
+                tintColor: [1, 1, 1, 1]
+          - <Entity>:
+              ID: 0x100000002
+              TagComponent:
+                tag: Camera
+              OrthoCameraComponent:
+                aspectRatio: 1.77777779
+                zoomLevel: 1
+                mooveSpeed: 1
+                halt: false
+                backgroundColor: [0, 0, 0, 1]
+              TransformComponent:
+                position: [0, 0]
+                size: [1, 1]
+                rotationRadians: 0

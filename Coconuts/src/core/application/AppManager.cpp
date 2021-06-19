@@ -16,6 +16,8 @@
 
 #include "AppManager.h"
 #include <coconuts/Logger.h>
+#include <coconuts/AssetManager.h>
+#include <coconuts/ecs/Serializer.h>
 #include <fstream>
 #include <sstream>
 
@@ -26,12 +28,12 @@ namespace Coconuts
     {
         std::string fileExt = filepath.substr(filepath.find_last_of(".") + 1);
         
-        if (fileExt == "ccnproj")
+        if (fileExt == Parser::FILE_EXTENSIONS::YAML_PROJECT_FILE_EXT)
         {
             return ConfigFileTypes::MetaText;
         }
         
-        else if (fileExt == "meta")
+        else if (fileExt == Parser::FILE_EXTENSIONS::METABINARY_FILE_EXT)
         {
             return ConfigFileTypes::MetaBinary;
         }
@@ -43,37 +45,63 @@ namespace Coconuts
     static bool LoadMetaYAML(const std::string& filepath)
     {
         std::ifstream file(filepath);
+        
+        if (!file.is_open() || file.fail())
+        {
+            LOG_CRITICAL("Failed to load configuration!");
+            LOG_CRITICAL("{} does not exist or failed to open", filepath);
+            file.close();
+            return false;
+        }
+        
         std::stringstream stream;
         stream << file.rdbuf();
         std::string yamlConf = stream.str();
         
-        LOG_TRACE("Load Meta YAML");
-        LOG_TRACE("{}", yamlConf);
+        /* (1) Import Assets */
+        if (!AssetManager::Deserialize(yamlConf))
+        {
+            LOG_CRITICAL("Failed to import Assets from .ccnproj file!");
+            file.close();
+            return false;
+        }
         
+        /* (2) Load Scenes */
+        Serializer serializer;
+        if (!serializer.Deserialize(yamlConf))
+        {
+            LOG_CRITICAL("Failed to load Scenes from .ccnproj file!");
+            file.close();
+            return false;
+        }
+        
+        file.close();
         return true;
+    }
+    
+    static bool LoadMetaBinary(const std::string& filepath)
+    {
+        LOG_CRITICAL("Loading Meta binary file not supported yet!");
+        return false;
     }
     
     //static
     bool AppManager::LoadRuntimeConfig(const std::string& filepath)
-    {
-        //TODO
-        
+    {   
         switch (ParseFileExtension(filepath))
         {
             case ConfigFileTypes::MetaText:
-                LoadMetaYAML(filepath);
-                break;
+                return LoadMetaYAML(filepath);
                 
             case ConfigFileTypes::MetaBinary:
-                //TODO
-                break;
+                return LoadMetaBinary(filepath);
                 
             default:
                 //TODO
                 break;
         }
         
-        return true;
+        return false;
     }
     
 }

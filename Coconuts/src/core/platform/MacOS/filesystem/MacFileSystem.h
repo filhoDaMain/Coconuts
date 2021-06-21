@@ -13,38 +13,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef FILESYSTEM_H
-#define FILESYSTEM_H
+#ifndef MACFILESYSTEM_H
+#define MACFILESYSTEM_H
 
-#include <string>
+#include <coconuts/FileSystem.h>
 
 namespace Coconuts
 {
     
-    class FileSystem
+    namespace {
+    namespace Parser
+    {
+        namespace PATHS
+        {
+            constexpr auto RUNTIME_CONFDIR_REL_PATH = "";   // empty == same as binary's current location
+        }
+    }
+    } //namespace
+    
+    
+    class MacFileSystem : public FileSystem
     {
     public:
-        inline static std::string GetCurrDirPath()
-        {
-            return s_Instance->GetCurrDirPathImpl();
-        }
-        
-        inline static std::string GetRuntimeConfDirPath()
-        {
-            return s_Instance->GetRuntimeConfDirPathImpl();
-        }
+        MacFileSystem() = default;
+        virtual ~MacFileSystem() = default;
         
     protected:
-        /* OS platform dependent implementations */
-        virtual std::string GetCurrDirPathImpl() = 0;
-        virtual std::string GetRuntimeConfDirPathImpl() = 0;
-        
-    private:
-        /* Platform defined instance */
-        static FileSystem* s_Instance;
+        virtual std::string GetCurrDirPathImpl() override;
+        virtual std::string GetRuntimeConfDirPathImpl() override;
     };
     
 }
 
-#endif /* FILESYSTEM_H */
+#endif /* MACFILESYSTEM_H */
 

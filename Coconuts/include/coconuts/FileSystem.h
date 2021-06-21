@@ -24,8 +24,20 @@ namespace Coconuts
     class FileSystem
     {
     public:
-        virtual static std::string GetCurrDirPath() = 0;
-        virtual static std::string GetRuntimeConfDirPath() = 0;
+        FileSystem();
+        virtual ~FileSystem() = default;
+        
+        static FileSystem& GetInstance();
+        
+        virtual std::string GetCurrDirPath() = 0;
+        virtual std::string GetRuntimeConfDirPath() = 0;
+        
+    private:
+        static FileSystem* CreatePlatformInstance();
+        
+    private:
+        /* Singleton */
+        static FileSystem* s_Instance;
     };
     
 }

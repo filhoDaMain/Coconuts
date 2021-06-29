@@ -29,16 +29,19 @@ namespace Coconuts
             return s_Instance->BootImpl(binary);
         }
         
-        inline static std::string GetProcWorkingDirPath()
+        /* Get process working directory absolute path */
+        inline static std::string GetProcWDirPath()
         {
-            return s_Instance->GetProcWorkingDirPathImpl();
+            return s_Instance->GetProcWDirPathImpl();
         }
         
-        inline static std::string GetRuntimeBinaryDirPath()
+        /* Get process executable absolute path */
+        inline static std::string GetRuntimeBinDirPath()
         {
-            return s_Instance->GetRuntimeBinaryDirPathImpl();
+            return s_Instance->GetRuntimeBinDirPathImpl();
         }
         
+        /* Get configuration directory absolute path */
         inline static std::string GetRuntimeConfDirPath()
         {
             return s_Instance->GetRuntimeConfDirPathImpl();
@@ -47,8 +50,8 @@ namespace Coconuts
     protected:
         /* OS platform dependent implementations */
         virtual bool BootImpl(const char* binary) = 0;
-        virtual std::string GetProcWorkingDirPathImpl() = 0;
-        virtual std::string GetRuntimeBinaryDirPathImpl() = 0;
+        virtual std::string GetProcWDirPathImpl() = 0;
+        virtual std::string GetRuntimeBinDirPathImpl() = 0;
         virtual std::string GetRuntimeConfDirPathImpl() = 0;
         
     private:

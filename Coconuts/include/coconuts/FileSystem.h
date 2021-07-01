@@ -24,11 +24,24 @@ namespace Coconuts
     class FileSystem
     {
     public:
-        inline static std::string GetCurrDirPath()
+        static bool Boot(const char* binary)
         {
-            return s_Instance->GetCurrDirPathImpl();
+            return s_Instance->BootImpl(binary);
         }
         
+        /* Get process working directory absolute path */
+        inline static std::string GetProcWDirPath()
+        {
+            return s_Instance->GetProcWDirPathImpl();
+        }
+        
+        /* Get process executable absolute path */
+        inline static std::string GetRuntimeBinDirPath()
+        {
+            return s_Instance->GetRuntimeBinDirPathImpl();
+        }
+        
+        /* Get configuration directory absolute path */
         inline static std::string GetRuntimeConfDirPath()
         {
             return s_Instance->GetRuntimeConfDirPathImpl();
@@ -36,7 +49,9 @@ namespace Coconuts
         
     protected:
         /* OS platform dependent implementations */
-        virtual std::string GetCurrDirPathImpl() = 0;
+        virtual bool BootImpl(const char* binary) = 0;
+        virtual std::string GetProcWDirPathImpl() = 0;
+        virtual std::string GetRuntimeBinDirPathImpl() = 0;
         virtual std::string GetRuntimeConfDirPathImpl() = 0;
         
     private:

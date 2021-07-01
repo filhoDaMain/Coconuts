@@ -18,6 +18,7 @@
 #define COCONUTS_CORE_H
 
 #include <coconuts/Application.h>
+#include <coconuts/FileSystem.h>
 #include <coconuts/Logger.h>
 
 #define COCONUTS_VERSION 0.1F
@@ -28,9 +29,23 @@ extern void coconuts_version(void);
 
 /* Entry Point for Standalone Editor */
 #ifdef __COCONUTS_STANDALONE_EDITOR_APP__
-int main (void)
+int main (int argc, char* argv[])
 {
     Coconuts::Logger::Init();
+    
+    /* Init FileSystem Tools */
+    if (argc == 0)
+    {
+        LOG_CRITICAL("CRITICAL FAILURE - FileSystem Tools are unavailable in current platform!");
+    }
+    else
+    {
+        if( !Coconuts::FileSystem::Boot(argv[0]) )
+        {
+            LOG_ERROR("FileSystem Tools failed to initialize!");
+        }
+    }
+    
     auto app = Coconuts::CreateApplication();
     
 #if 1   //TODO remove this once open project dialog is complete
@@ -48,9 +63,23 @@ int main (void)
 
 /* Entry Point for Sandbox applications */
 #ifdef __COCONUTS_SANDBOX_APP__
-int main (void)
+int main (int argc, char* argv[])
 {
     Coconuts::Logger::Init();
+    
+    /* Init FileSystem Tools */
+    if (argc == 0)
+    {
+        LOG_CRITICAL("CRITICAL FAILURE - FileSystem Tools are unavailable in current platform!");
+    }
+    else
+    {
+        if( !Coconuts::FileSystem::Boot(argv[0]) )
+        {
+            LOG_ERROR("FileSystem Tools failed to initialize!");
+        }
+    }
+    
     auto app = Coconuts::CreateApplication();
     Coconuts::AppManagerProxy::LoadRuntimeConfig(); //TODO (meta binary)
     app->Run();

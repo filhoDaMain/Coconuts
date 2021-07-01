@@ -26,6 +26,7 @@ namespace Coconuts
     {
         namespace PATHS
         {
+            /* Relative to binary's path */
             constexpr auto RUNTIME_CONFDIR_REL_PATH = "";   // empty == same as binary's current location
         }
     }
@@ -35,12 +36,25 @@ namespace Coconuts
     class GNUFileSystem : public FileSystem
     {
     public:
-        GNUFileSystem() = default;
+        GNUFileSystem();
         virtual ~GNUFileSystem() = default;
         
     protected:
-        virtual std::string GetCurrDirPathImpl() override;
+        virtual bool BootImpl(const char* binary) override;
+        virtual std::string GetProcWDirPathImpl() override;
+        virtual std::string GetRuntimeBinDirPathImpl() override;
         virtual std::string GetRuntimeConfDirPathImpl() override;
+        
+    private:
+        void GenProcWDirPath();
+        void GenBinDirPath(std::string& binary);
+        void GenConfDirPath();
+        
+    private:
+        bool m_IsInitialized;
+        std::string m_BinaryPath;           // absolute path
+        std::string m_ProcWorkingDirPath;   // absolute path
+        std::string m_ConfDirPath;          // absolute path
     };
     
 }

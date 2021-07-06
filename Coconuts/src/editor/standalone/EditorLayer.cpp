@@ -17,11 +17,23 @@
 #include "EditorLayer.h"
 #include "fonts/Fonts.h"
 #include <cstdint>
+#include <coconuts/FileSystem.h>
 
 #define INT2VOIDP(i) (void*)(uintptr_t)(i)
 
 namespace Coconuts
 {
+    
+    namespace {
+    namespace Parser
+    {
+        namespace DEFAULTS
+        {
+            constexpr auto EDITOR_APP_LAYOUT_FILE = "layout.ini";
+        }
+    }
+    } //namespace
+    
     
     void EditorLayer::OnUpdate(Timestep ts)
     {
@@ -201,6 +213,9 @@ namespace Coconuts
         
         /* Set custom dark theme */
         SetDarkThemeColors();
+        
+        /* Load last saved Editor App layout */
+        LoadLayout();
     }
     
     void EditorLayer::SetDarkThemeColors()
@@ -291,6 +306,17 @@ namespace Coconuts
         //colors[ImGuiCol_TableRowBgAlt]          =
         //colors[ImGuiCol_DragDropTarget]         =
         //colors[ImGuiCol_NavHighlight]           =
+    }
+    
+    void EditorLayer::LoadLayout()
+    {
+        std::string file =\
+            FileSystem::GetRuntimeConfDirPath() + Parser::DEFAULTS::EDITOR_APP_LAYOUT_FILE;
+        
+        if ( Editor::EditorApp::LoadLayoutFile(file) )
+        {
+            LOG_TRACE("Loaded Editor Application layout from file {}", file);
+        }
     }
     
 }

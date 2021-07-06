@@ -54,6 +54,7 @@ namespace Coconuts
     private:
         void SetCustomGUIStyle();
         void SetDarkThemeColors();
+        void LoadLayout();
         
     private:
         GameLayer* m_GameLayerPtr;

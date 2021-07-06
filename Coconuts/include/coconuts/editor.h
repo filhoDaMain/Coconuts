@@ -19,6 +19,19 @@
 #include <coconuts/editor_gui/GUILayer.h>
 #include <imgui/imgui.h>
 
+namespace Coconuts
+{
+    
+    namespace Editor
+    {
+        
+        namespace EditorApp
+        {
+            extern bool LoadLayoutFile(const std::string& file);
+        }
+        
+    }    
+}
 
 #endif /* EDITOR_H */
 

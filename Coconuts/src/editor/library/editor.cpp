@@ -29,6 +29,11 @@ using namespace Coconuts::Editor;
 #include <imgui/backends/imgui_impl_glfw.h>
 
 
+namespace
+{
+    static std::string layoutFile;
+}
+
 GUILayer::GUILayer()    : Layer("GUILayer")
 {
 }
@@ -150,4 +155,12 @@ void GUILayer::SetDefaultFontTTF(const std::string& pathToFileTTF, float size)
 {
     ImGuiIO& io = ImGui::GetIO(); (void)io;
     io.FontDefault = io.Fonts->AddFontFromFileTTF(pathToFileTTF.c_str(), size);
+}
+
+bool EditorApp::LoadLayoutFile(const std::string& file)
+{
+    layoutFile = file;
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    io.IniFilename = layoutFile.c_str();
+    return true;
 }

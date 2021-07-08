@@ -24,6 +24,7 @@
 #include <coconuts/types.h>
 #include <coconuts/AssetManager.h>
 #include <coconuts/SceneManager.h>
+#include <coconuts/FileSystem.h>
 #include "AppManager.h"
 
 
@@ -228,9 +229,8 @@ namespace Coconuts
     //static
     void AppManagerProxy::LoadRuntimeConfig()
     {
-        //TODO - These relative paths should be updated to absolute paths!
-        std::string filepath_ccnproj = "./";
-        std::string filepath_meta = "./";
+        std::string filepath_ccnproj = FileSystem::GetRuntimeConfDirPath();
+        std::string filepath_meta = FileSystem::GetRuntimeConfDirPath();
         std::string appName = Application::GetInstance().GetApplicationName();
         
         filepath_meta += appName + "." + Parser::FILE_EXTENSIONS::METABINARY_FILE_EXT;

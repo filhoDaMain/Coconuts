@@ -18,6 +18,7 @@
 #include "LoadingRefs.h"
 #include <yaml-cpp/yaml.h>
 #include <coconuts/Logger.h>
+#include <coconuts/FileSystem.h>
 
 namespace Coconuts
 {
@@ -175,6 +176,12 @@ namespace Coconuts
         
         std::string logicalName = texture2d_node[KEY_STR_LOGICALNAME].as<std::string>();
         std::string path = texture2d_node[KEY_STR_PATH].as<std::string>();
+        
+        /* Create abs path from a path relative to binary's location */
+        if (path.at(0) == '.')
+        {
+            path = FileSystem::GetRuntimeBinDirPath() + path;
+        }
         
         LOG_TRACE("  logicalName = {}", logicalName);
         LOG_TRACE("  path = {}", path);

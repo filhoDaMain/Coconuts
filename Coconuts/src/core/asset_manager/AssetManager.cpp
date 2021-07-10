@@ -251,6 +251,21 @@ namespace Coconuts
         {
             auto iter = found->second.spritesUsing->begin();
             found->second.spritesUsing->erase(iter + index);
+            
+            /* Update the referrerIndex of Sprites whose index have shifted positions */
+            for (uint32_t refIndex = index;
+                 refIndex < found->second.spritesUsing->size();
+                 refIndex++)
+            {
+                std::string nameOther = found->second.spritesUsing->operator[](refIndex);
+                auto findOther = m_HashTable_Sprites.find(nameOther);
+                
+                if (findOther != m_HashTable_Sprites.end())
+                {
+                    findOther->second.referrerIndex = refIndex;
+                }
+            }
+            
             return true;
         }
         
@@ -401,7 +416,7 @@ namespace Coconuts
             
             /* Delete entry from Keys vector */
             m_KeysList_Sprites.erase(m_KeysList_Sprites.begin() + found->second.keysListIndex);
-            
+
             /* Update the keysListIndex of Sprites whose keys have shifted positions */
             for (uint32_t keyIndex = found->second.keysListIndex;
                  keyIndex < m_KeysList_Sprites.size();
@@ -415,6 +430,9 @@ namespace Coconuts
                     findOther->second.keysListIndex = keyIndex;
                 }
             }
+
+            /* Delete entry from hash table */
+            m_HashTable_Sprites.erase(logicalName);
             return true;
         }
         

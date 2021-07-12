@@ -196,10 +196,16 @@ namespace Coconuts
         {
             LOG_WARN("Delete Texture2D {}", logicalName);
             
-            /* Loop through all referrers and delete them */
-            for (std::string spriteName : *(found->second.spritesUsing))
+            /* Loop through all referrers and delete them (and Log these deletions) */
+            while ( found->second.spritesUsing->size() > 0 )
             {
+                /*
+                 * Keep deleting 1st index element as long as the vector keeps
+                 * beeing shifted to the left (vector isn't empty).
+                 */
+                std::string spriteName = found->second.spritesUsing->operator[](0);
                 LOG_TRACE("Also deleting referrer Sprite '{}'", spriteName);
+                
                 DeleteSprite(spriteName);
             }
             

@@ -48,6 +48,10 @@ namespace Coconuts
         
         /* MUST be implemented by a platform dependent sub Window class */
         virtual void SetEventCallback(const EventCallbackFunction& callbackFn) = 0;
+        
+        /* Propagates a manually triggered event */
+        virtual void EventTrigger(Event& event) = 0;
+        
         virtual bool InitWindowManagerCallbacks(const char* library) = 0;
         virtual uint32_t GetWidth() const = 0;
         virtual uint32_t GetHeight() const = 0;

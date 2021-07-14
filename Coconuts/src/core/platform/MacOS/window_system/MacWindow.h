@@ -37,6 +37,12 @@ namespace Coconuts
             /* Make our MacWindow callback for events point to callbackFn */
             m_WindowData.eventCallback = callbackFn;
         }
+        
+        virtual void EventTrigger(Event& event) override
+        {
+            m_WindowData.eventCallback(event);
+        }
+        
         bool InitWindowManagerCallbacks(const char* library) override;
         uint32_t GetWidth() const override { return m_WindowData.width; }
         uint32_t GetHeight() const override { return m_WindowData.height; }

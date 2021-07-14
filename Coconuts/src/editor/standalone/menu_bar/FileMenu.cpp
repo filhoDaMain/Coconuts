@@ -17,6 +17,8 @@
 #include "FileMenu.h"
 #include <coconuts/editor.h>
 #include <coconuts/Logger.h>
+#include <coconuts/Application.h>
+#include <coconuts/EventSystem.h>
 
 namespace Coconuts {
 namespace MenuBar
@@ -34,11 +36,23 @@ namespace MenuBar
         {
             if (ImGui::MenuItem("Close", "", false, true))
             {
-                LOG_TRACE("File Menu: Close");
+                Close();
             }
             
             ImGui::EndMenu();
         }
+    }
+    
+    void FileMenu::Close()
+    {
+        LOG_TRACE("File Menu: Close");
+        
+        /**
+         * Create a WindowClose Event which will be propogated
+         * and handled by the assigned handler.
+         */
+        WindowEvent::WindowClose winCloseEvent;
+        Application::GetInstance().GetWindow().EventTrigger(winCloseEvent);
     }
     
 }

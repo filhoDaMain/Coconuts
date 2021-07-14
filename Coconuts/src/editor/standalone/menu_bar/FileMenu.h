@@ -31,6 +31,9 @@ namespace MenuBar
         void Draw();
         
     private:
+        void Close();
+        
+    private:
         /* Pointer to the GameLayer */
         GameLayer* m_GameLayerPtr;
     };

@@ -44,7 +44,7 @@ namespace Coconuts
     class EditorLayer : public Editor::GUILayer
     {
     public:
-        EditorLayer() = default;
+        EditorLayer() : m_ShowPopUp_LoadProject(false) {}
         EditorLayer(GameLayer* gameLayer) : m_GameLayerPtr(gameLayer) {}
         virtual ~EditorLayer() = default;
   
@@ -57,6 +57,9 @@ namespace Coconuts
         void LoadLayout();
         
     private:
+        /* Show PopUp flags */
+        bool m_ShowPopUp_LoadProject;
+        
         GameLayer* m_GameLayerPtr;
         
         /* Menu Bar menus */

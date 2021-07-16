@@ -159,6 +159,11 @@ namespace Coconuts
             m_CreateSpritePopUp.Draw(&showPopUp_CreateSprite);
         }
         
+        if (m_ShowPopUp_LoadProject)
+        {
+            //TODO - PopUp
+        }
+        
         /*  P A N E L S  */
         
         /* Viewport Panel */
@@ -193,7 +198,7 @@ namespace Coconuts
         /* Set Style */
         SetCustomGUIStyle();
         
-        m_FileMenu.Init(m_GameLayerPtr);
+        m_FileMenu.Init(m_GameLayerPtr, &m_ShowPopUp_LoadProject);
         m_EntityMenu.Init(m_GameLayerPtr);
         
         m_ViewportPanel.Init(m_GameLayerPtr);

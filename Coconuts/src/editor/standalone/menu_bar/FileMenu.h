@@ -26,16 +26,19 @@ namespace MenuBar
     {
     public:
         FileMenu() = default;
-        bool Init(GameLayer*& gameLayer);
+        bool Init(GameLayer*& gameLayer, bool* showPopUpLoadProj);
         
         void Draw();
         
     private:
         void Close();
+        void OpenProject();
         
     private:
         /* Pointer to the GameLayer */
         GameLayer* m_GameLayerPtr;
+        
+        bool* m_ShowPopUpLoadProj;
     };
     
 }

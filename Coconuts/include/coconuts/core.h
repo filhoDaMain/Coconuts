@@ -48,10 +48,6 @@ int main (int argc, char* argv[])
     
     auto app = Coconuts::CreateApplication();
     
-#if 1   //TODO remove this once open project dialog is complete
-    Coconuts::AppManagerProxy::LoadRuntimeConfig(); // Loads an example
-#endif
-    
     app->Run();
     delete app;
     

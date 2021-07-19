@@ -161,7 +161,8 @@ namespace Coconuts
         
         if (m_ShowPopUp_LoadProject)
         {
-            //TODO - PopUp
+            LOG_TRACE("Load Project");
+            m_LoadProjectPopUp.Draw();
         }
         
         /*  P A N E L S  */
@@ -195,6 +196,9 @@ namespace Coconuts
     {
         LOG_TRACE("Editor Layer OnPostAttach()");
         
+        /* Init flags */
+        m_ShowPopUp_LoadProject = false;
+        
         /* Set Style */
         SetCustomGUIStyle();
         
@@ -209,6 +213,7 @@ namespace Coconuts
         
         m_ImportTexture2dPopUp.Init();
         m_CreateSpritePopUp.Init();
+        m_LoadProjectPopUp.Init(&m_ShowPopUp_LoadProject);
     }
     
     void EditorLayer::SetCustomGUIStyle()

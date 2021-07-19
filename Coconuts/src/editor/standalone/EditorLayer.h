@@ -37,6 +37,7 @@
 /* PopUps */
 #include "popups/ImportTexture2DPopUp.h"
 #include "popups/CreateSpritePopUp.h"
+#include "popups/LoadProjectPopUp.h"
 
 namespace Coconuts
 {
@@ -44,7 +45,7 @@ namespace Coconuts
     class EditorLayer : public Editor::GUILayer
     {
     public:
-        EditorLayer() : m_ShowPopUp_LoadProject(false) {}
+        EditorLayer() = default;
         EditorLayer(GameLayer* gameLayer) : m_GameLayerPtr(gameLayer) {}
         virtual ~EditorLayer() = default;
   
@@ -78,6 +79,7 @@ namespace Coconuts
         /* PopUps */
         PopUps::ImportTexture2DPopUp    m_ImportTexture2dPopUp;
         PopUps::CreateSpritePopUp       m_CreateSpritePopUp;
+        PopUps::LoadProjectPopUp        m_LoadProjectPopUp;
     };
     
 }

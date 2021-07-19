@@ -37,6 +37,7 @@
 /* PopUps */
 #include "popups/ImportTexture2DPopUp.h"
 #include "popups/CreateSpritePopUp.h"
+#include "popups/LoadProjectPopUp.h"
 
 namespace Coconuts
 {
@@ -57,6 +58,9 @@ namespace Coconuts
         void LoadLayout();
         
     private:
+        /* Show PopUp flags */
+        bool m_ShowPopUp_LoadProject;
+        
         GameLayer* m_GameLayerPtr;
         
         /* Menu Bar menus */
@@ -75,6 +79,7 @@ namespace Coconuts
         /* PopUps */
         PopUps::ImportTexture2DPopUp    m_ImportTexture2dPopUp;
         PopUps::CreateSpritePopUp       m_CreateSpritePopUp;
+        PopUps::LoadProjectPopUp        m_LoadProjectPopUp;
     };
     
 }

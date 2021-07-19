@@ -159,6 +159,12 @@ namespace Coconuts
             m_CreateSpritePopUp.Draw(&showPopUp_CreateSprite);
         }
         
+        if (m_ShowPopUp_LoadProject)
+        {
+            LOG_TRACE("Load Project");
+            m_LoadProjectPopUp.Draw();
+        }
+        
         /*  P A N E L S  */
         
         /* Viewport Panel */
@@ -190,10 +196,13 @@ namespace Coconuts
     {
         LOG_TRACE("Editor Layer OnPostAttach()");
         
+        /* Init flags */
+        m_ShowPopUp_LoadProject = false;
+        
         /* Set Style */
         SetCustomGUIStyle();
         
-        m_FileMenu.Init(m_GameLayerPtr);
+        m_FileMenu.Init(m_GameLayerPtr, &m_ShowPopUp_LoadProject);
         m_EntityMenu.Init(m_GameLayerPtr);
         
         m_ViewportPanel.Init(m_GameLayerPtr);
@@ -204,6 +213,7 @@ namespace Coconuts
         
         m_ImportTexture2dPopUp.Init();
         m_CreateSpritePopUp.Init();
+        m_LoadProjectPopUp.Init(&m_ShowPopUp_LoadProject);
     }
     
     void EditorLayer::SetCustomGUIStyle()

@@ -72,7 +72,7 @@
                 aspectRatio: 1.77777779
                 zoomLevel: 1
                 mooveSpeed: 1
-                halt: false
+                halt: true
                 backgroundColor: [0, 0, 0, 1]
               TransformComponent:
                 position: [0, 0]

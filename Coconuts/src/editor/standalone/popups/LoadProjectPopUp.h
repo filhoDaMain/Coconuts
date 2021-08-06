@@ -16,6 +16,8 @@
 #ifndef LOADPROJECTPOPUP_H
 #define LOADPROJECTPOPUP_H
 
+#include "../GameLayer.h"
+
 namespace Coconuts {
 namespace PopUps
 {
@@ -24,10 +26,11 @@ namespace PopUps
     {
     public:
         LoadProjectPopUp() = default;
-        bool Init(bool* m_ShowPopUpLoadProj);
+        bool Init(GameLayer*& gameLayer, bool* m_ShowPopUpLoadProj);
         void Draw();
         
     private:
+        GameLayer* m_GameLayerPtr;
         bool* m_ShowPopUp;
     };
     

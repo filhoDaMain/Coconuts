@@ -213,7 +213,7 @@ namespace Coconuts
         
         m_ImportTexture2dPopUp.Init();
         m_CreateSpritePopUp.Init();
-        m_LoadProjectPopUp.Init(&m_ShowPopUp_LoadProject);
+        m_LoadProjectPopUp.Init(m_GameLayerPtr, &m_ShowPopUp_LoadProject);
     }
     
     void EditorLayer::SetCustomGUIStyle()

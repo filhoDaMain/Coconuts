@@ -72,6 +72,9 @@ namespace Coconuts
             /* Destroy Entity */
             bool DestroyEntity(uint64_t id);
             
+            /* Get Active Scene's aspect ratio */
+            float GetActiveSceneAR();
+            
             // --------------------------------------
             // Debug Color change
             Entity& GetEntity() {return m_Entity; }

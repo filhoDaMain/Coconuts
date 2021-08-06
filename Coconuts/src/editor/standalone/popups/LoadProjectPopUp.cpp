@@ -24,8 +24,9 @@ namespace Coconuts {
 namespace PopUps
 {
     
-    bool LoadProjectPopUp::Init(bool* m_ShowPopUpLoadProj)
+    bool LoadProjectPopUp::Init(GameLayer*& gameLayer, bool* m_ShowPopUpLoadProj)
     {
+        m_GameLayerPtr = gameLayer;
         m_ShowPopUp = m_ShowPopUpLoadProj;
         return true;
     }
@@ -86,6 +87,15 @@ namespace PopUps
                 {
                     std::string path = std::string(pathBuffer);
                     AppManagerProxy::LoadRuntimeConfig(path);
+                    
+                    /**
+                     * Workaround:
+                     *  When loading a project from Editor GUI, set current active scene
+                     *  main camera halt state to true, so it matches the default
+                     *  Viewport panel focus state.
+                     */
+                    m_GameLayerPtr->HaltEvents(true); // override halt parameter from config file
+                    
                     strcpy(pathBuffer, "/absolute/path/to/project.ccnproj");
                     
                     ImGui::CloseCurrentPopup();

@@ -100,4 +100,9 @@ namespace Coconuts
         return SceneManager::GetInstance().GetActiveScene()->DestroyEntity(id);
     }
     
+    float GameLayer::GetActiveSceneAR()
+    {
+        return SceneManager::GetInstance().GetActiveScene()->GetAspectRatio();
+    }
+    
 }

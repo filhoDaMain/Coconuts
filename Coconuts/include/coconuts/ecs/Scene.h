@@ -49,6 +49,7 @@ namespace Coconuts
         bool HaltAllEvents(bool state = true);
         bool HaltEditorCameraNavigation(bool state = true);
         bool DeleteDefaultSceneCamera();
+        float GetAspectRatio() { return m_AspectRatio; }
         
         uint16_t GetID() const { return m_ID; }
         std::string GetName() const { return m_Name; }
@@ -61,6 +62,7 @@ namespace Coconuts
         bool m_HaltAllEvents;
         bool m_HaltEditorCameraNavigation;
         uint64_t m_DefaultCameraID;
+        float m_AspectRatio;
         
         /**
          * When a new Entity is added or modified m_IsUpdated is set to true.

@@ -145,6 +145,8 @@ namespace Coconuts
             thisOrthoCameraComponent.aspectRatio = (float) (x / y);   
             // Cameras matrices are updated by its Camera Nav System!
         });
+        
+        m_AspectRatio = (float) (x / y);
     }
     
     Scene::Scene(uint16_t id, const std::string& name, bool isActive)
@@ -154,7 +156,8 @@ namespace Coconuts
         m_HaltAllEvents(false),
         m_HaltEditorCameraNavigation(false),
         m_DefaultCameraID(0),
-        m_IsUpdated(false)
+        m_IsUpdated(false),
+        m_AspectRatio(0.0f)
     {
         LOG_INFO("Create New Scene ({}, {}, {})", m_Name, m_ID, m_IsActive ? "true" : "false");
         CreateDefaultSceneCamera();

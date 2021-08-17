@@ -24,10 +24,11 @@ namespace Coconuts {
 namespace MenuBar
 {
  
-    bool FileMenu::Init(GameLayer*& gameLayer, bool* showPopUpLoadProj)
+    bool FileMenu::Init(GameLayer*& gameLayer, bool* showPopUpLoadProj, bool* showPopUpSaveProj)
     {
         m_GameLayerPtr = gameLayer;
         m_ShowPopUpLoadProj = showPopUpLoadProj;
+        m_ShowPopUpSaveProj = showPopUpSaveProj;
         return true;
     }
     
@@ -43,6 +44,11 @@ namespace MenuBar
             if (ImGui::MenuItem("Open Project", "", false, true))
             {
                 OpenProject();
+            }
+            
+            if (ImGui::MenuItem("Svae Project As...", "", false, true))
+            {
+                SaveProjectAs();
             }
             
             ImGui::EndMenu();
@@ -65,6 +71,12 @@ namespace MenuBar
     {
         LOG_TRACE("File Menu: Open Project");
         *m_ShowPopUpLoadProj = true;
+    }
+    
+    void FileMenu::SaveProjectAs()
+    {
+        LOG_TRACE("File Menu: Save Project As");
+        *m_ShowPopUpSaveProj = true;
     }
     
 }

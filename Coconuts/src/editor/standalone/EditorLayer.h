@@ -60,6 +60,7 @@ namespace Coconuts
     private:
         /* Show PopUp flags */
         bool m_ShowPopUp_LoadProject;
+        bool m_ShowPopUp_SaveProject;
         
         GameLayer* m_GameLayerPtr;
         

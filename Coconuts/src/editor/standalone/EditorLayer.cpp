@@ -144,7 +144,6 @@ namespace Coconuts
         }
         
         
-        
         /*  P O P   U P S  */
         
         if (showPopUp_ImportTexture2D)
@@ -164,6 +163,12 @@ namespace Coconuts
             LOG_TRACE("Load Project");
             m_LoadProjectPopUp.Draw();
         }
+        
+        if (m_ShowPopUp_SaveProject)
+        {
+            LOG_TRACE("Save Project");
+        }
+        
         
         /*  P A N E L S  */
         
@@ -202,7 +207,7 @@ namespace Coconuts
         /* Set Style */
         SetCustomGUIStyle();
         
-        m_FileMenu.Init(m_GameLayerPtr, &m_ShowPopUp_LoadProject);
+        m_FileMenu.Init(m_GameLayerPtr, &m_ShowPopUp_LoadProject, &m_ShowPopUp_SaveProject);
         m_EntityMenu.Init(m_GameLayerPtr);
         
         m_ViewportPanel.Init(m_GameLayerPtr);

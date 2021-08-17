@@ -46,7 +46,7 @@ namespace MenuBar
                 OpenProject();
             }
             
-            if (ImGui::MenuItem("Svae Project As...", "", false, true))
+            if (ImGui::MenuItem("Save Project As...", "", false, true))
             {
                 SaveProjectAs();
             }

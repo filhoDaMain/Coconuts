@@ -38,6 +38,7 @@
 #include "popups/ImportTexture2DPopUp.h"
 #include "popups/CreateSpritePopUp.h"
 #include "popups/LoadProjectPopUp.h"
+#include "popups/SaveProjectPopUp.h"
 
 namespace Coconuts
 {
@@ -81,6 +82,7 @@ namespace Coconuts
         PopUps::ImportTexture2DPopUp    m_ImportTexture2dPopUp;
         PopUps::CreateSpritePopUp       m_CreateSpritePopUp;
         PopUps::LoadProjectPopUp        m_LoadProjectPopUp;
+        PopUps::SaveProjectPopUp        m_SaveProjectPopUp;
     };
     
 }

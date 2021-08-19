@@ -167,6 +167,7 @@ namespace Coconuts
         if (m_ShowPopUp_SaveProject)
         {
             LOG_TRACE("Save Project");
+            m_SaveProjectPopUp.Draw();
         }
         
         
@@ -203,6 +204,7 @@ namespace Coconuts
         
         /* Init flags */
         m_ShowPopUp_LoadProject = false;
+        m_ShowPopUp_SaveProject = false;
         
         /* Set Style */
         SetCustomGUIStyle();
@@ -219,6 +221,7 @@ namespace Coconuts
         m_ImportTexture2dPopUp.Init();
         m_CreateSpritePopUp.Init();
         m_LoadProjectPopUp.Init(m_GameLayerPtr, &m_ShowPopUp_LoadProject);
+        m_SaveProjectPopUp.Init(&m_ShowPopUp_SaveProject);
     }
     
     void EditorLayer::SetCustomGUIStyle()

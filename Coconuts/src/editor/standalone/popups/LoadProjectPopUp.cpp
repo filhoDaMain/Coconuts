@@ -19,6 +19,7 @@
 #include <coconuts/editor.h>
 #include <coconuts/Logger.h>
 #include <nfd/nfd.h>
+#include "../ed_utils.h"
 
 namespace Coconuts {
 namespace PopUps
@@ -87,6 +88,9 @@ namespace PopUps
                 {
                     std::string path = std::string(pathBuffer);
                     AppManagerProxy::LoadRuntimeConfig(path);
+                    
+                    /* Store .ccnproj file for future reference when using 'Save' only */
+                    utils::SaveState::StoreCCNProjFilePath(path);
                     
                     /**
                      * Workaround:

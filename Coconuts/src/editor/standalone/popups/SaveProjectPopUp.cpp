@@ -16,45 +16,15 @@
 
 #include "SaveProjectPopUp.h"
 #include <coconuts/editor.h>
-#include <coconuts/AssetManager.h>
-#include <coconuts/ecs/Serializer.h>
-#include <string>
-#include <coconuts/Logger.h>
-#include <iostream>
-#include <fstream>  
+#include <string> 
 #include <nfd/nfd.h>
+#include "../ed_utils.h"
+#include <coconuts/Logger.h>
 
 namespace Coconuts {
     
-namespace
-{
-    const std::string FILE_HEADER =\
-R"(# This is a Coconuts project configuration file.
-#
-# Coconuts is an Open Source Game Engine project Licensed under the
-#  Apache License, Version 2.0 (Copyright 2021).
-#
-# Please refer to https://github.com/filhoDaMain/Coconuts for up-to-date
-#  information about Licensing, Copyright, Authorship and Acknowledgements.
-#
-)";
-}
-    
 namespace PopUps
 {
-    
-    static bool SaveCCNProjFile(const std::string& filePath)
-    {
-        Serializer serializer;
-        std::ofstream outfile (filePath);
-        outfile << FILE_HEADER << std::endl;
-        outfile << AssetManager::Serialize() << std::endl;
-        outfile << std::endl;
-        outfile << serializer.Serialize() << std::endl;
-        outfile.close();
-           
-        return true;
-    }
     
     bool SaveProjectPopUp::Init(bool* showPopUpSaveProj)
     {
@@ -74,7 +44,6 @@ namespace PopUps
         {            
             static char pathBuffer[200] = "/absolute/path/to/project.ccnproj";
             
-            /* Image Path */
             ImGui::Text("Save ccnproj file");
             ImGui::Spacing();ImGui::Spacing();ImGui::Spacing();
             
@@ -103,20 +72,20 @@ namespace PopUps
                 }
                 else 
                 {
-                    LOG_WARN("Failed to load file from File Dialog");
+                    LOG_WARN("Failed to select file from File Dialog");
                 }
             }
             
             ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
             ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
             
-            /* Import into Application */
+            /* Serialize all and save serialization in file */
             if (ImGui::Button("Save", ImVec2(120, 0)))
             {
                 if ( strcmp(pathBuffer, "/absolute/path/to/project.ccnproj") != 0 )
                 {
                     std::string path = std::string(pathBuffer);
-                    SaveCCNProjFile(path);
+                    utils::SaveState::SaveCCNProjFile(path);
                     
                     strcpy(pathBuffer, "/absolute/path/to/project.ccnproj");
                     ImGui::CloseCurrentPopup();

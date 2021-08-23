@@ -13,39 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef FILEMENU_H
-#define FILEMENU_H
-
-#include "../GameLayer.h"
+#ifndef SAVEPROJECTPOPUP_H
+#define SAVEPROJECTPOPUP_H
 
 namespace Coconuts {
-namespace MenuBar
+namespace PopUps
 {
     
-    class FileMenu
+    class SaveProjectPopUp
     {
     public:
-        FileMenu() = default;
-        bool Init(GameLayer*& gameLayer, bool* showPopUpLoadProj, bool* showPopUpSaveProj);
-        
+        SaveProjectPopUp() = default;
+        bool Init(bool* showPopUpSaveProj);
         void Draw();
         
     private:
-        void Close();
-        void OpenProject();
-        void SaveProject();
-        void SaveProjectAs();
-        
-    private:
-        /* Pointer to the GameLayer */
-        GameLayer* m_GameLayerPtr;
-        
-        bool* m_ShowPopUpLoadProj;
-        bool* m_ShowPopUpSaveProj;
+        bool* m_ShowPopUp;
     };
-    
 }
 }
 
-#endif /* FILEMENU_H */
+#endif /* SAVEPROJECTPOPUP_H */
 

@@ -20,6 +20,7 @@
 #include <string>
 #include <coconuts/graphics/Texture.h>
 #include <coconuts/AssetManager.h>
+#include <coconuts/ecs/Serializer.h>
 
 namespace Coconuts{
 namespace utils
@@ -29,6 +30,17 @@ namespace utils
     void DrawTableTextButton(const std::string& label, const std::string& text, float colWidth = 100.0f);
     void DrawTableImage(const std::string& label, Texture2D& texture, const glm::vec4& tintColor = glm::vec4(1.0f), uint8_t divider = 2, float colWidth = 100.0f);
     void DrawTableImage(const std::string& label, Texture2D& spriteSheet, AssetManager::SpriteSelector& selector, const glm::vec4& tintColor = glm::vec4(1.0f), uint8_t divider = 2, float colWidth = 100.0f);
+    
+    class SaveState
+    {
+    public:
+        static bool SaveCCNProjFile(const std::string& filePath);
+        static bool StoreCCNProjFilePath(const std::string& path) { s_FilePath = path; return true; }
+        static std::string GetCCNProjFilePath() { return s_FilePath; }
+        
+    private:
+        static std::string s_FilePath;
+    };
 }    
 }
 

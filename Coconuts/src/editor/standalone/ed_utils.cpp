@@ -16,6 +16,8 @@
 
 #include "ed_utils.h"
 #include <coconuts/editor.h>
+#include <iostream>
+#include <fstream> 
 
 namespace Coconuts
 {
@@ -187,6 +189,41 @@ namespace Coconuts
         
         ImGui::PopID();
         ImGui::Spacing(); ImGui::Spacing();
+    }
+    
+    
+    /* SaveState */
+    std::string utils::SaveState::s_FilePath("nullptr");    //static allocation
+    
+namespace
+{
+    const std::string FILE_HEADER =\
+R"(# This is a Coconuts project configuration file.
+#
+# Coconuts is an Open Source Game Engine project Licensed under the
+#  Apache License, Version 2.0 (Copyright 2021).
+#
+# Please refer to https://github.com/filhoDaMain/Coconuts for up-to-date
+#  information about Licensing, Copyright, Authorship and Acknowledgements.
+#
+)";
+}
+    
+    //static
+    bool utils::SaveState::SaveCCNProjFile(const std::string& filePath)
+    {
+        /* Store for future reference when using 'Save' only */
+        s_FilePath = filePath;
+        
+        Serializer serializer;
+        std::ofstream outfile (filePath);
+        outfile << FILE_HEADER << std::endl;
+        outfile << AssetManager::Serialize() << std::endl;
+        outfile << std::endl;
+        outfile << serializer.Serialize() << std::endl;
+        outfile.close();
+           
+        return true;
     }
     
 }

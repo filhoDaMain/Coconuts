@@ -14,52 +14,50 @@
  * limitations under the License.
  */
 
-#include "LoadProjectPopUp.h"
-#include <coconuts/Application.h>
+#include "SaveProjectPopUp.h"
 #include <coconuts/editor.h>
-#include <coconuts/Logger.h>
+#include <string> 
 #include <nfd/nfd.h>
 #include "../ed_utils.h"
+#include <coconuts/Logger.h>
 
 namespace Coconuts {
+    
 namespace PopUps
 {
     
-    bool LoadProjectPopUp::Init(GameLayer*& gameLayer, bool* m_ShowPopUpLoadProj)
+    bool SaveProjectPopUp::Init(bool* showPopUpSaveProj)
     {
-        m_GameLayerPtr = gameLayer;
-        m_ShowPopUp = m_ShowPopUpLoadProj;
+        m_ShowPopUp = showPopUpSaveProj;
         return true;
     }
     
-    void LoadProjectPopUp::Draw()
+    void SaveProjectPopUp::Draw()
     {
-        ImGui::OpenPopup("Application:  Load Project File");
+        ImGui::OpenPopup("Application:  Save Project File");
 
         // Always center this window when appearing
         ImVec2 center = ImGui::GetMainViewport()->GetCenter();
         ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
 
-        if (ImGui::BeginPopupModal("Application:  Load Project File", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+        if (ImGui::BeginPopupModal("Application:  Save Project File", NULL, ImGuiWindowFlags_AlwaysAutoResize))
         {            
             static char pathBuffer[200] = "/absolute/path/to/project.ccnproj";
             
-            /* Image Path */
-            ImGui::Text("Load ccnproj file");
+            ImGui::Text("Save ccnproj file");
             ImGui::Spacing();ImGui::Spacing();ImGui::Spacing();
-            if (ImGui::InputText("", pathBuffer, sizeof(pathBuffer)))
-            {
-                //
-            }
             
-            ImGui::SameLine();
-            if (ImGui::Button("Open        "))
+            ImGui::Text("File:");
+            ImGui::Text("%s", pathBuffer);
+            
+            ImGui::Spacing(); ImGui::Spacing();
+            if (ImGui::Button("Open File Dialog        "))
             {
                 /* Open File Dialog */
                 nfdchar_t *outPath = NULL;
                 
                 /* WARNING -> outPath is dynamically allocated and needs to be freed after */
-                nfdresult_t result = NFD_OpenDialog( "ccnproj", NULL, &outPath );
+                nfdresult_t result = NFD_SaveDialog( "ccnproj", NULL, &outPath );
     
                 if ( result == NFD_OKAY )
                 {
@@ -74,34 +72,22 @@ namespace PopUps
                 }
                 else 
                 {
-                    LOG_WARN("Failed to load file from File Dialog");
+                    LOG_WARN("Failed to select file from File Dialog");
                 }
             }
             
             ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
             ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
             
-            /* Import into Application */
-            if (ImGui::Button("Import", ImVec2(120, 0)))
+            /* Serialize all and save serialization in file */
+            if (ImGui::Button("Save", ImVec2(120, 0)))
             {
                 if ( strcmp(pathBuffer, "/absolute/path/to/project.ccnproj") != 0 )
                 {
                     std::string path = std::string(pathBuffer);
-                    AppManagerProxy::LoadRuntimeConfig(path);
-                    
-                    /* Store .ccnproj file for future reference when using 'Save' only */
-                    utils::SaveState::StoreCCNProjFilePath(path);
-                    
-                    /**
-                     * Workaround:
-                     *  When loading a project from Editor GUI, set current active scene
-                     *  main camera halt state to true, so it matches the default
-                     *  Viewport panel focus state.
-                     */
-                    m_GameLayerPtr->HaltEvents(true); // override halt parameter from config file
+                    utils::SaveState::SaveCCNProjFile(path);
                     
                     strcpy(pathBuffer, "/absolute/path/to/project.ccnproj");
-                    
                     ImGui::CloseCurrentPopup();
                     *m_ShowPopUp = false;
                 }

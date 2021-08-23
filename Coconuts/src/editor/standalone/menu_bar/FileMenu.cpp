@@ -19,6 +19,7 @@
 #include <coconuts/Logger.h>
 #include <coconuts/Application.h>
 #include <coconuts/EventSystem.h>
+#include "../ed_utils.h"
 
 namespace Coconuts {
 namespace MenuBar
@@ -46,6 +47,11 @@ namespace MenuBar
                 OpenProject();
             }
             
+            if (ImGui::MenuItem("Save", "", false, true))
+            {
+                SaveProject();
+            }
+            
             if (ImGui::MenuItem("Save Project As...", "", false, true))
             {
                 SaveProjectAs();
@@ -71,6 +77,28 @@ namespace MenuBar
     {
         LOG_TRACE("File Menu: Open Project");
         *m_ShowPopUpLoadProj = true;
+    }
+    
+    void FileMenu::SaveProject()
+    {
+        LOG_TRACE("File Menu: Save");
+        std::string ccnproj = utils::SaveState::GetCCNProjFilePath();
+        
+        if ( ccnproj == "nullptr" )
+        {
+            /**
+             * No valid reference found to a .ccnproj file
+             * (not opened or not saved before).
+             * 
+             * Do a 'Save As...'
+             */
+            SaveProjectAs();
+        }
+        
+        else
+        {
+            utils::SaveState::SaveCCNProjFile(ccnproj);
+        }
     }
     
     void FileMenu::SaveProjectAs()

@@ -33,6 +33,7 @@ namespace MenuBar
     private:
         void Close();
         void OpenProject();
+        void SaveProject();
         void SaveProjectAs();
         
     private:

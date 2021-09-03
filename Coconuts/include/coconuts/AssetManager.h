@@ -102,6 +102,8 @@ namespace Coconuts
         static std::tuple<bool, SpriteSelector> GetSpriteSelector(const std::string& logicalName);
         static bool DeleteSprite(const std::string& logicalName);
         
+        static bool ClearAll();
+        
     private:
         static uint32_t ReferenceTexture2D(const std::string& texture2DName, const std::string& spriteName);
         static bool EraseReferenceTexture2D(const std::string& texture2DName, uint32_t index);

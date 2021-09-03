@@ -54,4 +54,11 @@ namespace Coconuts
         return true;
     }
     
+    //static
+    bool LoadingRefs::Clear()
+    {
+        m_Paths.clear();
+        return true;
+    }
+    
 }

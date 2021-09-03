@@ -445,6 +445,19 @@ namespace Coconuts
         return false;
     }
     
+    //static
+    bool AssetManager::ClearAll()
+    {
+        m_HashTable_Textures2D.clear();
+        m_HashTable_Sprites.clear();
+        m_KeysList_Textures2D.clear();
+        m_KeysList_Sprites.clear();
+        LoadingRefs::Clear();
+        Init();
+        
+        return true;
+    }
+    
     //private static
     AssetManager::IndexedTexture2D AssetManager::GetFullHTIndexedTexture2D(const std::string& name)
     {

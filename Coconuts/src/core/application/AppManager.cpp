@@ -91,10 +91,16 @@ namespace Coconuts
         switch (ParseFileExtension(filepath))
         {
             case ConfigFileTypes::MetaText:
+            {
+                AssetManager::ClearAll();
                 return LoadMetaYAML(filepath);
+            }
                 
             case ConfigFileTypes::MetaBinary:
+            {
+                AssetManager::ClearAll();
                 return LoadMetaBinary(filepath);
+            }
                 
             default:
                 //TODO

@@ -38,6 +38,8 @@ namespace Coconuts
         
         static bool RemovePath(uint32_t id);
         
+        static bool Clear();
+        
     private:
         static std::vector<std::string> m_Paths;
     };

@@ -454,6 +454,7 @@ namespace Coconuts
         m_KeysList_Sprites.clear();
         LoadingRefs::Clear();
         Init();
+        LOG_DEBUG("Cleared AssetManager state by request");
         
         return true;
     }

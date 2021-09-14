@@ -40,6 +40,8 @@ namespace Coconuts
         
         inline uint16_t GetBufferSize() const { return m_ScenesBuffer.size(); }
         
+        bool ClearAll();
+        
     private:
         uint16_t NewSceneImpl(const std::string& name, bool isActive = false);
         bool NewSceneImpl(uint16_t hardcoded_id, const std::string& name, bool hardcoded_activeState);

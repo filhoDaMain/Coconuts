@@ -15,6 +15,7 @@
  */
 
 #include "AppManager.h"
+#include "coconuts/SceneManager.h"
 #include <coconuts/Logger.h>
 #include <coconuts/AssetManager.h>
 #include <coconuts/ecs/Serializer.h>
@@ -92,12 +93,14 @@ namespace Coconuts
         {
             case ConfigFileTypes::MetaText:
             {
+                SceneManager::GetInstance().ClearAll();
                 AssetManager::ClearAll();
                 return LoadMetaYAML(filepath);
             }
                 
             case ConfigFileTypes::MetaBinary:
             {
+                SceneManager::GetInstance().ClearAll();
                 AssetManager::ClearAll();
                 return LoadMetaBinary(filepath);
             }

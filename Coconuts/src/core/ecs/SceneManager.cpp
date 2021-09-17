@@ -165,4 +165,13 @@ namespace Coconuts
         return m_ScenesBuffer[m_ActiveSceneID];
     }
     
+    bool SceneManager::ClearAll()
+    {
+        m_ScenesBuffer.clear();
+        m_ActiveSceneID = 0x0000;
+        LOG_DEBUG("Cleared SceneManager state by request");
+        
+        return true;
+    }
+    
 }

@@ -85,7 +85,6 @@ namespace PopUps
             }
             
             ImGui::Separator();
-
             
             /* Import into AssetManager */
             if (ImGui::Button("Import", ImVec2(120, 0)))

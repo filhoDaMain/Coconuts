@@ -54,8 +54,6 @@ namespace Panels
          * When View Port Panel changes, update the
          * GameLayer's Framebuffer size
          */
-        //if ( (imguiViewportPanelSize.x != m_ViewportSize.x) || 
-        //     (imguiViewportPanelSize.y != m_ViewportSize.y))
         if (aspectRatio != m_GameLayerPtr->GetActiveSceneAR())
         {
             m_ViewportSize = { imguiViewportPanelSize.x, imguiViewportPanelSize.y };

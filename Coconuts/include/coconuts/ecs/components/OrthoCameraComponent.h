@@ -17,7 +17,6 @@
 #define ORTHOCAMERACOMPONENT_H
 
 #include <coconuts/cameras/OrthographicCamera.h>
-#include <coconuts/cameras/CameraController.h>
 #include <glm/glm.hpp>
 
 namespace Coconuts

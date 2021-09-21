@@ -46,7 +46,7 @@ namespace Coconuts
             OnDestroyFunc = [](Behavior* inst) { ((C*) inst)->OnDestroy(); };
             OnUpdateFunc = [](Behavior* inst, Timestep ts) { ((C*) inst)->OnUpdate(ts); };
             
-            /* Instantiate object of Behavioral class */
+            /* Instantiate object of Behavior class */
             Instantiate();
             
             /* Link it to an entity affected by this behavior */

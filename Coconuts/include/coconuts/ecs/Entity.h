@@ -66,8 +66,7 @@ namespace Coconuts
     private:
         Scene*          m_Scene;            /* The Scene this Entity belongs to */
         entityx::Entity m_EntityxEntity;    /* Entity Handler */
-        friend class Scene;
-        //uint64_t id;
+        friend class    Scene;
     };
     
 }

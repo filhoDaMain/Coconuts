@@ -30,7 +30,12 @@ namespace Panels
      
     bool ComponentInspector::Init()
     {
-        isSpriteComponentSaved = true;
+        m_HasValidContext         = false;
+        m_HasCameraComponent      = false;
+        m_HasTransformComponent   = false;
+        m_HasSpriteComponent      = false;
+        m_HasBehaviorComponent    = false;
+        m_IsSpriteComponentSaved  = true;
         return true;
     }
     
@@ -40,7 +45,7 @@ namespace Panels
         ImGui::Begin("Component Inspector");
         
         /* Draw all Components */
-        if (hasValidContext)
+        if (m_HasValidContext)
         {
             /* Tag */
             if (m_Context->HasComponent<TagComponent>())
@@ -55,7 +60,7 @@ namespace Panels
             /* Camera */
             if (m_Context->HasComponent<OrthoCameraComponent>())
             {
-                hasCameraComponent = true;
+                m_HasCameraComponent = true;
                 
                 ImGui::Spacing(); ImGui::Spacing();
                 DrawCameraComponent();
@@ -66,7 +71,7 @@ namespace Panels
             /* Transform */
             if (m_Context->HasComponent<TransformComponent>())
             {
-                hasTransformComponent = true;
+                m_HasTransformComponent = true;
                 
                 ImGui::Spacing(); ImGui::Spacing();
                 DrawTransformComponent();
@@ -77,7 +82,7 @@ namespace Panels
             /* Sprite */
             if (m_Context->HasComponent<SpriteComponent>())
             {
-                hasSpriteComponent = true;
+                m_HasSpriteComponent = true;
                 
                 ImGui::Spacing(); ImGui::Spacing();
                 DrawSpriteComponent();
@@ -88,7 +93,7 @@ namespace Panels
             /* Behavior */
             if (m_Context->HasComponent<BehaviorComponent>())
             {
-                hasBehaviorComponent = true;
+                m_HasBehaviorComponent = true;
                 
                 ImGui::Spacing(); ImGui::Spacing();
                 DrawBehaviorComponent();
@@ -108,10 +113,10 @@ namespace Panels
         }
         
         /* Reset all flags */
-        hasCameraComponent      = false;
-        hasTransformComponent   = false;
-        hasSpriteComponent      = false;
-        hasBehaviorComponent    = false;
+        m_HasCameraComponent      = false;
+        m_HasTransformComponent   = false;
+        m_HasSpriteComponent      = false;
+        m_HasBehaviorComponent    = false;
         
         ImGui::End();
     }
@@ -223,7 +228,7 @@ namespace Panels
             {
                 spritesArray.emplace_back(const_cast<char*>(sprites[i].c_str()));
                 
-                if (isSpriteComponentSaved && spriteComponent.spriteLogicalName.compare(spritesArray[i]) == 0)
+                if (m_IsSpriteComponentSaved && spriteComponent.spriteLogicalName.compare(spritesArray[i]) == 0)
                 {
                     seletected_sprite_index = i;    // 1st option to display
                 }
@@ -292,7 +297,7 @@ namespace Panels
             
             /* Tint Color */
             /* First time, get original tint color from spritecomponent */
-            if (isSpriteComponentSaved)
+            if (m_IsSpriteComponentSaved)
             {
                 tint = spriteComponent.tintColor;
             }
@@ -302,7 +307,7 @@ namespace Panels
             ImGui::Spacing(); ImGui::Spacing(); 
             
             /* Save sprite asset switch */
-            isSpriteComponentSaved = false;
+            m_IsSpriteComponentSaved = false;
             if (ImGui::Button("Apply"))
             {   
                 /* Update to newly selected sprite from drop-down list */
@@ -318,7 +323,7 @@ namespace Panels
                     undefined_sprite = false;
                 }
                 
-                isSpriteComponentSaved = true;
+                m_IsSpriteComponentSaved = true;
             }
             
             /* Tiling Factor */
@@ -363,40 +368,40 @@ namespace Panels
         if (ImGui::BeginPopup("AddComponentPopUp"))
         {
             /* Transform */
-            if (!hasTransformComponent)
+            if (!m_HasTransformComponent)
             {
                 if (ImGui::MenuItem("Transform"))
                 {
                     m_Context->AddComponent<TransformComponent>();
                     ImGui::CloseCurrentPopup();
                     
-                    hasTransformComponent = true;
+                    m_HasTransformComponent = true;
                     LOG_TRACE("Transform added to {}", m_Context->GetId());
                 }
             }
             
             /* Sprite */
-            if (!hasSpriteComponent)
+            if (!m_HasSpriteComponent)
             {
                 if (ImGui::MenuItem("Sprite"))
                 {
                     m_Context->AddComponent<SpriteComponent>();
                     ImGui::CloseCurrentPopup();
                     
-                    hasSpriteComponent = true;
+                    m_HasSpriteComponent = true;
                     LOG_TRACE("Sprite added to {}", m_Context->GetId());
                 }
             }
             
             /* Behavior */
-            if (!hasBehaviorComponent)
+            if (!m_HasBehaviorComponent)
             {
                 if (ImGui::MenuItem("Behavior"))
                 {
                     m_Context->AddComponent<BehaviorComponent>();
                     ImGui::CloseCurrentPopup();
                     
-                    hasBehaviorComponent = true;
+                    m_HasBehaviorComponent = true;
                     LOG_TRACE("Behavior added to {}", m_Context->GetId());
                 }
             }
@@ -409,8 +414,8 @@ namespace Panels
     {
         LOG_TRACE("ComponentInspector - Change context to Entity {}", ptr->GetId());
         m_Context = ptr;
-        hasValidContext = true;
-        isSpriteComponentSaved = true;  // fetch original spritecomponent data
+        m_HasValidContext = true;
+        m_IsSpriteComponentSaved = true;  // fetch original spritecomponent data
     }
     
 }

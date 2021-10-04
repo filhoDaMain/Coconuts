@@ -50,16 +50,16 @@ namespace Panels
          
         /* Context */
         Coconuts::Entity* m_Context;
-        bool hasValidContext = false;
+        bool m_HasValidContext;
         
         /* Aux flags */
-        bool hasCameraComponent     = false;
-        bool hasTransformComponent  = false;
-        bool hasSpriteComponent     = false;
-        bool hasBehaviorComponent   = false;
+        bool m_HasCameraComponent;
+        bool m_HasTransformComponent;
+        bool m_HasSpriteComponent;
+        bool m_HasBehaviorComponent;
         
         /* Aux state flags */
-        bool isSpriteComponentSaved;
+        bool m_IsSpriteComponentSaved;
         
     };
     

@@ -25,9 +25,10 @@ namespace Coconuts {
 namespace PopUps
 {
     
-    bool LoadProjectPopUp::Init(GameLayer*& gameLayer, bool* m_ShowPopUpLoadProj)
+    bool LoadProjectPopUp::Init(GameLayer*& gameLayer, Panels::ComponentInspector* cmpInsp, bool* m_ShowPopUpLoadProj)
     {
         m_GameLayerPtr = gameLayer;
+        m_ComponentInspectorPtr = cmpInsp;
         m_ShowPopUp = m_ShowPopUpLoadProj;
         return true;
     }
@@ -86,6 +87,10 @@ namespace PopUps
             {
                 if ( strcmp(pathBuffer, "/absolute/path/to/project.ccnproj") != 0 )
                 {
+                    /* Clear context */
+                    m_ComponentInspectorPtr->Init();
+                    
+                    /* Load project from .ccnproj file */
                     std::string path = std::string(pathBuffer);
                     AppManagerProxy::LoadRuntimeConfig(path);
                     

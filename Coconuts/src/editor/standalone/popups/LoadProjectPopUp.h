@@ -17,6 +17,7 @@
 #define LOADPROJECTPOPUP_H
 
 #include "../GameLayer.h"
+#include "../panels/ComponentInspector.h"
 
 namespace Coconuts {
 namespace PopUps
@@ -26,11 +27,12 @@ namespace PopUps
     {
     public:
         LoadProjectPopUp() = default;
-        bool Init(GameLayer*& gameLayer, bool* m_ShowPopUpLoadProj);
+        bool Init(GameLayer*& gameLayer, Panels::ComponentInspector* cmpInsp, bool* m_ShowPopUpLoadProj);
         void Draw();
         
     private:
         GameLayer* m_GameLayerPtr;
+        Panels::ComponentInspector* m_ComponentInspectorPtr;
         bool* m_ShowPopUp;
     };
     

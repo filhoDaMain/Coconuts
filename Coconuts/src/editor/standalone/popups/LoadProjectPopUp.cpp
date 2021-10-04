@@ -87,6 +87,10 @@ namespace PopUps
             {
                 if ( strcmp(pathBuffer, "/absolute/path/to/project.ccnproj") != 0 )
                 {
+                    /* Clear context */
+                    m_ComponentInspectorPtr->Init();
+                    
+                    /* Load project from .ccnproj file */
                     std::string path = std::string(pathBuffer);
                     AppManagerProxy::LoadRuntimeConfig(path);
                     

@@ -24,10 +24,11 @@ namespace PopUps
     {
     public:
         ImportTexture2DPopUp() = default;
-        bool Init() { return true; }
-        void Draw(bool* show);
+        bool Init(bool* showPopUp) { m_ShowPopUp = showPopUp; return true; }
+        void Draw();
         
     private:
+        bool* m_ShowPopUp;
     };
     
 }

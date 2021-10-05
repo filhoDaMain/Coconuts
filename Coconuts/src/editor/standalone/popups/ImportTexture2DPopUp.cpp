@@ -26,7 +26,7 @@ namespace Coconuts {
 namespace PopUps
 {
     
-    void ImportTexture2DPopUp::Draw(bool* show)
+    void ImportTexture2DPopUp::Draw()
     {   
         ImGui::OpenPopup("AssetManager:  Import Texture 2D");
 
@@ -109,7 +109,7 @@ namespace PopUps
                     strcpy(logicalNameBuffer, "SingleWordName");
                     
                     ImGui::CloseCurrentPopup();
-                    *show = false;
+                    *m_ShowPopUp = false;
                 }
                 else
                 {
@@ -126,7 +126,7 @@ namespace PopUps
                 strcpy(logicalNameBuffer, "SingleWordName");
                     
                 ImGui::CloseCurrentPopup();
-                *show = false;
+                *m_ShowPopUp = false;
             }
             
             ImGui::EndPopup();

@@ -60,6 +60,8 @@ namespace Coconuts
         
     private:
         /* Show PopUp flags */
+        bool m_ShowPopUp_CreateSprite;
+        bool m_ShowPopUp_ImportTexture2D;
         bool m_ShowPopUp_LoadProject;
         bool m_ShowPopUp_SaveProject;
         

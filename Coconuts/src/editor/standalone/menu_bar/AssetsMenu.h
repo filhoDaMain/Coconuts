@@ -24,10 +24,18 @@ namespace MenuBar
     {
     public:
         AssetsMenu() = default;
-        void Draw(bool* showPopUp_ImportTexture2D,
-                  bool* showPopUp_CreateSprite);
+        bool Init(bool* showPopUp_ImportTexture2D, bool* showPopUp_CreateSprite)
+        {
+            m_ShowPopUp_ImportTexture2D = showPopUp_ImportTexture2D;
+            m_ShowPopUp_CreateSprite = showPopUp_CreateSprite;
+            return true;
+        }
+        
+        void Draw();
         
     private:
+        bool* m_ShowPopUp_ImportTexture2D;
+        bool* m_ShowPopUp_CreateSprite;
     };
     
 }

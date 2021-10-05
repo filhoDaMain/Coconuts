@@ -122,10 +122,6 @@ namespace Coconuts
         }
 #endif
         
-        /* PopUps triggering flags */
-        static bool showPopUp_ImportTexture2D = false;
-        static bool showPopUp_CreateSprite = false;
-        
         
         /*  M E N U   B A R  */
         
@@ -138,7 +134,7 @@ namespace Coconuts
             m_EntityMenu.Draw();
             
             /* Assets Menu */
-            m_AssetsMenu.Draw(&showPopUp_ImportTexture2D, &showPopUp_CreateSprite);
+            m_AssetsMenu.Draw();
             
             ImGui::EndMenuBar();
         }
@@ -146,13 +142,13 @@ namespace Coconuts
         
         /*  P O P   U P S  */
         
-        if (showPopUp_ImportTexture2D)
+        if (m_ShowPopUp_ImportTexture2D)
         {
             /* Import Texture 2D (Triggered from AssetsMenu) */
-            m_ImportTexture2dPopUp.Draw(&showPopUp_ImportTexture2D);
+            m_ImportTexture2dPopUp.Draw();
         }
         
-        if (showPopUp_CreateSprite)
+        if (m_ShowPopUp_CreateSprite)
         {
             /* Create Sprite (Triggered from AssetsMenu) */
             m_CreateSpritePopUp.Draw(&showPopUp_CreateSprite);
@@ -160,13 +156,13 @@ namespace Coconuts
         
         if (m_ShowPopUp_LoadProject)
         {
-            LOG_TRACE("Load Project");
+            /* Load Project (Triggered from FileMenu) */
             m_LoadProjectPopUp.Draw();
         }
         
         if (m_ShowPopUp_SaveProject)
         {
-            LOG_TRACE("Save Project");
+            /* Save Project (Triggered from FileMenu) */
             m_SaveProjectPopUp.Draw();
         }
         
@@ -203,22 +199,28 @@ namespace Coconuts
         LOG_TRACE("Editor Layer OnPostAttach()");
         
         /* Init flags */
+        m_ShowPopUp_CreateSprite = false;
+        m_ShowPopUp_ImportTexture2D = false;
         m_ShowPopUp_LoadProject = false;
         m_ShowPopUp_SaveProject = false;
         
         /* Set Style */
         SetCustomGUIStyle();
         
+        /* Menus */
+        m_AssetsMenu.Init(&m_ShowPopUp_ImportTexture2D, &m_ShowPopUp_CreateSprite);
         m_FileMenu.Init(m_GameLayerPtr, &m_ShowPopUp_LoadProject, &m_ShowPopUp_SaveProject);
         m_EntityMenu.Init(m_GameLayerPtr);
         
+        /* Panels */
         m_ViewportPanel.Init(m_GameLayerPtr);
         m_ComponentInspectorPanel.Init();
         m_SceneOverviewPanel.Init(m_GameLayerPtr, &m_ComponentInspectorPanel);
         m_AssetInspectorPanel.Init();
         m_AssetsPanel.Init(&m_AssetInspectorPanel);
         
-        m_ImportTexture2dPopUp.Init();
+        /* PopUps */
+        m_ImportTexture2dPopUp.Init(&m_ShowPopUp_ImportTexture2D);
         m_CreateSpritePopUp.Init();
         m_LoadProjectPopUp.Init(m_GameLayerPtr, &m_ComponentInspectorPanel, &m_ShowPopUp_LoadProject);
         m_SaveProjectPopUp.Init(&m_ShowPopUp_SaveProject);

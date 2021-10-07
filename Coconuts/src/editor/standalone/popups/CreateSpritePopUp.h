@@ -24,10 +24,11 @@ namespace PopUps
     {
     public:
         CreateSpritePopUp() = default;
-        bool Init() { return true; }
-        void Draw(bool* show);
+        bool Init(bool* show) { m_ShowPopUp = show; return true; }
+        void Draw();
         
     private:
+        bool* m_ShowPopUp;
     };
     
 }

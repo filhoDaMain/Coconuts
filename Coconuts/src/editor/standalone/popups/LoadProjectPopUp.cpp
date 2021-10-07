@@ -25,11 +25,11 @@ namespace Coconuts {
 namespace PopUps
 {
     
-    bool LoadProjectPopUp::Init(GameLayer*& gameLayer, Panels::ComponentInspector* cmpInsp, bool* m_ShowPopUpLoadProj)
+    bool LoadProjectPopUp::Init(GameLayer*& gameLayer, Panels::ComponentInspector* cmpInsp, bool* showPopUpLoadProj)
     {
         m_GameLayerPtr = gameLayer;
         m_ComponentInspectorPtr = cmpInsp;
-        m_ShowPopUp = m_ShowPopUpLoadProj;
+        m_ShowPopUp = showPopUpLoadProj;
         return true;
     }
     

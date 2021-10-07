@@ -28,7 +28,7 @@ namespace Coconuts {
 namespace PopUps
 {
     
-    void CreateSpritePopUp::Draw(bool* show)
+    void CreateSpritePopUp::Draw()
     {
         ImGui::OpenPopup("AssetManager:  Create New Sprite");
 
@@ -41,6 +41,7 @@ namespace PopUps
             static char logicalNameBuffer[32] = "SingleWordName";
             
             auto sheets = AssetManager::GetAllTexture2DLogicalNames();
+            static bool emptyTexturesList = sheets.size() == 0 ? true : false;
             std::vector<char*> sheetsArray;
             sheetsArray.reserve(sheets.size());
 
@@ -50,26 +51,40 @@ namespace PopUps
             {
                 sheetsArray.push_back(const_cast<char*>(sheets[i].c_str())); 
             }
+            
+            /**
+             * Empty list - There's currently no Textures created.
+             * Push back a default string.
+             */
+            if (emptyTexturesList)
+            {
+                std::string defaultText = "Empty - Textures 2D";
+                sheetsArray.push_back(const_cast<char*>(defaultText.c_str()));
+            }
 
             /* Drop-down - Choose spritesheet */
             ImGui::Text("Create sprite from sprite sheet Texture2D asset");
             ImGui::Spacing();ImGui::Spacing();ImGui::Spacing();
             ImGui::Combo("Texture2D", &seletected_sheet_index, &sheetsArray[0], sheetsArray.size());
             
-            /* Draw sprite sheet preview */
-            std::string texture2DStr = sheetsArray[seletected_sheet_index];
-            auto texture = AssetManager::GetTexture2D(texture2DStr);
-            ImGui::Image((void *) *texture, ImVec2((texture->GetWidth()/8), (texture->GetHeight()/8)), ImVec2{0, 1}, ImVec2{1, 0});
-            
-            
-            ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
-            ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
-            
-            ImGui::Text("Give Sprite a logical name");
-            ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
-            if (ImGui::InputText("Sprite Name", logicalNameBuffer, sizeof(logicalNameBuffer)))
+            std::string texture2DStr;
+            if (!emptyTexturesList)
             {
-                //
+                /* Draw sprite sheet preview */
+                texture2DStr = sheetsArray[seletected_sheet_index];
+                auto texture = AssetManager::GetTexture2D(texture2DStr);
+                ImGui::Image((void *) *texture, ImVec2((texture->GetWidth()/8), (texture->GetHeight()/8)), ImVec2{0, 1}, ImVec2{1, 0});
+            
+            
+                ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
+                ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
+            
+                ImGui::Text("Give Sprite a logical name");
+                ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
+                if (ImGui::InputText("Sprite Name", logicalNameBuffer, sizeof(logicalNameBuffer)))
+                {
+                    //
+                }
             }
             
             ImGui::Separator();
@@ -77,7 +92,7 @@ namespace PopUps
             /* Create Sprite in AssetManager */
             if (ImGui::Button("Create", ImVec2(120, 0)))
             {
-                if ((strcmp(logicalNameBuffer, "SingleWordName") != 0))
+                if ((strcmp(logicalNameBuffer, "SingleWordName") != 0) && !emptyTexturesList)
                 {
                     //texture2DStr is Texture2D name as string
                     std::string spriteNameStr = std::string(logicalNameBuffer);
@@ -93,7 +108,7 @@ namespace PopUps
                     strcpy(logicalNameBuffer, "SingleWordName");
                     
                     ImGui::CloseCurrentPopup();
-                    *show = false;
+                    *m_ShowPopUp = false;
                 }
                 else
                 {
@@ -110,7 +125,7 @@ namespace PopUps
                 strcpy(logicalNameBuffer, "SingleWordName");
                 
                 ImGui::CloseCurrentPopup();
-                *show = false;
+                *m_ShowPopUp = false;
             }
             
             ImGui::EndPopup();

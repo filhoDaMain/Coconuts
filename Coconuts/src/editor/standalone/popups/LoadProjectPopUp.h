@@ -27,7 +27,7 @@ namespace PopUps
     {
     public:
         LoadProjectPopUp() = default;
-        bool Init(GameLayer*& gameLayer, Panels::ComponentInspector* cmpInsp, bool* m_ShowPopUpLoadProj);
+        bool Init(GameLayer*& gameLayer, Panels::ComponentInspector* cmpInsp, bool* showPopUpLoadProj);
         void Draw();
         
     private:

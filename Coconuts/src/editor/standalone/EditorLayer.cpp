@@ -151,7 +151,7 @@ namespace Coconuts
         if (m_ShowPopUp_CreateSprite)
         {
             /* Create Sprite (Triggered from AssetsMenu) */
-            m_CreateSpritePopUp.Draw(&showPopUp_CreateSprite);
+            m_CreateSpritePopUp.Draw();
         }
         
         if (m_ShowPopUp_LoadProject)
@@ -221,7 +221,7 @@ namespace Coconuts
         
         /* PopUps */
         m_ImportTexture2dPopUp.Init(&m_ShowPopUp_ImportTexture2D);
-        m_CreateSpritePopUp.Init();
+        m_CreateSpritePopUp.Init(&m_ShowPopUp_CreateSprite);
         m_LoadProjectPopUp.Init(m_GameLayerPtr, &m_ComponentInspectorPanel, &m_ShowPopUp_LoadProject);
         m_SaveProjectPopUp.Init(&m_ShowPopUp_SaveProject);
     }

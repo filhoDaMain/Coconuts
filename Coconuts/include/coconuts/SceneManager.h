@@ -26,9 +26,15 @@ namespace Coconuts
     class SceneManager
     {
     public:
-        SceneManager();
         ~SceneManager();
+        
+        /**
+         * Singleton implementation.
+         */
+        SceneManager(SceneManager const&) = delete;
+        void operator = (SceneManager const&) = delete;
         static SceneManager& GetInstance();
+        
         
         std::shared_ptr<Scene> NewScene(const std::string& name, bool isActive = false);
         std::shared_ptr<Scene> NewScene(uint16_t hardcoded_id, const std::string& name, bool hardcoded_activeState);
@@ -43,13 +49,12 @@ namespace Coconuts
         bool ClearAll();
         
     private:
+        SceneManager();
+        
         uint16_t NewSceneImpl(const std::string& name, bool isActive = false);
         bool NewSceneImpl(uint16_t hardcoded_id, const std::string& name, bool hardcoded_activeState);
         
     private:
-        /* Singleton */
-        static SceneManager* s_Instance;
-        
         std::vector<std::shared_ptr<Scene>> m_ScenesBuffer;
         uint16_t m_ActiveSceneID;
     };

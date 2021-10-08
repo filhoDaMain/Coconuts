@@ -20,25 +20,13 @@
 namespace Coconuts
 {
     
-    /* Singleton */
-    SceneManager* SceneManager::s_Instance = nullptr;
-    
     SceneManager::SceneManager()
     :   m_ActiveSceneID(0x0000)
     {
-        if (s_Instance != nullptr)
-        {
-            LOG_ERROR("SceneManager must be a singleton!");
-            return;
-        }
-        
-        /* Singleton created */
-        s_Instance = this;
+        /* Create dafault Scene and set it to active state */
+        this->NewScene("_Default_", true);
         
         LOG_INFO("Singleton instance of SceneManager created");
-        
-        /* Create dafault Scene and set it to active state */
-        s_Instance->NewScene("_Default_", true);
     }
     
     SceneManager::~SceneManager()
@@ -49,13 +37,8 @@ namespace Coconuts
     //static
     SceneManager& SceneManager::GetInstance()
     {
-        if (s_Instance == nullptr)
-        {
-            LOG_WARN("First time SceneManager not initialized!");
-            SceneManager(); // updates s_Instance
-        }
-        
-        return *s_Instance;
+        static SceneManager s_Instance;
+        return s_Instance;
     }
     
     //private

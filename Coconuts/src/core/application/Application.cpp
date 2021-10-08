@@ -86,9 +86,6 @@ namespace Coconuts
         
         /* Pre-alloc AssetManager hash tables */
         AssetManager::Init();
-        
-        /* Init SceneManager's singleton */
-        p_SceneManager = std::unique_ptr<SceneManager>(new SceneManager());
     }
     
     Application::~Application()

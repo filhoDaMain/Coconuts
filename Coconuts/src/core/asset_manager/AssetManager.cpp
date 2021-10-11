@@ -92,6 +92,7 @@ namespace Coconuts
         Texture2D* rawPtr = Texture2D::Create(path);
         if (rawPtr == nullptr)
         {
+            LOG_ERROR("Failed to import Texture2D '{}' from file '{}'!", logicalName, path);
             return false;   // Failed. Stop here.
         }
          
@@ -297,6 +298,7 @@ namespace Coconuts
         std::shared_ptr<Texture2D> texture2D = AssetManager::GetTexture2D(spriteSheetLogicalName);
         if (texture2D == nullptr)
         {
+            LOG_ERROR("Failed to create sprite. '{}' Texture2D does not exist!", spriteSheetLogicalName);
             return false;   // Failed. Stop here.
         }
         

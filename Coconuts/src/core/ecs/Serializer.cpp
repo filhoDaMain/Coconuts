@@ -532,6 +532,7 @@ namespace Coconuts
     
     bool Serializer::Deserialize(std::string& conf)
     {
+        bool retVal = false;
         using namespace Parser::ROOT;
         
         YAML::Node root = YAML::Load(conf);
@@ -544,19 +545,20 @@ namespace Coconuts
             auto scenes_list = scenemanager_node[KEY_SEQ_NODE_SCENESLIST];
             if (scenes_list)
             {
+                retVal = true;
                 for (auto scene : scenes_list)
                 {
                     using namespace Parser::ROOT::SCENE;
                     auto scene_node = scene[CLASS_NODE_SCENE];
                     if (scene_node)
                     {
-                        DeserializeScene(scene_node);
+                        retVal &= DeserializeScene(scene_node);
                     }
                 }
             }
         }
         
-        return true;
+        return retVal;
     }
     
 }

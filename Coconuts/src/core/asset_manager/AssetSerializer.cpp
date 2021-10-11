@@ -187,9 +187,7 @@ namespace Coconuts
         LOG_TRACE("  path = {}", path);
         
         /* Import Texture2D */
-        AssetManager::ImportTexture2D(logicalName, path);
-        
-        return true;
+        return AssetManager::ImportTexture2D(logicalName, path);
     }
     
     static bool DeserializeSprite(YAML::Node& sprite_node)
@@ -227,13 +225,13 @@ namespace Coconuts
         selector.coords = {coords_x, coords_y};
         selector.cellSize = {cellsize_x, cellsize_y};
         selector.spriteSize = {spritesize_x, spritesize_y};
-        AssetManager::CreateSprite(logicalName, spriteSheetName, selector);
         
-        return true;
+        return AssetManager::CreateSprite(logicalName, spriteSheetName, selector);
     }
     
     bool AssetSerializer::Deserialize(std::string& conf)
     {
+        bool retVal = false;
         using namespace Parser::ROOT;
         
         YAML::Node root = YAML::Load(conf);
@@ -241,6 +239,7 @@ namespace Coconuts
         auto assetmanager_node = root[ROOT_NODE_ASSETMANAGER];
         if (assetmanager_node)
         {
+            retVal = true;
             LOG_TRACE("Parsing <AssetManager> ...");
             
             auto textures2d_list = assetmanager_node[KEY_SEQ_NODE_TEXTURES2DLIST];
@@ -252,7 +251,7 @@ namespace Coconuts
                     auto texture2d_node = texture2d[CLASS_NODE_TEXTURE2D];
                     if (texture2d_node)
                     {
-                        DeserializeTexture2D(texture2d_node);
+                        retVal &= DeserializeTexture2D(texture2d_node);
                     }
                 }
             }
@@ -266,13 +265,13 @@ namespace Coconuts
                     auto sprite_node = sprite[CLASS_NODE_SPRITE];
                     if (sprite_node)
                     {
-                        DeserializeSprite(sprite_node);
+                        retVal &= DeserializeSprite(sprite_node);
                     }
                 }
             }
         }
         
-        return true;
+        return retVal;
     }
     
 }

@@ -1,5 +1,7 @@
 # Coconuts
 
+Coconuts is a 2D Game Engine library and a Game Editor standalone application.
+
 <p align="center">
   <img src="https://user-images.githubusercontent.com/44137701/115147789-a8864180-a054-11eb-8d61-84248982e6b0.png"/>
 </p>

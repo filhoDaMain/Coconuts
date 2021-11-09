@@ -19,11 +19,17 @@ Please include every License files in derivative work. You are also welcome to c
 
 
 ### Clone
-Coconuts depends on third party libraries that are cloned into ./Coconuts/vendor/ directory.\
+Coconuts depends on third-party libraries that are cloned into ./Coconuts/vendor/ directory.\
 To clone everything at once do
 
 ```
 git clone --recurse-submodules git@github.com:filhoDaMain/Coconuts.git
+```
+
+#### Pull latest supported changes from all third-party submodules
+
+```
+git submodule update
 ```
 
 ## How to build

@@ -20,20 +20,26 @@ namespace Coconuts
 {
     
     //private
-    TimeProfiler::TimeProfiler() : m_Profiles()
+    Profiler::TimeProfiler::TimeProfiler() : m_Profiles()
     {
         // do nothing
     }
     
-    void TimeProfiler::Push(Profiler::TimeData data)
+    Profiler::TimeProfiler& Profiler::TimeProfiler::GetInstance()
+    {
+        static TimeProfiler s_Instance;
+        return s_Instance;
+    }
+    
+    void Profiler::TimeProfiler::Push(TimeData data)
     {
         m_Profiles[data.scopeName] = data;
     }
     
-    std::vector<Profiler::TimeData> TimeProfiler::Fetch()
+    std::vector<Profiler::TimeData> Profiler::TimeProfiler::Fetch()
     {
-        std::vector<Profiler::TimeData> tmp;
-        std::map<std::string, Profiler::TimeData>::iterator it;
+        std::vector<TimeData> tmp;
+        std::map<std::string, TimeData>::iterator it;
         
         for (it = m_Profiles.begin(); it != m_Profiles.end(); it++)
         {

@@ -21,89 +21,100 @@
 #include <vector>
 #include <chrono>
 
-#include <iostream>
-
 namespace Coconuts
 {
     
     namespace Profiler
     {
+        
         struct TimeData
         {
             std::string scopeName;
+            std::string file;
+            std::string function;
+            uint32_t    line;
             uint32_t    executionTime_us;   // in microseconds
         };
-    }
     
-    class TimeProfiler
-    {
-    public:
-        ~TimeProfiler() = default;
         
-        /**
-         * Singleton implementation.
-         */
-        TimeProfiler(TimeProfiler const&) = delete;
-        void operator = (TimeProfiler const&) = delete;
-        
-        static TimeProfiler& GetInstance()
+        class TimeProfiler
         {
-            static TimeProfiler s_Instance;
-            return s_Instance;
-        }
+        public:
+            ~TimeProfiler() = default;
         
-        void Push(Profiler::TimeData data);
-        std::vector<Profiler::TimeData> Fetch();
+            /**
+             * Singleton implementation.
+             */
+            TimeProfiler(TimeProfiler const&) = delete;
+            void operator = (TimeProfiler const&) = delete;
         
+            static TimeProfiler& GetInstance();
         
-    private:
-        TimeProfiler(); // singleton
-        
-    private:
-        std::map<std::string, Profiler::TimeData> m_Profiles;
-    };
-    
-    
-    class InstrumentationTimer
-    {
-    public:
-        InstrumentationTimer(const char* scope)
-        : m_Data(), m_Scope(scope), m_StartTimepoint(), m_StopTimepoint()
-        {
-            Start();
-        }
-        
-        ~InstrumentationTimer()
-        {
-            Stop();
-        }
-        
-    private:
-        void Start()
-        {
-            m_StartTimepoint = std::chrono::high_resolution_clock::now();
-        }
-        
-        void Stop()
-        {
-            m_StopTimepoint = std::chrono::high_resolution_clock::now();
-            auto duration = std::chrono::duration_cast<std::chrono::microseconds>(m_StopTimepoint - m_StartTimepoint);
+            void Push(TimeData data);
+            std::vector<TimeData> Fetch();
             
-            m_Data.scopeName = m_Scope;
-            m_Data.executionTime_us = static_cast<uint32_t> (duration.count());
+        private:
+            TimeProfiler(); // singleton
             
-            // Publish results
-            TimeProfiler::GetInstance().Push(m_Data);
-        }
+        private:
+            std::map<std::string, TimeData> m_Profiles;
+        };
         
-    private:
-        Profiler::TimeData m_Data;
-        std::string m_Scope;
-        std::chrono::time_point<std::chrono::high_resolution_clock> m_StartTimepoint;
-        std::chrono::time_point<std::chrono::high_resolution_clock> m_StopTimepoint;
-    };
+        
+        class InstrumentationTimer
+        {
+        public:
+            InstrumentationTimer(const char* scope, const char* file, const char* func, uint32_t line)
+            : m_Data(),
+              m_Scope(scope),
+              m_File(file),
+              m_Function(func),
+              m_Line(line),
+              m_StartTimepoint(),
+              m_StopTimepoint()
+            {
+                Start();
+            }
+            
+            ~InstrumentationTimer()
+            {
+                Stop();
+            }
+            
+        private:
+            void Start()
+            {
+                m_StartTimepoint = std::chrono::high_resolution_clock::now();
+            }
+        
+            void Stop()
+            {
+                m_StopTimepoint = std::chrono::high_resolution_clock::now();
+                auto duration = std::chrono::duration_cast<std::chrono::microseconds>(m_StopTimepoint - m_StartTimepoint);
+                
+                m_Data.scopeName        = m_Scope;
+                m_Data.file             = m_File;
+                m_Data.function         = m_Function;
+                m_Data.line             = m_Line;
+                m_Data.executionTime_us = static_cast<uint32_t> (duration.count());
+                
+                // Publish results
+                TimeProfiler::GetInstance().Push(m_Data);
+            }
+            
+        private:
+            Profiler::TimeData m_Data;
+            std::string m_Scope;
+            std::string m_File;
+            std::string m_Function;
+            uint32_t m_Line;
+            std::chrono::time_point<std::chrono::high_resolution_clock> m_StartTimepoint;
+            std::chrono::time_point<std::chrono::high_resolution_clock> m_StopTimepoint;
+        };
+        
+    }   // namespace Profiler
     
-}
+}   // namespace Coconuts
 
 #endif /* TIMEPROFILER_H */
 

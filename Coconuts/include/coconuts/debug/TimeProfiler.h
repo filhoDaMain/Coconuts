@@ -33,7 +33,7 @@ namespace Coconuts
             std::string file;
             std::string function;
             uint32_t    line;
-            uint32_t    executionTime_us;   // in microseconds
+            uint32_t    deltaTime_us;   // in microseconds
         };
     
         
@@ -49,15 +49,16 @@ namespace Coconuts
             void operator = (TimeProfiler const&) = delete;
         
             static TimeProfiler& GetInstance();
-        
-            void Push(TimeData data);
-            std::vector<TimeData> Fetch();
+            std::vector<TimeData> FetchAll();
+            TimeData Fetch(std::string& key);
             
         private:
             TimeProfiler(); // singleton
+            void Push(TimeData data);
             
         private:
             std::map<std::string, TimeData> m_Profiles;
+            friend class InstrumentationTimer;  // forward declared (below)
         };
         
         
@@ -96,7 +97,7 @@ namespace Coconuts
                 m_Data.file             = m_File;
                 m_Data.function         = m_Function;
                 m_Data.line             = m_Line;
-                m_Data.executionTime_us = static_cast<uint32_t> (duration.count());
+                m_Data.deltaTime_us     = static_cast<uint32_t> (duration.count());
                 
                 // Publish results
                 TimeProfiler::GetInstance().Push(m_Data);

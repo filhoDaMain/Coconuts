@@ -36,7 +36,7 @@ namespace Coconuts
         m_Profiles[data.scopeName] = data;
     }
     
-    std::vector<Profiler::TimeData> Profiler::TimeProfiler::Fetch()
+    std::vector<Profiler::TimeData> Profiler::TimeProfiler::FetchAll()
     {
         std::vector<TimeData> tmp;
         std::map<std::string, TimeData>::iterator it;
@@ -47,6 +47,20 @@ namespace Coconuts
         }
         
         return tmp;
+    }
+    
+    Profiler::TimeData Profiler::TimeProfiler::Fetch(std::string& key)
+    {
+        auto found = m_Profiles.find(key);
+        
+        if (found != m_Profiles.end())
+        {
+            return found->second;
+        }
+        
+        // ELSE: Not found -> return dummy object
+        TimeData dummy = {"not found", "null", "null", 0, 0};
+        return dummy;
     }
     
 }

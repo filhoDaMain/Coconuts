@@ -3,6 +3,9 @@ project(COCONUTS VERSION 0.1 LANGUAGES CXX)
 
 set (CMAKE_CXX_STANDARD 11)
 
+# Enable Profiling
+set(COCONUTS_DEBUGGING_ENABLE ON CACHE BOOL "" FORCE)
+
 # Look for hard dependencies
 # For GNU-Linux build xorg-dev has to be installed
 if(UNIX AND NOT APPLE)
@@ -24,6 +27,11 @@ endif()
 
 # Create macro for Build Tree root directory
 add_definitions(-DCOCONUTS_BUILDTREE_ROOTDIR="${PROJECT_SOURCE_DIR}")
+
+# Debug Macros
+if (COCONUTS_DEBUGGING_ENABLE)
+    add_definitions(-DCOCONUTS_DEBUG_TIMEPROFILER)
+endif()
 
 # Set Default Shaders location
 set(DEFAULT_SHADER_SRCDIR "${PROJECT_SOURCE_DIR}/include/coconuts/graphics/shaders")

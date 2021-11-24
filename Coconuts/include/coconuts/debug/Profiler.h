@@ -18,12 +18,20 @@
 
 #include <coconuts/debug/TimeProfiler.h>
 
+// Debugging Enabled
+#ifdef COCONUTS_DEBUG_TIMEPROFILER
 #define __CCNCORE_PROFILER_LINE__(name, file, func, line) Coconuts::Profiler::InstrumentationTimer timer##line(name, file, func, line);
-
 #define __CCNCORE_PROFILER_SCOPE__(name) __CCNCORE_PROFILER_LINE__(name, __FILE__, __func__, __LINE__)
-
 // Uses function name as scope name
 #define __CCNCORE_PROFILER_FUNC__ __CCNCORE_PROFILER_SCOPE__(__func__)
+
+// Debugging Disabled
+#else
+#define __CCNCORE_PROFILER_LINE__(name, file, func, line)
+#define __CCNCORE_PROFILER_SCOPE__(name)
+#define __CCNCORE_PROFILER_FUNC__
+
+#endif  // COCONUTS_DEBUG_TIMEPROFILER
 
 #endif /* PROFILER_H */
 

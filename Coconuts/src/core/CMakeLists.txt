@@ -10,6 +10,7 @@ add_subdirectory(cameras)
 add_subdirectory(graphics)
 add_subdirectory(ecs)
 add_subdirectory(asset_manager)
+add_subdirectory(debug)
 
 
 # Platform Specific files

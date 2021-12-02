@@ -19,6 +19,7 @@
 #include <coconuts/Renderer.h>
 #include <coconuts/Logger.h>
 #include <coconuts/graphics/defs.h>
+#include <coconuts/debug/Profiler.h>
 
 // Components
 #include <coconuts/ecs/components/TagComponent.h>
@@ -39,6 +40,8 @@ namespace Coconuts
     
     void Scene::OnUpdate(Timestep ts)
     {
+        __CCNCORE_PROFILER_SCOPE__ ("Scene:OnUpdate")
+        
         if (!m_IsActive)
         {
             return;
@@ -49,17 +52,21 @@ namespace Coconuts
         /* ---------------------------------------------------------------------- */
         
         /* Update Behavior scripts */
-        m_EntityManager.entities.each<BehaviorComponent>([&]
-        (entityx::Entity thisEntityxEntity, BehaviorComponent& thisBehaviorComponent)
         {
-            /* Prevent against non-initialized Behavior Component */
-            if (thisBehaviorComponent.instance == nullptr)
-            {
-                return;
-            }
+            __CCNCORE_PROFILER_SCOPE__ ("Scene:ExecuteBehaviors")
             
-            thisBehaviorComponent.OnUpdateFunc(thisBehaviorComponent.instance, ts);
-        });
+            m_EntityManager.entities.each<BehaviorComponent>([&]
+            (entityx::Entity thisEntityxEntity, BehaviorComponent& thisBehaviorComponent)
+            {
+                /* Prevent against non-initialized Behavior Component */
+                if (thisBehaviorComponent.instance == nullptr)
+                {
+                    return;
+                }
+                
+                thisBehaviorComponent.OnUpdateFunc(thisBehaviorComponent.instance, ts);
+            });
+        }
         
         
         /* Rendering */
@@ -75,6 +82,8 @@ namespace Coconuts
          */
         m_EntityManager.entities.each<OrthoCameraComponent>([&](entityx::Entity thisEntityxEntity, OrthoCameraComponent& thisOrthoCameraComponent)
         {
+            __CCNCORE_PROFILER_SCOPE__ ("Scene:Renderer2D")
+            
             /* Clear Screen */
             Graphics::LowLevelAPI::SetClearColor(thisOrthoCameraComponent.backgroundColor);
             Graphics::LowLevelAPI::Clear();

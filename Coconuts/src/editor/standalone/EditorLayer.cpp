@@ -156,7 +156,7 @@ namespace Coconuts
         m_ViewportPanel.LiveUpdate();
         
         /* Statistics Panel */
-        m_StatisticsPanel.Draw(Renderer2D::GetStatistics());
+        m_StatisticsPanel.Draw();
 
         /* Scene Overview Panel */
         m_SceneOverviewPanel.Draw();

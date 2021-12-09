@@ -17,7 +17,6 @@
 #define EDITORLAYER_H
 
 #include <coconuts/editor.h>
-#include <coconuts/graphics/Renderer2D.h>
 #include "GameLayer.h"
 #include <glm/glm.hpp>
 

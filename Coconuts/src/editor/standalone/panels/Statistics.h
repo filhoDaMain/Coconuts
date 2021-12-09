@@ -16,8 +16,6 @@
 #ifndef STATISTICS_H
 #define STATISTICS_H
 
-#include <coconuts/graphics/Renderer2D.h>
-
 namespace Coconuts {
 namespace Panels
 {
@@ -26,7 +24,7 @@ namespace Panels
     {
     public:
         Statistics() = default;
-        void Draw(Renderer2DStatistics& stats);
+        void Draw();
     };
     
 }

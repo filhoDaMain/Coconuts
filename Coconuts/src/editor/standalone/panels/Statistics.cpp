@@ -16,22 +16,39 @@
 
 #include "Statistics.h"
 #include <coconuts/editor.h>
+#include <coconuts/debug/TimeProfiler.h>
+#include <coconuts/graphics/Renderer2D.h>
 
 namespace Coconuts {
 namespace Panels
 {
     
-    void Statistics::Draw(Renderer2DStatistics& stats)
+    void Statistics::Draw()
     {
         ImGui::Begin("Statistics");
         
-        ImGui::Text("Renderer statistics");
-        ImGui::Spacing(); ImGui::Spacing();
-        ImGui::Text("Per Frame:");
-        ImGui::Spacing();
-        ImGui::Text("%d Draw Calls", stats.drawCalls);
-        ImGui::Spacing();
-        ImGui::Text("%d Quads", stats.quadCount);
+        ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_OpenOnArrow;
+        
+        bool open = ImGui::TreeNodeEx("Renderer Statistics Summary" , flags);
+        
+        /* Draw a tree with Arrows */
+        if (open)
+        {
+            // -> Arrow
+            std::string fpsKey("Scene:OnUpdate");
+            
+            Profiler::TimeData fpsData = Profiler::TimeProfiler::GetInstance().Fetch(fpsKey);
+            float delta_sec = static_cast<float>(fpsData.deltaTime_us / 1000000.0f);    // in seconds
+            float fps = static_cast<float>(1/delta_sec);                                // frames per second
+            
+            ImGui::Text("Frame Rate: %.1f fps", fps);
+            ImGui::Text("Per frame stats:");
+            ImGui::Text(" %u Draw calls", Renderer2D::GetStatistics().drawCalls);
+            ImGui::Text(" %u Quads", Renderer2D::GetStatistics().quadCount);
+            
+            ImGui::TreePop();   // Close all
+        }
+        
         ImGui::End();
     }
     

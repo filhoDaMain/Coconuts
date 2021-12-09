@@ -19,8 +19,6 @@
 #include <coconuts/debug/TimeProfiler.h>
 #include <coconuts/graphics/Renderer2D.h>
 
-#include <coconuts/Logger.h>
-
 namespace Coconuts {
 namespace Panels
 {

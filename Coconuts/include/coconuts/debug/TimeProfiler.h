@@ -20,6 +20,7 @@
 #include <map>
 #include <vector>
 #include <chrono>
+#include <mutex>
 
 namespace Coconuts
 {
@@ -39,6 +40,8 @@ namespace Coconuts
         
         class TimeProfiler
         {
+            friend class InstrumentationTimer;  // forward declared (below)
+            
         public:
             ~TimeProfiler() = default;
         
@@ -58,7 +61,7 @@ namespace Coconuts
             
         private:
             std::map<std::string, TimeData> m_Profiles;
-            friend class InstrumentationTimer;  // forward declared (below)
+            std::mutex m_Guard;
         };
         
         

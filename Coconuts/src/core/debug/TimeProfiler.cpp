@@ -20,7 +20,8 @@ namespace Coconuts
 {
     
     //private
-    Profiler::TimeProfiler::TimeProfiler() : m_Profiles()
+    Profiler::TimeProfiler::TimeProfiler()
+    : m_Profiles(), m_Guard()
     {
         // do nothing
     }
@@ -33,11 +34,13 @@ namespace Coconuts
     
     void Profiler::TimeProfiler::Push(TimeData data)
     {
+        std::lock_guard<std::mutex> lock(m_Guard);
         m_Profiles[data.scopeName] = data;
     }
     
     std::vector<Profiler::TimeData> Profiler::TimeProfiler::FetchAll()
     {
+        std::lock_guard<std::mutex> lock(m_Guard);
         std::vector<TimeData> tmp;
         std::map<std::string, TimeData>::iterator it;
         
@@ -51,6 +54,7 @@ namespace Coconuts
     
     Profiler::TimeData Profiler::TimeProfiler::Fetch(std::string& key)
     {
+        std::lock_guard<std::mutex> lock(m_Guard);
         auto found = m_Profiles.find(key);
         
         if (found != m_Profiles.end())

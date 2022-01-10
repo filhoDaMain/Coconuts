@@ -44,7 +44,7 @@ namespace Coconuts
             }
             else
             {
-                m_Factor = static_cast<float>(Nom/Denom);
+                m_Factor = (static_cast<float>(Nom) / static_cast<float>(Denom));
             }
             
             m_Complement = static_cast<float>(1.0f - m_Factor);
@@ -62,9 +62,10 @@ namespace Coconuts
             
             else
             {
-                m_Average = m_Factor * value + m_Complement * m_Average;
+                float last = m_Average.load();
+                m_Average = m_Factor * value + m_Complement * last;
                 
-                if (m_Average < 0.001)
+                if (m_Average.load() < 0.001)
                 {
                     m_Average = 0.0f;
                 }

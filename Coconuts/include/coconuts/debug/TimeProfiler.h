@@ -27,6 +27,10 @@ namespace Coconuts
     
     namespace Profiler
     {
+        enum Constants
+        {
+            TIMEPROFILER_BUFFER_SIZE = 128U
+        };
         
         struct TimeData
         {
@@ -52,15 +56,15 @@ namespace Coconuts
             void operator = (TimeProfiler const&) = delete;
         
             static TimeProfiler& GetInstance();
-            std::vector<TimeData> FetchAll();
-            TimeData Fetch(std::string& key);
+            std::vector<TimeData> Fetch(const std::string& key);
+            bool Clear(const std::string& key);
             
         private:
             TimeProfiler(); // singleton
             void Push(TimeData data);
             
         private:
-            std::map<std::string, TimeData> m_Profiles;
+            std::map<std::string, std::vector<TimeData>> m_Profiles;
             std::mutex m_Guard;
         };
         

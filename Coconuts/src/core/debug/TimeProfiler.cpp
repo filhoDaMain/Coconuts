@@ -15,6 +15,7 @@
  */
 
 #include <coconuts/debug/TimeProfiler.h>
+#include <coconuts/Logger.h>
 
 namespace Coconuts
 {
@@ -35,26 +36,41 @@ namespace Coconuts
     void Profiler::TimeProfiler::Push(TimeData data)
     {
         std::lock_guard<std::mutex> lock(m_Guard);
-        m_Profiles[data.scopeName] = data;
-    }
-    
-    std::vector<Profiler::TimeData> Profiler::TimeProfiler::FetchAll()
-    {
-        std::lock_guard<std::mutex> lock(m_Guard);
-        std::vector<TimeData> tmp;
-        std::map<std::string, TimeData>::iterator it;
+        const auto found = m_Profiles.find(data.scopeName);
         
-        for (it = m_Profiles.begin(); it != m_Profiles.end(); it++)
+        /**
+         * First time pushing data for the given map key.
+         * Reserve vector space once to avoid further re-allocations.
+         */
+        if (found == m_Profiles.end())
         {
-            tmp.push_back(it->second);
+            /* Allocation of a map element */
+            m_Profiles[data.scopeName];
+            
+            /* Allocation of its vector */
+            m_Profiles[data.scopeName].reserve(Profiler::Constants::TIMEPROFILER_BUFFER_SIZE);
         }
         
-        return tmp;
+        /* Get vector for the given key */
+        auto& vec = m_Profiles[data.scopeName];
+        
+        /**
+         * Buffer reached its maximum pre-defined max size.
+         * Discard oldest element to avoid a re-allocation.
+         */
+        if (vec.size() == Profiler::Constants::TIMEPROFILER_BUFFER_SIZE)
+        {
+            vec.erase(vec.cbegin());
+        }
+        
+        /* Push element */
+        vec.push_back(data);
     }
     
-    Profiler::TimeData Profiler::TimeProfiler::Fetch(std::string& key)
+    std::vector<Profiler::TimeData> Profiler::TimeProfiler::Fetch(const std::string& key)
     {
         std::lock_guard<std::mutex> lock(m_Guard);
+        
         auto found = m_Profiles.find(key);
         
         if (found != m_Profiles.end())
@@ -64,7 +80,22 @@ namespace Coconuts
         
         // ELSE: Not found -> return dummy object
         TimeData dummy = {"not found", "null", "null", 0, 0};
-        return dummy;
+        return std::vector<Profiler::TimeData> {dummy};
+    }
+    
+    bool Profiler::TimeProfiler::Clear(const std::string& key)
+    {
+        std::lock_guard<std::mutex> lock(m_Guard);
+        
+        const auto& found = m_Profiles.find(key);
+        
+        if (found != m_Profiles.end())
+        {
+            found->second.clear();
+            return true;
+        }
+        
+        return false;
     }
     
 }

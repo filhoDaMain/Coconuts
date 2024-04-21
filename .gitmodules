@@ -4,6 +4,7 @@
 [submodule "Coconuts/vendor/glfw"]
 	path = Coconuts/vendor/glfw
 	url = https://github.com/glfw/glfw
+	branch = 3.3-stable
 [submodule "Coconuts/vendor/imgui/imgui"]
 	path = Coconuts/vendor/imgui/imgui
 	url = https://github.com/ocornut/imgui

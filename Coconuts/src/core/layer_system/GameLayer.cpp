@@ -16,7 +16,7 @@
 
 #include <string>
 #include <coconuts/Renderer.h>
-#include "GameLayer.h"
+#include <coconuts/layer_system/GameLayer.h>
 #include <coconuts/ECS.h>
 #include <coconuts/Logger.h>
 #include <coconuts/SceneManager.h>

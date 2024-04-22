@@ -18,7 +18,7 @@
 
 #include <coconuts/editor.h>
 #include <coconuts/graphics/Renderer2D.h>
-#include "GameLayer.h"
+#include <coconuts/layer_system/GameLayer.h>
 #include <glm/glm.hpp>
 
 /* Menu Bar */

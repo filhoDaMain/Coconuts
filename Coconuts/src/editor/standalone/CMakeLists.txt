@@ -1,5 +1,5 @@
 # Standalone Binary Source Code
-add_executable(ccneditor_standalone main.cpp MainApp.cpp EditorLayer.cpp GameLayer.cpp ed_utils.cpp)
+add_executable(ccneditor_standalone main.cpp MainApp.cpp EditorLayer.cpp ed_utils.cpp)
 
 target_include_directories(ccneditor_standalone PRIVATE "${PROJECT_SOURCE_DIR}/include"
                                         "${PROJECT_SOURCE_DIR}/vendor/spdlog/include"

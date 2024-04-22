@@ -16,7 +16,7 @@
 #ifndef FILEMENU_H
 #define FILEMENU_H
 
-#include "../GameLayer.h"
+#include <coconuts/layer_system/GameLayer.h>
 
 namespace Coconuts {
 namespace MenuBar

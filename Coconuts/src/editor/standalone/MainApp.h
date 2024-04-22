@@ -17,7 +17,7 @@
 #define MAINAPP_H
 
 #include <coconuts/Application.h>
-#include "GameLayer.h"
+#include <coconuts/layer_system/GameLayer.h>
 #include "EditorLayer.h"
 
 namespace Coconuts

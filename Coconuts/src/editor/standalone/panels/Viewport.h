@@ -16,7 +16,7 @@
 #ifndef VIEWPORT_H
 #define VIEWPORT_H
 
-#include "../GameLayer.h"
+#include <coconuts/layer_system/GameLayer.h>
 #include <coconuts/graphics/Framebuffer.h>
 
 namespace Coconuts {

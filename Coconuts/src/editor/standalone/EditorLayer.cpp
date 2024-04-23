@@ -29,6 +29,8 @@ namespace Coconuts
 {
     
     namespace {
+    static std::string s_layoutFile;
+
     namespace Parser
     {
         namespace DEFAULTS
@@ -427,8 +429,9 @@ namespace Coconuts
 
     bool EditorLayer::LoadLayoutFile(const std::string& file)
     {
+        s_layoutFile = file;
         ImGuiIO& io = ImGui::GetIO(); (void)io;
-        io.IniFilename = file.c_str();
+        io.IniFilename = s_layoutFile.c_str();
         return true;
     }
     

@@ -52,7 +52,7 @@ namespace Coconuts
             LOG_ERROR("Failed to initialize Window Manager library callbacks!");
         }
         p_EditorWindow->SetEventCallback(BIND_EVENT_FUNCTION(StandaloneApp::OnEvent));
-        p_GameApp = std::unique_ptr<Application>(new Application(p_EditorWindow, "Editor"));
+        p_GameApp = std::unique_ptr<Application>(new Application(p_EditorWindow, "Coconuts_Editor"));
 
         p_EditorGUILayer = std::unique_ptr<EditorLayer>(new EditorLayer(*p_EditorWindow));
         p_EditorGUILayer->Init();
@@ -71,7 +71,12 @@ namespace Coconuts
         while(m_IsRunning)
         {
             p_EditorGUILayer->Draw();   // Draw Editor GUI
+
+            // Render to a FrameBuffer (consumed by ImGui)
+            p_GameApp->GetGameLayer().GetFramebuffer()->Bind();
             p_GameApp->Run();           // Game Loop (1 frame)
+            p_GameApp->GetGameLayer().GetFramebuffer()->Unbind();
+
             p_EditorWindow->OnUpdate(); // Refresh window
         }
     }

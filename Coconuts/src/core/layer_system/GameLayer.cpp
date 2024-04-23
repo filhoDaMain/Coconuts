@@ -32,13 +32,7 @@ namespace Coconuts
 
     void GameLayer::OnUpdate(Timestep ts)
     {
-        /* Bind Framebuffer */
-        m_Framebuffer->Bind();
-
         SceneManager::GetInstance().GetActiveScene()->OnUpdate(ts);
-
-        /* Unbind Framebuffer */
-        m_Framebuffer->Unbind();
     }
 
     void GameLayer::OnEvent(Event& event)

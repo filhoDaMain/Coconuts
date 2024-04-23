@@ -60,6 +60,9 @@ namespace Coconuts
         /* Push main game layer */
         PushLayer(static_cast<Layer*>(&m_GameLayer));
 
+        /* Load default configs from file (if exists) based on app name */
+        AppManagerProxy::LoadRuntimeConfig();
+
         LOG_INFO("Game App created!");
     }
     

@@ -18,6 +18,10 @@
 #include "fonts/Fonts.h"
 #include <cstdint>
 #include <coconuts/FileSystem.h>
+#include <GLFW/glfw3.h>
+#include <imgui/backends/imgui_impl_opengl3.h>
+#include <imgui/backends/imgui_impl_glfw.h>
+#include <coconuts/Application.h>
 
 #define INT2VOIDP(i) (void*)(uintptr_t)(i)
 
@@ -34,8 +38,133 @@ namespace Coconuts
     }
     } //namespace
     
+    void EditorLayer::Init(void)
+    {
+        m_GameLayerPtr = static_cast<GameLayer*>(&Application::GetInstance().GetGameLayer());
+        PreInit();
+        PostInit();
+    }
+
+    void EditorLayer::Draw()
+    {
+        Begin();
+        RenderGUI();
+        End();
+    }
+
+    void EditorLayer::PreInit(void)
+    {
+        /**
+         * Referece:
+         *  imgui/examples/example_glfw_opengl3/main.cpp
+         */
+        // Setup Dear ImGui context
+        IMGUI_CHECKVERSION();
+        ImGui::CreateContext();
+        ImGuiIO& io = ImGui::GetIO(); (void)io;
+        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
+        //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+        io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
+        io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
+        //io.ConfigViewportsNoAutoMerge = true;
+        //io.ConfigViewportsNoTaskBarIcon = true;
+
+        // Setup Dear ImGui style
+        ImGui::StyleColorsDark();
+        //ImGui::StyleColorsClassic();
+
+        // When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
+        ImGuiStyle& style = ImGui::GetStyle();
+        if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+        {
+            style.WindowRounding = 0.0f;
+            style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+        }
+
+        /* Editor Application Native Window - GLFWwindow* */
+        /* --------------------------------------------------------------------------- */
+        GLFWwindow* window = static_cast<GLFWwindow*>(m_Window.GetNativeWindow());
+        /* --------------------------------------------------------------------------- */
+
+        /**
+         * Referece:
+         *  imgui/examples/example_glfw_opengl3/main.cpp
+         */
+        // Setup Platform/Renderer bindings
+        ImGui_ImplGlfw_InitForOpenGL(window /* GLFWwindow* */, true);
+        ImGui_ImplOpenGL3_Init("#version 150" /* chosen by me */);
+
+        LOG_DEBUG("EditorLayer initialized");
+    }
+
+    void EditorLayer::PostInit(void)
+    {
+        /* Init flags */
+        m_ShowPopUp_CreateSprite = false;
+        m_ShowPopUp_ImportTexture2D = false;
+        m_ShowPopUp_LoadProject = false;
+        m_ShowPopUp_SaveProject = false;
+
+        /* Set Style */
+        SetCustomGUIStyle();
+
+        /* Menus */
+        m_AssetsMenu.Init(&m_ShowPopUp_ImportTexture2D, &m_ShowPopUp_CreateSprite);
+        m_FileMenu.Init(m_GameLayerPtr, &m_ShowPopUp_LoadProject, &m_ShowPopUp_SaveProject);
+        m_EntityMenu.Init(m_GameLayerPtr);
+
+        /* Panels */
+        m_ViewportPanel.Init(m_GameLayerPtr);
+        m_ComponentInspectorPanel.Init();
+        m_SceneOverviewPanel.Init(m_GameLayerPtr, &m_ComponentInspectorPanel);
+        m_AssetInspectorPanel.Init();
+        m_AssetsPanel.Init(&m_AssetInspectorPanel);
+
+        /* PopUps */
+        m_ImportTexture2dPopUp.Init(&m_ShowPopUp_ImportTexture2D);
+        m_CreateSpritePopUp.Init(&m_ShowPopUp_CreateSprite);
+        m_LoadProjectPopUp.Init(m_GameLayerPtr, &m_ComponentInspectorPanel, &m_ShowPopUp_LoadProject);
+        m_SaveProjectPopUp.Init(&m_ShowPopUp_SaveProject);
+    }
+
+    void EditorLayer::Begin(void)
+    {
+        /**
+         * Referece:
+         *  imgui/examples/example_glfw_opengl3/main.cpp
+         */
+        // Start the Dear ImGui frame
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+    }
+
+    void EditorLayer::End(void)
+    {
+        ImGuiIO& io = ImGui::GetIO();
+        io.DisplaySize = ImVec2((float)m_Window.GetWidth(), (float)m_Window.GetHeight());
+
+        /**
+         * Referece:
+         *  imgui/examples/example_glfw_opengl3/main.cpp
+         */
+        // Rendering
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+        // Update and Render additional Platform Windows
+        // (Platform functions may change the current OpenGL context, so we save/restore it to make it easier to paste this code elsewhere.
+        //  For this specific demo app we could also call glfwMakeContextCurrent(window) directly)
+        if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+        {
+            GLFWwindow* backup_current_context = glfwGetCurrentContext();
+            ImGui::UpdatePlatformWindows();
+            ImGui::RenderPlatformWindowsDefault();
+            glfwMakeContextCurrent(backup_current_context);
+        }
+    }
     
-    void EditorLayer::OnUpdate(Timestep ts)
+    void EditorLayer::RenderGUI(void)
     {
         /**
          * SET UP DOCK SPACE
@@ -176,38 +305,6 @@ namespace Coconuts
         // ---------------------------------------------------------------------------
         // DOCK SPACE END
     }
-
-    void EditorLayer::OnPostAttach()
-    {
-        LOG_TRACE("Editor Layer OnPostAttach()");
-        
-        /* Init flags */
-        m_ShowPopUp_CreateSprite = false;
-        m_ShowPopUp_ImportTexture2D = false;
-        m_ShowPopUp_LoadProject = false;
-        m_ShowPopUp_SaveProject = false;
-        
-        /* Set Style */
-        SetCustomGUIStyle();
-        
-        /* Menus */
-        m_AssetsMenu.Init(&m_ShowPopUp_ImportTexture2D, &m_ShowPopUp_CreateSprite);
-        m_FileMenu.Init(m_GameLayerPtr, &m_ShowPopUp_LoadProject, &m_ShowPopUp_SaveProject);
-        m_EntityMenu.Init(m_GameLayerPtr);
-        
-        /* Panels */
-        m_ViewportPanel.Init(m_GameLayerPtr);
-        m_ComponentInspectorPanel.Init();
-        m_SceneOverviewPanel.Init(m_GameLayerPtr, &m_ComponentInspectorPanel);
-        m_AssetInspectorPanel.Init();
-        m_AssetsPanel.Init(&m_AssetInspectorPanel);
-        
-        /* PopUps */
-        m_ImportTexture2dPopUp.Init(&m_ShowPopUp_ImportTexture2D);
-        m_CreateSpritePopUp.Init(&m_ShowPopUp_CreateSprite);
-        m_LoadProjectPopUp.Init(m_GameLayerPtr, &m_ComponentInspectorPanel, &m_ShowPopUp_LoadProject);
-        m_SaveProjectPopUp.Init(&m_ShowPopUp_SaveProject);
-    }
     
     void EditorLayer::SetCustomGUIStyle()
     {
@@ -316,10 +413,23 @@ namespace Coconuts
         std::string file =\
             FileSystem::GetRuntimeConfDirPath() + Parser::DEFAULTS::EDITOR_APP_LAYOUT_FILE;
         
-        if ( Editor::EditorApp::LoadLayoutFile(file) )
+        if ( LoadLayoutFile(file) )
         {
             LOG_TRACE("Loaded Editor Application layout from file {}", file);
         }
+    }
+
+    void EditorLayer::SetDefaultFontTTF(const std::string& pathToFileTTF, float size)
+    {
+        ImGuiIO& io = ImGui::GetIO(); (void)io;
+        io.FontDefault = io.Fonts->AddFontFromFileTTF(pathToFileTTF.c_str(), size);
+    }
+
+    bool EditorLayer::LoadLayoutFile(const std::string& file)
+    {
+        ImGuiIO& io = ImGui::GetIO(); (void)io;
+        io.IniFilename = file.c_str();
+        return true;
     }
     
 }

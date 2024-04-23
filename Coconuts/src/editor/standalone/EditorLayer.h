@@ -16,6 +16,7 @@
 #ifndef EDITORLAYER_H
 #define EDITORLAYER_H
 
+#include <coconuts/window_system/Window.h>
 #include <coconuts/editor.h>
 #include <coconuts/graphics/Renderer2D.h>
 #include <coconuts/layer_system/GameLayer.h>
@@ -43,35 +44,46 @@
 namespace Coconuts
 {
     
-    class EditorLayer : public Editor::GUILayer
+    class EditorLayer
     {
     public:
-        EditorLayer() = default;
-        EditorLayer(GameLayer* gameLayer) : m_GameLayerPtr(gameLayer) {}
-        virtual ~EditorLayer() = default;
+        EditorLayer(const Window& windowContext) : m_Window(windowContext), m_GameLayerPtr() {}
+        ~EditorLayer() = default;
   
-        virtual void OnUpdate(Timestep ts) override;
-        virtual void OnPostAttach() override;
-        
+        void Init(void);
+        void Draw();
+
     private:
+        void PreInit(void);
+        void PostInit(void);
+
+        // Draw Calls
+        void Begin(void);
+        void RenderGUI(void);
+        void End();
         void SetCustomGUIStyle();
         void SetDarkThemeColors();
         void LoadLayout();
-        
+        void SetDefaultFontTTF(const std::string& pathToFileTTF, float size);
+        bool LoadLayoutFile(const std::string& file);
+
     private:
+        // Window context
+        const Window& m_Window;
+
         /* Show PopUp flags */
         bool m_ShowPopUp_CreateSprite;
         bool m_ShowPopUp_ImportTexture2D;
         bool m_ShowPopUp_LoadProject;
         bool m_ShowPopUp_SaveProject;
-        
+
         GameLayer* m_GameLayerPtr;
-        
+
         /* Menu Bar menus */
         MenuBar::FileMenu               m_FileMenu;
         MenuBar::EntityMenu             m_EntityMenu;
         MenuBar::AssetsMenu             m_AssetsMenu;
-        
+
         /* Panels */
         Panels::Viewport                m_ViewportPanel;
         Panels::Statistics              m_StatisticsPanel;
@@ -79,7 +91,7 @@ namespace Coconuts
         Panels::ComponentInspector      m_ComponentInspectorPanel;
         Panels::Assets                  m_AssetsPanel;
         Panels::AssetInspector          m_AssetInspectorPanel;
-        
+
         /* PopUps */
         PopUps::ImportTexture2DPopUp    m_ImportTexture2dPopUp;
         PopUps::CreateSpritePopUp       m_CreateSpritePopUp;

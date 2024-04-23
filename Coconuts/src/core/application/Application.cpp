@@ -33,8 +33,8 @@ namespace Coconuts
     /* Singleton Pattern */
     Application* Application::s_Instance = nullptr;
     
-    Application::Application(const std::string& appname)
-    : m_AppName(appname)
+    Application::Application(std::shared_ptr<Window> window, const std::string& appname)
+    : m_AppName(appname), m_GameLayer()
     {
         /* Assert that the Singleton Pattern is respected */
         if (s_Instance != nullptr)
@@ -44,10 +44,7 @@ namespace Coconuts
         }
         
         s_Instance = this;
-      
-        LOG_DEBUG("App created!");
-        
-        p_Window = std::unique_ptr<Window>(Window::Create( WindowProperties(appname) ));
+        p_Window = window;
         
         /* Initialize abstracted Renderer */
         Renderer::Init();
@@ -57,35 +54,13 @@ namespace Coconuts
         /* VSync enable/disable */
         p_Window->SetVSync(true);
         
-#if defined(__APPLE__)
-        if (p_Window != nullptr)
-        {
-            LOG_DEBUG("Coconuts WindowSystem initialized for the MacOS Platform");
-        }
-        //ELSE - it should already have crashed!
-#elif __gnu_linux__
-        if (p_Window != nullptr)
-        {
-            LOG_DEBUG("Coconuts WindowSystem initialized for the GNU Platform");
-        }
-        //ELSE - it should already have crashed!
-#endif
-        
-        /* Initialize the Window Manager library callbacks */
-        if ( p_Window->InitWindowManagerCallbacks("GLFW") )
-        {
-            LOG_DEBUG("Window Manager library callbacks successfully initialized");
-        }
-        else
-        {
-            LOG_ERROR("Failed to initialize Window Manager library callbacks!");
-        }
-        
-        /* Set the callback function for all Window Manager library events */
-        p_Window->SetEventCallback(BIND_EVENT_FUNCTION(Application::OnEvent));
-        
         /* Pre-alloc AssetManager hash tables */
         AssetManager::Init();
+
+        /* Push main game layer */
+        PushLayer(static_cast<Layer*>(&m_GameLayer));
+
+        LOG_INFO("Game App created!");
     }
     
     Application::~Application()
@@ -95,65 +70,20 @@ namespace Coconuts
     
     void Application::Run()
     {
-        m_isRunning = true;
-        LOG_INFO("App is now running...");
-        
-        while(m_isRunning)
+        float time = (float) glfwGetTime(); //TODO: Make this a platform dependent func call
+        Timestep timestep = time - m_LastFrameTime;
+        m_LastFrameTime = time;
+
+        for (Layer* layer : m_LayerStack)
         {
-            float time = (float) glfwGetTime(); //TODO: Make this a platform dependent func call
-            Timestep timestep = time - m_LastFrameTime;
-            m_LastFrameTime = time;
-            
-            for (Layer* layer : m_LayerStack)
-            {
-                /* GUI Layer */
-                if (layer->IsGUI() == true)
-                {
-                        Editor::GUILayer* gui = dynamic_cast<Editor::GUILayer*>(layer);
-                        gui->Begin();
-                        gui->OnUpdate(timestep);
-                        gui->End();
-                }
-                    
-                /* Normal Layer */
-                else
-                {   
-                    /* Only update layers if main window is not minimized */
-                    if (!m_isMainWindMinimized)
-                    {
-                        layer->OnUpdate(timestep);
-                    }
-                } 
-            }
-            
-            p_Window->OnUpdate();
+            layer->OnUpdate(timestep);
         }
     }
-    
+
     void Application::OnEvent(Event& event)
     {
         bool handled = false;
-        
-        /* Log Event */
-        //LOG_TRACE(event.ToString());
-        
-        /* Dispatch Window Related events to the appropriate Applicattion::Callback() */
-        
-        /**
-         * Dispatch Window Related events to the appropriate
-         * Application::OnEventCallback()
-         */
-        EventDispatcher dispatcher(event);
-        
-        // Window Close
-        dispatcher.Dispatch<WindowEvent::WindowClose>(BIND_EVENT_FUNCTION(Application::OnWindowClose));
-        
-        // Window Resize
-        dispatcher.Dispatch<WindowEvent::WindowResize>(BIND_EVENT_FUNCTION(Application::OnWindowResize));
-        
-        // Window Minimize
-        dispatcher.Dispatch<WindowEvent::WindowMinimize>(BIND_EVENT_FUNCTION(Application::OnWindowMinimize));
-        
+
         /**
          * Dispatch the event (Window Event or not) to the respective
          * OnEvent() callback on which the layer has occured

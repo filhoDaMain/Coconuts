@@ -81,5 +81,4 @@ add_definitions(-DSTB_IMAGE_IMPLEMENTATION)
 
 # Coconuts source
 add_subdirectory(src/core)
-add_subdirectory(src/editor/library)
 add_subdirectory(src/editor/standalone)

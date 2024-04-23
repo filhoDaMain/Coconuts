@@ -23,6 +23,7 @@
 #include <coconuts/EventSystem.h>
 #include <coconuts/Layer.h>
 #include <coconuts/layer_system/LayerStack.h>
+#include <coconuts/layer_system/GameLayer.h>
 
 namespace Coconuts
 {
@@ -34,11 +35,12 @@ namespace Coconuts
     class Application
     {   
     public:
-        Application(const std::string& appname = "Application");
+        Application(std::shared_ptr<Window> window, const std::string& appname = "Application");
         ~Application();
         
         inline static Application& GetInstance() { return *s_Instance; }
         inline Window& GetWindow() const { return *p_Window; }
+        inline GameLayer& GetGameLayer(void) {return m_GameLayer; }
         
         void Run(void);
         void OnEvent(Event& event);
@@ -53,6 +55,7 @@ namespace Coconuts
         
     private:
         std::string m_AppName;
+        GameLayer m_GameLayer;
         
         /* Single instance */
         static Application* s_Instance;
@@ -61,7 +64,7 @@ namespace Coconuts
         bool m_isMainWindMinimized = false;
         
         /* Generic Window tied to a platform dependent Window sublclass */
-        std::unique_ptr<Window> p_Window;
+        std::shared_ptr<Window> p_Window;
         
         LayerStack m_LayerStack;
         

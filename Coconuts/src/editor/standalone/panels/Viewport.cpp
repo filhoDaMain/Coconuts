@@ -23,12 +23,12 @@ namespace Coconuts {
 namespace Panels
 {
  
-    bool Viewport::Init(GameLayer*& gameLayer)
+    bool Viewport::Init(GameLayer*& gameLayer, std::shared_ptr<Framebuffer> framebuffer)
     {
         m_GameLayerPtr = gameLayer;
         m_IsViewportPanelFocused = false;
-        m_Framebuffer = m_GameLayerPtr->GetFramebuffer();
-        m_ViewPortTexID = m_Framebuffer->GetColorAttachID();
+        m_FramebufferPtr = framebuffer;
+        m_ViewPortTexID = m_FramebufferPtr->GetColorAttachID();
         
         return true;
     }
@@ -57,11 +57,11 @@ namespace Panels
         if (aspectRatio != m_GameLayerPtr->GetActiveSceneAR())
         {
             m_ViewportSize = { imguiViewportPanelSize.x, imguiViewportPanelSize.y };
-            m_Framebuffer->Resize( m_ViewportSize.x, m_ViewportSize.y );
+            m_FramebufferPtr->Resize( m_ViewportSize.x, m_ViewportSize.y );
             m_GameLayerPtr->ChangeViewport(m_ViewportSize.x, m_ViewportSize.y);
             
             /* On some platforms, Framebuffers and its attach's change IDs after Resize() */
-            m_ViewPortTexID = m_Framebuffer->GetColorAttachID();
+            m_ViewPortTexID = m_FramebufferPtr->GetColorAttachID();
         }
         
         ImGui::Image(INT2VOIDP(m_ViewPortTexID), ImVec2{m_ViewportSize.x, m_ViewportSize.y}, ImVec2{0, 1}, ImVec2{1, 0});

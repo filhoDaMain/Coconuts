@@ -28,12 +28,6 @@ namespace Coconuts
     class GameLayer : public Layer
     {
         private:
-            /**
-             * Init during OnAttach to make it available for
-             * EditorLayer's OnPostAttach() phase!
-             */
-            std::shared_ptr<Framebuffer> m_Framebuffer;
-            
             /* Entity handlers */
             Entity m_Entity;
 
@@ -56,9 +50,6 @@ namespace Coconuts
              * Returns: current halt state after change.
              */
             bool HaltEvents(bool state = true);
-            
-            /* Get Framebuffer where active scene is being drawn */
-            std::shared_ptr<Framebuffer>& GetFramebuffer() { return m_Framebuffer; }
             
             /* Change on viewport notification */
             void ChangeViewport(float x, float y);

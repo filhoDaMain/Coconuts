@@ -20,6 +20,7 @@
 #include <coconuts/editor.h>
 #include <coconuts/graphics/Renderer2D.h>
 #include <coconuts/layer_system/GameLayer.h>
+#include <coconuts/graphics/Framebuffer.h>
 #include <glm/glm.hpp>
 
 /* Menu Bar */
@@ -50,7 +51,7 @@ namespace Coconuts
         EditorLayer(const Window& windowContext) : m_Window(windowContext), m_GameLayerPtr() {}
         ~EditorLayer() = default;
   
-        void Init(void);
+        void Init(std::shared_ptr<Framebuffer> framebuffer);
         void Draw();
 
     private:
@@ -70,6 +71,7 @@ namespace Coconuts
     private:
         // Window context
         const Window& m_Window;
+        std::shared_ptr<Framebuffer> m_FramebufferPtr;  // to render game app images
 
         /* Show PopUp flags */
         bool m_ShowPopUp_CreateSprite;

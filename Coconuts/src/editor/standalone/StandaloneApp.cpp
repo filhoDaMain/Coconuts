@@ -23,7 +23,7 @@
 int main(int argc, char* argv[])
 {
     Coconuts::StandaloneApp app( (std::string(argv[0])) );
-    app.Start();
+    app.StartEditor();
     return 0;
 }
 
@@ -31,7 +31,11 @@ namespace Coconuts
 {
 
     StandaloneApp::StandaloneApp(const std::string& appname)
-    :   p_EditorWindow(), p_EditorGUILayer(), p_GameApp(), m_IsRunning(false)
+    :   p_EditorWindow(),
+        p_EditorGUILayer(),
+        p_GameApp(),
+        m_FramebufferPtr(),
+        m_IsRunning(false)
     {
         Coconuts::Logger::Init();
 
@@ -54,8 +58,15 @@ namespace Coconuts
         p_EditorWindow->SetEventCallback(BIND_EVENT_FUNCTION(StandaloneApp::OnEvent));
         p_GameApp = std::unique_ptr<Application>(new Application(p_EditorWindow, "Coconuts_Editor"));
 
+        /* Create Framebuffer */
+        FramebufferSpecification spec;
+        spec.width = 1280.0f;
+        spec.height = 696.0f;
+        m_FramebufferPtr.reset( Framebuffer::Create(spec) );
+
+        /* Create Editor GUI Layer */
         p_EditorGUILayer = std::unique_ptr<EditorLayer>(new EditorLayer(*p_EditorWindow));
-        p_EditorGUILayer->Init();
+        p_EditorGUILayer->Init(m_FramebufferPtr);
 
         LOG_INFO("Editor App created");
     }
@@ -64,7 +75,7 @@ namespace Coconuts
     {
     }
 
-    void StandaloneApp::Start(void)
+    void StandaloneApp::StartEditor(void)
     {
         m_IsRunning = true;
 
@@ -72,11 +83,21 @@ namespace Coconuts
         {
             p_EditorGUILayer->Draw();   // Draw Editor GUI
 
-            // Render to a FrameBuffer (consumed by ImGui)
-            p_GameApp->GetGameLayer().GetFramebuffer()->Bind();
+            m_FramebufferPtr->Bind();
             p_GameApp->Run();           // Game Loop (1 frame)
-            p_GameApp->GetGameLayer().GetFramebuffer()->Unbind();
+            m_FramebufferPtr->Unbind();
 
+            p_EditorWindow->OnUpdate(); // Refresh window
+        }
+    }
+
+    void StandaloneApp::StartGameNoEditor(void)
+    {
+        m_IsRunning = true;
+
+        while(m_IsRunning)
+        {
+            p_GameApp->Run();           // Game Loop (1 frame)
             p_EditorWindow->OnUpdate(); // Refresh window
         }
     }

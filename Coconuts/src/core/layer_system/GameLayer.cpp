@@ -47,12 +47,6 @@ namespace Coconuts
     void GameLayer::OnAttach()
     {   
         LOG_TRACE("Game Layer OnAttach()");
-        
-        /* Create Framebuffer */
-        FramebufferSpecification spec;
-        spec.width = 1280.0f;
-        spec.height = 696.0f;
-        m_Framebuffer.reset( Framebuffer::Create(spec) );
     }
 
     void GameLayer::OnDetach()

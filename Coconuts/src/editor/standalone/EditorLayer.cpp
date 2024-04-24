@@ -40,9 +40,10 @@ namespace Coconuts
     }
     } //namespace
     
-    void EditorLayer::Init(void)
+    void EditorLayer::Init(std::shared_ptr<Framebuffer> framebuffer)
     {
         m_GameLayerPtr = static_cast<GameLayer*>(&Application::GetInstance().GetGameLayer());
+        m_FramebufferPtr = framebuffer;
         PreInit();
         PostInit();
     }
@@ -116,7 +117,7 @@ namespace Coconuts
         m_EntityMenu.Init(m_GameLayerPtr);
 
         /* Panels */
-        m_ViewportPanel.Init(m_GameLayerPtr);
+        m_ViewportPanel.Init(m_GameLayerPtr, m_FramebufferPtr);
         m_ComponentInspectorPanel.Init();
         m_SceneOverviewPanel.Init(m_GameLayerPtr, &m_ComponentInspectorPanel);
         m_AssetInspectorPanel.Init();

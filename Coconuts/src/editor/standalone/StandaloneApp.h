@@ -20,6 +20,7 @@
 #include <coconuts/window_system/Window.h>
 #include <coconuts/EventSystem.h>
 #include <coconuts/Application.h>
+#include <coconuts/graphics/Framebuffer.h>
 #include <thread>
 #include "EditorLayer.h"
 
@@ -32,7 +33,8 @@ namespace Coconuts
         StandaloneApp(const std::string& appname);
         ~StandaloneApp();
 
-        void Start(void);
+        void StartEditor(void);
+        void StartGameNoEditor(void);   // render game graphics as they are
     
     private:
         void OnEvent(Event& event);
@@ -44,6 +46,7 @@ namespace Coconuts
         std::shared_ptr<Window> p_EditorWindow;
         std::unique_ptr<EditorLayer> p_EditorGUILayer;
         std::unique_ptr<Application> p_GameApp;
+        std::shared_ptr<Framebuffer> m_FramebufferPtr;  // to render game app images
         bool m_IsRunning;
     };
 }

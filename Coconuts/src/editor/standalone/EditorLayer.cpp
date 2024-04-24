@@ -42,7 +42,7 @@ namespace Coconuts
     
     void EditorLayer::Init(std::shared_ptr<Framebuffer> framebuffer)
     {
-        m_GameLayerPtr = static_cast<GameLayer*>(&Application::GetInstance().GetGameLayer());
+        m_GameLayerPtr = Application::GetInstance().GetGameLayer();
         m_FramebufferPtr = framebuffer;
         PreInit();
         PostInit();

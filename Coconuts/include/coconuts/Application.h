@@ -40,7 +40,7 @@ namespace Coconuts
         
         inline static Application& GetInstance() { return *s_Instance; }
         inline Window& GetWindow() const { return *p_Window; }
-        inline GameLayer& GetGameLayer(void) {return m_GameLayer; }
+        inline GameLayer* GetGameLayer(void) {return m_GameLayerPtr.get(); }
         
         void Run(void);
         void OnEvent(Event& event);
@@ -48,14 +48,14 @@ namespace Coconuts
         bool OnWindowResize(WindowEvent::WindowResize& event);
         bool OnWindowMinimize(WindowEvent::WindowMinimize& event);
         
-        void PushLayer(Layer* layer);
-        void PushOverlay(Layer* overlay);
+        void PushLayer(std::shared_ptr<Layer> layer);
+        void PushOverlay(std::shared_ptr<Layer> overlay);
         
         std::string GetApplicationName() { return m_AppName; }
         
     private:
         std::string m_AppName;
-        GameLayer m_GameLayer;
+        std::shared_ptr<GameLayer> m_GameLayerPtr;
         
         /* Single instance */
         static Application* s_Instance;

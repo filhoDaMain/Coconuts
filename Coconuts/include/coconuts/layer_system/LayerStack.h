@@ -25,20 +25,21 @@ namespace Coconuts
     {
     public:
         LayerStack();
-        ~LayerStack();
+        ~LayerStack() = default;
         
-        void PushLayer(Layer* layer);
-        void PushOverlay(Layer* overlay);
+        void PushLayer(std::shared_ptr<Layer> layer);
+        void PushOverlay(std::shared_ptr<Layer> overlay);
         
-        void PopLayer(Layer* layer);
-        void PopOverlay(Layer* overlay);
+        void PopLayer(std::shared_ptr<Layer> layer);
+        void PopOverlay(std::shared_ptr<Layer> overlay);
         
-        std::vector<Layer*>::iterator begin() { return v_Layers.begin(); }
-        std::vector<Layer*>::iterator end() { return v_Layers.end(); }
+        std::vector< std::shared_ptr<Layer> >::iterator begin() { return m_Layers.begin(); }
+        std::vector< std::shared_ptr<Layer> >::iterator end() { return m_Layers.end(); }
         
     private:
-        std::vector<Layer*> v_Layers;   /* Contuguous heap storage of raw vectors */
-        std::vector<Layer*>::iterator i_LayerInsert;
+        std::vector< std::shared_ptr<Layer> > m_Layers;
+        std::vector< std::shared_ptr<Layer> >::iterator m_LayerInsert;
+
     };
 }
 

@@ -73,6 +73,7 @@ namespace Coconuts
 
     StandaloneApp::~StandaloneApp()
     {
+        LOG_DEBUG("Goodbye!");
     }
 
     void StandaloneApp::StartEditor(void)

@@ -34,7 +34,7 @@ namespace Coconuts
     Application* Application::s_Instance = nullptr;
     
     Application::Application(std::shared_ptr<Window> window, const std::string& appname)
-    : m_AppName(appname), m_GameLayer()
+    : m_AppName(appname), m_GameLayerPtr()
     {
         /* Assert that the Singleton Pattern is respected */
         if (s_Instance != nullptr)
@@ -58,7 +58,8 @@ namespace Coconuts
         AssetManager::Init();
 
         /* Push main game layer */
-        PushLayer(static_cast<Layer*>(&m_GameLayer));
+        m_GameLayerPtr.reset( new GameLayer() );
+        PushLayer(m_GameLayerPtr);
 
         /* Load default configs from file (if exists) based on app name */
         AppManagerProxy::LoadRuntimeConfig();
@@ -77,7 +78,7 @@ namespace Coconuts
         Timestep timestep = time - m_LastFrameTime;
         m_LastFrameTime = time;
 
-        for (Layer* layer : m_LayerStack)
+        for (std::shared_ptr<Layer> layer : m_LayerStack)
         {
             layer->OnUpdate(timestep);
         }
@@ -140,15 +141,15 @@ namespace Coconuts
         
         return true;    /* Stop the event propagation */
     }
-    
-    void Application::PushLayer(Layer* layer)
+
+    void Application::PushLayer(std::shared_ptr<Layer> layer)
     {
         m_LayerStack.PushLayer(layer);
         layer->OnAttach();
         layer->OnPostAttach();
     }
-    
-    void Application::PushOverlay(Layer* overlay)
+
+    void Application::PushOverlay(std::shared_ptr<Layer> overlay)
     {
         m_LayerStack.PushOverlay(overlay);
         overlay->OnAttach();

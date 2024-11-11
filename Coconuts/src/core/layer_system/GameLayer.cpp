@@ -16,7 +16,7 @@
 
 #include <string>
 #include <coconuts/Renderer.h>
-#include "GameLayer.h"
+#include <coconuts/layer_system/GameLayer.h>
 #include <coconuts/ECS.h>
 #include <coconuts/Logger.h>
 #include <coconuts/SceneManager.h>
@@ -32,13 +32,7 @@ namespace Coconuts
 
     void GameLayer::OnUpdate(Timestep ts)
     {
-        /* Bind Framebuffer */
-        m_Framebuffer->Bind();
-
         SceneManager::GetInstance().GetActiveScene()->OnUpdate(ts);
-
-        /* Unbind Framebuffer */
-        m_Framebuffer->Unbind();
     }
 
     void GameLayer::OnEvent(Event& event)
@@ -53,12 +47,6 @@ namespace Coconuts
     void GameLayer::OnAttach()
     {   
         LOG_TRACE("Game Layer OnAttach()");
-        
-        /* Create Framebuffer */
-        FramebufferSpecification spec;
-        spec.width = 1280.0f;
-        spec.height = 696.0f;
-        m_Framebuffer.reset( Framebuffer::Create(spec) );
     }
 
     void GameLayer::OnDetach()

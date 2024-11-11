@@ -16,7 +16,7 @@
 #ifndef VIEWPORT_H
 #define VIEWPORT_H
 
-#include "../GameLayer.h"
+#include <coconuts/layer_system/GameLayer.h>
 #include <coconuts/graphics/Framebuffer.h>
 
 namespace Coconuts {
@@ -26,7 +26,7 @@ namespace Panels
     {
     public:
         Viewport() = default;
-        bool Init(GameLayer*& gameLayer);
+        bool Init(GameLayer*& gameLayer, std::shared_ptr<Framebuffer> framebuffer);
         
         void LiveUpdate();
         
@@ -37,9 +37,9 @@ namespace Panels
         /* Viewport selected flag */
         bool m_IsViewportPanelFocused;
         
-        /* GameLayer's Framebuffer */
-        std::shared_ptr<Framebuffer> m_Framebuffer;
-        
+        /* Framebuffer where images from game app are rendered */
+        std::shared_ptr<Framebuffer> m_FramebufferPtr;
+
         /* Framebuffer's Color attach texture ID */
         uint32_t m_ViewPortTexID;
         

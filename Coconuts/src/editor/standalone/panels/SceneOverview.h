@@ -16,7 +16,7 @@
 #ifndef SCENEOVERVIEW_H
 #define SCENEOVERVIEW_H
 
-#include "../GameLayer.h"
+#include <coconuts/layer_system/GameLayer.h>
 #include "ComponentInspector.h"
 #include <coconuts/ecs/Entity.h>
 #include <vector>

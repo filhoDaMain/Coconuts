@@ -16,7 +16,7 @@
 #ifndef LOADPROJECTPOPUP_H
 #define LOADPROJECTPOPUP_H
 
-#include "../GameLayer.h"
+#include <coconuts/layer_system/GameLayer.h>
 #include "../panels/ComponentInspector.h"
 
 namespace Coconuts {

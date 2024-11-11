@@ -44,49 +44,42 @@ namespace Coconuts
     
     
     LayerStack::LayerStack()
+    : m_Layers()
     {
-        i_LayerInsert = v_Layers.begin();
+        m_LayerInsert = m_Layers.begin();
     }
-    
-    LayerStack::~LayerStack()
+
+    void LayerStack::PushLayer(std::shared_ptr<Layer> layer)
     {
-        for (Layer* layer : v_Layers)
-        {
-            delete layer;
-        }
-    }
-    
-    void LayerStack::PushLayer(Layer* layer)
-    {
-        i_LayerInsert = v_Layers.emplace(i_LayerInsert /* Last Layer position */,
+        m_LayerInsert = m_Layers.emplace(m_LayerInsert /* Last Layer position */,
                                          layer);
     }
-    
-    void LayerStack::PushOverlay(Layer* overlay)
+
+    void LayerStack::PushOverlay(std::shared_ptr<Layer> overlay)
     {
-        v_Layers.emplace_back(overlay);
+        m_Layers.emplace_back(overlay);
     }
-    
-    void LayerStack::PopLayer(Layer* layer)
+
+    void LayerStack::PopLayer(std::shared_ptr<Layer> layer)
     {
-        auto it = std::find(v_Layers.begin(), v_Layers.end(), layer);
+        auto it = std::find(m_Layers.begin(), m_Layers.end(), layer);
         
         /* Found */
-        if (it != v_Layers.end())
+        if (it != m_Layers.end())
         {
-            v_Layers.erase(it);
-            i_LayerInsert--;
+            m_Layers.erase(it);
+            m_LayerInsert--;
         }
     }
-    
-    void LayerStack::PopOverlay(Layer* overlay)
+
+    void LayerStack::PopOverlay(std::shared_ptr<Layer> overlay)
     {
-        auto it = std::find(v_Layers.begin(), v_Layers.end(), overlay);
+        auto it = std::find(m_Layers.begin(), m_Layers.end(), overlay);
         
         /* Found */
-        if (it != v_Layers.end())
+        if (it != m_Layers.end())
         {
-            v_Layers.erase(it);
+            m_Layers.erase(it);
         }
     }
 }

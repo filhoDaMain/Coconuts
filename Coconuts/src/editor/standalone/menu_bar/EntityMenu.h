@@ -16,7 +16,7 @@
 #ifndef ENTITYMENU_H
 #define ENTITYMENU_H
 
-#include "../GameLayer.h"
+#include <coconuts/layer_system/GameLayer.h>
 
 namespace Coconuts {
 namespace MenuBar

@@ -307,6 +307,7 @@ namespace Coconuts
         
         // ---------------------------------------------------------------------------
         // DOCK SPACE END
+        ImGui::End();
     }
     
     void EditorLayer::SetCustomGUIStyle()

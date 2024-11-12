@@ -51,6 +51,13 @@ cmake ..
 make
 ```
 
+#### Compile with debug symbols for GDB and LLDB interactive debugging support
+```
+cd ./Coconuts/build/
+cmake -DCMAKE_BUILD_TYPE=DEBUG ..
+make
+```
+
 The toolchain generates both static libraries and a Standalone Editor application by default.\
 Coconuts-based applications are required to link with the [generated libraries](#lib).\
 Standalone Editor application is a Game Editor [executable](#bin).

@@ -27,9 +27,18 @@ add_dependencies(ccneditor nfd)
 target_link_libraries(ccneditor  "${PROJECT_SOURCE_DIR}/lib/libccncore.a"
                                             "${PROJECT_SOURCE_DIR}/lib/libglfw3.a"
                                             "${PROJECT_SOURCE_DIR}/lib/libglad.a"
-                                            "${PROJECT_SOURCE_DIR}/lib/libentityx.a"
-                                            "${PROJECT_SOURCE_DIR}/lib/libyaml-cpp.a"
-                                            "${PROJECT_SOURCE_DIR}/lib/libnfd.a")
+                                            "${PROJECT_SOURCE_DIR}/lib/libnfd.a"
+                                            )
+
+if (${CMAKE_BUILD_TYPE} MATCHES "DEBUG")
+   target_link_libraries(ccneditor "${PROJECT_SOURCE_DIR}/lib/libentityx-d.a"
+                                   "${PROJECT_SOURCE_DIR}/lib/libyaml-cppd.a"
+   )
+else()
+   target_link_libraries(ccneditor "${PROJECT_SOURCE_DIR}/lib/libentityx.a"
+                                   "${PROJECT_SOURCE_DIR}/lib/libyaml-cpp.a"
+)
+endif()
 
 # Output directory
 set_target_properties(ccneditor PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/bin")
